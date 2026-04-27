@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GeoAI 多智能体 WebGIS</title>
+  <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/styles.css" />
+  <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+</head>
+<body>
+  <main class="shell">
+    <section class="map-pane">
+      <div id="map"></div>
+      <div class="layer-card">
+        <div class="card-title">图层</div>
+        <div id="layerList"></div>
+      </div>
+    </section>
+
+    <aside class="side-pane">
+      <header class="topbar">
+        <div class="brand">GeoAI Agent</div>
+        <button id="clearHighlightBtn" title="清除地图高亮">清除高亮</button>
+      </header>
+
+      <section class="control-row">
+        <label>会话</label>
+        <select id="sessionSelect"></select>
+        <button id="newSessionBtn">新会话</button>
+      </section>
+
+      <nav class="tabs">
+        <button class="tab active" data-tab="chat">对话</button>
+        <button class="tab" data-tab="trace">ACE 轨迹</button>
+        <button class="tab" data-tab="experience">经验库</button>
+      </nav>
+
+      <section id="chatTab" class="tab-panel active">
+        <div id="chatLog" class="chat-log"></div>
+        <textarea id="chatInput" placeholder="输入地理分析任务，例如：统计每家酒店300米内餐饮数量并排序"></textarea>
+        <div class="button-row">
+          <button id="sendBtn" class="primary">发送</button>
+          <button id="okBtn">👍 正确</button>
+          <button id="badBtn">👎 不正确</button>
+          <button id="fixBtn">✍ 纠正</button>
+        </div>
+      </section>
+
+      <section id="traceTab" class="tab-panel">
+        <pre id="traceBox"></pre>
+      </section>
+
+      <section id="experienceTab" class="tab-panel">
+        <div class="control-row">
+          <label>经验库</label>
+          <select id="bankSelect"></select>
+        </div>
+        <div class="button-row wrap">
+          <button data-template="empty" class="bankCreateBtn">新建空库</button>
+          <button data-template="default" class="bankCreateBtn">默认模板</button>
+          <button data-template="copy_current" class="bankCreateBtn">复制当前</button>
+          <button id="refreshExperienceBtn">刷新</button>
+        </div>
+        <pre id="experienceBox"></pre>
+      </section>
+    </aside>
+  </main>
+  <script src="/static/app.js"></script>
+</body>
+</html>

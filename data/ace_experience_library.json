@@ -152,5 +152,19 @@
     "success_count": 2,
     "created_at": "2026-04-27T20:23:44",
     "updated_at": "2026-04-27T20:23:55"
+  },
+  {
+    "id": "ace-20260427213317-12",
+    "category": "工具执行异常",
+    "task_types": [
+      "search"
+    ],
+    "trigger": "llm.invoke",
+    "problem": "执行过程中发生异常: Connection error.",
+    "strategy": "记录异常摘要；下一轮优先检查网络、模型服务、工具参数和数据 schema。",
+    "source": "critic",
+    "success_count": 2,
+    "created_at": "2026-04-27T21:33:17",
+    "updated_at": "2026-04-27T21:33:40"
   }
 ]

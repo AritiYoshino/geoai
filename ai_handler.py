@@ -1,4 +1,5 @@
 from langchain_deepseek import ChatDeepSeek
+import os
 
 from agents import CoordinatorAgent, ReflectorAgent, SpatialAnalystAgent
 from core.context_manager import ContextManager
@@ -12,6 +13,7 @@ class AIHandler:
 
     def __init__(self, api_key, map_handler):
         self.map_handler = map_handler
+        self._disable_broken_proxy_env()
         self.llm = ChatDeepSeek(
             model="deepseek-chat",
             temperature=0.3,
@@ -34,6 +36,17 @@ class AIHandler:
             spatial_agent=self.spatial_agent,
             reflector_agent=self.reflector_agent,
         )
+
+    def _disable_broken_proxy_env(self):
+        for key in (
+            "HTTP_PROXY",
+            "HTTPS_PROXY",
+            "ALL_PROXY",
+            "http_proxy",
+            "https_proxy",
+            "all_proxy",
+        ):
+            os.environ.pop(key, None)
 
     def _store_highlights(self, highlight_infos):
         self._last_highlights = highlight_infos
