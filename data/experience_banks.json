@@ -1,0 +1,11 @@
+{
+  "active_id": "default",
+  "banks": [
+    {
+      "id": "default",
+      "name": "默认经验库",
+      "path": "data\\ace_experience_library.json",
+      "created_at": "2026-04-27T20:40:59"
+    }
+  ]
+}

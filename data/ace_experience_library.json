@@ -1,0 +1,156 @@
+[
+  {
+    "id": "gis-crs-001",
+    "category": "坐标系冲突",
+    "task_types": [
+      "nearby",
+      "overlay",
+      "mapping"
+    ],
+    "trigger": "距离、附近、缓冲区、叠加分析前需要确认 CRS。",
+    "problem": "在经纬度坐标系中直接计算距离会得到角度单位，导致范围分析错误。",
+    "strategy": "执行距离分析前统一投影到米制 CRS；若数据缺少 CRS，先按 WGS84 设置并记录假设。",
+    "source": "initial",
+    "success_count": 0,
+    "created_at": "2026-04-27T00:00:00"
+  },
+  {
+    "id": "gis-field-001",
+    "category": "字段验证",
+    "task_types": [
+      "query",
+      "search"
+    ],
+    "trigger": "用户提出行政区、类型、名称等属性筛选。",
+    "problem": "LLM 容易猜测中文字段名，导致 query 使用不存在的列。",
+    "strategy": "查询前读取图层字段清单，条件表达式必须使用真实字段名；字段错误时根据工具返回的可用字段重试。",
+    "source": "initial",
+    "success_count": 0,
+    "created_at": "2026-04-27T00:00:00"
+  },
+  {
+    "id": "gis-result-001",
+    "category": "结果规模控制",
+    "task_types": [
+      "search",
+      "query",
+      "nearby"
+    ],
+    "trigger": "模糊搜索或宽泛条件可能返回大量 POI。",
+    "problem": "过多结果会挤占上下文并降低回答质量。",
+    "strategy": "工具结果只摘要展示前若干条，但地图高亮保留完整匹配集合，并提醒用户缩小范围。",
+    "source": "initial",
+    "success_count": 0,
+    "created_at": "2026-04-27T00:00:00"
+  },
+  {
+    "id": "ace-20260427195128-4",
+    "category": "结果规模控制",
+    "task_types": [
+      "nearby"
+    ],
+    "trigger": "任务类型=nearby, 工具=search_poi, 参数={'keyword': '春熙路'}",
+    "problem": "返回结果规模过大，需要摘要输出并保留地图高亮。 原始反馈: 找到 707 个匹配项，仅显示前 20 条: [住宿服务_6474] 索引:1225 | name: 尚锦翡翠酒店(成都春熙路店), type: 住宿服务;宾馆酒店;宾馆酒店, address: 府青路二段24号(近财富又一城,电子科大东校区), province: 四川省, city: 成都市, district: ",
+    "strategy": "回答只展示摘要和代表样本，地图端继续高亮全部匹配结果。",
+    "source": "critic",
+    "success_count": 1,
+    "created_at": "2026-04-27T19:51:28"
+  },
+  {
+    "id": "ace-20260427195131-5",
+    "category": "字段验证",
+    "task_types": [
+      "nearby"
+    ],
+    "trigger": "任务类型=nearby, 工具=query_poi_by_conditions, 参数={'layer_name': '餐饮_61102', 'conditions': \"name like '%春熙路店%' and type like '%中餐%'\"}",
+    "problem": "工具反馈显示字段或条件表达式可能不匹配数据 schema。 原始反馈: 错误：条件中使用了不存在的字段名 ['like']。图层 '餐饮_61102' 可用的字段有：name, type, address, lng, lat, province, city, district。请修正字段名后重试。",
+    "strategy": "重新读取图层字段，使用真实列名构造条件；优先让工具错误中的可用字段清单指导重试。",
+    "source": "critic",
+    "success_count": 7,
+    "created_at": "2026-04-27T19:51:31",
+    "updated_at": "2026-04-27T20:23:49"
+  },
+  {
+    "id": "ace-20260427195132-6",
+    "category": "结果为空",
+    "task_types": [
+      "nearby"
+    ],
+    "trigger": "任务类型=nearby, 工具=search_poi, 参数={'keyword': '春熙路店 餐饮'}",
+    "problem": "当前检索条件过窄、图层选择错误或地名表达与数据不一致。 原始反馈: 未找到任何包含 '春熙路店 餐饮' 的POI。",
+    "strategy": "先用 search_poi 做宽松定位，再用精确查询或邻近分析逐步收窄。",
+    "source": "critic",
+    "success_count": 5,
+    "created_at": "2026-04-27T19:51:32",
+    "updated_at": "2026-04-27T20:23:54"
+  },
+  {
+    "id": "ace-20260427195133-7",
+    "category": "结果规模控制",
+    "task_types": [
+      "nearby"
+    ],
+    "trigger": "任务类型=nearby, 工具=search_poi, 参数={'keyword': '春熙路店'}",
+    "problem": "返回结果规模过大，需要摘要输出并保留地图高亮。 原始反馈: 找到 178 个匹配项，仅显示前 20 条: [住宿服务_6474] 索引:1225 | name: 尚锦翡翠酒店(成都春熙路店), type: 住宿服务;宾馆酒店;宾馆酒店, address: 府青路二段24号(近财富又一城,电子科大东校区), province: 四川省, city: 成都市, district: ",
+    "strategy": "回答只展示摘要和代表样本，地图端继续高亮全部匹配结果。",
+    "source": "critic",
+    "success_count": 4,
+    "created_at": "2026-04-27T19:51:33",
+    "updated_at": "2026-04-27T20:35:39"
+  },
+  {
+    "id": "ace-20260427195136-8",
+    "category": "工具执行异常",
+    "task_types": [
+      "nearby"
+    ],
+    "trigger": "任务类型=nearby, 工具=query_poi_by_conditions, 参数={'layer_name': '餐饮_61102', 'conditions': \"type='中餐'\"}",
+    "problem": "工具运行中出现异常，需要把错误信息转化为下一轮约束。 原始反馈: 条件查询出错: cannot assign without a target object。请确保条件格式正确，列名存在。示例: district=='锦江区' and type=='酒店'",
+    "strategy": "保留 traceback 摘要，调整参数、图层名或字段名后再次调用工具。",
+    "source": "critic",
+    "success_count": 6,
+    "created_at": "2026-04-27T19:51:36",
+    "updated_at": "2026-04-27T20:23:51"
+  },
+  {
+    "id": "ace-20260427195809-9",
+    "category": "结果为空",
+    "task_types": [
+      "nearby"
+    ],
+    "trigger": "任务类型=nearby, 工具=find_nearby_point_filtered, 参数={'reference_layer': '住宿服务_6474', 'reference_index': 2513, 'target_layer': '餐饮_61102', 'distance': 500, 'keyword': '中餐', 'unit': 'm'}",
+    "problem": "当前检索条件过窄、图层选择错误或地名表达与数据不一致。 原始反馈: 在 住宿服务_6474 索引 2513 的 500.0m 范围内，找到 450 个包含 '中餐' 的 餐饮_61102，仅显示前 20 个: [餐饮_61102] 要素32838: name: 品轩蜀味焖锅(群光店), type: 餐饮服务;中餐厅;中餐厅, address: 春熙路群光广场8楼a-05号, provi",
+    "strategy": "先用 search_poi 做宽松定位，再用精确查询或邻近分析逐步收窄。",
+    "source": "critic",
+    "success_count": 2,
+    "created_at": "2026-04-27T19:58:09",
+    "updated_at": "2026-04-27T20:23:59"
+  },
+  {
+    "id": "ace-20260427202058-10",
+    "category": "坐标系冲突",
+    "task_types": [
+      "query"
+    ],
+    "trigger": "任务类型=query, 工具=query_poi_by_conditions, 参数={'layer_name': '住宿服务_6474', 'conditions': \"district=='锦江区'\"}",
+    "problem": "空间距离或投影处理存在 CRS 风险。 原始反馈: 在图层 '住宿服务_6474' 中找到 1395 个满足条件的要素: [住宿服务_6474] 要素1835: name: 如家快捷酒店(成都红星路一号桥店), type: 住宿服务;宾馆酒店;经济型连锁酒店, address: 红星路一段9号(东城拐下街附22号), province: 四川省, city: 成都市, ",
+    "strategy": "距离分析统一转为米制投影，并在回答中说明距离单位和 CRS 假设。",
+    "source": "critic",
+    "success_count": 1,
+    "created_at": "2026-04-27T20:20:58"
+  },
+  {
+    "id": "ace-20260427202344-11",
+    "category": "结果规模控制",
+    "task_types": [
+      "query"
+    ],
+    "trigger": "任务类型=query, 工具=search_poi, 参数={'keyword': '武侯祠'}",
+    "problem": "返回结果规模过大，需要摘要输出并保留地图高亮。 原始反馈: 找到 387 个匹配项，仅显示前 20 条: [住宿服务_6474] 索引:2989 | name: 成都行者居别墅客栈——锦里武侯祠印象店, type: 住宿服务;住宿服务相关;住宿服务相关, address: 金雁路名流花园2巷8号(五大花园), province: 四川省, city: 成都市, district",
+    "strategy": "回答只展示摘要和代表样本，地图端继续高亮全部匹配结果。",
+    "source": "critic",
+    "success_count": 2,
+    "created_at": "2026-04-27T20:23:44",
+    "updated_at": "2026-04-27T20:23:55"
+  }
+]

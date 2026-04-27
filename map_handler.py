@@ -74,10 +74,10 @@ class MapHandler:
         self.ax.set_ylabel("纬度 / 投影Y")
         self.canvas.draw()
     
-    def highlight_features(self, layer_idx, feature_indices):
+    def highlight_features(self, layer_idx, feature_indices, clear_existing=True):
         """高亮指定图层的某些要素（保留原始绘图）"""
-        # 先清除已有高亮
-        self.clear_highlight(keep_record=False)
+        if clear_existing:
+            self.clear_highlight(keep_record=False)
         
         if not feature_indices:
             return
@@ -116,4 +116,4 @@ class MapHandler:
         for layer_idx, feat_idx in highlight_infos:
             layer_dict[layer_idx].append(feat_idx)
         for layer_idx, indices in layer_dict.items():
-            self.highlight_features(layer_idx, indices)
+            self.highlight_features(layer_idx, indices, clear_existing=False)

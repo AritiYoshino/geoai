@@ -51,12 +51,22 @@ def create_query_poi_by_conditions_tool(handler):
 
             results = []
             highlights = []
+            pois = []
             text_cols = result_gdf.select_dtypes(include=['object', 'string']).columns.tolist()
             for idx in result_gdf.index:
                 info = {col: result_gdf.loc[idx, col] for col in text_cols if col != 'geometry' and pd.notna(result_gdf.loc[idx, col])}
                 info_str = ", ".join([f"{k}: {v}" for k, v in info.items()])
                 results.append(f"[{target_name}] 要素{idx}: {info_str}")
                 highlights.append((target_idx, idx))
+                pois.append({
+                    "layer": target_name,
+                    "index": int(idx),
+                    "name": str(result_gdf.loc[idx, "name"]) if "name" in result_gdf.columns and pd.notna(result_gdf.loc[idx, "name"]) else "",
+                    "type": str(result_gdf.loc[idx, "type"]) if "type" in result_gdf.columns and pd.notna(result_gdf.loc[idx, "type"]) else "",
+                    "address": str(result_gdf.loc[idx, "address"]) if "address" in result_gdf.columns and pd.notna(result_gdf.loc[idx, "address"]) else "",
+                    "district": str(result_gdf.loc[idx, "district"]) if "district" in result_gdf.columns and pd.notna(result_gdf.loc[idx, "district"]) else "",
+                })
+            handler._last_pois = pois
             handler._store_highlights(highlights)
             return f"在图层 '{layer_name}' 中找到 {len(result_gdf)} 个满足条件的要素:\n" + "\n".join(results)
         except Exception as e:

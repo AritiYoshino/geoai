@@ -15,6 +15,7 @@ def create_search_poi_tool(handler):
         """
         results = []
         highlights = []
+        pois = []
         for layer_idx, (gdf, name) in enumerate(zip(map_h.gdfs, map_h.layer_names)):
             text_cols = gdf.select_dtypes(include=['object', 'string']).columns.tolist()
             if not text_cols:
@@ -31,6 +32,14 @@ def create_search_poi_tool(handler):
                     info_str = ", ".join([f"{k}: {v}" for k, v in info.items()])
                     results.append(f"[{name}] 索引:{idx} | {info_str}")
                     highlights.append((layer_idx, idx))
+                    pois.append({
+                        "layer": name,
+                        "index": int(idx),
+                        "name": str(matched.loc[idx, "name"]) if "name" in matched.columns and pd.notna(matched.loc[idx, "name"]) else "",
+                        "type": str(matched.loc[idx, "type"]) if "type" in matched.columns and pd.notna(matched.loc[idx, "type"]) else "",
+                        "address": str(matched.loc[idx, "address"]) if "address" in matched.columns and pd.notna(matched.loc[idx, "address"]) else "",
+                        "district": str(matched.loc[idx, "district"]) if "district" in matched.columns and pd.notna(matched.loc[idx, "district"]) else "",
+                    })
 
         total = len(results)
         if total == 0:
@@ -43,6 +52,7 @@ def create_search_poi_tool(handler):
         else:
             summary = "找到以下匹配项:\n" + "\n".join(results)
 
+        handler._last_pois = pois
         handler._store_highlights(highlights)  # 高亮全部（不截断）
         return summary
 

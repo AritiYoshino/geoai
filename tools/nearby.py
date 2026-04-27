@@ -185,3 +185,122 @@ def create_find_nearby_point_tool(handler):
         return summary + "\n".join(results)
 
     return find_nearby_point
+
+
+def create_find_nearby_point_filtered_tool(handler):
+    map_h = handler.map_handler
+
+    @tool
+    def find_nearby_point_filtered(
+        reference_layer: str,
+        reference_index: int,
+        target_layer: str,
+        distance: float,
+        keyword: str,
+        unit: str = "m",
+    ) -> str:
+        """
+        以单个参考要素为中心，查找指定距离内且文本字段包含 keyword 的目标 POI。
+        适合“某酒店附近500米内的中餐/火锅/咖啡”等带类别过滤的邻近查询。
+        """
+        ref_gdf = None
+        target_gdf = None
+        target_idx_map = None
+        target_name = None
+        for idx, (gdf, name) in enumerate(zip(map_h.gdfs, map_h.layer_names)):
+            if name == reference_layer:
+                ref_gdf = gdf
+            if name == target_layer:
+                target_idx_map = idx
+                target_gdf = gdf
+                target_name = name
+
+        if ref_gdf is None:
+            return f"错误：未找到参考图层 '{reference_layer}'"
+        if target_gdf is None:
+            return f"错误：未找到目标图层 '{target_layer}'"
+
+        try:
+            if reference_index in ref_gdf.index:
+                ref_geom = ref_gdf.geometry.loc[reference_index]
+            else:
+                ref_geom = ref_gdf.geometry.iloc[reference_index]
+        except Exception as e:
+            return f"错误：无法获取参考要素几何: {str(e)}"
+
+        if ref_geom is None or ref_geom.is_empty:
+            return "错误：参考要素几何为空。"
+
+        if ref_gdf.crs != target_gdf.crs:
+            ref_gdf = ref_gdf.to_crs("EPSG:4326")
+            target_gdf = target_gdf.to_crs("EPSG:4326")
+            ref_geom = ref_gdf.geometry.loc[reference_index] if reference_index in ref_gdf.index else ref_gdf.geometry.iloc[reference_index]
+
+        try:
+            target_proj = reproject_to_meters(target_gdf.copy())
+            ref_point_proj = reproject_to_meters(gpd.GeoDataFrame(geometry=[ref_geom], crs=ref_gdf.crs))
+            ref_point_geom = ref_point_proj.geometry.iloc[0]
+        except Exception as e:
+            return f"坐标投影失败: {str(e)}"
+
+        dist_meters = distance * 1000 if unit == "km" else distance
+        buffer = ref_point_geom.buffer(dist_meters)
+        possible = list(target_proj.sindex.intersection(buffer.bounds))
+
+        text_cols = target_gdf.select_dtypes(include=["object", "string"]).columns.tolist()
+        nearby_indices = []
+        for pos in possible:
+            geom = target_proj.geometry.iloc[pos]
+            if geom.distance(ref_point_geom) > dist_meters:
+                continue
+            original_idx = target_gdf.index[pos]
+            row_text = " ".join(
+                str(target_gdf.loc[original_idx, col])
+                for col in text_cols
+                if col != "geometry" and pd.notna(target_gdf.loc[original_idx, col])
+            )
+            if keyword in row_text:
+                nearby_indices.append(original_idx)
+
+        total = len(nearby_indices)
+        if total == 0:
+            return (
+                f"在距离 {reference_layer} 索引 {reference_index} 的 {distance}{unit} "
+                f"范围内未找到包含 '{keyword}' 的 {target_name}。"
+            )
+
+        shown_indices = nearby_indices[:MAX_NEARBY_RESULTS]
+        summary = (
+            f"在 {reference_layer} 索引 {reference_index} 的 {distance}{unit} 范围内，"
+            f"找到 {total} 个包含 '{keyword}' 的 {target_name}"
+        )
+        if total > MAX_NEARBY_RESULTS:
+            summary += f"，仅显示前 {MAX_NEARBY_RESULTS} 个"
+        summary += ":\n"
+
+        results = []
+        highlights = []
+        pois = []
+        for idx in shown_indices:
+            info = {
+                col: target_gdf.loc[idx, col]
+                for col in text_cols
+                if col != "geometry" and pd.notna(target_gdf.loc[idx, col])
+            }
+            info_str = ", ".join([f"{k}: {v}" for k, v in info.items()])
+            results.append(f"[{target_name}] 要素{idx}: {info_str}")
+            highlights.append((target_idx_map, idx))
+            pois.append({
+                "layer": target_name,
+                "index": int(idx),
+                "name": str(target_gdf.loc[idx, "name"]) if "name" in target_gdf.columns and pd.notna(target_gdf.loc[idx, "name"]) else "",
+                "type": str(target_gdf.loc[idx, "type"]) if "type" in target_gdf.columns and pd.notna(target_gdf.loc[idx, "type"]) else "",
+                "address": str(target_gdf.loc[idx, "address"]) if "address" in target_gdf.columns and pd.notna(target_gdf.loc[idx, "address"]) else "",
+                "district": str(target_gdf.loc[idx, "district"]) if "district" in target_gdf.columns and pd.notna(target_gdf.loc[idx, "district"]) else "",
+            })
+
+        handler._last_pois = pois
+        handler._store_highlights(highlights)
+        return summary + "\n".join(results)
+
+    return find_nearby_point_filtered
