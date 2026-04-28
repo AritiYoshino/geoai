@@ -200,19 +200,41 @@ textarea {
   gap: 8px;
 }
 
-.layer-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+.layer-card {
   padding: 10px 12px;
-  font-size: 13px;
   background: rgba(248, 250, 252, 0.9);
   border: 1px solid #e2e8f0;
   border-radius: 12px;
 }
 
+.layer-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  padding: 0;
+}
+
 .layer-row input {
   margin: 0;
+}
+
+.layer-title-wrap {
+  min-width: 0;
+}
+
+.layer-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.layer-meta,
+.layer-hint {
+  margin-top: 4px;
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.45;
 }
 
 .session-list {
@@ -349,7 +371,7 @@ button:disabled {
 
 .tabs {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 8px;
 }
 
@@ -390,6 +412,7 @@ pre {
   border: 1px solid var(--panel-border);
   border-radius: var(--radius-md);
   line-height: 1.55;
+  white-space: pre-wrap;
 }
 
 .chat-log {
@@ -399,7 +422,8 @@ pre {
 .layer-list,
 .session-list,
 .chat-log,
-pre {
+pre,
+.ace-grid {
   scrollbar-width: thin;
   scrollbar-color: #c4d2e3 transparent;
 }
@@ -407,32 +431,19 @@ pre {
 .layer-list::-webkit-scrollbar,
 .session-list::-webkit-scrollbar,
 .chat-log::-webkit-scrollbar,
-pre::-webkit-scrollbar {
+pre::-webkit-scrollbar,
+.ace-grid::-webkit-scrollbar {
   width: 10px;
-}
-
-.layer-list::-webkit-scrollbar-track,
-.session-list::-webkit-scrollbar-track,
-.chat-log::-webkit-scrollbar-track,
-pre::-webkit-scrollbar-track {
-  background: transparent;
 }
 
 .layer-list::-webkit-scrollbar-thumb,
 .session-list::-webkit-scrollbar-thumb,
 .chat-log::-webkit-scrollbar-thumb,
-pre::-webkit-scrollbar-thumb {
+pre::-webkit-scrollbar-thumb,
+.ace-grid::-webkit-scrollbar-thumb {
   background: #c4d2e3;
   border-radius: 999px;
   border: 2px solid transparent;
-  background-clip: padding-box;
-}
-
-.layer-list::-webkit-scrollbar-thumb:hover,
-.session-list::-webkit-scrollbar-thumb:hover,
-.chat-log::-webkit-scrollbar-thumb:hover,
-pre::-webkit-scrollbar-thumb:hover {
-  background: #aebfd5;
   background-clip: padding-box;
 }
 
@@ -474,6 +485,33 @@ pre::-webkit-scrollbar-thumb:hover {
 .control-stack label {
   font-size: 13px;
   color: var(--text-muted);
+}
+
+.ace-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  min-height: 0;
+  overflow-y: auto;
+  padding-right: 2px;
+}
+
+.ace-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ace-card pre {
+  flex: unset;
+  min-height: 84px;
+  max-height: 180px;
+}
+
+.ace-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-main);
 }
 
 .maplibregl-popup-content {

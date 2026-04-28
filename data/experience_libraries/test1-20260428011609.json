@@ -10,7 +10,11 @@
     "strategy": "类似任务需要重新检查上下文指代、图层选择、字段条件和空间分析参数，不要直接沿用上一次回答。",
     "source": "user_feedback",
     "success_count": 1,
-    "created_at": "2026-04-28T01:16:51"
+    "created_at": "2026-04-28T01:16:51",
+    "fail_count": 0,
+    "updated_at": "2026-04-28T01:16:51",
+    "last_used_at": "",
+    "confidence": 0.667
   },
   {
     "id": "ace-20260428011720-2",
@@ -23,7 +27,11 @@
     "strategy": "遇到类似任务时优先遵循用户纠正: 我说的是查找武侯祠的店，不是桔子酒店的武侯祠的店",
     "source": "user_feedback",
     "success_count": 1,
-    "created_at": "2026-04-28T01:17:20"
+    "created_at": "2026-04-28T01:17:20",
+    "fail_count": 0,
+    "updated_at": "2026-04-28T01:17:20",
+    "last_used_at": "",
+    "confidence": 0.667
   },
   {
     "id": "ace-20260428011748-3",
@@ -37,7 +45,10 @@
     "source": "critic",
     "success_count": 4,
     "created_at": "2026-04-28T01:17:48",
-    "updated_at": "2026-04-28T01:24:40"
+    "updated_at": "2026-04-28T01:24:40",
+    "fail_count": 0,
+    "last_used_at": "",
+    "confidence": 0.833
   },
   {
     "id": "ace-20260428011750-4",
@@ -51,7 +62,10 @@
     "source": "critic",
     "success_count": 6,
     "created_at": "2026-04-28T01:17:50",
-    "updated_at": "2026-04-28T01:23:47"
+    "updated_at": "2026-04-28T01:23:47",
+    "fail_count": 0,
+    "last_used_at": "",
+    "confidence": 0.875
   },
   {
     "id": "ace-20260428011753-5",
@@ -65,7 +79,10 @@
     "source": "critic",
     "success_count": 5,
     "created_at": "2026-04-28T01:17:53",
-    "updated_at": "2026-04-28T01:24:44"
+    "updated_at": "2026-04-28T01:24:44",
+    "fail_count": 0,
+    "last_used_at": "",
+    "confidence": 0.857
   },
   {
     "id": "ace-20260428011754-6",
@@ -79,7 +96,10 @@
     "source": "critic",
     "success_count": 4,
     "created_at": "2026-04-28T01:17:54",
-    "updated_at": "2026-04-28T01:22:11"
+    "updated_at": "2026-04-28T01:22:11",
+    "fail_count": 0,
+    "last_used_at": "",
+    "confidence": 0.833
   },
   {
     "id": "ace-20260428011755-7",
@@ -92,7 +112,11 @@
     "strategy": "先用 search_poi 做宽松定位，再用精确查询或邻近分析逐步收窄。",
     "source": "critic",
     "success_count": 1,
-    "created_at": "2026-04-28T01:17:55"
+    "created_at": "2026-04-28T01:17:55",
+    "fail_count": 0,
+    "updated_at": "2026-04-28T01:17:55",
+    "last_used_at": "",
+    "confidence": 0.667
   },
   {
     "id": "ace-20260428012028-8",
@@ -106,7 +130,10 @@
     "source": "user_feedback",
     "success_count": 2,
     "created_at": "2026-04-28T01:20:28",
-    "updated_at": "2026-04-28T01:24:11"
+    "updated_at": "2026-04-28T01:24:11",
+    "fail_count": 0,
+    "last_used_at": "",
+    "confidence": 0.75
   },
   {
     "id": "ace-20260428012057-9",
@@ -120,7 +147,10 @@
     "source": "user_feedback",
     "success_count": 2,
     "created_at": "2026-04-28T01:20:57",
-    "updated_at": "2026-04-28T01:24:30"
+    "updated_at": "2026-04-28T01:24:30",
+    "fail_count": 0,
+    "last_used_at": "",
+    "confidence": 0.75
   },
   {
     "id": "ace-20260428012213-10",
@@ -133,7 +163,11 @@
     "strategy": "距离分析统一转为米制投影，并在回答中说明距离单位和 CRS 假设。",
     "source": "critic",
     "success_count": 1,
-    "created_at": "2026-04-28T01:22:13"
+    "created_at": "2026-04-28T01:22:13",
+    "fail_count": 0,
+    "updated_at": "2026-04-28T01:22:13",
+    "last_used_at": "",
+    "confidence": 0.667
   },
   {
     "id": "ace-20260428012214-11",
@@ -146,7 +180,11 @@
     "strategy": "距离分析统一转为米制投影，并在回答中说明距离单位和 CRS 假设。",
     "source": "critic",
     "success_count": 1,
-    "created_at": "2026-04-28T01:22:14"
+    "created_at": "2026-04-28T01:22:14",
+    "fail_count": 0,
+    "updated_at": "2026-04-28T01:22:14",
+    "last_used_at": "",
+    "confidence": 0.667
   },
   {
     "id": "ace-20260428012353-12",
@@ -159,6 +197,112 @@
     "strategy": "先用 search_poi 做宽松定位，再用精确查询或邻近分析逐步收窄。",
     "source": "critic",
     "success_count": 1,
-    "created_at": "2026-04-28T01:23:53"
+    "created_at": "2026-04-28T01:23:53",
+    "fail_count": 0,
+    "updated_at": "2026-04-28T01:23:53",
+    "last_used_at": "",
+    "confidence": 0.667
+  },
+  {
+    "id": "ace-20260428130345-13",
+    "category": "用户正反馈",
+    "task_types": [
+      "general"
+    ],
+    "trigger": "用户反馈类型=correct; 用户任务=计算成华区面积",
+    "problem": "用户确认该任务结果正确。任务: 计算成华区面积",
+    "strategy": "类似任务可优先复用本次上下文解析、工具选择和回答组织方式。",
+    "source": "user_feedback",
+    "success_count": 1,
+    "fail_count": 0,
+    "confidence": 0.667,
+    "created_at": "2026-04-28T13:03:45",
+    "updated_at": "2026-04-28T13:03:45",
+    "last_used_at": "2026-04-28T13:03:45"
+  },
+  {
+    "id": "ace-20260428130522-14",
+    "category": "FIELD_ERROR",
+    "task_types": [
+      "nearby"
+    ],
+    "trigger": "tool=query_poi_by_conditions; args={'layer_name': '成都行政区__加高新天府东区', 'conditions': \"NAME like '%春熙%'\"}",
+    "problem": "查询条件或生成代码引用了目标图层中不存在的字段名。 原始错误信息: 错误：条件中使用了不存在的字段名 ['like']。图层 '成都行政区__加高新天府东区' 可用的字段有：NAME。请修正字段名后重试。",
+    "strategy": "先读取真实 schema，再仅使用实际存在的字段名重建筛选条件或代码。 代码提示: 优先检查 gdf.columns，不要猜测字段别名或中英文映射。",
+    "source": "critic",
+    "success_count": 0,
+    "fail_count": 1,
+    "confidence": 0.333,
+    "created_at": "2026-04-28T13:05:22",
+    "updated_at": "2026-04-28T13:05:22",
+    "last_used_at": "2026-04-28T13:05:22"
+  },
+  {
+    "id": "ace-20260428130524-15",
+    "category": "EMPTY_RESULT",
+    "task_types": [
+      "nearby"
+    ],
+    "trigger": "tool=query_poi_by_conditions; args={'layer_name': '成都行政区__加高新天府东区', 'conditions': \"NAME == '春熙路'\"}",
+    "problem": "当前条件可能过严，目标图层选择有误，或者参考 POI 指代解析不正确。 原始错误信息: 在图层 '成都行政区__加高新天府东区' 中未找到满足条件 'NAME == '春熙路'' 的要素。",
+    "strategy": "先放宽搜索范围，确认参考 POI 和目标图层，再逐步收紧过滤条件或距离限制。 代码提示: 建议先用 search_poi 或更简单的查询定位，再执行精确筛选。",
+    "source": "critic",
+    "success_count": 0,
+    "fail_count": 1,
+    "confidence": 0.333,
+    "created_at": "2026-04-28T13:05:24",
+    "updated_at": "2026-04-28T13:05:24",
+    "last_used_at": "2026-04-28T13:05:24"
+  },
+  {
+    "id": "ace-20260428132415-16",
+    "category": "用户纠正",
+    "task_types": [
+      "mapping"
+    ],
+    "trigger": "用户反馈类型=correction; 用户任务=哪个区餐馆最多，并高亮",
+    "problem": "用户对结果给出纠正。任务: 哪个区餐馆最多，并高亮 原回答摘要: ## 📊 分析结果\n\n**餐馆数量最多的区是：武侯区 🏆**\n\n| 排名 | 行政区 | 餐馆数量 |\n|:---:|:------:|:--------:|\n| 🥇 | **武侯区** | **18,435 家** |\n| 🥈 | 金牛区 | 11,530 家 |\n| 🥉 | 成华区 | 9,682 家 |\n| 4 ",
+    "strategy": "遇到类似任务时优先遵循用户纠正: 高亮的是行政区shp不是餐馆的店shp",
+    "source": "user_feedback",
+    "success_count": 0,
+    "fail_count": 0,
+    "confidence": 0.5,
+    "created_at": "2026-04-28T13:24:15",
+    "updated_at": "2026-04-28T13:24:15",
+    "last_used_at": "2026-04-28T13:24:15"
+  },
+  {
+    "id": "ace-20260428132613-17",
+    "category": "FIELD_ERROR",
+    "task_types": [
+      "mapping"
+    ],
+    "trigger": "tool=query_poi_by_conditions; args={'layer_name': '餐饮_61102', 'conditions': 'district is not null'}",
+    "problem": "查询条件或生成代码引用了目标图层中不存在的字段名。 原始错误信息: 错误：条件中使用了不存在的字段名 ['null']。图层 '餐饮_61102' 可用的字段有：name, type, address, lng, lat, province, city, district。请修正字段名后重试。",
+    "strategy": "先读取真实 schema，再仅使用实际存在的字段名重建筛选条件或代码。 代码提示: 优先检查 gdf.columns，不要猜测字段别名或中英文映射。",
+    "source": "critic",
+    "success_count": 0,
+    "fail_count": 1,
+    "confidence": 0.333,
+    "created_at": "2026-04-28T13:26:13",
+    "updated_at": "2026-04-28T13:26:13",
+    "last_used_at": "2026-04-28T13:26:13"
+  },
+  {
+    "id": "ace-20260428132700-18",
+    "category": "用户负反馈",
+    "task_types": [
+      "mapping"
+    ],
+    "trigger": "用户反馈类型=incorrect; 用户任务=哪个区的餐馆数量第二多，并高亮",
+    "problem": "用户认为结果不正确。任务: 哪个区的餐馆数量第二多，并高亮 原回答摘要: ## 分析结论\n\n**餐馆数量第二多的区是：金牛区 🥈**\n\n各区餐馆数量排名如下：\n\n| 排名 | 区 | 餐馆数量 |\n|:---:|:---:|:---:|\n| 🥇 | **武侯区** | 18,435 家 |\n| 🥈 | **金牛区** | 11,530 家 |\n| 🥉 | **成华区** | 9,682 家 |\n| 4 | 锦江区 | 9,541 ",
+    "strategy": "类似任务需要重新检查上下文指代、图层选择、字段条件和空间分析参数，不要直接沿用上一轮回答。",
+    "source": "user_feedback",
+    "success_count": 0,
+    "fail_count": 1,
+    "confidence": 0.333,
+    "created_at": "2026-04-28T13:27:00",
+    "updated_at": "2026-04-28T13:27:00",
+    "last_used_at": "2026-04-28T13:27:00"
   }
 ]

@@ -3,11 +3,12 @@ import mimetypes
 import os
 import socket
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
-from urllib.parse import urlparse
+from urllib.parse import parse_qs, urlparse
 
 from dotenv import load_dotenv
 
 from ai_handler import AIHandler
+from core.jsonl_logger import log_error
 from web_app.web_map_handler import BrowserMapHandler
 
 
@@ -18,7 +19,7 @@ class WebGISAppState:
         if not api_key:
             raise RuntimeError("请在 .env 文件中设置 DEEPSEEK_API_KEY")
         self.map_handler = BrowserMapHandler()
-        self.map_handler.load_shapefiles("geodata")
+        self.map_handler.load_geojson_layers(os.path.join("data", "geodata"))
         self.ai_handler = AIHandler(api_key, self.map_handler)
 
 
@@ -35,38 +36,47 @@ class ExclusiveThreadingHTTPServer(ThreadingHTTPServer):
 
 
 class WebGISRequestHandler(SimpleHTTPRequestHandler):
-    server_version = "GeoAIWeb/0.1"
+    server_version = "GeoAIWeb/0.2"
 
     def do_GET(self):
         parsed = urlparse(self.path)
-        if parsed.path == "/":
-            self._send_static("index.html")
-        elif parsed.path.startswith("/static/"):
-            self._send_static(parsed.path.removeprefix("/static/"))
-        elif parsed.path == "/api/layers":
-            self._send_json({"layers": STATE.map_handler.layers_payload()})
-        elif parsed.path == "/api/highlights":
-            self._send_json({"geojson": STATE.map_handler.highlights_geojson()})
-        elif parsed.path == "/api/trace":
-            self._send_json({"trace": STATE.ai_handler.get_trace_text()})
-        elif parsed.path == "/api/experience":
-            self._send_json({"summary": STATE.ai_handler.get_experience_summary()})
-        elif parsed.path == "/api/sessions":
-            self._send_json(
-                {
-                    "current": STATE.ai_handler.get_current_session(),
-                    "sessions": STATE.ai_handler.list_sessions(),
-                }
-            )
-        elif parsed.path == "/api/experience-banks":
-            self._send_json(
-                {
-                    "active": STATE.ai_handler.get_active_experience_bank(),
-                    "banks": STATE.ai_handler.list_experience_banks(),
-                }
-            )
-        else:
-            self.send_error(404, "Not found")
+        query = parse_qs(parsed.query)
+        try:
+            if parsed.path == "/":
+                self._send_static("index.html")
+            elif parsed.path.startswith("/static/"):
+                self._send_static(parsed.path.removeprefix("/static/"))
+            elif parsed.path == "/api/layers":
+                self._send_json({"layers": STATE.map_handler.layers_payload()})
+            elif parsed.path == "/api/layer_data":
+                self._handle_layer_data(query)
+            elif parsed.path == "/api/highlights":
+                self._send_json({"geojson": STATE.map_handler.highlights_geojson()})
+            elif parsed.path == "/api/trace":
+                self._send_json({"trace": STATE.ai_handler.get_trace_text()})
+            elif parsed.path == "/api/ace-panel":
+                self._send_json({"ace_panel": STATE.ai_handler.get_ace_panel()})
+            elif parsed.path == "/api/experience":
+                self._send_json({"summary": STATE.ai_handler.get_experience_summary()})
+            elif parsed.path == "/api/sessions":
+                self._send_json(
+                    {
+                        "current": STATE.ai_handler.get_current_session(),
+                        "sessions": STATE.ai_handler.list_sessions(),
+                    }
+                )
+            elif parsed.path == "/api/experience-banks":
+                self._send_json(
+                    {
+                        "active": STATE.ai_handler.get_active_experience_bank(),
+                        "banks": STATE.ai_handler.list_experience_banks(),
+                    }
+                )
+            else:
+                self.send_error(404, "Not found")
+        except Exception as exc:
+            log_error({"source": "http_get", "path": parsed.path, "error": str(exc)})
+            self._send_json({"error": str(exc)}, status=500)
 
     def do_POST(self):
         parsed = urlparse(self.path)
@@ -106,6 +116,7 @@ class WebGISRequestHandler(SimpleHTTPRequestHandler):
                         "current": STATE.ai_handler.get_current_session(),
                         "sessions": STATE.ai_handler.list_sessions(),
                         "trace": STATE.ai_handler.get_trace_text(),
+                        "ace_panel": STATE.ai_handler.get_ace_panel(),
                     }
                 )
             elif parsed.path == "/api/highlights/clear":
@@ -149,6 +160,7 @@ class WebGISRequestHandler(SimpleHTTPRequestHandler):
             else:
                 self.send_error(404, "Not found")
         except Exception as exc:
+            log_error({"source": "http_post", "path": parsed.path, "error": str(exc)})
             self._send_json({"error": str(exc)}, status=500)
 
     def _handle_chat(self, data):
@@ -165,12 +177,31 @@ class WebGISRequestHandler(SimpleHTTPRequestHandler):
             {
                 "answer": answer,
                 "trace": STATE.ai_handler.get_trace_text(),
+                "ace_panel": STATE.ai_handler.get_ace_panel(),
                 "experience": STATE.ai_handler.get_experience_summary(),
                 "session": STATE.ai_handler.get_current_session(),
                 "sessions": STATE.ai_handler.list_sessions(),
                 "highlights": STATE.map_handler.highlights_geojson(),
             }
         )
+
+    def _handle_layer_data(self, query):
+        layer_name = (query.get("layer_name") or [""])[0]
+        if not layer_name:
+            self._send_json({"error": "layer_name 不能为空"}, status=400)
+            return
+
+        bbox_text = (query.get("bbox") or [""])[0]
+        zoom_text = (query.get("zoom") or [""])[0]
+        bbox = None
+        if bbox_text:
+            parts = [float(part) for part in bbox_text.split(",")]
+            if len(parts) == 4:
+                bbox = tuple(parts)
+        zoom = float(zoom_text) if zoom_text else None
+
+        payload = STATE.map_handler.layer_data_payload(layer_name=layer_name, bbox=bbox, zoom=zoom)
+        self._send_json(payload)
 
     def _read_json(self):
         length = int(self.headers.get("Content-Length", "0"))
@@ -222,8 +253,7 @@ def run(host="127.0.0.1", port=8000, max_port=8010):
 
     if server is None or selected_port is None:
         raise RuntimeError(
-            f"端口 {port}-{max_port} 都已被占用。"
-            f"请先停止旧的 Web 服务后再启动。原始错误: {last_error}"
+            f"端口 {port}-{max_port} 都已被占用。请先停止旧的 Web 服务后再启动。原始错误: {last_error}"
         ) from last_error
 
     if selected_port != port:

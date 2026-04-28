@@ -56,7 +56,9 @@ class SessionStore:
             "messages": [],
             "feedback": [],
             "recent_pois": [],
+            "user_preferences": {},
             "last_trace_text": "尚未执行任务。",
+            "last_ace_panel": {},
         }
         self.data.setdefault("sessions", []).append(session)
         self.data["current_session_id"] = session["id"]
@@ -66,7 +68,7 @@ class SessionStore:
     def switch_session(self, session_id):
         session = self.get_session(session_id)
         if session is None:
-            raise ValueError(f"未找到会话: {session_id}")
+            raise ValueError(f"未找到会话 {session_id}")
         self.data["current_session_id"] = session_id
         self.save()
         return session
@@ -89,12 +91,16 @@ class SessionStore:
         self.touch(session)
         return session
 
-    def update_memory(self, recent_pois=None, last_trace_text=None):
+    def update_memory(self, recent_pois=None, last_trace_text=None, last_ace_panel=None, user_preferences=None):
         session = self.get_current_session()
         if recent_pois is not None:
             session["recent_pois"] = recent_pois
         if last_trace_text is not None:
             session["last_trace_text"] = last_trace_text
+        if last_ace_panel is not None:
+            session["last_ace_panel"] = last_ace_panel
+        if user_preferences is not None:
+            session["user_preferences"] = user_preferences
         self.touch(session)
         return session
 
@@ -115,7 +121,7 @@ class SessionStore:
     def rename_session(self, session_id, title):
         session = self.get_session(session_id)
         if session is None:
-            raise ValueError(f"未找到会话: {session_id}")
+            raise ValueError(f"未找到会话 {session_id}")
         title = (title or "").strip()
         if not title:
             raise ValueError("会话名称不能为空")
@@ -127,7 +133,7 @@ class SessionStore:
         sessions = self.data.get("sessions", [])
         session = self.get_session(session_id)
         if session is None:
-            raise ValueError(f"未找到会话: {session_id}")
+            raise ValueError(f"未找到会话 {session_id}")
         if len(sessions) <= 1:
             raise ValueError("至少需要保留一个会话")
 

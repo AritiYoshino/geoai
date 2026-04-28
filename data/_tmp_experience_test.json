@@ -1,0 +1,75 @@
+[
+  {
+    "id": "gis-crs-001",
+    "category": "坐标系统冲突",
+    "task_types": [
+      "nearby",
+      "overlay",
+      "mapping"
+    ],
+    "trigger": "距离、邻近、缓冲区、叠加分析前需要确认 CRS。",
+    "problem": "在经纬度坐标系中直接计算距离会得到角度单位，导致范围分析错误。",
+    "strategy": "执行距离分析前统一投影到米制 CRS；若数据缺少 CRS，先按 WGS84 设置并记录假设。",
+    "source": "initial",
+    "success_count": 0,
+    "fail_count": 0,
+    "confidence": 0.5,
+    "created_at": "2026-04-27T00:00:00",
+    "updated_at": "2026-04-27T00:00:00",
+    "last_used_at": ""
+  },
+  {
+    "id": "gis-field-001",
+    "category": "字段验证",
+    "task_types": [
+      "query",
+      "search"
+    ],
+    "trigger": "用户提出行政区、类型、名称等属性筛选。",
+    "problem": "LLM 容易猜测字段名，导致 query 使用不存在的列。",
+    "strategy": "查询前读取图层字段清单，条件表达式必须使用真实字段名；字段错误时根据工具返回的可用字段重试。",
+    "source": "initial",
+    "success_count": 0,
+    "fail_count": 0,
+    "confidence": 0.5,
+    "created_at": "2026-04-27T00:00:00",
+    "updated_at": "2026-04-27T00:00:00",
+    "last_used_at": ""
+  },
+  {
+    "id": "gis-result-001",
+    "category": "结果规模控制",
+    "task_types": [
+      "search",
+      "query",
+      "nearby"
+    ],
+    "trigger": "模糊搜索或宽泛条件可能返回大量 POI。",
+    "problem": "过多结果会挤占上下文并降低回答质量。",
+    "strategy": "工具结果只摘要展示前若干条，但地图高亮保留完整匹配集合，并提醒用户缩小范围。",
+    "source": "initial",
+    "success_count": 0,
+    "fail_count": 0,
+    "confidence": 0.5,
+    "created_at": "2026-04-27T00:00:00",
+    "updated_at": "2026-04-27T00:00:00",
+    "last_used_at": ""
+  },
+  {
+    "id": "ace-20260428124407-4",
+    "category": "????",
+    "task_types": [
+      "query"
+    ],
+    "trigger": "??1",
+    "problem": "?????",
+    "strategy": "??schema",
+    "source": "critic",
+    "success_count": 0,
+    "fail_count": 1,
+    "confidence": 0.333,
+    "created_at": "2026-04-28T12:44:07",
+    "updated_at": "2026-04-28T12:44:07",
+    "last_used_at": "2026-04-28T12:44:07"
+  }
+]

@@ -12,7 +12,11 @@
     "strategy": "执行距离分析前统一投影到米制 CRS；若数据缺少 CRS，先按 WGS84 设置并记录假设。",
     "source": "initial",
     "success_count": 0,
-    "created_at": "2026-04-27T00:00:00"
+    "created_at": "2026-04-27T00:00:00",
+    "fail_count": 0,
+    "updated_at": "2026-04-27T00:00:00",
+    "last_used_at": "",
+    "confidence": 0.5
   },
   {
     "id": "gis-field-001",
@@ -26,7 +30,11 @@
     "strategy": "查询前读取图层字段清单，条件表达式必须使用真实字段名；字段错误时根据工具返回的可用字段重试。",
     "source": "initial",
     "success_count": 0,
-    "created_at": "2026-04-27T00:00:00"
+    "created_at": "2026-04-27T00:00:00",
+    "fail_count": 0,
+    "updated_at": "2026-04-27T00:00:00",
+    "last_used_at": "",
+    "confidence": 0.5
   },
   {
     "id": "gis-result-001",
@@ -41,7 +49,11 @@
     "strategy": "工具结果只摘要展示前若干条，但地图高亮保留完整匹配集合，并提醒用户缩小范围。",
     "source": "initial",
     "success_count": 0,
-    "created_at": "2026-04-27T00:00:00"
+    "created_at": "2026-04-27T00:00:00",
+    "fail_count": 0,
+    "updated_at": "2026-04-27T00:00:00",
+    "last_used_at": "",
+    "confidence": 0.5
   },
   {
     "id": "ace-20260427195128-4",
@@ -55,7 +67,10 @@
     "source": "critic",
     "success_count": 2,
     "created_at": "2026-04-27T19:51:28",
-    "updated_at": "2026-04-27T23:53:09"
+    "updated_at": "2026-04-27T23:53:09",
+    "fail_count": 0,
+    "last_used_at": "",
+    "confidence": 0.75
   },
   {
     "id": "ace-20260427195131-5",
@@ -69,7 +84,10 @@
     "source": "critic",
     "success_count": 10,
     "created_at": "2026-04-27T19:51:31",
-    "updated_at": "2026-04-27T23:57:03"
+    "updated_at": "2026-04-27T23:57:03",
+    "fail_count": 0,
+    "last_used_at": "",
+    "confidence": 0.917
   },
   {
     "id": "ace-20260427195132-6",
@@ -83,7 +101,10 @@
     "source": "critic",
     "success_count": 10,
     "created_at": "2026-04-27T19:51:32",
-    "updated_at": "2026-04-27T23:57:02"
+    "updated_at": "2026-04-27T23:57:02",
+    "fail_count": 0,
+    "last_used_at": "",
+    "confidence": 0.917
   },
   {
     "id": "ace-20260427195133-7",
@@ -97,7 +118,10 @@
     "source": "critic",
     "success_count": 4,
     "created_at": "2026-04-27T19:51:33",
-    "updated_at": "2026-04-27T20:35:39"
+    "updated_at": "2026-04-27T20:35:39",
+    "fail_count": 0,
+    "last_used_at": "",
+    "confidence": 0.833
   },
   {
     "id": "ace-20260427195136-8",
@@ -111,7 +135,10 @@
     "source": "critic",
     "success_count": 9,
     "created_at": "2026-04-27T19:51:36",
-    "updated_at": "2026-04-28T01:12:29"
+    "updated_at": "2026-04-28T01:12:29",
+    "fail_count": 0,
+    "last_used_at": "",
+    "confidence": 0.909
   },
   {
     "id": "ace-20260427195809-9",
@@ -125,7 +152,10 @@
     "source": "critic",
     "success_count": 13,
     "created_at": "2026-04-27T19:58:09",
-    "updated_at": "2026-04-28T01:12:56"
+    "updated_at": "2026-04-28T01:12:56",
+    "fail_count": 0,
+    "last_used_at": "",
+    "confidence": 0.933
   },
   {
     "id": "ace-20260427202058-10",
@@ -138,7 +168,11 @@
     "strategy": "距离分析统一转为米制投影，并在回答中说明距离单位和 CRS 假设。",
     "source": "critic",
     "success_count": 1,
-    "created_at": "2026-04-27T20:20:58"
+    "created_at": "2026-04-27T20:20:58",
+    "fail_count": 0,
+    "updated_at": "2026-04-27T20:20:58",
+    "last_used_at": "",
+    "confidence": 0.667
   },
   {
     "id": "ace-20260427202344-11",
@@ -152,7 +186,10 @@
     "source": "critic",
     "success_count": 2,
     "created_at": "2026-04-27T20:23:44",
-    "updated_at": "2026-04-27T20:23:55"
+    "updated_at": "2026-04-27T20:23:55",
+    "fail_count": 0,
+    "last_used_at": "",
+    "confidence": 0.75
   },
   {
     "id": "ace-20260427213317-12",
@@ -166,7 +203,10 @@
     "source": "critic",
     "success_count": 2,
     "created_at": "2026-04-27T21:33:17",
-    "updated_at": "2026-04-27T21:33:40"
+    "updated_at": "2026-04-27T21:33:40",
+    "fail_count": 0,
+    "last_used_at": "",
+    "confidence": 0.75
   },
   {
     "id": "ace-20260427235315-13",
@@ -179,7 +219,11 @@
     "strategy": "回答只展示摘要和代表样本，地图端继续高亮全部匹配结果。",
     "source": "critic",
     "success_count": 1,
-    "created_at": "2026-04-27T23:53:15"
+    "created_at": "2026-04-27T23:53:15",
+    "fail_count": 0,
+    "updated_at": "2026-04-27T23:53:15",
+    "last_used_at": "",
+    "confidence": 0.667
   },
   {
     "id": "ace-20260427235522-14",
@@ -192,7 +236,11 @@
     "strategy": "先用 search_poi 做宽松定位，再用精确查询或邻近分析逐步收窄。",
     "source": "critic",
     "success_count": 1,
-    "created_at": "2026-04-27T23:55:22"
+    "created_at": "2026-04-27T23:55:22",
+    "fail_count": 0,
+    "updated_at": "2026-04-27T23:55:22",
+    "last_used_at": "",
+    "confidence": 0.667
   },
   {
     "id": "ace-20260428011237-15",
@@ -205,7 +253,11 @@
     "strategy": "保留 traceback 摘要，调整参数、图层名或字段名后再次调用工具。",
     "source": "critic",
     "success_count": 1,
-    "created_at": "2026-04-28T01:12:37"
+    "created_at": "2026-04-28T01:12:37",
+    "fail_count": 0,
+    "updated_at": "2026-04-28T01:12:37",
+    "last_used_at": "",
+    "confidence": 0.667
   },
   {
     "id": "ace-20260428011417-16",
@@ -218,6 +270,10 @@
     "strategy": "类似任务可优先复用本次上下文解析、工具选择和回答组织方式。",
     "source": "user_feedback",
     "success_count": 1,
-    "created_at": "2026-04-28T01:14:17"
+    "created_at": "2026-04-28T01:14:17",
+    "fail_count": 0,
+    "updated_at": "2026-04-28T01:14:17",
+    "last_used_at": "",
+    "confidence": 0.667
   }
 ]

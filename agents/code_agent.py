@@ -1,5 +1,6 @@
 import re
 
+from core.jsonl_logger import log_code, log_error
 from tools.code_executor import run_spatial_code
 
 
@@ -16,18 +17,30 @@ class CodeAgent:
         last_run = None
 
         for attempt in range(1, self.max_retries + 2):
-            trace.add("Code Agent", f"第 {attempt} 次执行空间分析代码。")
+            trace.add("Code Agent / Status", f"第 {attempt} 次执行空间分析代码。")
+            trace.add("Code Agent / Generated Code", current_code or "# 未生成代码")
             run = run_spatial_code(self.tool_state, task_description, current_code)
             last_run = run
+
+            log_code(
+                {
+                    "task_description": task_description,
+                    "attempt": attempt,
+                    "success": bool(run.success),
+                    "code": current_code,
+                    "result_preview": str(run.result_text)[:1000],
+                    "error_text": str(run.error_text or "")[:1000],
+                }
+            )
 
             if run.highlights:
                 self.tool_state._store_highlights(run.highlights)
 
             if run.success:
-                trace.add("Code Agent", "代码执行成功，结果已返回。")
+                trace.add("Code Agent / Execution", "代码执行成功，结果已返回。")
                 return run.result_text
 
-            trace.add("Code Agent", run.result_text[:1200])
+            trace.add("Code Agent / Execution", run.result_text[:1200])
             if attempt > self.max_retries:
                 break
 
@@ -37,34 +50,53 @@ class CodeAgent:
                 error_text=run.error_text or run.result_text,
             )
             if not repaired_code or repaired_code.strip() == current_code.strip():
-                trace.add("Code Agent", "未能生成有效修复代码，停止重试。")
+                trace.add("Code Agent / Status", "未能生成有效修复代码，停止重试。")
                 break
             current_code = repaired_code
-            trace.add("Code Agent", "已生成修复代码，准备重试。")
+            trace.add("Code Agent / Status", "已生成修复代码，准备重试。")
 
+        if last_run and not last_run.success:
+            log_error(
+                {
+                    "source": "code_agent.execute",
+                    "task_description": task_description,
+                    "error": str(last_run.error_text or last_run.result_text)[:1000],
+                }
+            )
         return last_run.result_text if last_run else "Code Agent 未能执行代码。"
 
     def _repair_code(self, task_description, original_code, error_text):
         prompt = f"""
-你是一个专门修复 GeoPandas/Pandas 空间分析代码的编码智能体。
-请修复下面的代码，并严格遵守这些约束：
-- 不要 import 任何库
-- 不要读写文件，不要访问系统命令
-- 只能使用 layers, layer_names, pd, gpd, np, Point, reproject_to_meters
-- 最终必须给 RESULT 赋值
-- 如需高亮，可给 HIGHLIGHTS 赋值
-- 只返回可直接执行的 Python 代码，不要解释，不要 Markdown
+你是一个 GeoPandas/Pandas 空间分析代码修复器。请修复下面这段代码。
 
-任务描述：
+约束：
+- 不允许 import
+- 不允许读写文件
+- 只能使用 layers, layer_names, pd, gpd, np, Point, reproject_to_meters
+- 最终结果必须赋值给 RESULT
+- 如需地图高亮，可设置 HIGHLIGHTS
+- 只返回 Python 代码，不要返回解释
+
+任务：
 {task_description}
 
-原始代码：
+原代码：
 {original_code}
 
 错误信息：
 {error_text}
 """
-        response = self.llm.invoke(prompt)
+        try:
+            response = self.llm.invoke(prompt)
+        except Exception as exc:
+            log_error(
+                {
+                    "source": "code_agent.repair",
+                    "task_description": task_description,
+                    "error": str(exc),
+                }
+            )
+            return ""
         content = getattr(response, "content", "") or ""
         return self._extract_code(content)
 

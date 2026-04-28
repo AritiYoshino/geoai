@@ -51,18 +51,45 @@
 
       <nav class="tabs">
         <button class="tab active" data-tab="chat" type="button">对话</button>
+        <button class="tab" data-tab="ace" type="button">ACE 面板</button>
         <button class="tab" data-tab="trace" type="button">ACE 轨迹</button>
         <button class="tab" data-tab="experience" type="button">经验库</button>
       </nav>
 
       <section id="chatTab" class="tab-panel active">
         <div id="chatLog" class="chat-log"></div>
-        <textarea id="chatInput" placeholder="输入地理分析任务，例如：统计每家酒店300米内餐饮数量并排序"></textarea>
+        <textarea id="chatInput" placeholder="输入地理分析任务，或直接反馈：例如“对”“不对，应该查所有名称包含武侯祠的店”"></textarea>
         <div class="button-row">
           <button id="sendBtn" class="primary" type="button">发送</button>
-          <button id="okBtn" type="button">👍 正确</button>
-          <button id="badBtn" type="button">👎 不正确</button>
-          <button id="fixBtn" type="button">✍ 纠正</button>
+        </div>
+      </section>
+
+      <section id="aceTab" class="tab-panel">
+        <div class="ace-grid">
+          <div class="ace-card">
+            <div class="ace-label">任务类型</div>
+            <pre id="aceTaskType"></pre>
+          </div>
+          <div class="ace-card">
+            <div class="ace-label">检索到的经验</div>
+            <pre id="aceExperienceHit"></pre>
+          </div>
+          <div class="ace-card">
+            <div class="ace-label">生成代码</div>
+            <pre id="aceGeneratedCode"></pre>
+          </div>
+          <div class="ace-card">
+            <div class="ace-label">执行状态</div>
+            <pre id="aceExecutionStatus"></pre>
+          </div>
+          <div class="ace-card">
+            <div class="ace-label">错误诊断</div>
+            <pre id="aceDiagnosis"></pre>
+          </div>
+          <div class="ace-card">
+            <div class="ace-label">经验库更新记录</div>
+            <pre id="aceEvolution"></pre>
+          </div>
         </div>
       </section>
 

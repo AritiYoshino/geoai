@@ -4,6 +4,20 @@ from datetime import datetime
 
 
 TASK_KEYWORDS = {
+    "help": [
+        "怎么用",
+        "如何用",
+        "怎么做",
+        "如何做",
+        "有哪些功能",
+        "有什么功能",
+        "可以做什么",
+        "能做什么",
+        "介绍一下",
+        "说明一下",
+        "解释一下",
+        "聚类分析可以怎么用",
+    ],
     "nearby": ["附近", "周边", "距离", "km", "公里", "米", "缓冲", "near"],
     "query": ["筛选", "查询", "属于", "类型", "行政区", "district", "type", "where"],
     "search": ["搜索", "查找", "找", "包含", "名字", "名称", "search"],
@@ -13,13 +27,17 @@ TASK_KEYWORDS = {
 
 
 def classify_task(text):
-    lowered = text.lower()
+    lowered = str(text).lower()
     scores = {
         task_type: sum(1 for keyword in keywords if keyword in lowered)
         for task_type, keywords in TASK_KEYWORDS.items()
     }
     best = max(scores, key=scores.get)
     return best if scores[best] > 0 else "general"
+
+
+def is_help_request(text):
+    return classify_task(text) == "help"
 
 
 @dataclass
@@ -50,9 +68,9 @@ class CriticAgent:
     """Rule-based critic that converts tool feedback into reusable diagnostics."""
 
     ERROR_PATTERNS = [
-        ("字段验证", r"不存在的字段|not in index|UndefinedVariableError|字段"),
+        ("字段校验", r"不存在的字段|not in index|UndefinedVariableError|字段"),
         ("坐标系冲突", r"CRS|坐标|投影|Cannot transform|geographic CRS"),
-        ("结果为空", r"未找到|没有找到|empty|0 个|0个"),
+        ("结果为空", r"未找到|没有找到|empty|0 条|0条"),
         ("工具执行异常", r"出错|错误|Traceback|Exception|失败"),
         ("结果规模控制", r"仅显示前|结果已截断|过多"),
     ]
@@ -72,7 +90,7 @@ class CriticAgent:
     def _problem(self, category, text):
         snippet = text.replace("\n", " ")[:160]
         defaults = {
-            "字段验证": "工具反馈显示字段或条件表达式可能不匹配数据 schema。",
+            "字段校验": "工具反馈显示字段或条件表达式可能不匹配数据 schema。",
             "坐标系冲突": "空间距离或投影处理存在 CRS 风险。",
             "结果为空": "当前检索条件过窄、图层选择错误或地名表达与数据不一致。",
             "工具执行异常": "工具运行中出现异常，需要把错误信息转化为下一轮约束。",
@@ -82,7 +100,7 @@ class CriticAgent:
 
     def _strategy(self, category):
         return {
-            "字段验证": "重新读取图层字段，使用真实列名构造条件；优先让工具错误中的可用字段清单指导重试。",
+            "字段校验": "重新读取图层字段，使用真实列名构造条件；优先让工具错误中的可用字段清单指导重试。",
             "坐标系冲突": "距离分析统一转为米制投影，并在回答中说明距离单位和 CRS 假设。",
             "结果为空": "先用 search_poi 做宽松定位，再用精确查询或邻近分析逐步收窄。",
             "工具执行异常": "保留 traceback 摘要，调整参数、图层名或字段名后再次调用工具。",

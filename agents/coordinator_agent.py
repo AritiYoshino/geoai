@@ -28,6 +28,11 @@ class CoordinatorAgent:
         )
         messages = [SystemMessage(content=system_prompt), HumanMessage(content=user_input)]
 
+        if self._should_answer_directly(task_type, user_input):
+            answer = self._answer_help_request(user_input, messages, trace)
+            self.context_manager.set_trace(trace)
+            return answer
+
         final_answer = self._dispatch_loop(
             user_input=user_input,
             task_type=task_type,
@@ -37,6 +42,36 @@ class CoordinatorAgent:
         )
         self.context_manager.set_trace(trace)
         return final_answer
+
+    def _should_answer_directly(self, task_type, user_input):
+        if task_type == "help":
+            return True
+        help_markers = ["怎么用", "如何用", "介绍", "说明", "解释", "有哪些功能", "可以做什么", "能做什么"]
+        lowered = str(user_input).lower()
+        return any(marker in lowered for marker in help_markers)
+
+    def _answer_help_request(self, user_input, messages, trace):
+        trace.add("Coordinator Agent", "识别为说明型请求，直接生成回答，不进入工具调用循环。")
+        messages[0] = SystemMessage(
+            content=(
+                str(messages[0].content)
+                + "\n## 说明型问题附加规则\n"
+                + "- 如果用户是在询问某种分析能力怎么用、适合什么场景、需要哪些参数，请直接回答。\n"
+                + "- 不要调用任何工具，不要执行代码，不要进入多轮调度。\n"
+                + "- 优先给出：适用场景、输入参数、典型问法、结果解读、注意事项。\n"
+                + "- 回答使用简洁中文。"
+            )
+        )
+        try:
+            response = self.spatial_agent.llm.invoke(messages)
+            content = getattr(response, "content", "") or "我可以继续为你说明这个分析能力的适用场景、参数和示例问法。"
+            trace.add("Coordinator Agent / Final", str(content)[:500])
+            return content
+        except Exception as exc:
+            answer = f"说明请求生成失败：{str(exc)}"
+            trace.add("Reflector Agent", answer)
+            self.reflector_agent.record_exception("help", "llm.invoke", str(exc), trace)
+            return answer
 
     def _make_plan(self, user_input, task_type, conversation_context):
         base = [

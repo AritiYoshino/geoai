@@ -2,6 +2,8 @@ const palette = ["#2563eb", "#16a34a", "#dc2626", "#9333ea", "#ea580c", "#0891b2
 let layerPayload = [];
 let currentSessionId = "";
 let suppressBankChange = false;
+const selectedLayers = new Set();
+const layerStatus = new Map();
 
 const shell = document.getElementById("appShell");
 const sidebarToggleBtn = document.getElementById("sidebarToggleBtn");
@@ -31,12 +33,19 @@ const map = new maplibregl.Map({
 map.addControl(new maplibregl.NavigationControl({ visualizePitch: true }), "top-right");
 map.addControl(new maplibregl.ScaleControl({ maxWidth: 120, unit: "metric" }), "bottom-left");
 
+const refreshSelectedLayersDebounced = debounce(() => refreshSelectedLayers(), 450);
+
 map.on("load", async () => {
   await loadLayers();
   await refreshSessions();
   await refreshTrace();
+  await refreshAcePanel();
   await refreshExperience();
   await refreshBanks();
+});
+
+map.on("moveend", () => {
+  refreshSelectedLayersDebounced();
 });
 
 function sourceId(name) { return `src-${name}`; }
@@ -52,7 +61,7 @@ async function api(path, options = {}) {
       ...options,
     });
   } catch (error) {
-    throw new Error("无法连接到 Web 服务。请确认 main_web.py 正在运行，并且端口没有被旧进程占用。");
+    throw new Error("无法连接到 Web 服务。请确认 main_web.py 正在运行。");
   }
 
   const contentType = response.headers.get("Content-Type") || "";
@@ -61,16 +70,9 @@ async function api(path, options = {}) {
 
   if (rawText) {
     if (contentType.includes("application/json")) {
-      try {
-        data = JSON.parse(rawText);
-      } catch (error) {
-        throw new Error("服务返回了无效的 JSON 数据，请重启 Web 服务后重试。");
-      }
+      data = JSON.parse(rawText);
     } else if (!response.ok) {
-      if (response.status === 404) {
-        throw new Error(`接口 ${path} 不存在。当前运行的后端可能还是旧版本，请重启 main_web.py。`);
-      }
-      throw new Error(`服务返回了非 JSON 响应（HTTP ${response.status}）。请重启 Web 服务后重试。`);
+      throw new Error(`服务返回了非 JSON 响应（HTTP ${response.status}）。`);
     }
   }
 
@@ -80,39 +82,53 @@ async function api(path, options = {}) {
 
 async function loadLayers() {
   const data = await api("/api/layers");
-  setLayers(data.layers);
+  setLayers(data.layers || []);
 }
 
 function setLayers(payload) {
   layerPayload = payload || [];
   for (const item of layerPayload) {
-    const color = palette[item.layer_index % palette.length];
-    const name = item.name;
-    const src = sourceId(name);
-    if (map.getSource(src)) {
-      map.getSource(src).setData(item.geojson);
-      continue;
-    }
-    map.addSource(src, { type: "geojson", data: item.geojson });
+    ensureLayerSource(item);
+  }
+  renderLayerControl();
+  fitAllLayerBBoxes();
+}
+
+function ensureLayerSource(item) {
+  const color = palette[item.layer_index % palette.length];
+  const name = item.name;
+  const src = sourceId(name);
+  if (!map.getSource(src)) {
+    map.addSource(src, { type: "geojson", data: emptyFeatureCollection() });
+  }
+
+  if (!map.getLayer(fillLayerId(name))) {
     map.addLayer({
       id: fillLayerId(name),
       type: "fill",
       source: src,
       filter: ["==", ["geometry-type"], "Polygon"],
+      layout: { visibility: "none" },
       paint: { "fill-color": color, "fill-opacity": 0.22 }
     });
+  }
+  if (!map.getLayer(lineLayerId(name))) {
     map.addLayer({
       id: lineLayerId(name),
       type: "line",
       source: src,
       filter: ["any", ["==", ["geometry-type"], "LineString"], ["==", ["geometry-type"], "Polygon"]],
+      layout: { visibility: "none" },
       paint: { "line-color": color, "line-width": 1.5, "line-opacity": 0.78 }
     });
+  }
+  if (!map.getLayer(pointLayerId(name))) {
     map.addLayer({
       id: pointLayerId(name),
       type: "circle",
       source: src,
       filter: ["==", ["geometry-type"], "Point"],
+      layout: { visibility: "none" },
       paint: {
         "circle-radius": ["interpolate", ["linear"], ["zoom"], 10, 3, 15, 7],
         "circle-color": color,
@@ -121,40 +137,132 @@ function setLayers(payload) {
         "circle-stroke-width": 1
       }
     });
-    addPopup(pointLayerId(name));
-    addPopup(lineLayerId(name));
-    addPopup(fillLayerId(name));
   }
-  renderLayerControl();
-  fitAllLayers();
+
+  addPopup(pointLayerId(name));
+  addPopup(lineLayerId(name));
+  addPopup(fillLayerId(name));
 }
 
 function renderLayerControl() {
   const container = document.getElementById("layerList");
   container.innerHTML = "";
+
   for (const item of layerPayload) {
-    const row = document.createElement("label");
-    row.className = "layer-row";
+    const row = document.createElement("div");
+    row.className = "layer-card";
+
+    const head = document.createElement("label");
+    head.className = "layer-row";
 
     const checkbox = document.createElement("input");
     checkbox.type = "checkbox";
-    checkbox.checked = true;
-    checkbox.onchange = () => {
-      const visibility = checkbox.checked ? "visible" : "none";
-      [pointLayerId(item.name), lineLayerId(item.name), fillLayerId(item.name)].forEach((id) => {
-        if (map.getLayer(id)) map.setLayoutProperty(id, "visibility", visibility);
-      });
+    checkbox.checked = selectedLayers.has(item.name);
+    checkbox.onchange = async () => {
+      if (checkbox.checked) {
+        selectedLayers.add(item.name);
+        await loadLayerData(item);
+      } else {
+        selectedLayers.delete(item.name);
+        clearLayerData(item.name);
+      }
+      renderLayerControl();
     };
 
-    const text = document.createElement("span");
-    text.textContent = `${item.name} (${item.feature_count})`;
+    const titleWrap = document.createElement("div");
+    titleWrap.className = "layer-title-wrap";
 
-    row.append(checkbox, text);
+    const title = document.createElement("div");
+    title.className = "layer-title";
+    title.textContent = `${item.name} (${item.feature_count})`;
+
+    const meta = document.createElement("div");
+    meta.className = "layer-meta";
+    meta.textContent = `${(item.geometry_types || []).join(", ")} | ${item.fields.length} 字段`;
+
+    titleWrap.append(title, meta);
+    head.append(checkbox, titleWrap);
+
+    const hint = document.createElement("div");
+    hint.className = "layer-hint";
+    hint.textContent = buildLayerHint(item);
+
+    row.append(head, hint);
     container.appendChild(row);
   }
 }
 
+function buildLayerHint(item) {
+  const status = layerStatus.get(item.name) || "";
+  if (status) return status;
+  if (item.is_large_layer) {
+    return `大图层，建议放大到 ${item.min_zoom} 级后再加载当前视野数据。`;
+  }
+  return "勾选后按当前地图视野按需加载。";
+}
+
+async function loadLayerData(item) {
+  const bbox = getCurrentBboxString();
+  const zoom = map.getZoom().toFixed(2);
+  const params = new URLSearchParams({
+    layer_name: item.name,
+    bbox,
+    zoom,
+  });
+  const data = await api(`/api/layer_data?${params.toString()}`);
+  layerStatus.set(item.name, data.message || `已加载当前视野 ${data.returned_count} 个要素。`);
+
+  if (data.deferred) {
+    setLayerVisibility(item.name, false);
+    updateLayerSource(item.name, emptyFeatureCollection());
+    renderLayerControl();
+    return;
+  }
+
+  updateLayerSource(item.name, data.geojson || emptyFeatureCollection());
+  setLayerVisibility(item.name, true);
+  renderLayerControl();
+}
+
+async function refreshSelectedLayers() {
+  for (const item of layerPayload) {
+    if (!selectedLayers.has(item.name)) continue;
+    await loadLayerData(item);
+  }
+}
+
+function clearLayerData(layerName) {
+  updateLayerSource(layerName, emptyFeatureCollection());
+  setLayerVisibility(layerName, false);
+  layerStatus.delete(layerName);
+}
+
+function updateLayerSource(layerName, geojson) {
+  const source = map.getSource(sourceId(layerName));
+  if (source) source.setData(geojson || emptyFeatureCollection());
+}
+
+function setLayerVisibility(layerName, visible) {
+  const value = visible ? "visible" : "none";
+  [pointLayerId(layerName), lineLayerId(layerName), fillLayerId(layerName)].forEach((id) => {
+    if (map.getLayer(id)) map.setLayoutProperty(id, "visibility", value);
+  });
+}
+
+function getCurrentBboxString() {
+  const bounds = map.getBounds();
+  return [bounds.getWest(), bounds.getSouth(), bounds.getEast(), bounds.getNorth()].join(",");
+}
+
+function emptyFeatureCollection() {
+  return { type: "FeatureCollection", features: [] };
+}
+
 function addPopup(layerId) {
+  if (map.__popupBoundLayers?.has(layerId)) return;
+  map.__popupBoundLayers = map.__popupBoundLayers || new Set();
+  map.__popupBoundLayers.add(layerId);
+
   map.on("click", layerId, (event) => {
     const feature = event.features && event.features[0];
     if (!feature) return;
@@ -176,7 +284,7 @@ function popupHtml(props) {
 }
 
 function escapeHtml(text) {
-  return text.replace(/[&<>"']/g, (ch) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#039;" }[ch]));
+  return String(text).replace(/[&<>\"']/g, (ch) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#039;" }[ch]));
 }
 
 function setHighlights(geojson) {
@@ -215,10 +323,14 @@ function setHighlights(geojson) {
   fitGeoJson(geojson, 60);
 }
 
-function fitAllLayers() {
-  const all = { type: "FeatureCollection", features: [] };
-  layerPayload.forEach((item) => all.features.push(...(item.geojson.features || [])));
-  fitGeoJson(all, 40);
+function fitAllLayerBBoxes() {
+  const bounds = new maplibregl.LngLatBounds();
+  for (const item of layerPayload) {
+    if (!item.bbox || item.bbox.length !== 4) continue;
+    bounds.extend([item.bbox[0], item.bbox[1]]);
+    bounds.extend([item.bbox[2], item.bbox[3]]);
+  }
+  if (!bounds.isEmpty()) map.fitBounds(bounds, { padding: 40, maxZoom: 12, duration: 600 });
 }
 
 function fitGeoJson(geojson, padding) {
@@ -245,6 +357,21 @@ function addMessage(sender, content) {
   log.scrollTop = log.scrollHeight;
 }
 
+function prettyValue(value, emptyText = "暂无") {
+  if (value === null || value === undefined || value === "") return emptyText;
+  if (typeof value === "object") return JSON.stringify(value, null, 2);
+  return String(value);
+}
+
+function renderAcePanel(panel = {}) {
+  document.getElementById("aceTaskType").textContent = prettyValue(panel.task_type, "暂无任务类型");
+  document.getElementById("aceExperienceHit").textContent = prettyValue(panel.retrieved_experiences, "暂无检索经验");
+  document.getElementById("aceGeneratedCode").textContent = prettyValue(panel.generated_code, "本轮未生成空间代码");
+  document.getElementById("aceExecutionStatus").textContent = prettyValue(panel.execution_status, "暂无执行状态");
+  document.getElementById("aceDiagnosis").textContent = prettyValue(panel.error_diagnosis, "暂无错误诊断");
+  document.getElementById("aceEvolution").textContent = prettyValue(panel.experience_update, "暂无经验库更新记录");
+}
+
 async function sendMessage() {
   const input = document.getElementById("chatInput");
   const message = input.value.trim();
@@ -257,8 +384,9 @@ async function sendMessage() {
     const data = await api("/api/chat", { method: "POST", body: JSON.stringify({ message }) });
     addMessage("AI 助手", data.answer);
     document.getElementById("traceBox").textContent = data.trace || "";
+    renderAcePanel(data.ace_panel || {});
     document.getElementById("experienceBox").textContent = data.experience || "";
-    setHighlights(data.highlights || { type: "FeatureCollection", features: [] });
+    setHighlights(data.highlights || emptyFeatureCollection());
     renderSessions(data.sessions, data.session);
   } catch (error) {
     addMessage("系统", `错误：${error.message}`);
@@ -272,6 +400,11 @@ async function refreshTrace() {
   document.getElementById("traceBox").textContent = data.trace || "";
 }
 
+async function refreshAcePanel() {
+  const data = await api("/api/ace-panel");
+  renderAcePanel(data.ace_panel || {});
+}
+
 async function refreshExperience() {
   const data = await api("/api/experience");
   document.getElementById("experienceBox").textContent = data.summary || "";
@@ -281,6 +414,7 @@ async function refreshSessions() {
   const data = await api("/api/sessions");
   renderSessions(data.sessions, data.current);
   renderSessionHistory(data.current);
+  renderAcePanel(data.current?.last_ace_panel || {});
 }
 
 function renderSessions(sessions, current) {
@@ -336,6 +470,7 @@ async function switchSession(sessionId) {
   });
   currentSessionId = data.session?.id || sessionId;
   renderSessionHistory(data.session);
+  renderAcePanel(data.session?.last_ace_panel || {});
   await refreshSessions();
   await refreshTrace();
 }
@@ -360,7 +495,8 @@ async function deleteSession(session) {
   renderSessions(data.sessions, data.current);
   renderSessionHistory(data.current);
   document.getElementById("traceBox").textContent = data.trace || "";
-  setHighlights({ type: "FeatureCollection", features: [] });
+  renderAcePanel(data.ace_panel || {});
+  setHighlights(emptyFeatureCollection());
 }
 
 async function refreshBanks() {
@@ -433,6 +569,14 @@ function toggleSidebar() {
   window.setTimeout(() => map.resize(), 260);
 }
 
+function debounce(fn, wait) {
+  let timer = null;
+  return (...args) => {
+    window.clearTimeout(timer);
+    timer = window.setTimeout(() => fn(...args), wait);
+  };
+}
+
 document.querySelectorAll(".tab").forEach((button) => {
   button.addEventListener("click", () => {
     document.querySelectorAll(".tab").forEach((b) => b.classList.remove("active"));
@@ -458,24 +602,9 @@ document.getElementById("newSessionBtn").addEventListener("click", async () => {
   const data = await api("/api/sessions/new", { method: "POST", body: "{}" });
   await refreshSessions();
   renderSessionHistory(data.session);
+  renderAcePanel(data.session?.last_ace_panel || {});
   await refreshTrace();
 });
-
-document.getElementById("okBtn").addEventListener("click", () => submitFeedback("correct"));
-document.getElementById("badBtn").addEventListener("click", () => submitFeedback("incorrect"));
-document.getElementById("fixBtn").addEventListener("click", async () => {
-  const correction = prompt("请说明正确结果或以后应遵循的规则：");
-  if (correction) await submitFeedback("correction", correction);
-});
-
-async function submitFeedback(type, correction = "") {
-  const data = await api("/api/feedback", {
-    method: "POST",
-    body: JSON.stringify({ type, correction })
-  });
-  addMessage("系统", `已记录反馈并更新经验库：${data.result}`);
-  document.getElementById("experienceBox").textContent = data.experience || "";
-}
 
 document.getElementById("refreshExperienceBtn").addEventListener("click", refreshExperience);
 document.getElementById("renameBankBtn").addEventListener("click", renameActiveBank);

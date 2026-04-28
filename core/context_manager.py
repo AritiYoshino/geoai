@@ -12,7 +12,9 @@ class ContextManager:
         self.session_store = session_store or SessionStore()
         self.active_session = self.session_store.get_current_session()
         self.recent_pois = list(self.active_session.get("recent_pois", []))
+        self.user_preferences = dict(self.active_session.get("user_preferences", {}))
         self.last_trace_text = self.active_session.get("last_trace_text", "尚未执行任务。")
+        self.last_ace_panel = dict(self.active_session.get("last_ace_panel", {}))
 
     def classify_intent(self, user_input):
         return classify_task(user_input)
@@ -43,11 +45,16 @@ class ContextManager:
         self.session_store.update_memory(recent_pois=self.recent_pois)
 
     def format_conversation_context(self, user_input):
+        lines = []
+        preference_text = self.format_user_preferences()
+        if preference_text:
+            lines.append(preference_text)
+
         if not self.recent_pois:
-            return "暂无可引用的上一轮 POI。"
+            lines.append("暂无可引用的上一轮 POI。")
+            return "\n".join(lines)
 
         scored = self.score_relevant_pois(user_input)
-        lines = []
         if scored and scored[0][0] >= 4:
             top = scored[0][1]
             lines.append(
@@ -63,6 +70,29 @@ class ContextManager:
                 f"name={poi.get('name', '')}, type={poi.get('type', '')}, "
                 f"address={poi.get('address', '')}, district={poi.get('district', '')}"
             )
+        return "\n".join(lines)
+
+    def set_user_preference(self, key, value):
+        if value in ("", None, False):
+            self.user_preferences.pop(key, None)
+        else:
+            self.user_preferences[key] = value
+        self.session_store.update_memory(user_preferences=self.user_preferences)
+
+    def get_user_preferences(self):
+        return dict(self.user_preferences)
+
+    def format_user_preferences(self):
+        if not self.user_preferences:
+            return ""
+
+        lines = ["当前会话中的用户偏好与纠正规则："]
+        if self.user_preferences.get("highlight_mode") == "admin_polygon_only":
+            lines.append("- 涉及“哪个区/行政区/区县 + 并高亮”时，只高亮行政区面图层，不高亮餐饮或住宿 POI 点。")
+        if self.user_preferences.get("avoid_partial_poi_highlight"):
+            lines.append("- 不要高亮“部分餐馆位置”或“部分 POI 点”作为统计类问题的结果展示。")
+        if self.user_preferences.get("preferred_highlight_layer"):
+            lines.append(f"- 优先高亮图层：{self.user_preferences['preferred_highlight_layer']}")
         return "\n".join(lines)
 
     def select_relevant_pois(self, user_input):
@@ -120,7 +150,7 @@ class ContextManager:
         text = str(text).lower()
         for token in ["的", "这个", "那个", "它", "其", "附近", "周边", "查询", "查找", "店"]:
             text = text.replace(token, "")
-        return re.sub(r"[\s,，。；;:：()（）·\-_/]+", "", text)
+        return re.sub(r"[\s,，。；;:（）()·\-_/]+", "", text)
 
     def _name_pieces(self, name):
         pieces = {name}
@@ -131,7 +161,7 @@ class ContextManager:
                 pieces.add(inside[2:])
             if inside.endswith("店"):
                 pieces.add(inside[:-1])
-        for marker in ["店", "酒店", "中心", "祠", "路"]:
+        for marker in ["店", "酒店", "中心", "苑", "路"]:
             if marker in name:
                 for part in re.split(r"[\s（）()·\-_/]+", name):
                     if marker in part:
@@ -167,13 +197,21 @@ class ContextManager:
 4. find_nearby_point(reference_layer, reference_index, target_layer, distance, unit): 以单个要素为中心做邻近分析。
 5. find_nearby_point_filtered(reference_layer, reference_index, target_layer, distance, keyword, unit): 以单个要素为中心做带关键词过滤的邻近分析。
 6. get_poi_by_index(layer_name, feature_index): 按上下文解析出的图层和索引获取单个 POI 详情并高亮。
-7. execute_spatial_code(task_description, code): 当固定工具不足时，生成并执行受控 GeoPandas/Pandas 空间分析代码。
+7. buffer_analysis(layer_name, distance, unit, dissolve): 缓冲区分析，并保存可导出的派生结果。
+8. overlay_layers(input_layer, overlay_layer, how): 空间叠加 overlay。
+9. spatial_join_layers(target_layer, join_layer, predicate, how): 空间连接 sjoin。
+10. nearest_neighbor_search(reference_layer, reference_index, target_layer, top_k, max_distance, unit): 最近邻分析。
+11. cluster_points_dbscan(layer_name, eps, min_samples, unit): DBSCAN 聚类分析。
+12. hotspot_analysis(layer_name, cell_size, unit, top_n): 网格热点分析。
+13. summarize_layer_statistics(layer_name, group_by, numeric_field): 结果统计汇总。
+14. export_analysis_result(source_type, layer_name, export_format, output_name): 导出 GeoJSON / CSV。
+15. execute_spatial_code(task_description, code): 当固定工具不足时，生成并执行受控 GeoPandas/Pandas 空间分析代码。
 
 ## 代码生成规则
 - 只有固定工具无法完成时才使用 execute_spatial_code。
 - 代码不能 import，不能读写文件，不能调用系统命令。
 - 可直接使用 layers、layer_names、pd、gpd、np、Point、reproject_to_meters。
-- layers 是 dict[str, GeoDataFrame]，键是图层名，例如 layers["住宿服务_6474"]。
+- layers 是 dict[str, GeoDataFrame]，键是图层名。
 - 最终结果必须赋值给 RESULT。
 - 如需地图高亮，可赋值 HIGHLIGHTS=[("图层名", 要素索引), ...]。
 - 距离/面积分析必须先用 reproject_to_meters 转成米制投影。
@@ -182,6 +220,8 @@ class ContextManager:
 - 属性查询必须使用 schema 中真实存在的字段名，禁止猜字段。
 - “它、这个、那个、X 的店、上面那个”等省略表达必须优先参考“最可能指代的上一轮 POI”。
 - 如果只是查询上下文中某个店的详情，优先调用 get_poi_by_index。
+- 如果用户是在询问某个分析能力怎么用、适合什么场景、有哪些参数，应直接文字说明，不调用工具。
+- 如果当前会话偏好要求“只高亮行政区 shp / 不高亮餐馆点”，则“哪个区最多/第二多并高亮”这类任务必须只高亮行政区面图层。
 - 涉及“附近、距离、公里、米”的任务必须考虑 CRS 和米制投影风险。
 - 工具返回大量结果时，回答摘要即可，并说明地图已高亮匹配要素。
 - 回答要简洁说明分析步骤和结论。
@@ -189,13 +229,19 @@ class ContextManager:
 
     def set_trace(self, trace):
         self.last_trace_text = trace.render()
+        self.last_ace_panel = self._build_ace_panel(trace)
         self.session_store.update_memory(
             recent_pois=self.recent_pois,
             last_trace_text=self.last_trace_text,
+            last_ace_panel=self.last_ace_panel,
+            user_preferences=self.user_preferences,
         )
 
     def get_trace_text(self):
         return self.last_trace_text
+
+    def get_ace_panel(self):
+        return self.last_ace_panel
 
     def add_message(self, role, content):
         self.session_store.add_message(role, content)
@@ -222,13 +268,17 @@ class ContextManager:
     def new_session(self, title=None):
         self.active_session = self.session_store.create_session(title)
         self.recent_pois = []
+        self.user_preferences = dict(self.active_session.get("user_preferences", {}))
         self.last_trace_text = self.active_session.get("last_trace_text", "尚未执行任务。")
+        self.last_ace_panel = dict(self.active_session.get("last_ace_panel", {}))
         return self.active_session
 
     def switch_session(self, session_id):
         self.active_session = self.session_store.switch_session(session_id)
         self.recent_pois = list(self.active_session.get("recent_pois", []))
+        self.user_preferences = dict(self.active_session.get("user_preferences", {}))
         self.last_trace_text = self.active_session.get("last_trace_text", "尚未执行任务。")
+        self.last_ace_panel = dict(self.active_session.get("last_ace_panel", {}))
         return self.active_session
 
     def get_current_session(self):
@@ -241,5 +291,30 @@ class ContextManager:
     def delete_session(self, session_id):
         self.active_session = self.session_store.delete_session(session_id)
         self.recent_pois = list(self.active_session.get("recent_pois", []))
+        self.user_preferences = dict(self.active_session.get("user_preferences", {}))
         self.last_trace_text = self.active_session.get("last_trace_text", self.last_trace_text)
+        self.last_ace_panel = dict(self.active_session.get("last_ace_panel", self.last_ace_panel))
         return self.active_session
+
+    def _build_ace_panel(self, trace):
+        entries = list(getattr(trace, "entries", []))
+
+        def pick_latest(role):
+            for entry in reversed(entries):
+                if entry.get("role") == role:
+                    return entry.get("content", "")
+            return ""
+
+        def pick_all(role):
+            return [entry.get("content", "") for entry in entries if entry.get("role") == role]
+
+        return {
+            "task_type": getattr(trace, "task_type", ""),
+            "retrieved_experiences": pick_latest("Experience Library"),
+            "generated_code": pick_latest("Code Agent / Generated Code"),
+            "execution_status": pick_latest("Code Agent / Execution") or pick_latest("Tool Feedback"),
+            "error_diagnosis": pick_latest("Reflector Agent / Diagnosis"),
+            "experience_update": pick_latest("Reflector Agent / Evolution"),
+            "reflection": pick_latest("Reflector Agent"),
+            "tool_feedbacks": pick_all("Tool Feedback"),
+        }
