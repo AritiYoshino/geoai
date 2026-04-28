@@ -1,6 +1,7 @@
 import json
 import mimetypes
 import os
+import socket
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import urlparse
 
@@ -22,6 +23,15 @@ class WebGISAppState:
 
 
 STATE = None
+
+
+class ExclusiveThreadingHTTPServer(ThreadingHTTPServer):
+    allow_reuse_address = False
+
+    def server_bind(self):
+        if hasattr(socket, "SO_EXCLUSIVEADDRUSE"):
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_EXCLUSIVEADDRUSE, 1)
+        super().server_bind()
 
 
 class WebGISRequestHandler(SimpleHTTPRequestHandler):
@@ -78,6 +88,26 @@ class WebGISRequestHandler(SimpleHTTPRequestHandler):
                 session = STATE.ai_handler.switch_session(data["session_id"])
                 STATE.map_handler.clear_highlight()
                 self._send_json({"session": session})
+            elif parsed.path == "/api/sessions/rename":
+                session = STATE.ai_handler.rename_session(data["session_id"], data.get("title", ""))
+                self._send_json(
+                    {
+                        "session": session,
+                        "current": STATE.ai_handler.get_current_session(),
+                        "sessions": STATE.ai_handler.list_sessions(),
+                    }
+                )
+            elif parsed.path == "/api/sessions/delete":
+                session = STATE.ai_handler.delete_session(data["session_id"])
+                STATE.map_handler.clear_highlight()
+                self._send_json(
+                    {
+                        "session": session,
+                        "current": STATE.ai_handler.get_current_session(),
+                        "sessions": STATE.ai_handler.list_sessions(),
+                        "trace": STATE.ai_handler.get_trace_text(),
+                    }
+                )
             elif parsed.path == "/api/highlights/clear":
                 STATE.map_handler.clear_highlight()
                 self._send_json({"geojson": STATE.map_handler.highlights_geojson()})
@@ -92,6 +122,26 @@ class WebGISRequestHandler(SimpleHTTPRequestHandler):
                 self._send_json(
                     {
                         "bank": bank,
+                        "banks": STATE.ai_handler.list_experience_banks(),
+                        "summary": STATE.ai_handler.get_experience_summary(),
+                    }
+                )
+            elif parsed.path == "/api/experience-banks/rename":
+                bank = STATE.ai_handler.rename_experience_bank(data["bank_id"], data.get("name", ""))
+                self._send_json(
+                    {
+                        "bank": bank,
+                        "active": STATE.ai_handler.get_active_experience_bank(),
+                        "banks": STATE.ai_handler.list_experience_banks(),
+                        "summary": STATE.ai_handler.get_experience_summary(),
+                    }
+                )
+            elif parsed.path == "/api/experience-banks/delete":
+                bank = STATE.ai_handler.delete_experience_bank(data["bank_id"])
+                self._send_json(
+                    {
+                        "bank": bank,
+                        "active": STATE.ai_handler.get_active_experience_bank(),
                         "banks": STATE.ai_handler.list_experience_banks(),
                         "summary": STATE.ai_handler.get_experience_summary(),
                     }
@@ -155,9 +205,29 @@ class WebGISRequestHandler(SimpleHTTPRequestHandler):
         print("[web]", format % args)
 
 
-def run(host="127.0.0.1", port=8000):
+def run(host="127.0.0.1", port=8000, max_port=8010):
     global STATE
     STATE = WebGISAppState()
-    server = ThreadingHTTPServer((host, port), WebGISRequestHandler)
-    print(f"GeoAI WebGIS running at http://{host}:{port}")
+    server = None
+    selected_port = None
+    last_error = None
+
+    for candidate_port in range(port, max_port + 1):
+        try:
+            server = ExclusiveThreadingHTTPServer((host, candidate_port), WebGISRequestHandler)
+            selected_port = candidate_port
+            break
+        except OSError as exc:
+            last_error = exc
+
+    if server is None or selected_port is None:
+        raise RuntimeError(
+            f"端口 {port}-{max_port} 都已被占用。"
+            f"请先停止旧的 Web 服务后再启动。原始错误: {last_error}"
+        ) from last_error
+
+    if selected_port != port:
+        print(f"端口 {port} 已被占用，已自动切换到可用端口 {selected_port}。")
+
+    print(f"GeoAI WebGIS running at http://{host}:{selected_port}")
     server.serve_forever()

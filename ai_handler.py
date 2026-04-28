@@ -1,7 +1,7 @@
 from langchain_deepseek import ChatDeepSeek
 import os
 
-from agents import CoordinatorAgent, ReflectorAgent, SpatialAnalystAgent
+from agents import CodeAgent, CoordinatorAgent, ReflectorAgent, SpatialAnalystAgent
 from core.context_manager import ContextManager
 from core.experience_bank_manager import ExperienceBankManager
 from core.experience_library import ExperienceLibrary
@@ -26,9 +26,9 @@ class AIHandler:
         self.experience_library = ExperienceLibrary(self.experience_bank_manager.active_path())
         self.context_manager = ContextManager(map_handler)
 
-        # Tools write transient highlights / POI hits onto this facade.
         self.tools = create_tools(self)
-        self.spatial_agent = SpatialAnalystAgent(self.llm, self.tools, self)
+        self.code_agent = CodeAgent(self.llm, self)
+        self.spatial_agent = SpatialAnalystAgent(self.llm, self.tools, self, code_agent=self.code_agent)
         self.reflector_agent = ReflectorAgent(self.experience_library)
         self.coordinator_agent = CoordinatorAgent(
             context_manager=self.context_manager,
@@ -74,6 +74,12 @@ class AIHandler:
     def switch_session(self, session_id):
         return self.context_manager.switch_session(session_id)
 
+    def rename_session(self, session_id, title):
+        return self.context_manager.rename_session(session_id, title)
+
+    def delete_session(self, session_id):
+        return self.context_manager.delete_session(session_id)
+
     def get_current_session(self):
         return self.context_manager.get_current_session()
 
@@ -114,4 +120,12 @@ class AIHandler:
             source = []
         bank = self.experience_bank_manager.create_bank(name, template, source)
         self.experience_library.switch_path(bank["path"])
+        return bank
+
+    def rename_experience_bank(self, bank_id, name):
+        return self.experience_bank_manager.rename_bank(bank_id, name)
+
+    def delete_experience_bank(self, bank_id):
+        bank = self.experience_bank_manager.delete_bank(bank_id)
+        self.experience_library.switch_path(self.experience_bank_manager.active_path())
         return bank

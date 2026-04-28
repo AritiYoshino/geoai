@@ -13,10 +13,11 @@ class ToolExecution:
 class SpatialAnalystAgent:
     """Runs spatial reasoning by invoking GIS tools through the LLM tool API."""
 
-    def __init__(self, llm, tools, tool_state):
+    def __init__(self, llm, tools, tool_state, code_agent=None):
         self.llm = llm
         self.tools = tools
         self.tool_state = tool_state
+        self.code_agent = code_agent
         self.llm_with_tools = llm.bind_tools(tools)
 
     def think(self, messages, trace, iteration):
@@ -34,7 +35,14 @@ class SpatialAnalystAgent:
             return ToolExecution(tool_name, tool_args, result)
 
         try:
-            result = tool_func.invoke(tool_args)
+            if tool_name == "execute_spatial_code" and self.code_agent:
+                result = self.code_agent.execute(
+                    task_description=tool_args.get("task_description", ""),
+                    code=tool_args.get("code", ""),
+                    trace=trace,
+                )
+            else:
+                result = tool_func.invoke(tool_args)
         except Exception as exc:
             result = f"工具执行出错: {str(exc)}"
 

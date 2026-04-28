@@ -111,3 +111,32 @@ class SessionStore:
         )
         self.touch(session)
         return session
+
+    def rename_session(self, session_id, title):
+        session = self.get_session(session_id)
+        if session is None:
+            raise ValueError(f"未找到会话: {session_id}")
+        title = (title or "").strip()
+        if not title:
+            raise ValueError("会话名称不能为空")
+        session["title"] = title[:60]
+        self.touch(session)
+        return session
+
+    def delete_session(self, session_id):
+        sessions = self.data.get("sessions", [])
+        session = self.get_session(session_id)
+        if session is None:
+            raise ValueError(f"未找到会话: {session_id}")
+        if len(sessions) <= 1:
+            raise ValueError("至少需要保留一个会话")
+
+        remaining = [item for item in sessions if item.get("id") != session_id]
+        self.data["sessions"] = remaining
+
+        if self.data.get("current_session_id") == session_id:
+            remaining.sort(key=lambda item: item.get("updated_at", ""), reverse=True)
+            self.data["current_session_id"] = remaining[0]["id"]
+
+        self.save()
+        return self.get_current_session()

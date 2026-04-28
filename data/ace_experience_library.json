@@ -53,8 +53,9 @@
     "problem": "返回结果规模过大，需要摘要输出并保留地图高亮。 原始反馈: 找到 707 个匹配项，仅显示前 20 条: [住宿服务_6474] 索引:1225 | name: 尚锦翡翠酒店(成都春熙路店), type: 住宿服务;宾馆酒店;宾馆酒店, address: 府青路二段24号(近财富又一城,电子科大东校区), province: 四川省, city: 成都市, district: ",
     "strategy": "回答只展示摘要和代表样本，地图端继续高亮全部匹配结果。",
     "source": "critic",
-    "success_count": 1,
-    "created_at": "2026-04-27T19:51:28"
+    "success_count": 2,
+    "created_at": "2026-04-27T19:51:28",
+    "updated_at": "2026-04-27T23:53:09"
   },
   {
     "id": "ace-20260427195131-5",
@@ -66,9 +67,9 @@
     "problem": "工具反馈显示字段或条件表达式可能不匹配数据 schema。 原始反馈: 错误：条件中使用了不存在的字段名 ['like']。图层 '餐饮_61102' 可用的字段有：name, type, address, lng, lat, province, city, district。请修正字段名后重试。",
     "strategy": "重新读取图层字段，使用真实列名构造条件；优先让工具错误中的可用字段清单指导重试。",
     "source": "critic",
-    "success_count": 7,
+    "success_count": 10,
     "created_at": "2026-04-27T19:51:31",
-    "updated_at": "2026-04-27T20:23:49"
+    "updated_at": "2026-04-27T23:57:03"
   },
   {
     "id": "ace-20260427195132-6",
@@ -80,9 +81,9 @@
     "problem": "当前检索条件过窄、图层选择错误或地名表达与数据不一致。 原始反馈: 未找到任何包含 '春熙路店 餐饮' 的POI。",
     "strategy": "先用 search_poi 做宽松定位，再用精确查询或邻近分析逐步收窄。",
     "source": "critic",
-    "success_count": 5,
+    "success_count": 10,
     "created_at": "2026-04-27T19:51:32",
-    "updated_at": "2026-04-27T20:23:54"
+    "updated_at": "2026-04-27T23:57:02"
   },
   {
     "id": "ace-20260427195133-7",
@@ -108,9 +109,9 @@
     "problem": "工具运行中出现异常，需要把错误信息转化为下一轮约束。 原始反馈: 条件查询出错: cannot assign without a target object。请确保条件格式正确，列名存在。示例: district=='锦江区' and type=='酒店'",
     "strategy": "保留 traceback 摘要，调整参数、图层名或字段名后再次调用工具。",
     "source": "critic",
-    "success_count": 6,
+    "success_count": 9,
     "created_at": "2026-04-27T19:51:36",
-    "updated_at": "2026-04-27T20:23:51"
+    "updated_at": "2026-04-28T01:12:29"
   },
   {
     "id": "ace-20260427195809-9",
@@ -122,9 +123,9 @@
     "problem": "当前检索条件过窄、图层选择错误或地名表达与数据不一致。 原始反馈: 在 住宿服务_6474 索引 2513 的 500.0m 范围内，找到 450 个包含 '中餐' 的 餐饮_61102，仅显示前 20 个: [餐饮_61102] 要素32838: name: 品轩蜀味焖锅(群光店), type: 餐饮服务;中餐厅;中餐厅, address: 春熙路群光广场8楼a-05号, provi",
     "strategy": "先用 search_poi 做宽松定位，再用精确查询或邻近分析逐步收窄。",
     "source": "critic",
-    "success_count": 2,
+    "success_count": 13,
     "created_at": "2026-04-27T19:58:09",
-    "updated_at": "2026-04-27T20:23:59"
+    "updated_at": "2026-04-28T01:12:56"
   },
   {
     "id": "ace-20260427202058-10",
@@ -166,5 +167,57 @@
     "success_count": 2,
     "created_at": "2026-04-27T21:33:17",
     "updated_at": "2026-04-27T21:33:40"
+  },
+  {
+    "id": "ace-20260427235315-13",
+    "category": "结果规模控制",
+    "task_types": [
+      "query"
+    ],
+    "trigger": "任务类型=query, 工具=search_poi, 参数={'keyword': '春熙路步行街'}",
+    "problem": "返回结果规模过大，需要摘要输出并保留地图高亮。 原始反馈: 找到 22 个匹配项，仅显示前 20 条: [住宿服务_6474] 索引:2504 | name: 如家快捷酒店(成都春熙路步行街店), type: 住宿服务;宾馆酒店;经济型连锁酒店, address: 总府路18号春熙商汇广场1、9-12, province: 四川省, city: 成都市, district: 锦",
+    "strategy": "回答只展示摘要和代表样本，地图端继续高亮全部匹配结果。",
+    "source": "critic",
+    "success_count": 1,
+    "created_at": "2026-04-27T23:53:15"
+  },
+  {
+    "id": "ace-20260427235522-14",
+    "category": "结果为空",
+    "task_types": [
+      "nearby"
+    ],
+    "trigger": "任务类型=nearby, 工具=find_nearby_point, 参数={'reference_layer': '住宿服务_6474', 'reference_index': 2494, 'target_layer': '餐饮_61102', 'distance': 20, 'unit': 'm'}",
+    "problem": "当前检索条件过窄、图层选择错误或地名表达与数据不一致。 原始反馈: 在距离 住宿服务_6474 索引 2494 的 20.0m 范围内未找到任何 餐饮_61102。",
+    "strategy": "先用 search_poi 做宽松定位，再用精确查询或邻近分析逐步收窄。",
+    "source": "critic",
+    "success_count": 1,
+    "created_at": "2026-04-27T23:55:22"
+  },
+  {
+    "id": "ace-20260428011237-15",
+    "category": "工具执行异常",
+    "task_types": [
+      "nearby"
+    ],
+    "trigger": "任务类型=nearby, 工具=execute_spatial_code, 参数={'task_description': '获取住宿服务图层的前10家酒店，并统计每家酒店500米范围内的餐饮POI数量', 'code': '# 获取住宿服务图层\\naccommodation = layers[\"住宿服务_6474\"]\\n# 取前10家\\ntop10 = accommodation.head(10)\\ntop10[[\"name\", \"type\", \"address\"]]\\n'}",
+    "problem": "工具运行中出现异常，需要把错误信息转化为下一轮约束。 原始反馈: 代码执行失败，traceback 如下： Traceback (most recent call last):   File \"D:\\geoai\\tools\\code_executor.py\", line 144, in run_spatial_code     exec(compiled, global_env, l",
+    "strategy": "保留 traceback 摘要，调整参数、图层名或字段名后再次调用工具。",
+    "source": "critic",
+    "success_count": 1,
+    "created_at": "2026-04-28T01:12:37"
+  },
+  {
+    "id": "ace-20260428011417-16",
+    "category": "用户正反馈",
+    "task_types": [
+      "query"
+    ],
+    "trigger": "用户反馈类型=correct; 用户任务=各行政区酒店与餐饮数量统计及比值排序",
+    "problem": "用户确认该任务结果正确。任务: 各行政区酒店与餐饮数量统计及比值排序",
+    "strategy": "类似任务可优先复用本次上下文解析、工具选择和回答组织方式。",
+    "source": "user_feedback",
+    "success_count": 1,
+    "created_at": "2026-04-28T01:14:17"
   }
 ]

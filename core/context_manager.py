@@ -233,3 +233,13 @@ class ContextManager:
 
     def get_current_session(self):
         return self.session_store.get_current_session()
+
+    def rename_session(self, session_id, title):
+        self.active_session = self.session_store.rename_session(session_id, title)
+        return self.active_session
+
+    def delete_session(self, session_id):
+        self.active_session = self.session_store.delete_session(session_id)
+        self.recent_pois = list(self.active_session.get("recent_pois", []))
+        self.last_trace_text = self.active_session.get("last_trace_text", self.last_trace_text)
+        return self.active_session

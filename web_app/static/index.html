@@ -9,41 +9,60 @@
   <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
 </head>
 <body>
-  <main class="shell">
+  <main class="shell shell-expanded" id="appShell">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-brand">GeoAI</div>
+        <button id="sidebarToggleBtn" class="icon-btn" type="button" title="收起侧栏" aria-label="收起侧栏">
+          <span class="toggle-icon">☰</span>
+        </button>
+      </div>
+
+      <div class="sidebar-content">
+        <section class="sidebar-section card">
+          <div class="section-header">
+            <h2>图层</h2>
+          </div>
+          <div id="layerList" class="layer-list"></div>
+        </section>
+
+        <section class="sidebar-section card session-section">
+          <div class="section-header">
+            <h2>会话</h2>
+            <button id="newSessionBtn" class="text-btn" type="button">新建会话</button>
+          </div>
+          <div id="sessionList" class="session-list"></div>
+        </section>
+      </div>
+    </aside>
+
     <section class="map-pane">
       <div id="map"></div>
-      <div class="layer-card">
-        <div class="card-title">图层</div>
-        <div id="layerList"></div>
-      </div>
     </section>
 
-    <aside class="side-pane">
-      <header class="topbar">
-        <div class="brand">GeoAI Agent</div>
-        <button id="clearHighlightBtn" title="清除地图高亮">清除高亮</button>
+    <aside class="agent-pane card">
+      <header class="agent-header">
+        <div>
+          <div class="agent-title">GeoAI Agent</div>
+          <div class="agent-subtitle">多智能体地理分析助手</div>
+        </div>
+        <button id="clearHighlightBtn" class="text-btn" type="button" title="清除地图高亮">清除高亮</button>
       </header>
 
-      <section class="control-row">
-        <label>会话</label>
-        <select id="sessionSelect"></select>
-        <button id="newSessionBtn">新会话</button>
-      </section>
-
       <nav class="tabs">
-        <button class="tab active" data-tab="chat">对话</button>
-        <button class="tab" data-tab="trace">ACE 轨迹</button>
-        <button class="tab" data-tab="experience">经验库</button>
+        <button class="tab active" data-tab="chat" type="button">对话</button>
+        <button class="tab" data-tab="trace" type="button">ACE 轨迹</button>
+        <button class="tab" data-tab="experience" type="button">经验库</button>
       </nav>
 
       <section id="chatTab" class="tab-panel active">
         <div id="chatLog" class="chat-log"></div>
         <textarea id="chatInput" placeholder="输入地理分析任务，例如：统计每家酒店300米内餐饮数量并排序"></textarea>
         <div class="button-row">
-          <button id="sendBtn" class="primary">发送</button>
-          <button id="okBtn">👍 正确</button>
-          <button id="badBtn">👎 不正确</button>
-          <button id="fixBtn">✍ 纠正</button>
+          <button id="sendBtn" class="primary" type="button">发送</button>
+          <button id="okBtn" type="button">👍 正确</button>
+          <button id="badBtn" type="button">👎 不正确</button>
+          <button id="fixBtn" type="button">✍ 纠正</button>
         </div>
       </section>
 
@@ -52,15 +71,19 @@
       </section>
 
       <section id="experienceTab" class="tab-panel">
-        <div class="control-row">
-          <label>经验库</label>
+        <div class="control-stack">
+          <label for="bankSelect">当前经验库</label>
           <select id="bankSelect"></select>
         </div>
+        <div class="button-row">
+          <button id="renameBankBtn" type="button">重命名</button>
+          <button id="deleteBankBtn" type="button">删除</button>
+        </div>
         <div class="button-row wrap">
-          <button data-template="empty" class="bankCreateBtn">新建空库</button>
-          <button data-template="default" class="bankCreateBtn">默认模板</button>
-          <button data-template="copy_current" class="bankCreateBtn">复制当前</button>
-          <button id="refreshExperienceBtn">刷新</button>
+          <button data-template="empty" class="bankCreateBtn" type="button">新建空库</button>
+          <button data-template="default" class="bankCreateBtn" type="button">默认模板</button>
+          <button data-template="copy_current" class="bankCreateBtn" type="button">复制当前</button>
+          <button id="refreshExperienceBtn" type="button">刷新</button>
         </div>
         <pre id="experienceBox"></pre>
       </section>

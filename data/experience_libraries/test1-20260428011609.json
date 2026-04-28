@@ -1,0 +1,164 @@
+[
+  {
+    "id": "ace-20260428011651-1",
+    "category": "用户负反馈",
+    "task_types": [
+      "search"
+    ],
+    "trigger": "用户反馈类型=incorrect; 用户任务=查找武侯祠的店",
+    "problem": "用户认为结果不正确。任务: 查找武侯祠的店 原回答摘要: 已在地图上高亮显示 **桔子酒店·精选(成都武侯祠店)**。\n\n**查询结果：**\n\n| 字段 | 内容 |\n|------|------|\n| 🏨 名称 | 桔子酒店·精选(成都武侯祠店) |\n| 📍 地址 | 武侯祠横街新2号 |\n| 🗺️ 区域 | 成都市武侯区 |\n| 🏷️ 类型 | 住宿服务·宾馆酒店·经济型连锁酒店 |\n| 📌 坐标 | (104",
+    "strategy": "类似任务需要重新检查上下文指代、图层选择、字段条件和空间分析参数，不要直接沿用上一次回答。",
+    "source": "user_feedback",
+    "success_count": 1,
+    "created_at": "2026-04-28T01:16:51"
+  },
+  {
+    "id": "ace-20260428011720-2",
+    "category": "用户纠正",
+    "task_types": [
+      "search"
+    ],
+    "trigger": "用户反馈类型=correction; 用户任务=查找武侯祠的店",
+    "problem": "用户对结果给出纠正。任务: 查找武侯祠的店 原回答摘要: 已在地图上高亮显示 **桔子酒店·精选(成都武侯祠店)**。\n\n**查询结果：**\n\n| 字段 | 内容 |\n|------|------|\n| 🏨 名称 | 桔子酒店·精选(成都武侯祠店) |\n| 📍 地址 | 武侯祠横街新2号 |\n| 🗺️ 区域 | 成都市武侯区 |\n| 🏷️ 类型 | 住宿服务·宾馆酒店·经济型",
+    "strategy": "遇到类似任务时优先遵循用户纠正: 我说的是查找武侯祠的店，不是桔子酒店的武侯祠的店",
+    "source": "user_feedback",
+    "success_count": 1,
+    "created_at": "2026-04-28T01:17:20"
+  },
+  {
+    "id": "ace-20260428011748-3",
+    "category": "结果规模控制",
+    "task_types": [
+      "search"
+    ],
+    "trigger": "任务类型=search, 工具=search_poi, 参数={'keyword': '武侯祠'}",
+    "problem": "返回结果规模过大，需要摘要输出并保留地图高亮。 原始反馈: 找到 387 个匹配项，仅显示前 20 条: [住宿服务_6474] 索引:2989 | name: 成都行者居别墅客栈——锦里武侯祠印象店, type: 住宿服务;住宿服务相关;住宿服务相关, address: 金雁路名流花园2巷8号(五大花园), province: 四川省, city: 成都市, district",
+    "strategy": "回答只展示摘要和代表样本，地图端继续高亮全部匹配结果。",
+    "source": "critic",
+    "success_count": 4,
+    "created_at": "2026-04-28T01:17:48",
+    "updated_at": "2026-04-28T01:24:40"
+  },
+  {
+    "id": "ace-20260428011750-4",
+    "category": "结果为空",
+    "task_types": [
+      "search"
+    ],
+    "trigger": "任务类型=search, 工具=search_poi, 参数={'keyword': '成都武侯祠博物馆'}",
+    "problem": "当前检索条件过窄、图层选择错误或地名表达与数据不一致。 原始反馈: 未找到任何包含 '成都武侯祠博物馆' 的POI。",
+    "strategy": "先用 search_poi 做宽松定位，再用精确查询或邻近分析逐步收窄。",
+    "source": "critic",
+    "success_count": 6,
+    "created_at": "2026-04-28T01:17:50",
+    "updated_at": "2026-04-28T01:23:47"
+  },
+  {
+    "id": "ace-20260428011753-5",
+    "category": "字段验证",
+    "task_types": [
+      "search"
+    ],
+    "trigger": "任务类型=search, 工具=query_poi_by_conditions, 参数={'layer_name': '住宿服务_6474', 'conditions': \"name like '%武侯祠%' and type like '%景点%'\"}",
+    "problem": "工具反馈显示字段或条件表达式可能不匹配数据 schema。 原始反馈: 错误：条件中使用了不存在的字段名 ['like']。图层 '住宿服务_6474' 可用的字段有：name, type, address, lng, lat, province, city, district。请修正字段名后重试。",
+    "strategy": "重新读取图层字段，使用真实列名构造条件；优先让工具错误中的可用字段清单指导重试。",
+    "source": "critic",
+    "success_count": 5,
+    "created_at": "2026-04-28T01:17:53",
+    "updated_at": "2026-04-28T01:24:44"
+  },
+  {
+    "id": "ace-20260428011754-6",
+    "category": "工具执行异常",
+    "task_types": [
+      "search"
+    ],
+    "trigger": "任务类型=search, 工具=query_poi_by_conditions, 参数={'layer_name': '住宿服务_6474', 'conditions': \"name='武侯祠'\"}",
+    "problem": "工具运行中出现异常，需要把错误信息转化为下一轮约束。 原始反馈: 条件查询出错: cannot assign without a target object。请确保条件格式正确，列名存在。示例: district=='锦江区' and type=='酒店'",
+    "strategy": "保留 traceback 摘要，调整参数、图层名或字段名后再次调用工具。",
+    "source": "critic",
+    "success_count": 4,
+    "created_at": "2026-04-28T01:17:54",
+    "updated_at": "2026-04-28T01:22:11"
+  },
+  {
+    "id": "ace-20260428011755-7",
+    "category": "结果为空",
+    "task_types": [
+      "search"
+    ],
+    "trigger": "任务类型=search, 工具=query_poi_by_conditions, 参数={'layer_name': '住宿服务_6474', 'conditions': \"name == '武侯祠'\"}",
+    "problem": "当前检索条件过窄、图层选择错误或地名表达与数据不一致。 原始反馈: 在图层 '住宿服务_6474' 中未找到满足条件 'name == '武侯祠'' 的要素。",
+    "strategy": "先用 search_poi 做宽松定位，再用精确查询或邻近分析逐步收窄。",
+    "source": "critic",
+    "success_count": 1,
+    "created_at": "2026-04-28T01:17:55"
+  },
+  {
+    "id": "ace-20260428012028-8",
+    "category": "用户负反馈",
+    "task_types": [
+      "search"
+    ],
+    "trigger": "用户反馈类型=incorrect; 用户任务=查找武侯祠的店",
+    "problem": "用户认为结果不正确。任务: 查找武侯祠的店 原回答摘要: 已达到最大协同轮次，请缩小任务范围或补充更明确的地点、图层、距离条件。",
+    "strategy": "类似任务需要重新检查上下文指代、图层选择、字段条件和空间分析参数，不要直接沿用上一次回答。",
+    "source": "user_feedback",
+    "success_count": 2,
+    "created_at": "2026-04-28T01:20:28",
+    "updated_at": "2026-04-28T01:24:11"
+  },
+  {
+    "id": "ace-20260428012057-9",
+    "category": "用户纠正",
+    "task_types": [
+      "search"
+    ],
+    "trigger": "用户反馈类型=correction; 用户任务=查找武侯祠的店",
+    "problem": "用户对结果给出纠正。任务: 查找武侯祠的店 原回答摘要: 已达到最大协同轮次，请缩小任务范围或补充更明确的地点、图层、距离条件。",
+    "strategy": "遇到类似任务时优先遵循用户纠正: 我的意思是找武侯祠的店。就是所有图层中 带有武侯祠的店",
+    "source": "user_feedback",
+    "success_count": 2,
+    "created_at": "2026-04-28T01:20:57",
+    "updated_at": "2026-04-28T01:24:30"
+  },
+  {
+    "id": "ace-20260428012213-10",
+    "category": "坐标系冲突",
+    "task_types": [
+      "search"
+    ],
+    "trigger": "任务类型=search, 工具=query_poi_by_conditions, 参数={'layer_name': '住宿服务_6474', 'conditions': \"district=='锦江区'\"}",
+    "problem": "空间距离或投影处理存在 CRS 风险。 原始反馈: 在图层 '住宿服务_6474' 中找到 1395 个满足条件的要素: [住宿服务_6474] 要素1835: name: 如家快捷酒店(成都红星路一号桥店), type: 住宿服务;宾馆酒店;经济型连锁酒店, address: 红星路一段9号(东城拐下街附22号), province: 四川省, city: 成都市, ",
+    "strategy": "距离分析统一转为米制投影，并在回答中说明距离单位和 CRS 假设。",
+    "source": "critic",
+    "success_count": 1,
+    "created_at": "2026-04-28T01:22:13"
+  },
+  {
+    "id": "ace-20260428012214-11",
+    "category": "坐标系冲突",
+    "task_types": [
+      "search"
+    ],
+    "trigger": "任务类型=search, 工具=query_poi_by_conditions, 参数={'layer_name': '餐饮_61102', 'conditions': \"district=='锦江区'\"}",
+    "problem": "空间距离或投影处理存在 CRS 风险。 原始反馈: 在图层 '餐饮_61102' 中找到 9541 个满足条件的要素: [餐饮_61102] 要素20637: name: 廖记棒棒鸡(一号桥店), type: 餐饮服务;餐饮相关场所;餐饮相关, address: 红星路一段35号附2号, province: 四川省, city: 成都市, district: 锦江区 [",
+    "strategy": "距离分析统一转为米制投影，并在回答中说明距离单位和 CRS 假设。",
+    "source": "critic",
+    "success_count": 1,
+    "created_at": "2026-04-28T01:22:14"
+  },
+  {
+    "id": "ace-20260428012353-12",
+    "category": "结果为空",
+    "task_types": [
+      "search"
+    ],
+    "trigger": "任务类型=search, 工具=find_nearby_point, 参数={'reference_layer': '住宿服务_6474', 'reference_index': 4264, 'target_layer': '餐饮_61102', 'distance': 500, 'unit': 'm'}",
+    "problem": "当前检索条件过窄、图层选择错误或地名表达与数据不一致。 原始反馈: 在 住宿服务_6474 索引 4264 的 500.0m 范围内，找到 225 个 餐饮_61102，仅显示前 20 个: [餐饮_61102] 要素39711: name: 清芳斋, type: 餐饮服务;中餐厅;清真菜馆, address: 和合大道与学海路交叉口东北50米, province: 四川省, city",
+    "strategy": "先用 search_poi 做宽松定位，再用精确查询或邻近分析逐步收窄。",
+    "source": "critic",
+    "success_count": 1,
+    "created_at": "2026-04-28T01:23:53"
+  }
+]
