@@ -1,0 +1,148 @@
+{
+  "experiment": "消融实验 - ACE 模块必要性验证",
+  "description": "12 个模块敏感型 GIS 任务，覆盖 Critic、Evolution、Experience Library、Context Memory 的独立贡献与协同效应。",
+  "version": "1.0",
+  "created_at": "2026-04-29",
+  "variants": [
+    {
+      "id": "full_ace",
+      "name": "Full ACE",
+      "removed_module": "",
+      "description": "完整 ACE 管线，启用上下文、经验库、Critic 与 Evolution。"
+    },
+    {
+      "id": "wo_critic",
+      "name": "w/o Critic",
+      "removed_module": "Critic",
+      "description": "移除结构化错误诊断，错误只作为普通工具反馈进入下一轮。"
+    },
+    {
+      "id": "wo_evolution",
+      "name": "w/o Evolution",
+      "removed_module": "Evolution",
+      "description": "移除经验沉淀，运行中发现的问题不写回经验库。"
+    },
+    {
+      "id": "wo_experience_lib",
+      "name": "w/o Experience Lib",
+      "removed_module": "Experience Library",
+      "description": "移除经验检索，任务提示只包含通用 GIS 规则。"
+    },
+    {
+      "id": "wo_context_memory",
+      "name": "w/o Context Memory",
+      "removed_module": "Context Memory",
+      "description": "移除会话级 POI 记忆与用户偏好记忆。"
+    }
+  ],
+  "tasks": [
+    {
+      "id": 1,
+      "task": "用 district 字段筛选成华区餐饮 POI，禁止猜测字段名。",
+      "task_type": "field_query",
+      "difficulty": "简单",
+      "requires": ["experience_lib"],
+      "risk": "field_error",
+      "expected_module": "Experience Library"
+    },
+    {
+      "id": 2,
+      "task": "用户误写字段 area='武侯区'，系统需要识别字段错误并改用 district。",
+      "task_type": "field_recovery",
+      "difficulty": "中等",
+      "requires": ["critic", "experience_lib"],
+      "risk": "field_error",
+      "expected_module": "Critic"
+    },
+    {
+      "id": 3,
+      "task": "执行 500 米缓冲区分析，必须先转换到米制投影。",
+      "task_type": "crs_buffer",
+      "difficulty": "中等",
+      "requires": ["experience_lib", "critic"],
+      "risk": "crs_error",
+      "expected_module": "Experience Library"
+    },
+    {
+      "id": 4,
+      "task": "餐饮点与行政区叠加后统计密度，遇到 CRS 风险需诊断并修复。",
+      "task_type": "overlay_density",
+      "difficulty": "较难",
+      "requires": ["critic", "experience_lib"],
+      "risk": "crs_error",
+      "expected_module": "Critic"
+    },
+    {
+      "id": 5,
+      "task": "搜索火锅后，追问“它附近 300 米有什么住宿”。",
+      "task_type": "context_reference",
+      "difficulty": "中等",
+      "requires": ["context_memory"],
+      "risk": "reference_loss",
+      "expected_module": "Context Memory"
+    },
+    {
+      "id": 6,
+      "task": "用户纠正“只高亮行政区”，下一轮统计最多区时必须应用该偏好。",
+      "task_type": "preference_memory",
+      "difficulty": "中等",
+      "requires": ["context_memory", "evolution"],
+      "risk": "preference_loss",
+      "expected_module": "Context Memory"
+    },
+    {
+      "id": 7,
+      "task": "第一次 DBSCAN 聚类参数过小导致空簇，系统应诊断空结果并调整参数。",
+      "task_type": "empty_result_recovery",
+      "difficulty": "较难",
+      "requires": ["critic", "evolution"],
+      "risk": "empty_result",
+      "expected_module": "Critic"
+    },
+    {
+      "id": 8,
+      "task": "重复第 7 类聚类任务，系统应复用上一轮沉淀经验避免再次失败。",
+      "task_type": "experience_reuse",
+      "difficulty": "较难",
+      "requires": ["evolution", "experience_lib"],
+      "risk": "repeat_error",
+      "expected_module": "Evolution"
+    },
+    {
+      "id": 9,
+      "task": "导出餐饮点 CSV，要求限制导出字段并记录输出路径。",
+      "task_type": "export",
+      "difficulty": "简单",
+      "requires": ["experience_lib"],
+      "risk": "format_error",
+      "expected_module": "Experience Library"
+    },
+    {
+      "id": 10,
+      "task": "热点分析时网格过细导致结果过大，系统应摘要输出并限制结果规模。",
+      "task_type": "result_scale",
+      "difficulty": "较难",
+      "requires": ["critic", "experience_lib"],
+      "risk": "result_scale",
+      "expected_module": "Critic"
+    },
+    {
+      "id": 11,
+      "task": "长序列中先后引用酒店、火锅店和行政区，系统需要正确绑定当前指代。",
+      "task_type": "long_context",
+      "difficulty": "较难",
+      "requires": ["context_memory", "experience_lib"],
+      "risk": "context_drift",
+      "expected_module": "Context Memory"
+    },
+    {
+      "id": 12,
+      "task": "同一字段错误在不同图层再次出现，系统应将 Critic 诊断演化为可复用经验。",
+      "task_type": "closed_loop",
+      "difficulty": "较难",
+      "requires": ["critic", "evolution", "experience_lib"],
+      "risk": "closed_loop_break",
+      "expected_module": "Evolution"
+    }
+  ]
+}

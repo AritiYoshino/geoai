@@ -1,0 +1,40 @@
+{
+  "experiment": "抗退化实验 - 长周期记忆持久性",
+  "description": "20 轮 GIS 对话序列，对比 Base LLM 与 ACE 在 POI 引用、用户偏好、经验约束上的记忆召回与上下文污染。",
+  "version": "1.0",
+  "created_at": "2026-04-29",
+  "systems": [
+    {
+      "id": "base_llm",
+      "name": "Base LLM",
+      "description": "无显式记忆管理，仅依赖原生上下文。"
+    },
+    {
+      "id": "ace_dynamic",
+      "name": "ACE",
+      "description": "启用 Context Manager、用户偏好记忆、经验检索与动态演化。"
+    }
+  ],
+  "rounds": [
+    {"round": 1, "phase": "inject", "task": "搜索名字包含火锅的餐饮 POI，并记住第一个结果。", "memory_type": "poi", "memory_key": "hotpot_poi", "target_gap": 0},
+    {"round": 2, "phase": "inject", "task": "纠正：统计类结果只高亮行政区面图层，不高亮餐馆点。", "memory_type": "preference", "memory_key": "admin_polygon_only", "target_gap": 0},
+    {"round": 3, "phase": "inject", "task": "搜索天府广场附近住宿服务，并记住最近酒店。", "memory_type": "poi", "memory_key": "hotel_poi", "target_gap": 0},
+    {"round": 4, "phase": "inject", "task": "说明距离分析必须使用米制投影。", "memory_type": "experience", "memory_key": "crs_meter_rule", "target_gap": 0},
+    {"round": 5, "phase": "inject", "task": "设置偏好：回答统计结果时优先给摘要和 Top 5。", "memory_type": "preference", "memory_key": "summary_top5", "target_gap": 0},
+    {"round": 6, "phase": "distract", "task": "查询武侯区住宿服务 POI。", "memory_type": "none", "memory_key": "", "target_gap": 0},
+    {"round": 7, "phase": "distract", "task": "导出餐饮数据为 CSV。", "memory_type": "none", "memory_key": "", "target_gap": 0},
+    {"round": 8, "phase": "recall", "task": "刚才那家火锅店附近 300 米有哪些住宿？", "memory_type": "poi", "memory_key": "hotpot_poi", "target_gap": 7},
+    {"round": 9, "phase": "distract", "task": "统计各行政区住宿数量。", "memory_type": "none", "memory_key": "", "target_gap": 0},
+    {"round": 10, "phase": "recall", "task": "哪个区餐馆最多，并按我的高亮偏好展示。", "memory_type": "preference", "memory_key": "admin_polygon_only", "target_gap": 8},
+    {"round": 11, "phase": "distract", "task": "对住宿服务做热点分析。", "memory_type": "none", "memory_key": "", "target_gap": 0},
+    {"round": 12, "phase": "recall", "task": "对刚才最近酒店周边 500 米做餐饮邻近分析。", "memory_type": "poi", "memory_key": "hotel_poi", "target_gap": 9},
+    {"round": 13, "phase": "distract", "task": "查询成华区餐饮店。", "memory_type": "none", "memory_key": "", "target_gap": 0},
+    {"round": 14, "phase": "recall", "task": "再次做 500 米缓冲分析，检查是否遵守投影经验。", "memory_type": "experience", "memory_key": "crs_meter_rule", "target_gap": 10},
+    {"round": 15, "phase": "distract", "task": "搜索名字包含咖啡的 POI。", "memory_type": "none", "memory_key": "", "target_gap": 0},
+    {"round": 16, "phase": "recall", "task": "统计行政区餐饮数量，按 Top 5 摘要输出。", "memory_type": "preference", "memory_key": "summary_top5", "target_gap": 11},
+    {"round": 17, "phase": "distract", "task": "对餐饮点进行 DBSCAN 聚类。", "memory_type": "none", "memory_key": "", "target_gap": 0},
+    {"round": 18, "phase": "recall", "task": "把火锅店、酒店和行政区偏好同时应用到一个复合问题。", "memory_type": "mixed", "memory_key": "hotpot_poi,hotel_poi,admin_polygon_only", "target_gap": 17},
+    {"round": 19, "phase": "distract", "task": "解释聚类分析参数。", "memory_type": "none", "memory_key": "", "target_gap": 0},
+    {"round": 20, "phase": "recall", "task": "最终检查：之前所有偏好和关键 POI 是否仍能正确引用。", "memory_type": "mixed", "memory_key": "all", "target_gap": 19}
+  ]
+}

@@ -1,0 +1,16 @@
+task_id,mode,task_type,difficulty,task_completed,tool_success,code_success,accuracy,experience_hit,error_recovered,response_time,has_error
+1,base,query,简单,True,True,True,False,False,False,4.63,False
+2,base,search,简单,True,True,True,False,False,False,2.97,False
+3,base,query+map,中等,True,True,True,False,False,False,2.7,False
+4,base,query+map,中等,True,True,True,False,False,False,3.69,False
+5,base,nearby,中等,True,True,True,False,False,False,4.66,False
+6,base,nearby,中等,True,True,True,False,False,False,5.01,False
+7,base,cluster,中等,True,True,True,False,False,False,5.79,False
+8,base,query+map,中等,True,True,True,False,False,False,3.85,False
+9,base,query,简单,True,True,True,False,False,False,2.45,False
+10,base,overlay,较难,True,True,True,False,False,False,4.12,False
+11,base,cluster,较难,True,True,True,False,False,False,7.02,False
+12,base,export,简单,True,True,True,False,False,False,3.22,False
+13,base,feedback,中等,True,True,True,True,False,False,3.65,False
+14,base,memory,中等,True,True,True,True,False,False,3.87,False
+15,base,help,简单,True,True,True,True,False,False,12.16,False

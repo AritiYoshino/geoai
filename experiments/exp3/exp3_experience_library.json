@@ -1,0 +1,87 @@
+[
+  {
+    "id": "exp3-poi-tracking-001",
+    "category": "POI跨轮追踪",
+    "task_types": [
+      "poi_tracking"
+    ],
+    "trigger": "用户在对话早期搜索并记住了某个POI（如火锅店），多轮干扰后再次引用该POI，如'刚才那家火锅店附近300米有哪些住宿？'。",
+    "problem": "经过多轮无关查询（干扰轮）后，系统需要从历史对话中准确地找到之前记录的POI引用。原生LLM在长对话中容易遗忘或混淆多个POI的位置和属性。",
+    "strategy": "第一步：通过 ContextManager 的会话记忆检索所有已记录的 POI 实体，包括其名称、图层位置、索引和搜索时间戳。第二步：根据用户当前问题的语义（'火锅店'、'刚才那家'）从历史 POI 列表中进行语义匹配。第三步：优先匹配最近轮次中搜索到的、名称高度匹配的 POI。第四步：找到目标 POI 后，使用其坐标执行邻近分析（find_nearby_point 或 nearest_neighbor_search）。第五步：回答中明确'您之前在[轮次]提到的[POI名称]，其附近300米范围内的住宿有：'。",
+    "source": "experiment_preset",
+    "success_count": 5,
+    "fail_count": 0,
+    "confidence": 0.857,
+    "created_at": "2026-04-29T00:00:00",
+    "updated_at": "2026-04-29T00:00:00",
+    "last_used_at": ""
+  },
+  {
+    "id": "exp3-preference-consistency-002",
+    "category": "用户偏好持久化",
+    "task_types": [
+      "preference_maintenance"
+    ],
+    "trigger": "用户设定了显示偏好（如'统计类结果只高亮行政区面图层'、'回答统计结果时优先给摘要和Top 5'），后续多轮查询中需要持续应用。",
+    "problem": "用户偏好一旦设定，必须在后续所有相关操作中自动执行。经过多轮干扰后，如果没有显式的偏好记忆机制，系统容易恢复默认行为而忽略用户偏好。",
+    "strategy": "第一步：当识别到用户偏好设定时，通过 context_manager.set_user_preference() 持久化存储偏好，包括键值对和偏好来源说明。第二步：在每次执行查询前，检查 user_preferences 列表。第三步：对于高亮偏好（highlight_mode='admin_polygon_only'），在结果展示时自动只高亮行政层面图层。第四步：对于展示格式偏好（display_mode='summary_top5'），在统计结果时自动进行分组汇总并仅展示 Top 5。第五步：在回答中说明'根据您之前的偏好设置，已为您[应用对应规则]'。",
+    "source": "experiment_preset",
+    "success_count": 5,
+    "fail_count": 1,
+    "confidence": 0.75,
+    "created_at": "2026-04-29T00:00:00",
+    "updated_at": "2026-04-29T00:00:00",
+    "last_used_at": ""
+  },
+  {
+    "id": "exp3-experience-consistency-003",
+    "category": "经验规则持久化",
+    "task_types": [
+      "experience_consistency"
+    ],
+    "trigger": "用户明确说明了某个技术规则（如'距离分析必须使用米制投影'），后续需要自动遵守该规则。",
+    "problem": "技术规则（如CRS要求、单位规范）在长对话中容易被忽略。系统需要在每次执行相关操作时自动应用之前设定的规则，不需要用户重复提醒。",
+    "strategy": "第一步：当用户说明技术规则时，将其通过 context_manager.set_user_preference() 记录为系统约束。第二步：对于CRS规则（crs_rule='meter_projection'），在所有涉及距离计算的工具调用前自动检查并应用米制投影转换。第三步：在进行缓冲区分析、邻近分析、聚类分析等操作前，先验证当前CRS设置是否符合规则。第四步：如果不符合，自动进行投影转换后再执行分析。第五步：回答中说明'根据之前设定的技术规范，本次分析已使用米制投影以确保距离准确'。",
+    "source": "experiment_preset",
+    "success_count": 4,
+    "fail_count": 0,
+    "confidence": 0.833,
+    "created_at": "2026-04-29T00:00:00",
+    "updated_at": "2026-04-29T00:00:00",
+    "last_used_at": ""
+  },
+  {
+    "id": "exp3-mixed-recall-004",
+    "category": "复合记忆召回",
+    "task_types": [
+      "mixed_recall"
+    ],
+    "trigger": "用户在一个复合问题中同时引用多个历史实体（POI、偏好、规则），如'把火锅店、酒店和行政区偏好同时应用到一个复合问题'。",
+    "problem": "复合问题需要同时从记忆中检索多种类型的信息——POI位置、用户偏好、技术规则——并在单次操作中正确组合应用。每种记忆类型的检索策略不同，容易遗漏或冲突。",
+    "strategy": "第一步：解析复合问题，识别出所有被引用的实体和规则。分别归类为 POI 引用、偏好应用、规则约束。第二步：从 ContextManager 分别检索 POI 列表（按语义匹配）、user_preferences（按键匹配）、系统约束（按任务类型匹配）。第三步：执行空间分析时按规则要求的顺序操作——如先使用米制投影，然后定位POI，执行邻近分析，最后按偏好格式展示结果。第四步：回答中明确列出'已应用：火锅店位置→[坐标]，酒店位置→[坐标]，行政区高亮偏好→只高亮面层，CRS规则→米制投影'。",
+    "source": "experiment_preset",
+    "success_count": 3,
+    "fail_count": 1,
+    "confidence": 0.667,
+    "created_at": "2026-04-29T00:00:00",
+    "updated_at": "2026-04-29T00:00:00",
+    "last_used_at": ""
+  },
+  {
+    "id": "exp3-final-audit-005",
+    "category": "最终一致性审计",
+    "task_types": [
+      "final_audit"
+    ],
+    "trigger": "在长对话的最终轮，需要检查所有之前建立的偏好和关键 POI 是否仍能正确引用和应用。",
+    "problem": "经过20轮以上的长对话，系统需要证明所有记录的知识（POI、偏好、规则）仍然可访问且正确。任何一项记忆丢失都意味着记忆管理系统失败。",
+    "strategy": "第一步：完整遍历 ContextManager 中存储的所有 POI 引用、user_preferences 和系统约束。第二步：对每个已记录的实体执行一次验证——确认 POI 仍在原始图层中可查询，偏好键值对未损坏，规则描述清晰。第三步：如果发现任何实体已无法访问（如图层被删除），记录为记忆衰减并尝试从经验库恢复。第四步：生成综合报告，列出全部记忆实体及其状态（活跃/衰减/丢失）。第五步：回答中汇总'当前系统记忆状态：POI引用 [count] 条（活跃 [x] 条），用户偏好 [count] 条，技术规则 [count] 条'。",
+    "source": "experiment_preset",
+    "success_count": 2,
+    "fail_count": 1,
+    "confidence": 0.6,
+    "created_at": "2026-04-29T00:00:00",
+    "updated_at": "2026-04-29T00:00:00",
+    "last_used_at": ""
+  }
+]

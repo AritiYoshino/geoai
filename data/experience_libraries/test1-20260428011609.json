@@ -304,5 +304,141 @@
     "created_at": "2026-04-28T13:27:00",
     "updated_at": "2026-04-28T13:27:00",
     "last_used_at": "2026-04-28T13:27:00"
+  },
+  {
+    "id": "ace-20260428235213-19",
+    "category": "CRS_ERROR",
+    "task_types": [
+      "search"
+    ],
+    "trigger": "tool=execute_spatial_code; args={'task_description': '计算住宿服务图层中所有POI到天府广场（104.062878, 30.658937）的距离，找出最近的5个住宿点', 'code': \"import numpy as np\\n\\ngdf = layers['住宿服务']\\n# 天府广场坐标\\ntianfu_lng, tianfu_lat = 104.062878, 30.658937\\n\\n# 创建天府广场的点\\nfrom shapely.geometry import Point\\ntianfu_point = Point(tianfu_lng, tianfu_lat)\\n\\n# 复制一份并设置CRS\\ngdf_copy = gdf.copy()\\ngdf_copy['geometry'] = gdf_copy.apply(lambda row: Point(row['lng'], row['lat']), axis=1)\\ngdf_copy = gpd.GeoDataFrame(gdf_copy, geometry='geometry', crs='EPSG:4326')\\n\\n# 转米制投影计算距离\\ngdf_meters = reproject_to_meters(gdf_copy)\\ntianfu_meters = reproject_to_meters(gpd.GeoDataFrame({'geometry': [tianfu_point]}, crs='EPSG:4326'))\\n\\n# 计算每个点到天府广场的距离（米）\\ntianfu_pt_meters = tianfu_meters.geometry.iloc[0]\\ngdf_meters['distance_m'] = gdf_meters.geometry.distance(tianfu_pt_meters)\\n\\n# 按距离排序，取前5个\\ntop5 = gdf_meters.sort_values('distance_m').head(5)\\n\\n# 准备结果\\nresult = []\\nfor idx in top5.index:\\n    row = top5.loc[idx]\\n    dist_km = row['distance_m'] / 1000\\n    result.append({\\n        'index': idx,\\n        'name': row['name'],\\n        'type': row['type'],\\n        'address': row['address'],\\n        'distance_km': round(dist_km, 3)\\n    })\\n\\n# 高亮这5个点\\nHIGHLIGHTS = [('住宿服务', idx) for idx in top5.index]\\n\\nRESULT = result\\n\"}",
+    "problem": "任务中很可能混用了地理坐标系和投影坐标系，或在重投影前直接进行了距离计算。 原始错误信息: 代码执行失败，traceback 如下：\nTraceback (most recent call last):\n  File \"D:\\geoai\\tools\\code_executor.py\", line 144, in run_spatial_code\n    exec(compiled, global_env, local_env)\n  File \"<llm_spatial_code>\", line 5, in <module>\n  File \"C:\\Users\\CLIE 相关代码片段: import numpy as np\n\ngdf = layers['住宿服务']\n# 天府广场坐标\ntianfu_lng, tianfu_lat = 104.062878, 30.658937\n\n# 创建天府广场的点\nfrom shapely.geometry import Point\ntianfu_point = Point(tianfu_lng, tianfu_lat)\n\n# 复制一份并设置CRS\ngdf_copy = gdf.copy()\ngdf_copy['geome",
+    "strategy": "重新检查图层 CRS，先统一转换到米制投影坐标系，再做距离或缓冲区分析。 代码提示: 在执行距离、缓冲区、面积等计算前，先使用 reproject_to_meters(...)。",
+    "source": "critic",
+    "success_count": 0,
+    "fail_count": 1,
+    "confidence": 0.333,
+    "created_at": "2026-04-28T23:52:13",
+    "updated_at": "2026-04-28T23:52:13",
+    "last_used_at": "2026-04-28T23:52:13"
+  },
+  {
+    "id": "ace-20260429120159-20",
+    "category": "FIELD_ERROR",
+    "task_types": [
+      "query"
+    ],
+    "trigger": "tool=query_poi_by_conditions; args={'layer_name': '餐饮', 'conditions': 'district is not null'}",
+    "problem": "查询条件或生成代码引用了目标图层中不存在的字段名。 原始错误信息: 错误：条件中使用了不存在的字段名 ['null']。图层 '餐饮' 可用的字段有：name, type, address, lng, lat, province, city, district。请修正字段名后重试。",
+    "strategy": "先读取真实 schema，再仅使用实际存在的字段名重建筛选条件或代码。 代码提示: 优先检查 gdf.columns，不要猜测字段别名或中英文映射。",
+    "source": "critic",
+    "success_count": 0,
+    "fail_count": 1,
+    "confidence": 0.333,
+    "created_at": "2026-04-29T12:01:59",
+    "updated_at": "2026-04-29T12:01:59",
+    "last_used_at": "2026-04-29T12:01:59"
+  },
+  {
+    "id": "ace-20260429120224-21",
+    "category": "FIELD_ERROR",
+    "task_types": [
+      "search"
+    ],
+    "trigger": "tool=query_poi_by_conditions; args={'layer_name': '成都行政区', 'conditions': \"NAME like '%天府%'\"}",
+    "problem": "查询条件或生成代码引用了目标图层中不存在的字段名。 原始错误信息: 错误：条件中使用了不存在的字段名 ['like']。图层 '成都行政区' 可用的字段有：NAME。请修正字段名后重试。",
+    "strategy": "先读取真实 schema，再仅使用实际存在的字段名重建筛选条件或代码。 代码提示: 优先检查 gdf.columns，不要猜测字段别名或中英文映射。",
+    "source": "critic",
+    "success_count": 0,
+    "fail_count": 1,
+    "confidence": 0.333,
+    "created_at": "2026-04-29T12:02:24",
+    "updated_at": "2026-04-29T12:02:24",
+    "last_used_at": "2026-04-29T12:02:24"
+  },
+  {
+    "id": "ace-20260429120226-22",
+    "category": "EMPTY_RESULT",
+    "task_types": [
+      "search"
+    ],
+    "trigger": "tool=search_poi; args={'keyword': '天府广场 广场'}",
+    "problem": "当前条件可能过严，目标图层选择有误，或者参考 POI 指代解析不正确。 原始错误信息: 未找到任何包含 '天府广场 广场' 的POI。",
+    "strategy": "先放宽搜索范围，确认参考 POI 和目标图层，再逐步收紧过滤条件或距离限制。 代码提示: 建议先用 search_poi 或更简单的查询定位，再执行精确筛选。",
+    "source": "critic",
+    "success_count": 0,
+    "fail_count": 1,
+    "confidence": 0.333,
+    "created_at": "2026-04-29T12:02:26",
+    "updated_at": "2026-04-29T12:02:26",
+    "last_used_at": "2026-04-29T12:02:26"
+  },
+  {
+    "id": "ace-20260429120238-23",
+    "category": "CRS_ERROR",
+    "task_types": [
+      "search"
+    ],
+    "trigger": "tool=execute_spatial_code; args={'task_description': '查找距离天府广场（成都市中心）最近的5个住宿服务POI', 'code': \"# 天府广场大致坐标（成都市中心）\\ntianfu_square = Point(104.072, 30.663)\\n\\n# 获取住宿服务图层\\naccommodation = layers['住宿服务'].copy()\\naccommodation = accommodation.to_crs('EPSG:4326')\\n\\n# 计算每个住宿点到天府广场的距离（度）\\naccommodation['dist_deg'] = accommodation.geometry.apply(lambda g: g.distance(tianfu_square))\\n\\n# 按距离排序，取前5个\\ntop5 = accommodation.sort_values('dist_deg').head(5).copy()\\n\\n# 转米制投影计算实际距离\\naccommodation_m = accommodation.to_crs(reproject_to_meters(accommodation))\\ntianfu_m = gpd.GeoSeries([tianfu_square], crs='EPSG:4326').to_crs(reproject_to_meters(accommodation)).iloc[0]\\n\\naccommodation_m['dist_m'] = accommodation_m.geometry.distance(tianfu_m)\\ntop5_dist = accommodation_m.sort_values('dist_m').head(5)\\n\\n# 准备结果\\nresult_list = []\\nfor idx, row in top5_dist.iterrows():\\n    result_list.append({\\n        'name': row['name'],\\n        'type': row['type'],\\n        'address': row['address'],\\n        'district': row['district'],\\n        'distance_m': round(row['dist_m'], 1)\\n    })\\n\\nRESULT = result_list\\n\\n# 高亮这5个住宿点\\nHIGHLIGHTS = [('住宿服务', int(idx)) for idx in top5_dist.index]\\n\"}",
+    "problem": "任务中很可能混用了地理坐标系和投影坐标系，或在重投影前直接进行了距离计算。 原始错误信息: 代码执行失败，traceback 如下：\nTraceback (most recent call last):\n  File \"D:\\geoai\\tools\\code_executor.py\", line 144, in run_spatial_code\n    exec(compiled, global_env, local_env)\n  File \"<llm_spatial_code>\", line 9, in <module>\n  File \"C:\\Users\\CLIE 相关代码片段: # 天府广场大致坐标（成都市中心）\ntianfu_square = Point(104.072, 30.663)\n\n# 获取住宿服务图层\naccommodation = layers['住宿服务'].copy()\naccommodation = accommodation.to_crs('EPSG:4326')\n\n# 计算每个住宿点到天府广场的距离（度）\naccommodation['dist_deg'] = accommodation.geometry.apply(lamb",
+    "strategy": "重新检查图层 CRS，先统一转换到米制投影坐标系，再做距离或缓冲区分析。 代码提示: 在执行距离、缓冲区、面积等计算前，先使用 reproject_to_meters(...)。",
+    "source": "critic",
+    "success_count": 0,
+    "fail_count": 1,
+    "confidence": 0.333,
+    "created_at": "2026-04-29T12:02:38",
+    "updated_at": "2026-04-29T12:02:38",
+    "last_used_at": "2026-04-29T12:02:38"
+  },
+  {
+    "id": "ace-20260429120336-24",
+    "category": "CRS_ERROR",
+    "task_types": [
+      "query"
+    ],
+    "trigger": "tool=execute_spatial_code; args={'code': '# 创建餐饮点的GeoDataFrame（从lng, lat构建点几何）\\ncatering = layers[\"餐饮\"].copy()\\ndistricts = layers[\"成都行政区\"].copy()\\n\\n# 从lng, lat创建Point几何\\nfrom shapely.geometry import Point\\ncatering[\\'geometry\\'] = catering.apply(lambda row: Point(row[\\'lng\\'], row[\\'lat\\']), axis=1)\\ncatering = gpd.GeoDataFrame(catering, geometry=\\'geometry\\', crs=\\'EPSG:4326\\')\\n\\n# 确保行政区也是4326\\nprint(f\"餐饮CRS: {catering.crs}\")\\nprint(f\"行政区CRS: {districts.crs}\")\\n\\n# 空间连接：找出每个餐饮点落在哪个行政区\\njoined = gpd.sjoin(catering, districts, how=\\'left\\', predicate=\\'within\\')\\n\\n# 统计每个行政区的餐饮点数量\\ncounts = joined[\\'NAME\\'].value_counts().sort_values(ascending=False)\\n\\n# 输出结果\\nresult_df = pd.DataFrame({\\'行政区\\': counts.index, \\'餐饮点数量\\': counts.values})\\nresult_df[\\'排名\\'] = range(1, len(result_df)+1)\\nresult_df = result_df[[\\'排名\\', \\'行政区\\', \\'餐饮点数量\\']]\\n\\nprint(\"各行政区餐饮点数量分布：\")\\nprint(result_df.to_string(index=False))\\n\\n# 找出没有匹配到行政区的点\\nunmatched = joined[joined[\\'NAME\\'].isna()]\\nprint(f\"\\\\n未匹配到行政区的餐饮点数量: {len(unmatched)}\")\\n\\nRESULT = result_df\\nHIGHLIGHTS = []', 'task_description': '通过空间连接统计各行政区内餐饮点的数量分布，并输出排名。'}",
+    "problem": "任务中很可能混用了地理坐标系和投影坐标系，或在重投影前直接进行了距离计算。 原始错误信息: 代码执行失败，traceback 如下：\nTraceback (most recent call last):\n  File \"D:\\geoai\\tools\\code_executor.py\", line 144, in run_spatial_code\n    exec(compiled, global_env, local_env)\n  File \"<llm_spatial_code>\", line 6, in <module>\n  File \"C:\\Users\\CLIE 相关代码片段: # 创建餐饮点的GeoDataFrame（从lng, lat构建点几何）\ncatering = layers[\"餐饮\"].copy()\ndistricts = layers[\"成都行政区\"].copy()\n\n# 从lng, lat创建Point几何\nfrom shapely.geometry import Point\ncatering['geometry'] = catering.apply(lambda row: Point(row['lng'], row['lat']),",
+    "strategy": "重新检查图层 CRS，先统一转换到米制投影坐标系，再做距离或缓冲区分析。 代码提示: 在执行距离、缓冲区、面积等计算前，先使用 reproject_to_meters(...)。",
+    "source": "critic",
+    "success_count": 0,
+    "fail_count": 1,
+    "confidence": 0.333,
+    "created_at": "2026-04-29T12:03:36",
+    "updated_at": "2026-04-29T12:03:36",
+    "last_used_at": "2026-04-29T12:03:36"
+  },
+  {
+    "id": "ace-20260429132037-25",
+    "category": "FIELD_ERROR",
+    "task_types": [
+      "general"
+    ],
+    "trigger": "tool=query_poi_by_conditions; args={'layer_name': '住宿服务', 'conditions': 'district is not null'}",
+    "problem": "查询条件或生成代码引用了目标图层中不存在的字段名。 原始错误信息: 错误：条件中使用了不存在的字段名 ['null']。图层 '住宿服务' 可用的字段有：name, type, address, lng, lat, province, city, district。请修正字段名后重试。",
+    "strategy": "先读取真实 schema，再仅使用实际存在的字段名重建筛选条件或代码。 代码提示: 优先检查 gdf.columns，不要猜测字段别名或中英文映射。",
+    "source": "critic",
+    "success_count": 0,
+    "fail_count": 1,
+    "confidence": 0.333,
+    "created_at": "2026-04-29T13:20:37",
+    "updated_at": "2026-04-29T13:20:37",
+    "last_used_at": "2026-04-29T13:20:37"
+  },
+  {
+    "id": "ace-20260429132112-26",
+    "category": "CRS_ERROR",
+    "task_types": [
+      "query"
+    ],
+    "trigger": "tool=execute_spatial_code; args={'task_description': '统计各行政区内餐饮点的数量分布', 'code': '# 获取图层\\ncatering = layers[\"餐饮\"]\\ndistricts = layers[\"成都行政区\"]\\n\\n# 检查CRS\\nprint(\"餐饮 CRS:\", catering.crs)\\nprint(\"行政区 CRS:\", districts.crs)\\n\\n# 检查行政区字段\\nprint(\"行政区字段:\", districts.columns.tolist())\\nprint(\"餐饮字段:\", catering.columns.tolist())\\n'}",
+    "problem": "任务中很可能混用了地理坐标系和投影坐标系，或在重投影前直接进行了距离计算。 原始错误信息: 工具执行出错: The truth value of a GeoDataFrame is ambiguous. Use a.empty, a.bool(), a.item(), a.any() or a.all(). 相关代码片段: # 获取图层\ncatering = layers[\"餐饮\"]\ndistricts = layers[\"成都行政区\"]\n\n# 检查CRS\nprint(\"餐饮 CRS:\", catering.crs)\nprint(\"行政区 CRS:\", districts.crs)\n\n# 检查行政区字段\nprint(\"行政区字段:\", districts.columns.tolist())\nprint(\"餐饮字段:\", catering.columns.tolist())\n",
+    "strategy": "重新检查图层 CRS，先统一转换到米制投影坐标系，再做距离或缓冲区分析。 代码提示: 在执行距离、缓冲区、面积等计算前，先使用 reproject_to_meters(...)。",
+    "source": "critic",
+    "success_count": 0,
+    "fail_count": 1,
+    "confidence": 0.333,
+    "created_at": "2026-04-29T13:21:12",
+    "updated_at": "2026-04-29T13:21:12",
+    "last_used_at": "2026-04-29T13:21:12"
   }
 ]

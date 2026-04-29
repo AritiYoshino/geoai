@@ -1,0 +1,206 @@
+[
+  {
+    "id": "exp2-field-query-001",
+    "category": "字段名验证",
+    "task_types": [
+      "field_query"
+    ],
+    "trigger": "用户要求用行政区字段筛选POI，如'用 district 字段筛选成华区餐饮 POI'。",
+    "problem": "POI图层的行政区字段名为 district，不是 area、region 或其他名称。直接猜测字段名可能导致关键错误。",
+    "strategy": "调用 query_poi_by_conditions 工具，layer_name 设为对应图层全名（如'餐饮_61102'），conditions 使用 'district=行政区名' 格式。禁止猜测或使用非标准字段名。查询前可通过工具获取图层字段列表确认 district 字段存在。",
+    "source": "experiment_preset",
+    "success_count": 5,
+    "fail_count": 0,
+    "confidence": 0.857,
+    "created_at": "2026-04-29T00:00:00",
+    "updated_at": "2026-04-29T00:00:00",
+    "last_used_at": ""
+  },
+  {
+    "id": "exp2-field-recovery-002",
+    "category": "字段错误诊断与恢复",
+    "task_types": [
+      "field_recovery"
+    ],
+    "trigger": "用户误写了字段名（如 area='武侯区'），系统需要识别并纠正为正确的字段名 district。",
+    "problem": "用户可能使用错误的字段名（area、region、区等）进行查询。如果直接使用用户提供的错误字段名，查询会返回空结果或错误。需要 Critic 模块诊断字段错误模式，自动尝试正确的字段名。",
+    "strategy": "第一步：接收用户输入但不直接使用可疑字段名。第二步：通过 get_layer_info 或查询工具的可选参数先确认图层实际字段列表。第三步：如果用户提供的字段名（如 area）不在字段列表中，但 district 存在，自动将条件转换为 'district=值' 执行查询。第四步：在回答中提示用户'已自动将 area 纠正为正确的字段名 district'。",
+    "source": "experiment_preset",
+    "success_count": 4,
+    "fail_count": 1,
+    "confidence": 0.714,
+    "created_at": "2026-04-29T00:00:00",
+    "updated_at": "2026-04-29T00:00:00",
+    "last_used_at": ""
+  },
+  {
+    "id": "exp2-crs-buffer-003",
+    "category": "CRS投影预处理",
+    "task_types": [
+      "crs_buffer"
+    ],
+    "trigger": "用户要求执行缓冲区分析，如'执行 500 米缓冲区分析'。",
+    "problem": "缓冲区分析使用米制单位（米），但原始数据通常是经纬度坐标（WGS84, EPSG:4326）。在经纬度下直接计算500米距离会产生严重错误。必须先转换到米制投影坐标系（如 EPSG:2380 或 UTM 分区投影）。",
+    "strategy": "第一步：确认源图层的CRS。如果是经纬度（EPSG:4326），调用 buffer_analysis 工具时工具内部会自动处理投影转换。第二步：设置 distance=500, unit='m', dissolve=False。如果缓冲区分析失败，检查CRS问题并手动转换。第三步：确保勾选了 preserve_crs=True 或自动将结果转换回原始CRS用于地图显示。",
+    "source": "experiment_preset",
+    "success_count": 4,
+    "fail_count": 0,
+    "confidence": 0.833,
+    "created_at": "2026-04-29T00:00:00",
+    "updated_at": "2026-04-29T00:00:00",
+    "last_used_at": ""
+  },
+  {
+    "id": "exp2-overlay-density-004",
+    "category": "叠加分析的CRS处理",
+    "task_types": [
+      "overlay_density"
+    ],
+    "trigger": "用户要求将POI与行政区叠加并统计密度，如'餐饮点与行政区叠加后统计密度'。",
+    "problem": "叠加分析（intersection）要求两个输入图层具有一致的CRS。如果餐饮点（点图层）和行政区（面图层）CRS不一致，叠加会失败或产生错误结果。叠加后需要计算密度（POI数量/面积）。",
+    "strategy": "第一步：调用 overlay_layers 工具前检查两个图层的CRS。第二步：如果CRS不一致，先通过投影转换统一到同一CRS（优先转换为米制投影以便计算面积）。第三步：叠加方式设为 intersection（交集）。第四步：叠加结果自动包含行政区的属性字段（如 district 名称），调用 summarize_layer_statistics 按行政区分组统计POI数量。第五步：密度 = POI数量 / 行政区面积（单位：个/平方公里）。",
+    "source": "experiment_preset",
+    "success_count": 3,
+    "fail_count": 1,
+    "confidence": 0.667,
+    "created_at": "2026-04-29T00:00:00",
+    "updated_at": "2026-04-29T00:00:00",
+    "last_used_at": ""
+  },
+  {
+    "id": "exp2-context-reference-005",
+    "category": "上下文指代解析",
+    "task_types": [
+      "context_reference"
+    ],
+    "trigger": "用户在前一轮搜索后，使用'它'、'那里'、'附近'等代词指代上一轮的POI，如'它附近 300 米有什么住宿'。",
+    "problem": "代词指代（如'它'、'那边'）需要关联到最近对话中提到的POI。如果没有上下文记忆机制，系统不知道'它'指的是什么。需要从上一轮的查询结果中提取被引用的POI。",
+    "strategy": "第一步：检查 ContextManager 中上一轮查询的结果POI列表。第二步：从上一轮的搜索结果中提取用户最可能指代的POI（通常是第一个结果或用户明确提及的对象）。第三步：使用该POI的名称和坐标作为邻近分析的参考点。第四步：调用 find_nearby_point 或 nearest_neighbor_search，设置参考点为上一轮找到的POI。第五步：回答中明确'根据上一轮找到的[POI名称]，其附近300米范围内的住宿有：'。",
+    "source": "experiment_preset",
+    "success_count": 4,
+    "fail_count": 0,
+    "confidence": 0.833,
+    "created_at": "2026-04-29T00:00:00",
+    "updated_at": "2026-04-29T00:00:00",
+    "last_used_at": ""
+  },
+  {
+    "id": "exp2-preference-memory-006",
+    "category": "用户偏好记忆",
+    "task_types": [
+      "preference_memory"
+    ],
+    "trigger": "用户纠正过高亮行为后，再次执行统计类查询时需要应用之前的偏好，如'只高亮行政区，下一轮统计最多区时必须应用该偏好'。",
+    "problem": "用户明确纠正过（如'只高亮行政层面，不高亮点'）后，系统必须在后续所有相关操作中自动应用该偏好。没有偏好记忆机制会导致同一错误反复出现。",
+    "strategy": "第一步：当收到纠正反馈时，通过 context_manager.set_user_preference() 记录偏好。第二步：对于高亮偏好，存储 highlight_mode='admin_polygon_only'。第三步：在后续查询+高亮任务中，在执行统计前检查 user_preferences。第四步：如果存在高亮偏好，在调用 query_poi_by_conditions 查询目标行政区POI后，只在地图上高亮行政区的面图层，不高亮点图层。第五步：回答中说明'根据您之前的偏好，本次只高亮行政区面图层'。",
+    "source": "experiment_preset",
+    "success_count": 4,
+    "fail_count": 0,
+    "confidence": 0.833,
+    "created_at": "2026-04-29T00:00:00",
+    "updated_at": "2026-04-29T00:00:00",
+    "last_used_at": ""
+  },
+  {
+    "id": "exp2-empty-result-recovery-007",
+    "category": "空结果诊断与参数调整",
+    "task_types": [
+      "empty_result_recovery"
+    ],
+    "trigger": "DBSCAN 聚类参数过小导致产生空簇或聚类结果为空，如'第一次 DBSCAN 聚类参数过小导致空簇'。",
+    "problem": "聚类参数 eps（邻域半径）过小或 min_samples 过大会导致没有点被聚为簇，返回空结果。需要 Critic 诊断空结果的原因并自动调整参数重试。",
+    "strategy": "第一步：用默认参数调用 cluster_points_dbscan（eps=500, min_samples=5）。第二步：如果结果为空或簇数量为0，Critic 诊断：'聚类参数eps=500过小，导致没有足够邻近点形成簇'。第三步：自动调整参数重试——增大 eps（如 eps=800, min_samples=3）。第四步：如果二次尝试仍为空，继续放宽参数（eps=1000, min_samples=2）。第五步：将最终有效的参数组合通过 Evolution 沉淀到经验库。",
+    "source": "experiment_preset",
+    "success_count": 3,
+    "fail_count": 1,
+    "confidence": 0.667,
+    "created_at": "2026-04-29T00:00:00",
+    "updated_at": "2026-04-29T00:00:00",
+    "last_used_at": ""
+  },
+  {
+    "id": "exp2-experience-reuse-008",
+    "category": "经验复用与闭环",
+    "task_types": [
+      "experience_reuse"
+    ],
+    "trigger": "重复之前的聚类任务，系统应复用上一轮沉淀的有效参数经验，如'重复第 7 类聚类任务'。",
+    "problem": "如果系统在第7轮通过参数调整找到了有效的聚类参数，这些参数必须被沉淀到经验库并在类似任务中自动复用。没有 Evolution 机制，每次都会从头开始参数调优。",
+    "strategy": "第一步：检索经验库中与当前任务匹配的聚类经验（按 task_type 和 trigger 匹配）。第二步：如果找到类似经验，优先使用经验库中记录的有效参数（如 eps=800, min_samples=3）。第三步：直接使用这些参数调用 cluster_points_dbscan，跳过默认参数阶段。第四步：如果新结果也成功，增加经验的 success_count 和 confidence。第五步：回答中说明'基于之前的经验，本次直接使用 eps=800, min_samples=3 进行聚类'。",
+    "source": "experiment_preset",
+    "success_count": 3,
+    "fail_count": 0,
+    "confidence": 0.8,
+    "created_at": "2026-04-29T00:00:00",
+    "updated_at": "2026-04-29T00:00:00",
+    "last_used_at": ""
+  },
+  {
+    "id": "exp2-export-format-009",
+    "category": "导出格式控制",
+    "task_types": [
+      "export"
+    ],
+    "trigger": "用户要求导出数据，如'导出餐饮点 CSV，要求限制导出字段并记录输出路径'。",
+    "problem": "导出CSV时如果不限制字段，会导出所有属性列，包含不必要的字段。导出后需要记录输出文件路径供用户参考。",
+    "strategy": "调用 export_analysis_result 工具，source_type='layer'（或 'last_result'），layer_name='餐饮_61102'，format='csv'。如果用户要求限制字段，在参数中添加 fields=['name', 'address', 'district', 'category']（根据图层实际字段调整）。工具返回结果中会包含输出文件路径，需在回答中明确告知用户文件保存位置。",
+    "source": "experiment_preset",
+    "success_count": 4,
+    "fail_count": 0,
+    "confidence": 0.833,
+    "created_at": "2026-04-29T00:00:00",
+    "updated_at": "2026-04-29T00:00:00",
+    "last_used_at": ""
+  },
+  {
+    "id": "exp2-result-scale-010",
+    "category": "结果规模控制",
+    "task_types": [
+      "result_scale"
+    ],
+    "trigger": "用户要求做热点分析，网格过细导致结果过大，如'热点分析时网格过细导致结果过大'。",
+    "problem": "热点分析的网格大小（cell_size）设置过小（如100米）会导致生成大量微小网格，结果数据过大难以展示。同时，过小的网格在空间分析上也不具有统计意义。",
+    "strategy": "第一步：调用 hotspot_analysis 工具时设置合理的 cell_size。对于城市级分析，推荐 cell_size=1000（米）。第二步：设置 top_n=10 限制返回的热点网格数量。第三步：如果结果仍然过大（超过50条记录），自动截断为 Top 10 并摘要展示。第四步：在回答中说明'为便于展示，已显示密度最高的前10个热点网格'。第五步：将合理的网格大小参数沉淀到经验库。",
+    "source": "experiment_preset",
+    "success_count": 3,
+    "fail_count": 0,
+    "confidence": 0.8,
+    "created_at": "2026-04-29T00:00:00",
+    "updated_at": "2026-04-29T00:00:00",
+    "last_used_at": ""
+  },
+  {
+    "id": "exp2-long-context-011",
+    "category": "长序列指代解析",
+    "task_types": [
+      "long_context"
+    ],
+    "trigger": "在长对话序列中先后引用多个POI和偏好，系统需要正确绑定当前指代对象。",
+    "problem": "在跨越多个轮次的对话中，用户可能先后提及火锅店、酒店和行政区偏好。当用户在新的上下文中使用时，系统需要从多个历史实体中正确识别当前指代的是哪一个。",
+    "strategy": "第一步：检查 ContextManager 中所有已记录的 POI 引用和用户偏好。第二步：根据当前问题的语义判断最可能指代的对象。如果问题提到'那个酒店'，优先匹配最近记录的酒店类 POI。第三步：对于复合指代（同时引用POI和偏好），分别解析每个部分。第四步：执行对应的空间分析操作，应用匹配的偏好设置。第五步：在回答中明确'根据对话历史，我理解您指的是[POI名称]'以确认指代正确。",
+    "source": "experiment_preset",
+    "success_count": 3,
+    "fail_count": 1,
+    "confidence": 0.667,
+    "created_at": "2026-04-29T00:00:00",
+    "updated_at": "2026-04-29T00:00:00",
+    "last_used_at": ""
+  },
+  {
+    "id": "exp2-closed-loop-012",
+    "category": "Critic到Evolution闭环",
+    "task_types": [
+      "closed_loop"
+    ],
+    "trigger": "同一类型的字段错误在不同图层再次出现，系统应将 Critic 诊断自动演化为可复用经验。",
+    "problem": "当 Critic 在某个图层上发现字段名错误并成功纠正后，该诊断知识需要通过 Evolution 沉淀到经验库。下次遇到不同图层但相同类型的字段错误时，系统应能直接复用该经验，不需要再次诊断。",
+    "strategy": "第一步：当 Critic 诊断出字段名错误（如用户用 area 应为 district）并成功纠正后，通过 Evolution 机制将诊断规则写回经验库。第二步：经验条目包含字段映射规则（area → district）、适用图层列表和置信度得分。第三步：下次遇到不同图层（如从餐饮换到住宿）的相同字段错误时，检索经验库匹配到该规则。第四步：直接应用字段映射规则，不需要再次诊断。第五步：回答中说明'根据之前处理类似字段错误的经验，已自动将 area 纠正为 district'。",
+    "source": "experiment_preset",
+    "success_count": 3,
+    "fail_count": 0,
+    "confidence": 0.8,
+    "created_at": "2026-04-29T00:00:00",
+    "updated_at": "2026-04-29T00:00:00",
+    "last_used_at": ""
+  }
+]

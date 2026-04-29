@@ -1,0 +1,529 @@
+{
+  "experiment": "实验一：基线对比实验",
+  "timestamp": "2026-04-29T12:57:05.049800",
+  "total_tasks": 7,
+  "base": {
+    "task_completion_rate": 0.0,
+    "tool_success_rate": 0.0,
+    "tool_invocation_rate": 0.0,
+    "code_execution_rate": 0.0,
+    "code_success_rate": 0.0,
+    "accuracy_rate": 0.0,
+    "error_rate": 0.0
+  },
+  "ace": {
+    "task_completion_rate": 100.0,
+    "tool_success_rate": 100.0,
+    "tool_invocation_rate": 86.66666666666667,
+    "code_execution_rate": 33.33333333333333,
+    "code_success_rate": 100.0,
+    "accuracy_rate": 86.66666666666667,
+    "error_rate": 0.0,
+    "experience_hit_rate": 46.666666666666664,
+    "error_recovery_rate": 6.666666666666667,
+    "preference_persistence_rate": 50.0
+  },
+  "improvements": {
+    "task_completion_rate": 100.0,
+    "task_completion_rate_pct": 100.0,
+    "tool_success_rate": 100.0,
+    "tool_success_rate_pct": 100.0,
+    "tool_invocation_rate": 86.67,
+    "tool_invocation_rate_pct": 100.0,
+    "code_execution_rate": 33.33,
+    "code_execution_rate_pct": 100.0,
+    "code_success_rate": 100.0,
+    "code_success_rate_pct": 100.0,
+    "accuracy_rate": 86.67,
+    "accuracy_rate_pct": 100.0,
+    "error_rate": 0,
+    "error_rate_pct": 0
+  },
+  "base_by_difficulty": {},
+  "ace_by_difficulty": {
+    "简单": {
+      "count": 5,
+      "accuracy_sum": 5,
+      "tool_success_sum": 5,
+      "accuracy_rate": 100.0,
+      "tool_success_rate": 100.0
+    },
+    "中等": {
+      "count": 8,
+      "accuracy_sum": 7,
+      "tool_success_sum": 8,
+      "accuracy_rate": 87.5,
+      "tool_success_rate": 100.0
+    },
+    "较难": {
+      "count": 2,
+      "accuracy_sum": 1,
+      "tool_success_sum": 2,
+      "accuracy_rate": 50.0,
+      "tool_success_rate": 100.0
+    }
+  },
+  "task_details": [
+    {
+      "task_id": 1,
+      "mode": "ace",
+      "task": "查询成华区有哪些餐饮店",
+      "task_type": "query",
+      "difficulty": "简单",
+      "task_completed": true,
+      "tool_invoked": true,
+      "tool_success": true,
+      "tool_failures": 0,
+      "code_executed": false,
+      "code_success": true,
+      "accuracy": true,
+      "experience_hit": false,
+      "error_recovered": false,
+      "response_time": 9.87,
+      "preference_applied": false,
+      "has_error": false,
+      "answer_preview": "成华区共有 **9,682 家**餐饮店，数据量较大，这里列出部分示例（地图上已高亮所有匹配要素）：\n\n| 序号 | 店名 | 类型 | 地址 |\n|:---:|:---|:---|:---|\n| 1 | 重庆鸭肠王火锅 | 火锅店 | 天回镇蓉都大道 |\n| 2 | 蓉蓉饼屋 | 糕饼店 | 蜀陵路367号 |\n| 3 | 自贡小吃(蜀陵路) | 中餐厅 | 蜀陵路367号 |\n| 4 | 将军",
+      "tool_calls": [
+        {
+          "name": "query_poi_by_conditions",
+          "status": "success"
+        }
+      ],
+      "error": ""
+    },
+    {
+      "task_id": 2,
+      "mode": "ace",
+      "task": "搜索名字包含'火锅'的POI",
+      "task_type": "search",
+      "difficulty": "简单",
+      "task_completed": true,
+      "tool_invoked": true,
+      "tool_success": true,
+      "tool_failures": 0,
+      "code_executed": false,
+      "code_success": true,
+      "accuracy": true,
+      "experience_hit": true,
+      "error_recovered": false,
+      "response_time": 6.98,
+      "preference_applied": false,
+      "has_error": false,
+      "answer_preview": "搜索完成！共找到 **4125 个**名字包含\"火锅\"的POI，结果已在地图上高亮显示。\n\n以下是部分代表性结果：\n\n**🏪 住宿服务（名称中提及火锅的酒店/民宿）**\n- 汉庭酒店(成都蜀汉店) — 金牛区（川西坝子火锅对面）\n- 成都SunshineHouse花园民宿 — 金牛区（山城老灶火锅旁边）\n- 梦之旅文君楼宾馆(成都宽窄巷子店) — 青羊区（狮子楼火锅斜对面）\n- m家社区酒店(成都",
+      "tool_calls": [
+        {
+          "name": "search_poi",
+          "status": "success"
+        }
+      ],
+      "error": ""
+    },
+    {
+      "task_id": 3,
+      "mode": "ace",
+      "task": "哪个区的餐馆数量最多，并高亮该行政区",
+      "task_type": "query+map",
+      "difficulty": "中等",
+      "task_completed": true,
+      "tool_invoked": true,
+      "tool_success": true,
+      "tool_failures": 0,
+      "code_executed": true,
+      "code_success": true,
+      "accuracy": true,
+      "experience_hit": false,
+      "error_recovered": false,
+      "response_time": 8.41,
+      "preference_applied": false,
+      "has_error": false,
+      "answer_preview": "## 分析结论\n\n**武侯区**的餐馆数量最多，共 **18,435 家**，远超其他行政区。\n\n各区餐馆数量排名如下：\n\n| 排名 | 行政区 | 餐馆数量 |\n|:---:|:------:|:--------:|\n| 🥇 | **武侯区** | **18,435** |\n| 🥈 | 金牛区 | 11,530 |\n| 🥉 | 成华区 | 9,682 |\n| 4 | 锦江区 | 9,541 |\n",
+      "tool_calls": [
+        {
+          "name": "summarize_layer_statistics",
+          "status": "success"
+        },
+        {
+          "name": "query_poi_by_conditions",
+          "status": "success"
+        },
+        {
+          "name": "execute_spatial_code",
+          "status": "success"
+        }
+      ],
+      "error": ""
+    },
+    {
+      "task_id": 4,
+      "mode": "ace",
+      "task": "哪个区的餐馆数量第二多，并高亮显示",
+      "task_type": "query+map",
+      "difficulty": "中等",
+      "task_completed": true,
+      "tool_invoked": true,
+      "tool_success": true,
+      "tool_failures": 0,
+      "code_executed": true,
+      "code_success": true,
+      "accuracy": true,
+      "experience_hit": true,
+      "error_recovered": false,
+      "response_time": 10.54,
+      "preference_applied": false,
+      "has_error": false,
+      "answer_preview": "## 分析结果\n\n**餐馆数量第二多的行政区是：金牛区 🏆**\n\n各行政区餐馆数量排名（前5）：\n| 排名 | 行政区 | 餐馆数量 |\n|:---:|:------:|:--------:|\n| 🥇 | 武侯区 | 18,435 家 |\n| 🥈 | **金牛区** | **11,530 家** |\n| 🥉 | 成华区 | 9,682 家 |\n| 4 | 锦江区 | 9,541 家 |\n| 5 |",
+      "tool_calls": [
+        {
+          "name": "summarize_layer_statistics",
+          "status": "success"
+        },
+        {
+          "name": "query_poi_by_conditions",
+          "status": "success"
+        },
+        {
+          "name": "execute_spatial_code",
+          "status": "success"
+        },
+        {
+          "name": "get_poi_by_index",
+          "status": "success"
+        }
+      ],
+      "error": ""
+    },
+    {
+      "task_id": 5,
+      "mode": "ace",
+      "task": "查找距离'天府广场'最近的5个住宿点",
+      "task_type": "nearby",
+      "difficulty": "中等",
+      "task_completed": true,
+      "tool_invoked": true,
+      "tool_success": true,
+      "tool_failures": 0,
+      "code_executed": false,
+      "code_success": true,
+      "accuracy": false,
+      "experience_hit": true,
+      "error_recovered": true,
+      "response_time": 10.75,
+      "preference_applied": false,
+      "has_error": false,
+      "answer_preview": "已达到最大协同轮次，请缩小任务范围或补充更明确的地点、图层、距离条件。",
+      "tool_calls": [
+        {
+          "name": "search_poi",
+          "status": "success"
+        },
+        {
+          "name": "query_poi_by_conditions",
+          "status": "success"
+        }
+      ],
+      "error": ""
+    },
+    {
+      "task_id": 6,
+      "mode": "ace",
+      "task": "在餐饮点周围做500米缓冲区分析",
+      "task_type": "nearby",
+      "difficulty": "中等",
+      "task_completed": true,
+      "tool_invoked": true,
+      "tool_success": true,
+      "tool_failures": 0,
+      "code_executed": false,
+      "code_success": true,
+      "accuracy": true,
+      "experience_hit": false,
+      "error_recovered": false,
+      "response_time": 5.36,
+      "preference_applied": false,
+      "has_error": false,
+      "answer_preview": "✅ **缓冲区分析已完成！**\n\n**分析结果：**\n- **图层：** 餐饮（共 61,101 个餐饮点）\n- **缓冲区半径：** 500 米\n- **生成结果图层：** `餐饮_buffer_500.0m`\n- **缓冲区数量：** 61,101 个（每个餐饮点周围生成一个 500 米缓冲区）\n\n每个餐饮点周围都生成了一个半径为 500 米的圆形缓冲区区域，这些缓冲区已在地图上高亮显示。您可",
+      "tool_calls": [
+        {
+          "name": "buffer_analysis",
+          "status": "success"
+        }
+      ],
+      "error": ""
+    },
+    {
+      "task_id": 7,
+      "mode": "ace",
+      "task": "对住宿服务数据进行DBSCAN聚类分析",
+      "task_type": "cluster",
+      "difficulty": "中等",
+      "task_completed": true,
+      "tool_invoked": true,
+      "tool_success": true,
+      "tool_failures": 0,
+      "code_executed": false,
+      "code_success": true,
+      "accuracy": true,
+      "experience_hit": true,
+      "error_recovered": false,
+      "response_time": 17.13,
+      "preference_applied": false,
+      "has_error": false,
+      "answer_preview": "DBSCAN聚类分析已完成！以下是分析结果总结：\n\n## 📊 住宿服务 DBSCAN 聚类分析结果\n\n**参数设置：**\n- 搜索半径（eps）：**500米**\n- 最小样本数（min_samples）：**5个**\n\n**聚类概况：**\n\n| 类别 | 数量 | 说明 |\n|------|------|------|\n| 🏠 **簇（Cluster）** | **36个** | 共识别出36个",
+      "tool_calls": [
+        {
+          "name": "query_poi_by_conditions",
+          "status": "success"
+        },
+        {
+          "name": "summarize_layer_statistics",
+          "status": "success"
+        },
+        {
+          "name": "cluster_points_dbscan",
+          "status": "success"
+        }
+      ],
+      "error": ""
+    },
+    {
+      "task_id": 8,
+      "mode": "ace",
+      "task": "统计各行政区内餐饮点的数量分布",
+      "task_type": "query+map",
+      "difficulty": "中等",
+      "task_completed": true,
+      "tool_invoked": true,
+      "tool_success": true,
+      "tool_failures": 0,
+      "code_executed": true,
+      "code_success": true,
+      "accuracy": true,
+      "experience_hit": false,
+      "error_recovered": false,
+      "response_time": 18.38,
+      "preference_applied": false,
+      "has_error": false,
+      "answer_preview": "## 成都市各行政区餐饮点数量分布统计\n\n以下是基于**空间位置匹配**（餐饮点落于哪个行政区面内）的统计结果，按数量降序排列：\n\n| 排名 | 行政区 | 餐饮点数量 |\n|:---:|:------:|:--------:|\n| 🥇 | **武侯区** | **14,463** |\n| 🥈 | **金牛区** | **10,432** |\n| 🥉 | **锦江区** | **10,200** ",
+      "tool_calls": [
+        {
+          "name": "summarize_layer_statistics",
+          "status": "success"
+        },
+        {
+          "name": "spatial_join_layers",
+          "status": "success"
+        },
+        {
+          "name": "execute_spatial_code",
+          "status": "success"
+        }
+      ],
+      "error": ""
+    },
+    {
+      "task_id": 9,
+      "mode": "ace",
+      "task": "查找武侯区内的住宿服务POI",
+      "task_type": "query",
+      "difficulty": "简单",
+      "task_completed": true,
+      "tool_invoked": true,
+      "tool_success": true,
+      "tool_failures": 0,
+      "code_executed": false,
+      "code_success": true,
+      "accuracy": true,
+      "experience_hit": true,
+      "error_recovered": false,
+      "response_time": 7.57,
+      "preference_applied": false,
+      "has_error": false,
+      "answer_preview": "查询成功！地图上已高亮所有匹配结果。以下是查询结论：\n\n---\n\n**武侯区住宿服务POI查询结果**\n\n在 **住宿服务** 图层中共找到 **1509 个** 位于武侯区的住宿服务POI，涵盖宾馆酒店、旅馆招待所、民宿短租公寓等多种类型。\n\n**部分代表样本：**\n| 名称 | 类型 | 地址 |\n|------|------|------|\n| 🏨 金薏假日酒店 | 三星级宾馆 | 武青北路",
+      "tool_calls": [
+        {
+          "name": "query_poi_by_conditions",
+          "status": "success"
+        }
+      ],
+      "error": ""
+    },
+    {
+      "task_id": 10,
+      "mode": "ace",
+      "task": "将餐饮点与行政区叠加分析，统计各区餐馆密度",
+      "task_type": "overlay",
+      "difficulty": "较难",
+      "task_completed": true,
+      "tool_invoked": true,
+      "tool_success": true,
+      "tool_failures": 0,
+      "code_executed": true,
+      "code_success": true,
+      "accuracy": false,
+      "experience_hit": false,
+      "error_recovered": false,
+      "response_time": 36.08,
+      "preference_applied": false,
+      "has_error": false,
+      "answer_preview": "已达到最大协同轮次，请缩小任务范围或补充更明确的地点、图层、距离条件。",
+      "tool_calls": [
+        {
+          "name": "summarize_layer_statistics",
+          "status": "success"
+        },
+        {
+          "name": "spatial_join_layers",
+          "status": "success"
+        },
+        {
+          "name": "execute_spatial_code",
+          "status": "success"
+        }
+      ],
+      "error": ""
+    },
+    {
+      "task_id": 11,
+      "mode": "ace",
+      "task": "对住宿服务数据做热点分析",
+      "task_type": "cluster",
+      "difficulty": "较难",
+      "task_completed": true,
+      "tool_invoked": true,
+      "tool_success": true,
+      "tool_failures": 0,
+      "code_executed": false,
+      "code_success": true,
+      "accuracy": true,
+      "experience_hit": true,
+      "error_recovered": false,
+      "response_time": 8.92,
+      "preference_applied": false,
+      "has_error": false,
+      "answer_preview": "以下是 **住宿服务热点分析** 的结果：\n\n---\n\n### 📊 分析参数\n- **数据图层**：住宿服务（共 6,473 条 POI）\n- **分析方法**：网格热点分析（网格大小 500m × 500m）\n- **展示**：Top 10 高密度热点网格\n\n### 🔥 热点排名（按住宿数量降序）\n\n| 排名 | 网格编号 | 住宿数量 |\n|:---:|:--------:|:--------",
+      "tool_calls": [
+        {
+          "name": "summarize_layer_statistics",
+          "status": "success"
+        },
+        {
+          "name": "hotspot_analysis",
+          "status": "success"
+        }
+      ],
+      "error": ""
+    },
+    {
+      "task_id": 12,
+      "mode": "ace",
+      "task": "导出餐饮点数据为CSV格式",
+      "task_type": "export",
+      "difficulty": "简单",
+      "task_completed": true,
+      "tool_invoked": true,
+      "tool_success": true,
+      "tool_failures": 0,
+      "code_executed": false,
+      "code_success": true,
+      "accuracy": true,
+      "experience_hit": true,
+      "error_recovered": false,
+      "response_time": 5.81,
+      "preference_applied": false,
+      "has_error": false,
+      "answer_preview": "已完成餐饮点数据的导出！以下是导出结果摘要：\n\n**导出信息**\n- 📄 **文件名**：`餐饮点数据.csv`\n- 📂 **保存路径**：`D:\\geoai\\data\\exports\\餐饮点数据.csv`\n- 📊 **数据量**：共 **61,101 条**餐饮点记录\n- 🏷️ **包含字段**：`name`, `type`, `address`, `lng`, `lat`, `province",
+      "tool_calls": [
+        {
+          "name": "summarize_layer_statistics",
+          "status": "success"
+        },
+        {
+          "name": "export_analysis_result",
+          "status": "success"
+        }
+      ],
+      "error": ""
+    },
+    {
+      "task_id": 13,
+      "mode": "ace",
+      "task": "不对，高亮的是行政区面图层，不是餐馆点图层",
+      "task_type": "feedback",
+      "difficulty": "中等",
+      "task_completed": true,
+      "tool_invoked": false,
+      "tool_success": true,
+      "tool_failures": 0,
+      "code_executed": false,
+      "code_success": true,
+      "accuracy": true,
+      "experience_hit": false,
+      "error_recovered": false,
+      "response_time": 3.67,
+      "preference_applied": false,
+      "has_error": false,
+      "answer_preview": "我明白了，您是在纠正之前的高亮方式——应该高亮行政区面图层，而不是餐馆点图层。\n\n让我先确认一下当前会话的上下文。看起来之前可能进行过某个分析，但当前消息中没有明确说明具体要做什么分析任务。让我先查看一下可用的数据情况。\n\n根据会话上下文，最近有多个住宿服务的POI信息。但用户当前的消息是在纠正高亮方式，没有提出新的查询任务。\n\n让我先确认一下之前的任务是什么，以便正确执行。\n\n看起来用户是在纠正",
+      "tool_calls": [],
+      "error": ""
+    },
+    {
+      "task_id": 14,
+      "mode": "ace",
+      "task": "哪个区的餐馆数量最多，并高亮该行政区",
+      "task_type": "memory",
+      "difficulty": "中等",
+      "task_completed": true,
+      "tool_invoked": true,
+      "tool_success": true,
+      "tool_failures": 0,
+      "code_executed": true,
+      "code_success": true,
+      "accuracy": true,
+      "experience_hit": false,
+      "error_recovered": false,
+      "response_time": 7.99,
+      "preference_applied": true,
+      "has_error": false,
+      "answer_preview": "## 分析结果\n\n**武侯区**的餐馆数量最多，共 **18,435 家**，远超其他行政区。\n\n各区餐馆数量排名如下：\n\n| 排名 | 行政区 | 餐馆数量 |\n|:---:|:------:|:--------:|\n| 🥇 | **武侯区** | **18,435** |\n| 🥈 | 金牛区 | 11,530 |\n| 🥉 | 成华区 | 9,682 |\n| 4 | 锦江区 | 9,541 |\n",
+      "tool_calls": [
+        {
+          "name": "query_poi_by_conditions",
+          "status": "success"
+        },
+        {
+          "name": "summarize_layer_statistics",
+          "status": "success"
+        },
+        {
+          "name": "execute_spatial_code",
+          "status": "success"
+        }
+      ],
+      "error": ""
+    },
+    {
+      "task_id": 15,
+      "mode": "ace",
+      "task": "聚类分析怎么用？有哪些参数？",
+      "task_type": "help",
+      "difficulty": "简单",
+      "task_completed": true,
+      "tool_invoked": false,
+      "tool_success": true,
+      "tool_failures": 0,
+      "code_executed": false,
+      "code_success": true,
+      "accuracy": true,
+      "experience_hit": false,
+      "error_recovered": false,
+      "response_time": 5.44,
+      "preference_applied": false,
+      "has_error": false,
+      "answer_preview": "## 聚类分析（DBSCAN）使用说明\n\n**适用场景**  \n- 发现 POI 的空间聚集区域（如“哪些区域餐饮最密集”）  \n- 识别异常点或孤立点（如远离主集群的设施）  \n- 无需预先指定聚类数量，适合探索性分析  \n\n**输入参数**  \n| 参数 | 说明 | 示例 |\n|------|------|------|\n| `layer_name` | 要分析的图层名 | `\"餐饮\"` |",
+      "tool_calls": [],
+      "error": ""
+    }
+  ],
+  "run_dir": "experiments\\experiment_outputs\\exp1\\exp1_ace_20260429-125422",
+  "run_name": "2026-04-29 12:54:22"
+}

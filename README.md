@@ -39,13 +39,13 @@
 
 ```text
 geoai/
-├─ agents/
+├─ agents/                    # 多智能体层
 │  ├─ code_agent.py
 │  ├─ coordinator_agent.py
 │  ├─ reflector_agent.py
 │  ├─ spatial_analyst_agent.py
 │  └─ __init__.py
-├─ core/
+├─ core/                      # 核心引擎
 │  ├─ ace_core.py
 │  ├─ context_manager.py
 │  ├─ critic.py
@@ -55,7 +55,7 @@ geoai/
 │  ├─ jsonl_logger.py
 │  ├─ session_store.py
 │  └─ __init__.py
-├─ tools/
+├─ tools/                     # GIS 工具集
 │  ├─ search.py
 │  ├─ query.py
 │  ├─ nearby.py
@@ -70,29 +70,66 @@ geoai/
 │  ├─ advanced_common.py
 │  ├─ utils_geo.py
 │  └─ __init__.py
-├─ web_app/
+├─ experiments/               # 实验系统
+│  ├─ __init__.py             # 统一导出入口
+│  ├─ runner.py               # 统一运行器
+│  ├─ export_utils.py         # matplotlib 图表导出（中文标签）
+│  ├─ exp1/                   # 基线对比实验
+│  │  ├─ __init__.py
+│  │  ├─ exp1_runner.py
+│  │  ├─ exp1_analyzer.py
+│  │  ├─ exp1_suite.json
+│  │  └─ exp1_experience_library.json
+│  ├─ exp2/                   # 消融实验
+│  │  ├─ __init__.py
+│  │  ├─ exp2_runner.py
+│  │  ├─ exp2_suite.json
+│  │  └─ exp2_experience_library.json
+│  ├─ exp3/                   # 记忆抗退化实验
+│  │  ├─ __init__.py
+│  │  ├─ exp3_runner.py
+│  │  ├─ exp3_suite.json
+│  │  └─ exp3_experience_library.json
+│  ├─ exp4/                   # 长上下文扩展实验
+│  │  ├─ __init__.py
+│  │  ├─ exp4_runner.py
+│  │  ├─ exp4_suite.json
+│  │  └─ exp4_experience_library.json
+│  └─ experiment_outputs/     # 运行输出
+│      ├─ exp1/
+│      ├─ exp2/
+│      ├─ exp3/
+│      └─ exp4/
+├─ web_app/                   # Web 前端
 │  ├─ server.py
 │  ├─ web_map_handler.py
 │  ├─ static/
 │  │  ├─ index.html
+│  │  ├─ experiment.html
+│  │  ├─ experiment.js
+│  │  ├─ experiment.css
 │  │  ├─ app.js
 │  │  └─ styles.css
 │  └─ __init__.py
-├─ data/
+├─ data/                      # 数据
 │  ├─ geodata/
+│  ├─ exports/
 │  ├─ experience_libraries/
 │  ├─ ace_experience_library.json
 │  ├─ experience_banks.json
 │  └─ sessions.json
-├─ logs/
+├─ logs/                      # JSONL 日志
 │  ├─ task_log.jsonl
 │  ├─ code_log.jsonl
 │  ├─ evolution_log.jsonl
 │  └─ error_log.jsonl
+├─ geodata/                   # Shapefile 数据
 ├─ .vscode/
 │  └─ launch.json
 ├─ ai_handler.py
 ├─ main_web.py
+├─ geoprc.py
+├─ utils.py
 ├─ ACE_UPGRADE.md
 ├─ EXPERIMENT_GUIDE.md
 ├─ SYSTEM_ARCHITECTURE.md
@@ -390,21 +427,51 @@ http://127.0.0.1:8000
 - [`SYSTEM_ARCHITECTURE.md`](d:/geoai/SYSTEM_ARCHITECTURE.md:1)
   系统架构与模块关系说明
 
-## 11. 当前特点
+## 11. 实验系统
+
+项目包含 4 组对比实验，位于 [`experiments/`](experiments/)：
+
+| 实验 | 说明 | 评估维度 |
+|------|------|---------|
+| 实验一 | Base LLM vs ACE 增强对比 | 任务完成率、工具成功率、代码成功率、准确率 |
+| 实验二 | 模块消融分析 | 各模块（Critic/Evolution/经验库/上下文）贡献度 |
+| 实验三 | 记忆抗退化评估 | POI 召回率、偏好持久率、经验复用率、半衰期 |
+| 实验四 | 长上下文扩展对比 | 长序列准确率、跨轮引用准确率、压缩率、污染率 |
+
+### 图表导出
+
+[`experiments/export_utils.py`](experiments/export_utils.py) 提供 matplotlib 图表导出：
+
+- **中文标签**：自动检测系统字体，所有标题/坐标轴/图例均为中文
+- **全可视化覆盖**：每个实验导出 3–4 张图片，覆盖所有前端 Chart.js 图表
+- **美观样式**：统一调色板、数值标注、网格虚线、高 DPI 输出
+
+```python
+from experiments.export_utils import ensure_matplotlib_exports, build_export_zip
+
+# 生成图片
+ensure_matplotlib_exports("experiments/experiment_outputs/exp1/exp1_both_20260429-132217")
+
+# 打包导出（summary.json + results.csv + 图片）
+build_export_zip("experiments/experiment_outputs/exp1/exp1_both_20260429-132217")
+```
+
+## 12. 当前特点
 
 这个版本已经具备：
 
-- WebGIS 前端
-- GeoJSON 按需加载
-- 多智能体协同
-- GIS 工具调用
-- 受控空间代码执行
-- 错误反思与经验演化
+- WebGIS 前端（MapLibre GL JS）
+- GeoJSON 按需加载（bbox + zoom）
+- 多智能体协同（Coordinator → SpatialAnalyst/CodeAgent → Reflector）
+- GIS 工具调用（查询、邻近、缓冲区、叠加、聚类、热点、统计、导出）
+- 受控空间代码执行（沙箱 + AST 安全检查）
+- 错误反思与经验演化（Critic + Evolution 闭环）
 - 会话级用户偏好记忆
-- 日志可追溯
+- 4 组对比实验系统（带 matplotlib 图表导出）
+- 日志可追溯（JSONL）
 
 如果后续继续演进，比较值得优先推进的方向是：
 
 1. 分析侧图层也进一步做惰性单层加载
 2. 高亮策略增加更强的规则约束
-3. README / 文档 / 前端提示语进一步统一编码与术语
+3. 文档与前端提示语进一步统一编码与术语

@@ -1,0 +1,209 @@
+{
+  "experiment": "基线对比实验 - Base LLM vs ACE",
+  "description": "15个标准化GIS测试任务，覆盖9种任务类型，三级难度分布",
+  "version": "1.0",
+  "created_at": "2026-04-28",
+  "tasks": [
+    {
+      "id": 1,
+      "task": "查询成华区有哪些餐饮店",
+      "task_type": "query",
+      "difficulty": "简单",
+      "expected_tools": ["query_poi_by_conditions"],
+      "expected_keywords": ["成华区", "餐饮"],
+      "ground_truth": "返回成华区餐饮POI列表",
+      "metric_checks": {
+        "requires_tool_call": true,
+        "requires_result_not_empty": true,
+        "requires_correct_district": "成华区"
+      }
+    },
+    {
+      "id": 2,
+      "task": "搜索名字包含'火锅'的POI",
+      "task_type": "search",
+      "difficulty": "简单",
+      "expected_tools": ["search_poi"],
+      "expected_keywords": ["火锅"],
+      "ground_truth": "返回含'火锅'的POI列表",
+      "metric_checks": {
+        "requires_tool_call": true,
+        "requires_result_not_empty": true
+      }
+    },
+    {
+      "id": 3,
+      "task": "哪个区的餐馆数量最多，并高亮该行政区",
+      "task_type": "query+map",
+      "difficulty": "中等",
+      "expected_tools": ["query_poi_by_conditions", "summarize_layer_statistics"],
+      "expected_keywords": ["最多", "高亮", "行政区"],
+      "ground_truth": "找出餐馆最多的行政区并高亮其面图层",
+      "metric_checks": {
+        "requires_tool_call": true,
+        "requires_highlight": true,
+        "requires_correct_answer": true
+      }
+    },
+    {
+      "id": 4,
+      "task": "哪个区的餐馆数量第二多，并高亮显示",
+      "task_type": "query+map",
+      "difficulty": "中等",
+      "expected_tools": ["query_poi_by_conditions", "summarize_layer_statistics"],
+      "expected_keywords": ["第二多", "高亮"],
+      "ground_truth": "找出餐馆数量第二多的行政区并高亮",
+      "metric_checks": {
+        "requires_tool_call": true,
+        "requires_highlight": true,
+        "requires_correct_answer": true
+      }
+    },
+    {
+      "id": 5,
+      "task": "查找距离'天府广场'最近的5个住宿点",
+      "task_type": "nearby",
+      "difficulty": "中等",
+      "expected_tools": ["search_poi", "find_nearby_point", "nearest_neighbor_search"],
+      "expected_keywords": ["天府广场", "最近", "住宿"],
+      "ground_truth": "返回距离天府广场最近的5个住宿POI",
+      "metric_checks": {
+        "requires_tool_call": true,
+        "requires_result_not_empty": true
+      }
+    },
+    {
+      "id": 6,
+      "task": "在餐饮点周围做500米缓冲区分析",
+      "task_type": "nearby",
+      "difficulty": "中等",
+      "expected_tools": ["buffer_analysis"],
+      "expected_keywords": ["500米", "缓冲区", "餐饮"],
+      "ground_truth": "对餐饮点执行500米缓冲区分析",
+      "metric_checks": {
+        "requires_tool_call": true,
+        "requires_crs_handling": true
+      }
+    },
+    {
+      "id": 7,
+      "task": "对住宿服务数据进行DBSCAN聚类分析",
+      "task_type": "cluster",
+      "difficulty": "中等",
+      "expected_tools": ["cluster_points_dbscan"],
+      "expected_keywords": ["DBSCAN", "聚类", "住宿服务"],
+      "ground_truth": "执行DBSCAN聚类分析并返回聚类结果",
+      "metric_checks": {
+        "requires_tool_call": true,
+        "requires_result_not_empty": true
+      }
+    },
+    {
+      "id": 8,
+      "task": "统计各行政区内餐饮点的数量分布",
+      "task_type": "query+map",
+      "difficulty": "中等",
+      "expected_tools": ["summarize_layer_statistics"],
+      "expected_keywords": ["统计", "行政区", "餐饮", "分布"],
+      "ground_truth": "返回各行政区餐饮点数量分布汇总",
+      "metric_checks": {
+        "requires_tool_call": true,
+        "requires_correct_answer": true
+      }
+    },
+    {
+      "id": 9,
+      "task": "查找武侯区内的住宿服务POI",
+      "task_type": "query",
+      "difficulty": "简单",
+      "expected_tools": ["query_poi_by_conditions"],
+      "expected_keywords": ["武侯区", "住宿服务"],
+      "ground_truth": "返回武侯区住宿服务POI",
+      "metric_checks": {
+        "requires_tool_call": true,
+        "requires_result_not_empty": true,
+        "requires_correct_district": "武侯区"
+      }
+    },
+    {
+      "id": 10,
+      "task": "将餐饮点与行政区叠加分析，统计各区餐馆密度",
+      "task_type": "overlay",
+      "difficulty": "较难",
+      "expected_tools": ["overlay_layers", "summarize_layer_statistics"],
+      "expected_keywords": ["叠加", "密度", "行政区", "餐饮"],
+      "ground_truth": "执行空间叠加后统计各区餐馆密度",
+      "metric_checks": {
+        "requires_tool_call": true,
+        "requires_crs_handling": true,
+        "requires_correct_answer": true
+      }
+    },
+    {
+      "id": 11,
+      "task": "对住宿服务数据做热点分析",
+      "task_type": "cluster",
+      "difficulty": "较难",
+      "expected_tools": ["hotspot_analysis"],
+      "expected_keywords": ["热点", "住宿服务"],
+      "ground_truth": "执行网格热点分析并返回结果",
+      "metric_checks": {
+        "requires_tool_call": true,
+        "requires_result_not_empty": true
+      }
+    },
+    {
+      "id": 12,
+      "task": "导出餐饮点数据为CSV格式",
+      "task_type": "export",
+      "difficulty": "简单",
+      "expected_tools": ["export_analysis_result"],
+      "expected_keywords": ["导出", "CSV", "餐饮"],
+      "ground_truth": "成功导出餐饮点CSV文件",
+      "metric_checks": {
+        "requires_tool_call": true
+      }
+    },
+    {
+      "id": 13,
+      "task": "不对，高亮的是行政区面图层，不是餐馆点图层",
+      "task_type": "feedback",
+      "difficulty": "中等",
+      "expected_tools": [],
+      "expected_keywords": [],
+      "ground_truth": "识别为纠正反馈，记录偏好：只高亮行政区",
+      "metric_checks": {
+        "requires_feedback_recognition": true,
+        "requires_preference_stored": true
+      }
+    },
+    {
+      "id": 14,
+      "task": "哪个区的餐馆数量最多，并高亮该行政区",
+      "task_type": "memory",
+      "difficulty": "中等",
+      "expected_tools": ["query_poi_by_conditions", "summarize_layer_statistics"],
+      "expected_keywords": ["最多", "高亮"],
+      "ground_truth": "正确应用第13轮的偏好，只高亮行政区面图层",
+      "metric_checks": {
+        "requires_preference_applied": true,
+        "requires_highlight_layer_is_admin": true,
+        "requires_correct_answer": true
+      },
+      "depends_on": [13]
+    },
+    {
+      "id": 15,
+      "task": "聚类分析怎么用？有哪些参数？",
+      "task_type": "help",
+      "difficulty": "简单",
+      "expected_tools": [],
+      "expected_keywords": ["聚类", "DBSCAN", "参数"],
+      "ground_truth": "文字说明聚类分析的使用方法和参数含义",
+      "metric_checks": {
+        "requires_text_explanation": true,
+        "requires_no_tool_call": true
+      }
+    }
+  ]
+}

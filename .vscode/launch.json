@@ -5,7 +5,7 @@
       "name": "GeoAI WebGIS",
       "type": "debugpy",
       "request": "launch",
-      "program": "main_web.py",
+      "program": "main.py",
       "console": "integratedTerminal"
     }
   ]

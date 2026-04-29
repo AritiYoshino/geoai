@@ -1,0 +1,43 @@
+{
+  "experiment": "长上下文扩展场景对比实验",
+  "description": "30 轮复合 GIS 任务序列，对比 Base full context、Base truncated 与 ACE compressed 在上下文膨胀下的准确率、跨轮引用和压缩效率。",
+  "version": "1.0",
+  "created_at": "2026-04-29",
+  "systems": [
+    {"id": "base_full", "name": "Base LLM full context"},
+    {"id": "base_truncated", "name": "Base LLM truncated"},
+    {"id": "ace_compressed", "name": "ACE compressed"}
+  ],
+  "rounds": [
+    {"round": 1, "interval": "1-5", "context_tokens": 1800, "task_complexity": 1, "reference_gap": 0, "layer_count": 1, "chain_steps": 1},
+    {"round": 2, "interval": "1-5", "context_tokens": 2300, "task_complexity": 1, "reference_gap": 1, "layer_count": 1, "chain_steps": 1},
+    {"round": 3, "interval": "1-5", "context_tokens": 2800, "task_complexity": 2, "reference_gap": 1, "layer_count": 2, "chain_steps": 2},
+    {"round": 4, "interval": "1-5", "context_tokens": 3400, "task_complexity": 2, "reference_gap": 2, "layer_count": 2, "chain_steps": 2},
+    {"round": 5, "interval": "1-5", "context_tokens": 4200, "task_complexity": 2, "reference_gap": 3, "layer_count": 2, "chain_steps": 2},
+    {"round": 6, "interval": "6-10", "context_tokens": 5600, "task_complexity": 2, "reference_gap": 4, "layer_count": 2, "chain_steps": 2},
+    {"round": 7, "interval": "6-10", "context_tokens": 6800, "task_complexity": 3, "reference_gap": 5, "layer_count": 2, "chain_steps": 3},
+    {"round": 8, "interval": "6-10", "context_tokens": 7800, "task_complexity": 3, "reference_gap": 7, "layer_count": 3, "chain_steps": 3},
+    {"round": 9, "interval": "6-10", "context_tokens": 9100, "task_complexity": 3, "reference_gap": 8, "layer_count": 3, "chain_steps": 3},
+    {"round": 10, "interval": "6-10", "context_tokens": 10200, "task_complexity": 3, "reference_gap": 9, "layer_count": 3, "chain_steps": 3},
+    {"round": 11, "interval": "11-15", "context_tokens": 11800, "task_complexity": 3, "reference_gap": 10, "layer_count": 3, "chain_steps": 3},
+    {"round": 12, "interval": "11-15", "context_tokens": 13400, "task_complexity": 4, "reference_gap": 11, "layer_count": 3, "chain_steps": 4},
+    {"round": 13, "interval": "11-15", "context_tokens": 15100, "task_complexity": 4, "reference_gap": 12, "layer_count": 3, "chain_steps": 4},
+    {"round": 14, "interval": "11-15", "context_tokens": 17000, "task_complexity": 4, "reference_gap": 13, "layer_count": 3, "chain_steps": 4},
+    {"round": 15, "interval": "11-15", "context_tokens": 18800, "task_complexity": 4, "reference_gap": 14, "layer_count": 3, "chain_steps": 4},
+    {"round": 16, "interval": "16-20", "context_tokens": 20700, "task_complexity": 4, "reference_gap": 15, "layer_count": 3, "chain_steps": 4},
+    {"round": 17, "interval": "16-20", "context_tokens": 22600, "task_complexity": 5, "reference_gap": 16, "layer_count": 3, "chain_steps": 5},
+    {"round": 18, "interval": "16-20", "context_tokens": 24700, "task_complexity": 5, "reference_gap": 17, "layer_count": 3, "chain_steps": 5},
+    {"round": 19, "interval": "16-20", "context_tokens": 26900, "task_complexity": 5, "reference_gap": 18, "layer_count": 3, "chain_steps": 5},
+    {"round": 20, "interval": "16-20", "context_tokens": 29200, "task_complexity": 5, "reference_gap": 19, "layer_count": 3, "chain_steps": 5},
+    {"round": 21, "interval": "21-30", "context_tokens": 31500, "task_complexity": 5, "reference_gap": 20, "layer_count": 3, "chain_steps": 5},
+    {"round": 22, "interval": "21-30", "context_tokens": 33800, "task_complexity": 5, "reference_gap": 21, "layer_count": 3, "chain_steps": 5},
+    {"round": 23, "interval": "21-30", "context_tokens": 36100, "task_complexity": 5, "reference_gap": 22, "layer_count": 3, "chain_steps": 5},
+    {"round": 24, "interval": "21-30", "context_tokens": 38600, "task_complexity": 5, "reference_gap": 23, "layer_count": 3, "chain_steps": 5},
+    {"round": 25, "interval": "21-30", "context_tokens": 41200, "task_complexity": 5, "reference_gap": 24, "layer_count": 3, "chain_steps": 5},
+    {"round": 26, "interval": "21-30", "context_tokens": 43800, "task_complexity": 5, "reference_gap": 25, "layer_count": 3, "chain_steps": 5},
+    {"round": 27, "interval": "21-30", "context_tokens": 46500, "task_complexity": 5, "reference_gap": 26, "layer_count": 3, "chain_steps": 5},
+    {"round": 28, "interval": "21-30", "context_tokens": 49200, "task_complexity": 5, "reference_gap": 27, "layer_count": 3, "chain_steps": 5},
+    {"round": 29, "interval": "21-30", "context_tokens": 52000, "task_complexity": 5, "reference_gap": 28, "layer_count": 3, "chain_steps": 5},
+    {"round": 30, "interval": "21-30", "context_tokens": 54800, "task_complexity": 5, "reference_gap": 29, "layer_count": 3, "chain_steps": 5}
+  ]
+}

@@ -1,0 +1,529 @@
+{
+  "experiment": "实验一：基线对比实验",
+  "timestamp": "2026-04-29T13:19:18.446509",
+  "total_tasks": 7,
+  "base": {
+    "task_completion_rate": 100.0,
+    "tool_success_rate": 93.33333333333333,
+    "tool_invocation_rate": 93.33333333333333,
+    "code_execution_rate": 33.33333333333333,
+    "code_success_rate": 100.0,
+    "accuracy_rate": 53.333333333333336,
+    "error_rate": 0.0
+  },
+  "ace": {
+    "task_completion_rate": 0.0,
+    "tool_success_rate": 0.0,
+    "tool_invocation_rate": 0.0,
+    "code_execution_rate": 0.0,
+    "code_success_rate": 0.0,
+    "accuracy_rate": 0.0,
+    "error_rate": 0.0,
+    "experience_hit_rate": 0.0,
+    "error_recovery_rate": 0.0,
+    "preference_persistence_rate": 0.0
+  },
+  "improvements": {
+    "task_completion_rate": -100.0,
+    "task_completion_rate_pct": -100.0,
+    "tool_success_rate": -93.33,
+    "tool_success_rate_pct": -100.0,
+    "tool_invocation_rate": -93.33,
+    "tool_invocation_rate_pct": -100.0,
+    "code_execution_rate": -33.33,
+    "code_execution_rate_pct": -100.0,
+    "code_success_rate": -100.0,
+    "code_success_rate_pct": -100.0,
+    "accuracy_rate": -53.33,
+    "accuracy_rate_pct": -100.0,
+    "error_rate": 0,
+    "error_rate_pct": 0
+  },
+  "base_by_difficulty": {
+    "简单": {
+      "count": 5,
+      "accuracy_sum": 4,
+      "tool_success_sum": 4,
+      "accuracy_rate": 80.0,
+      "tool_success_rate": 80.0
+    },
+    "中等": {
+      "count": 8,
+      "accuracy_sum": 4,
+      "tool_success_sum": 8,
+      "accuracy_rate": 50.0,
+      "tool_success_rate": 100.0
+    },
+    "较难": {
+      "count": 2,
+      "accuracy_sum": 0,
+      "tool_success_sum": 2,
+      "accuracy_rate": 0.0,
+      "tool_success_rate": 100.0
+    }
+  },
+  "ace_by_difficulty": {},
+  "task_details": [
+    {
+      "task_id": 1,
+      "mode": "base",
+      "task": "查询成华区有哪些餐饮店",
+      "task_type": "query",
+      "difficulty": "简单",
+      "task_completed": true,
+      "tool_invoked": true,
+      "tool_success": false,
+      "tool_failures": 1,
+      "code_executed": false,
+      "code_success": true,
+      "accuracy": true,
+      "experience_hit": false,
+      "error_recovered": false,
+      "response_time": 4.05,
+      "preference_applied": false,
+      "has_error": false,
+      "answer_preview": "我来查询成华区的餐饮店。首先，我需要查看可用的图层名称。\n\n[工具调用摘要]\n  ❌ query_poi_by_conditions: 条件查询出错: cannot assign without a target object。请确保条件格式正确，列名存在。示例: district=='锦江区' and type=='酒店'",
+      "tool_calls": [
+        {
+          "name": "query_poi_by_conditions",
+          "args": {
+            "layer_name": "餐饮",
+            "conditions": "district='成华区'"
+          },
+          "status": "error",
+          "error": "条件查询出错: cannot assign without a target object。请确保条件格式正确，列名存在。示例: district=='锦江区' and type=='酒店'"
+        }
+      ],
+      "error": ""
+    },
+    {
+      "task_id": 2,
+      "mode": "base",
+      "task": "搜索名字包含'火锅'的POI",
+      "task_type": "search",
+      "difficulty": "简单",
+      "task_completed": true,
+      "tool_invoked": true,
+      "tool_success": true,
+      "tool_failures": 0,
+      "code_executed": false,
+      "code_success": true,
+      "accuracy": true,
+      "experience_hit": false,
+      "error_recovered": false,
+      "response_time": 2.24,
+      "preference_applied": false,
+      "has_error": false,
+      "answer_preview": "我来搜索名字包含\"火锅\"的POI。\n\n[工具调用摘要]\n  ✅ search_poi",
+      "tool_calls": [
+        {
+          "name": "search_poi",
+          "args": {
+            "keyword": "火锅"
+          },
+          "status": "success"
+        }
+      ],
+      "error": ""
+    },
+    {
+      "task_id": 3,
+      "mode": "base",
+      "task": "哪个区的餐馆数量最多，并高亮该行政区",
+      "task_type": "query+map",
+      "difficulty": "中等",
+      "task_completed": true,
+      "tool_invoked": true,
+      "tool_success": true,
+      "tool_failures": 0,
+      "code_executed": true,
+      "code_success": true,
+      "accuracy": false,
+      "experience_hit": false,
+      "error_recovered": false,
+      "response_time": 1.97,
+      "preference_applied": false,
+      "has_error": false,
+      "answer_preview": "我来分析这个问题。首先，我需要查看可用的数据图层，然后统计每个区的餐馆数量。\n\n先看看图层的基本信息。\n\n[工具调用摘要]\n  ✅ execute_spatial_code",
+      "tool_calls": [
+        {
+          "name": "execute_spatial_code",
+          "args": {
+            "task_description": "查看所有可用的图层名称",
+            "code": "layer_names"
+          },
+          "status": "success"
+        }
+      ],
+      "error": ""
+    },
+    {
+      "task_id": 4,
+      "mode": "base",
+      "task": "哪个区的餐馆数量第二多，并高亮显示",
+      "task_type": "query+map",
+      "difficulty": "中等",
+      "task_completed": true,
+      "tool_invoked": true,
+      "tool_success": true,
+      "tool_failures": 0,
+      "code_executed": false,
+      "code_success": true,
+      "accuracy": false,
+      "experience_hit": false,
+      "error_recovered": false,
+      "response_time": 1.71,
+      "preference_applied": false,
+      "has_error": false,
+      "answer_preview": "我先查看一下可用的数据图层，然后统计各区的餐馆数量。\n\n[工具调用摘要]\n  ✅ summarize_layer_statistics",
+      "tool_calls": [
+        {
+          "name": "summarize_layer_statistics",
+          "args": {
+            "layer_name": "餐饮_61101",
+            "group_by": "district"
+          },
+          "status": "success"
+        }
+      ],
+      "error": ""
+    },
+    {
+      "task_id": 5,
+      "mode": "base",
+      "task": "查找距离'天府广场'最近的5个住宿点",
+      "task_type": "nearby",
+      "difficulty": "中等",
+      "task_completed": true,
+      "tool_invoked": true,
+      "tool_success": true,
+      "tool_failures": 0,
+      "code_executed": false,
+      "code_success": true,
+      "accuracy": true,
+      "experience_hit": false,
+      "error_recovered": false,
+      "response_time": 1.83,
+      "preference_applied": false,
+      "has_error": false,
+      "answer_preview": "我先搜索\"天府广场\"的位置，然后查找最近的住宿点。\n\n[工具调用摘要]\n  ✅ search_poi",
+      "tool_calls": [
+        {
+          "name": "search_poi",
+          "args": {
+            "keyword": "天府广场"
+          },
+          "status": "success"
+        }
+      ],
+      "error": ""
+    },
+    {
+      "task_id": 6,
+      "mode": "base",
+      "task": "在餐饮点周围做500米缓冲区分析",
+      "task_type": "nearby",
+      "difficulty": "中等",
+      "task_completed": true,
+      "tool_invoked": true,
+      "tool_success": true,
+      "tool_failures": 0,
+      "code_executed": false,
+      "code_success": true,
+      "accuracy": false,
+      "experience_hit": false,
+      "error_recovered": false,
+      "response_time": 1.6,
+      "preference_applied": false,
+      "has_error": false,
+      "answer_preview": "我来进行餐饮点周围500米缓冲区分析。首先，让我查看一下餐饮图层的详细信息。\n\n[工具调用摘要]\n  ✅ summarize_layer_statistics",
+      "tool_calls": [
+        {
+          "name": "summarize_layer_statistics",
+          "args": {
+            "layer_name": "餐饮"
+          },
+          "status": "success"
+        }
+      ],
+      "error": ""
+    },
+    {
+      "task_id": 7,
+      "mode": "base",
+      "task": "对住宿服务数据进行DBSCAN聚类分析",
+      "task_type": "cluster",
+      "difficulty": "中等",
+      "task_completed": true,
+      "tool_invoked": true,
+      "tool_success": true,
+      "tool_failures": 0,
+      "code_executed": false,
+      "code_success": true,
+      "accuracy": false,
+      "experience_hit": false,
+      "error_recovered": false,
+      "response_time": 1.7,
+      "preference_applied": false,
+      "has_error": false,
+      "answer_preview": "我来对住宿服务数据进行DBSCAN聚类分析。首先，我需要了解住宿服务数据的图层名称和基本信息。\n\n[工具调用摘要]\n  ✅ summarize_layer_statistics",
+      "tool_calls": [
+        {
+          "name": "summarize_layer_statistics",
+          "args": {
+            "layer_name": "住宿服务"
+          },
+          "status": "success"
+        }
+      ],
+      "error": ""
+    },
+    {
+      "task_id": 8,
+      "mode": "base",
+      "task": "统计各行政区内餐饮点的数量分布",
+      "task_type": "query+map",
+      "difficulty": "中等",
+      "task_completed": true,
+      "tool_invoked": true,
+      "tool_success": true,
+      "tool_failures": 0,
+      "code_executed": false,
+      "code_success": true,
+      "accuracy": true,
+      "experience_hit": false,
+      "error_recovered": false,
+      "response_time": 1.95,
+      "preference_applied": false,
+      "has_error": false,
+      "answer_preview": "我来统计成都各行政区内餐饮点的数量分布。首先，我需要查看可用的图层信息。\n\n[工具调用摘要]\n  ✅ summarize_layer_statistics\n  ✅ summarize_layer_statistics",
+      "tool_calls": [
+        {
+          "name": "summarize_layer_statistics",
+          "args": {
+            "layer_name": "成都行政区_24"
+          },
+          "status": "success"
+        },
+        {
+          "name": "summarize_layer_statistics",
+          "args": {
+            "layer_name": "餐饮_61101"
+          },
+          "status": "success"
+        }
+      ],
+      "error": ""
+    },
+    {
+      "task_id": 9,
+      "mode": "base",
+      "task": "查找武侯区内的住宿服务POI",
+      "task_type": "query",
+      "difficulty": "简单",
+      "task_completed": true,
+      "tool_invoked": true,
+      "tool_success": true,
+      "tool_failures": 0,
+      "code_executed": false,
+      "code_success": true,
+      "accuracy": true,
+      "experience_hit": false,
+      "error_recovered": false,
+      "response_time": 2.07,
+      "preference_applied": false,
+      "has_error": false,
+      "answer_preview": "我来先查看一下可用的数据图层，然后查找武侯区内的住宿服务POI。\n\n首先，我需要了解图层名称的准确格式，然后进行查询。\n\n[工具调用摘要]\n  ✅ query_poi_by_conditions",
+      "tool_calls": [
+        {
+          "name": "query_poi_by_conditions",
+          "args": {
+            "layer_name": "住宿服务 (6473 条, EPSG:4326)",
+            "conditions": "district='武侯区'"
+          },
+          "status": "success"
+        }
+      ],
+      "error": ""
+    },
+    {
+      "task_id": 10,
+      "mode": "base",
+      "task": "将餐饮点与行政区叠加分析，统计各区餐馆密度",
+      "task_type": "overlay",
+      "difficulty": "较难",
+      "task_completed": true,
+      "tool_invoked": true,
+      "tool_success": true,
+      "tool_failures": 0,
+      "code_executed": true,
+      "code_success": true,
+      "accuracy": false,
+      "experience_hit": false,
+      "error_recovered": false,
+      "response_time": 1.9,
+      "preference_applied": false,
+      "has_error": false,
+      "answer_preview": "我来进行餐饮点与行政区叠加分析，统计各区餐馆密度。首先，我需要了解数据的基本情况。\n\n[工具调用摘要]\n  ✅ execute_spatial_code",
+      "tool_calls": [
+        {
+          "name": "execute_spatial_code",
+          "args": {
+            "task_description": "查看可用的图层名称和基本信息",
+            "code": "# 查看所有图层名称\nlayer_names\n"
+          },
+          "status": "success"
+        }
+      ],
+      "error": ""
+    },
+    {
+      "task_id": 11,
+      "mode": "base",
+      "task": "对住宿服务数据做热点分析",
+      "task_type": "cluster",
+      "difficulty": "较难",
+      "task_completed": true,
+      "tool_invoked": true,
+      "tool_success": true,
+      "tool_failures": 0,
+      "code_executed": true,
+      "code_success": true,
+      "accuracy": false,
+      "experience_hit": false,
+      "error_recovered": false,
+      "response_time": 2.02,
+      "preference_applied": false,
+      "has_error": false,
+      "answer_preview": "我来对住宿服务数据进行热点分析。首先，我需要了解住宿服务数据图层的具体名称。\n\n让我先查看可用的图层信息。\n\n[工具调用摘要]\n  ✅ execute_spatial_code",
+      "tool_calls": [
+        {
+          "name": "execute_spatial_code",
+          "args": {
+            "task_description": "查看所有可用的图层名称",
+            "code": "layer_names"
+          },
+          "status": "success"
+        }
+      ],
+      "error": ""
+    },
+    {
+      "task_id": 12,
+      "mode": "base",
+      "task": "导出餐饮点数据为CSV格式",
+      "task_type": "export",
+      "difficulty": "简单",
+      "task_completed": true,
+      "tool_invoked": true,
+      "tool_success": true,
+      "tool_failures": 0,
+      "code_executed": true,
+      "code_success": true,
+      "accuracy": false,
+      "experience_hit": false,
+      "error_recovered": false,
+      "response_time": 1.62,
+      "preference_applied": false,
+      "has_error": false,
+      "answer_preview": "我来先查看一下可用的图层信息，确认餐饮图层的具体名称。\n\n[工具调用摘要]\n  ✅ execute_spatial_code",
+      "tool_calls": [
+        {
+          "name": "execute_spatial_code",
+          "args": {
+            "task_description": "查看所有可用图层的名称",
+            "code": "layer_names"
+          },
+          "status": "success"
+        }
+      ],
+      "error": ""
+    },
+    {
+      "task_id": 13,
+      "mode": "base",
+      "task": "不对，高亮的是行政区面图层，不是餐馆点图层",
+      "task_type": "feedback",
+      "difficulty": "中等",
+      "task_completed": true,
+      "tool_invoked": true,
+      "tool_success": true,
+      "tool_failures": 0,
+      "code_executed": true,
+      "code_success": true,
+      "accuracy": true,
+      "experience_hit": false,
+      "error_recovered": false,
+      "response_time": 3.8,
+      "preference_applied": false,
+      "has_error": false,
+      "answer_preview": "我理解您的问题了。您希望我高亮显示的是**餐馆点图层（餐饮）**，而不是**行政区面图层（成都行政区）**。让我先查看一下当前可用的图层信息。\n\n让我先看看各图层的具体数据情况。\n\n[工具调用摘要]\n  ✅ execute_spatial_code",
+      "tool_calls": [
+        {
+          "name": "execute_spatial_code",
+          "args": {
+            "task_description": "查看所有图层的名称和类型信息",
+            "code": "# 查看所有图层名称\nprint(\"可用图层:\", layer_names)\n\n# 查看各图层的列信息和前几条记录\nfor name in layer_names:\n    gdf = layers[name]\n    print(f\"\\n=== {name} ===\")\n    print(f\"几何类型: {gdf.geometry.type.iloc[0] if len(gdf) > 0 else '空'}\")\n    print(f\"记录数: {len(gdf)}\")\n    print(f\"列: {list(gdf.columns)}\")\n    print(gdf.head(2).to_string())\n"
+          },
+          "status": "success"
+        }
+      ],
+      "error": ""
+    },
+    {
+      "task_id": 14,
+      "mode": "base",
+      "task": "哪个区的餐馆数量最多，并高亮该行政区",
+      "task_type": "memory",
+      "difficulty": "中等",
+      "task_completed": true,
+      "tool_invoked": true,
+      "tool_success": true,
+      "tool_failures": 0,
+      "code_executed": false,
+      "code_success": true,
+      "accuracy": true,
+      "experience_hit": false,
+      "error_recovered": false,
+      "response_time": 1.97,
+      "preference_applied": false,
+      "has_error": false,
+      "answer_preview": "我来分析这个问题。首先，我需要查看可用的图层名称，然后统计各行政区的餐馆数量。\n\n先看看图层信息：\n\n[工具调用摘要]\n  ✅ summarize_layer_statistics",
+      "tool_calls": [
+        {
+          "name": "summarize_layer_statistics",
+          "args": {
+            "layer_name": "餐饮_61101",
+            "group_by": "district"
+          },
+          "status": "success"
+        }
+      ],
+      "error": ""
+    },
+    {
+      "task_id": 15,
+      "mode": "base",
+      "task": "聚类分析怎么用？有哪些参数？",
+      "task_type": "help",
+      "difficulty": "简单",
+      "task_completed": true,
+      "tool_invoked": false,
+      "tool_success": true,
+      "tool_failures": 0,
+      "code_executed": false,
+      "code_success": true,
+      "accuracy": true,
+      "experience_hit": false,
+      "error_recovered": false,
+      "response_time": 10.32,
+      "preference_applied": false,
+      "has_error": false,
+      "answer_preview": "# 聚类分析工具说明\n\n在可用的工具中，**聚类分析**主要通过 **DBSCAN** 算法实现，对应的工具是：\n\n## `cluster_points_dbscan`\n\n### 功能\n对点状要素图层进行 **DBSCAN（基于密度的空间聚类）**，将空间上密集分布的点归为一类，稀疏的点标记为噪声。\n\n### 参数说明\n\n| 参数 | 类型 | 必填 | 默认值 | 说明 |\n|------|--",
+      "tool_calls": [],
+      "error": ""
+    }
+  ],
+  "run_dir": "experiments\\experiment_outputs\\exp1\\exp1_base_20260429-131837",
+  "run_name": "2026-04-29 13:18:37"
+}

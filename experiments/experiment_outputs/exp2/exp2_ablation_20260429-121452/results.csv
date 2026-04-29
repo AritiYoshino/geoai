@@ -1,0 +1,61 @@
+task_id,variant_id,task_type,difficulty,risk,expected_module,score,task_completed,tool_success,accuracy,experience_hit,error_recovered,preference_applied,multi_turn_consistent,error_propagation_depth,response_time
+1,full_ace,field_query,简单,field_error,Experience Library,96,True,True,True,True,False,False,True,0,1.68
+2,full_ace,field_recovery,中等,field_error,Critic,90,True,True,True,True,False,False,True,0,2.26
+3,full_ace,crs_buffer,中等,crs_error,Experience Library,90,True,True,True,True,False,False,True,0,2.26
+4,full_ace,overlay_density,较难,crs_error,Critic,84,True,True,True,True,False,False,True,0,2.56
+5,full_ace,context_reference,中等,reference_loss,Context Memory,90,True,True,True,False,False,False,True,0,1.98
+6,full_ace,preference_memory,中等,preference_loss,Context Memory,90,True,True,True,False,False,True,True,0,2.26
+7,full_ace,empty_result_recovery,较难,empty_result,Critic,84,True,True,True,False,False,False,True,0,2.56
+8,full_ace,experience_reuse,较难,repeat_error,Evolution,84,True,True,True,True,False,False,True,0,2.56
+9,full_ace,export,简单,format_error,Experience Library,96,True,True,True,True,False,False,True,0,1.68
+10,full_ace,result_scale,较难,result_scale,Critic,84,True,True,True,True,False,False,True,0,2.56
+11,full_ace,long_context,较难,context_drift,Context Memory,84,True,True,True,True,False,False,True,0,2.56
+12,full_ace,closed_loop,较难,closed_loop_break,Evolution,84,True,True,True,True,False,False,True,0,2.84
+1,wo_critic,field_query,简单,field_error,Experience Library,88,True,True,True,True,False,False,True,0,1.68
+2,wo_critic,field_recovery,中等,field_error,Critic,54,True,False,False,True,False,False,False,1,2.81
+3,wo_critic,crs_buffer,中等,crs_error,Experience Library,54,True,False,False,True,False,False,False,1,2.81
+4,wo_critic,overlay_density,较难,crs_error,Critic,48,True,False,False,True,False,False,False,1,3.11
+5,wo_critic,context_reference,中等,reference_loss,Context Memory,90,True,True,True,False,False,False,True,0,1.98
+6,wo_critic,preference_memory,中等,preference_loss,Context Memory,90,True,True,True,False,False,True,True,0,2.26
+7,wo_critic,empty_result_recovery,较难,empty_result,Critic,48,True,False,False,False,False,False,False,1,3.11
+8,wo_critic,experience_reuse,较难,repeat_error,Evolution,84,True,True,True,True,False,False,True,0,2.56
+9,wo_critic,export,简单,format_error,Experience Library,96,True,True,True,True,False,False,True,0,1.68
+10,wo_critic,result_scale,较难,result_scale,Critic,48,True,False,False,True,False,False,False,1,3.11
+11,wo_critic,long_context,较难,context_drift,Context Memory,84,True,True,True,True,False,False,True,0,2.56
+12,wo_critic,closed_loop,较难,closed_loop_break,Evolution,56,True,True,False,True,False,False,False,1,3.39
+1,wo_evolution,field_query,简单,field_error,Experience Library,96,True,True,True,True,False,False,True,0,1.68
+2,wo_evolution,field_recovery,中等,field_error,Critic,90,True,True,True,True,False,False,True,0,2.26
+3,wo_evolution,crs_buffer,中等,crs_error,Experience Library,90,True,True,True,True,False,False,True,0,2.26
+4,wo_evolution,overlay_density,较难,crs_error,Critic,84,True,True,True,True,False,False,True,0,2.56
+5,wo_evolution,context_reference,中等,reference_loss,Context Memory,90,True,True,True,False,False,False,True,0,1.98
+6,wo_evolution,preference_memory,中等,preference_loss,Context Memory,72,True,True,True,False,False,True,True,1,2.81
+7,wo_evolution,empty_result_recovery,较难,empty_result,Critic,66,True,True,False,False,True,False,True,1,3.11
+8,wo_evolution,experience_reuse,较难,repeat_error,Evolution,63,True,True,False,True,False,False,True,2,3.11
+9,wo_evolution,export,简单,format_error,Experience Library,90,True,True,True,True,False,False,True,1,1.68
+10,wo_evolution,result_scale,较难,result_scale,Critic,78,True,True,True,True,False,False,True,1,2.56
+11,wo_evolution,long_context,较难,context_drift,Context Memory,78,True,True,True,True,False,False,True,1,2.56
+12,wo_evolution,closed_loop,较难,closed_loop_break,Evolution,60,True,True,False,True,False,False,True,2,3.39
+1,wo_experience_lib,field_query,简单,field_error,Experience Library,72,True,True,True,False,True,False,True,1,2.23
+2,wo_experience_lib,field_recovery,中等,field_error,Critic,66,True,True,False,False,True,False,True,1,2.81
+3,wo_experience_lib,crs_buffer,中等,crs_error,Experience Library,66,True,True,False,False,True,False,True,1,2.81
+4,wo_experience_lib,overlay_density,较难,crs_error,Critic,60,True,True,False,False,True,False,True,1,3.11
+5,wo_experience_lib,context_reference,中等,reference_loss,Context Memory,90,True,True,True,False,False,False,True,0,1.98
+6,wo_experience_lib,preference_memory,中等,preference_loss,Context Memory,90,True,True,True,False,False,True,True,0,2.26
+7,wo_experience_lib,empty_result_recovery,较难,empty_result,Critic,84,True,True,True,False,False,False,True,0,2.56
+8,wo_experience_lib,experience_reuse,较难,repeat_error,Evolution,60,True,True,False,False,False,False,True,1,3.11
+9,wo_experience_lib,export,简单,format_error,Experience Library,72,True,True,True,False,False,False,True,1,2.23
+10,wo_experience_lib,result_scale,较难,result_scale,Critic,60,True,True,False,False,True,False,True,1,3.11
+11,wo_experience_lib,long_context,较难,context_drift,Context Memory,60,True,True,False,False,False,False,False,1,3.11
+12,wo_experience_lib,closed_loop,较难,closed_loop_break,Evolution,60,True,True,False,False,False,False,True,1,3.39
+1,wo_context_memory,field_query,简单,field_error,Experience Library,96,True,True,True,True,False,False,True,0,1.68
+2,wo_context_memory,field_recovery,中等,field_error,Critic,90,True,True,True,True,False,False,True,0,2.26
+3,wo_context_memory,crs_buffer,中等,crs_error,Experience Library,90,True,True,True,True,False,False,True,0,2.26
+4,wo_context_memory,overlay_density,较难,crs_error,Critic,84,True,True,True,True,False,False,True,0,2.56
+5,wo_context_memory,context_reference,中等,reference_loss,Context Memory,48,True,False,False,False,False,False,False,1,2.53
+6,wo_context_memory,preference_memory,中等,preference_loss,Context Memory,48,True,False,False,False,False,False,False,1,2.81
+7,wo_context_memory,empty_result_recovery,较难,empty_result,Critic,84,True,True,True,False,False,False,True,0,2.56
+8,wo_context_memory,experience_reuse,较难,repeat_error,Evolution,84,True,True,True,True,False,False,True,0,2.56
+9,wo_context_memory,export,简单,format_error,Experience Library,96,True,True,True,True,False,False,True,0,1.68
+10,wo_context_memory,result_scale,较难,result_scale,Critic,84,True,True,True,True,False,False,True,0,2.56
+11,wo_context_memory,long_context,较难,context_drift,Context Memory,42,False,False,False,True,False,False,False,1,3.11
+12,wo_context_memory,closed_loop,较难,closed_loop_break,Evolution,84,True,True,True,True,False,False,True,0,2.84
