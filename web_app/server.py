@@ -918,7 +918,7 @@ class WebGISRequestHandler(SimpleHTTPRequestHandler):
         print("[web]", format % args)
 
 
-def run(host="127.0.0.1", port=8000, max_port=8010):
+def run(host="0.0.0.0", port=8000, max_port=8010):
     global STATE
     STATE = WebGISAppState()
     server = None

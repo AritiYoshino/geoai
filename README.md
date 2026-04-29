@@ -394,7 +394,7 @@ geoai/
 DEEPSEEK_API_KEY=你的密钥
 ```
 
-### 9.2 启动
+### 9.2 本地启动
 
 ```bash
 python main_web.py
@@ -408,7 +408,11 @@ http://127.0.0.1:8000
 
 如果 8000 被占用，系统会自动尝试 8001-8010。
 
-### 9.3 VS Code 调试
+### 9.3 公网访问（让别人也能访问你的 Web）
+
+参见 [第 13 节](#13-公网访问部署)。
+
+### 9.4 VS Code 调试
 
 已提供：
 
@@ -475,3 +479,67 @@ build_export_zip("experiments/experiment_outputs/exp1/exp1_both_20260429-132217"
 1. 分析侧图层也进一步做惰性单层加载
 2. 高亮策略增加更强的规则约束
 3. 文档与前端提示语进一步统一编码与术语
+
+## 13. 公网访问部署
+
+项目支持通过 **ngrok 内网穿透** 将 Web 服务暴露到公网，方便分享给他人访问。
+
+### 13.1 工作原理
+
+```text
+用户浏览器  -->  ngrok 隧道 -->  https://xxxx.ngrok-free.dev
+                                      |
+                              本地 Web 服务器 :8000
+```
+
+### 13.2 前置准备
+
+1. 注册 ngrok 账号：https://dashboard.ngrok.com/signup
+2. 获取 Authtoken：https://dashboard.ngrok.com/get-started/your-authtoken
+
+### 13.3 一键启动（推荐）
+
+双击项目目录下的 [`start_public.bat`](start_public.bat)，会自动启动 Web 服务器和 ngrok 隧道。
+
+在弹出的 ngrok 窗口中查看公网地址：
+
+```text
+Forwarding  https://xxxx.ngrok-free.dev -> http://localhost:8000
+```
+
+将 `https://xxxx.ngrok-free.dev` 分享给他人即可访问。
+
+### 13.4 手动启动
+
+**终端 1** — 启动 Web 服务器：
+
+```bash
+cd d:\geoai
+python main_web.py
+```
+
+**终端 2** — 启动 ngrok 隧道：
+
+```bash
+C:\Users\CLIENTS\ngrok\ngrok.exe http 8000
+```
+
+### 13.5 注意事项
+
+| 项目 | 说明 |
+|------|------|
+| **服务状态** | 两个终端窗口必须保持打开，关闭即停止服务 |
+| **地址变化** | ngrok 免费版每次重启生成的 URL 不同，需重新分享 |
+| **本地访问** | 你本地依然通过 `http://127.0.0.1:8000` 访问，不受影响 |
+| **速度限制** | 免费版 ngrok 有带宽限制，适合测试和演示 |
+| **安全性** | 公网地址任何人都能访问，建议仅用于测试/演示 |
+
+### 13.6 长期方案
+
+如需长期稳定公开访问，建议改用：
+
+1. **Cloudflare Tunnel** — 免费、稳定、可绑定自定义域名
+2. **云服务器部署** — 将项目部署到阿里云/腾讯云/AWS
+3. **ngrok 付费版** — 固定域名、更高带宽
+
+详细说明参见 [`PUBLIC_ACCESS_GUIDE.md`](PUBLIC_ACCESS_GUIDE.md)。

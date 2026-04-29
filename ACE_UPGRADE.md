@@ -50,3 +50,17 @@
 - `logs/error_log.jsonl`
 
 可用于实验复现、错误回放与论文附录说明。
+
+---
+
+## 公网访问
+
+启动 Web 服务后，可通过 ngrok 将服务暴露到公网供他人访问：
+
+```bash
+C:\Users\CLIENTS\ngrok\ngrok.exe http 8000
+```
+
+或双击项目根目录的 [`start_public.bat`](start_public.bat) 一键启动。
+
+详细说明参见 [`PUBLIC_ACCESS_GUIDE.md`](PUBLIC_ACCESS_GUIDE.md)。

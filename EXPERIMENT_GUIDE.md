@@ -29,6 +29,20 @@ http://127.0.0.1:8000
 
 若 8000 被占用，系统会自动尝试 8001-8010。
 
+### 公网访问（让别人也能看实验页面）
+
+启动 Web 服务后，另开一个终端运行 ngrok：
+
+```bash
+C:\Users\CLIENTS\ngrok\ngrok.exe http 8000
+```
+
+看到 `Forwarding https://xxxx.ngrok-free.dev -> http://localhost:8000` 后，将 `https://xxxx.ngrok-free.dev/experiment` 分享给他人，即可访问实验页面。
+
+也可直接双击 [`start_public.bat`](start_public.bat) 一键启动。
+
+> 你本地仍然通过 `http://127.0.0.1:8000` 访问，不受影响。
+
 ---
 
 ## 实验系统说明
