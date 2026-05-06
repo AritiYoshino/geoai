@@ -5,14 +5,13 @@ import os
 import shutil
 import socket
 import threading
+import time
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import parse_qs, quote, urlparse
 
 from dotenv import load_dotenv
 
-from ai_handler import AIHandler
 from core.jsonl_logger import log_error
-from web_app.web_map_handler import BrowserMapHandler
 
 
 EXPERIMENT_OUTPUT_ROOT = os.path.join("experiments", "experiment_outputs")
@@ -22,15 +21,51 @@ EXP3_OUTPUT_DIR = os.path.join(EXPERIMENT_OUTPUT_ROOT, "exp3")
 EXP4_OUTPUT_DIR = os.path.join(EXPERIMENT_OUTPUT_ROOT, "exp4")
 
 
+def startup_log(message):
+    print(f"[startup] {message}", flush=True)
+
+
+def startup_timing(label, start):
+    startup_log(f"[timing] {label}: {time.perf_counter() - start:.3f}s")
+
+
 class WebGISAppState:
     def __init__(self):
+        state_start = time.perf_counter()
+        step = time.perf_counter()
+        startup_log("loading .env")
         load_dotenv()
+        startup_timing("load .env", step)
         api_key = os.getenv("DEEPSEEK_API_KEY")
         if not api_key:
             raise RuntimeError("请在 .env 文件中设置 DEEPSEEK_API_KEY")
+
+        step = time.perf_counter()
+        startup_log("importing map handler")
+        from web_app.web_map_handler import BrowserMapHandler
+        startup_timing("import map handler", step)
+
+        step = time.perf_counter()
+        startup_log("initializing map handler")
         self.map_handler = BrowserMapHandler()
+        startup_timing("initialize map handler", step)
+
+        step = time.perf_counter()
+        startup_log("loading GeoJSON layers from data/geodata")
         self.map_handler.load_geojson_layers(os.path.join("data", "geodata"))
+        startup_timing("load GeoJSON layer metadata", step)
+
+        step = time.perf_counter()
+        startup_log("importing AI handler and agent modules")
+        from ai_handler import AIHandler
+        startup_timing("import AI handler and agent modules", step)
+
+        step = time.perf_counter()
+        startup_log("initializing AI handler and agents")
         self.ai_handler = AIHandler(api_key, self.map_handler)
+        startup_timing("initialize AI handler and agents", step)
+        startup_log("application state ready")
+        startup_timing("application state total", state_start)
         self._exp1_lock = threading.Lock()
         self._exp1_running = False
         self._exp1_latest = None  # 缓存实验一的最新结果
@@ -41,23 +76,39 @@ class WebGISAppState:
         self._exp4_running = False
         self._exp4_latest = None  # 缓存实验四的最新结果
 
+    def has_running_experiment(self):
+        return any(
+            (
+                self._exp1_running,
+                self._exp2_running,
+                self._exp3_running,
+                self._exp4_running,
+            )
+        )
+
 
 STATE = None
 
 
 class ExclusiveThreadingHTTPServer(ThreadingHTTPServer):
     allow_reuse_address = False
+    idle_shutdown_seconds = 0
+    last_request_at = None
 
     def server_bind(self):
         if hasattr(socket, "SO_EXCLUSIVEADDRUSE"):
             self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_EXCLUSIVEADDRUSE, 1)
         super().server_bind()
 
+    def touch(self):
+        self.last_request_at = time.monotonic()
+
 
 class WebGISRequestHandler(SimpleHTTPRequestHandler):
     server_version = "GeoAIWeb/0.2"
 
     def do_GET(self):
+        self.server.touch()
         parsed = urlparse(self.path)
         query = parse_qs(parsed.query)
         try:
@@ -127,6 +178,8 @@ class WebGISRequestHandler(SimpleHTTPRequestHandler):
                 self._handle_exp4_results()
             elif parsed.path == "/api/experiment/exp4/export":
                 self._handle_exp_export(query, "exp4_")
+            elif parsed.path == "/api/thesis/evidence":
+                self._handle_thesis_evidence()
             else:
                 self.send_error(404, "Not found")
         except Exception as exc:
@@ -134,6 +187,7 @@ class WebGISRequestHandler(SimpleHTTPRequestHandler):
             self._send_json({"error": str(exc)}, status=500)
 
     def do_POST(self):
+        self.server.touch()
         parsed = urlparse(self.path)
         try:
             data = self._read_json()
@@ -771,6 +825,11 @@ class WebGISRequestHandler(SimpleHTTPRequestHandler):
         zip_path = build_export_zip(abs_dir)
         self._send_download(zip_path, os.path.basename(zip_path))
 
+    def _handle_thesis_evidence(self):
+        from experiments.thesis_evidence import build_thesis_evidence
+
+        self._send_json(build_thesis_evidence())
+
     def _resolve_exp_run_dir(self, run_dir, prefix):
         if not run_dir:
             return ""
@@ -918,20 +977,59 @@ class WebGISRequestHandler(SimpleHTTPRequestHandler):
         print("[web]", format % args)
 
 
-def run(host="0.0.0.0", port=8000, max_port=8010):
+def _read_idle_shutdown_seconds(default=600):
+    raw = os.getenv("GEOAI_IDLE_SHUTDOWN_SECONDS", str(default)).strip()
+    try:
+        value = int(raw)
+    except ValueError:
+        startup_log(f"invalid GEOAI_IDLE_SHUTDOWN_SECONDS={raw!r}; using {default}s")
+        return default
+    return max(0, value)
+
+
+def _start_idle_shutdown_watcher(server):
+    seconds = server.idle_shutdown_seconds
+    if seconds <= 0:
+        startup_log("idle auto-shutdown disabled")
+        return
+
+    def watch_idle():
+        while True:
+            time.sleep(min(max(seconds / 2, 5), 60))
+            idle_for = time.monotonic() - server.last_request_at
+            if idle_for < seconds:
+                continue
+            if STATE is not None and STATE.has_running_experiment():
+                server.touch()
+                continue
+            startup_log(f"idle for {int(idle_for)}s; shutting down and releasing port")
+            server.shutdown()
+            break
+
+    thread = threading.Thread(target=watch_idle, name="idle-shutdown-watcher", daemon=True)
+    thread.start()
+    startup_log(f"idle auto-shutdown enabled after {seconds}s without requests")
+
+
+def run(host="127.0.0.1", port=8000, max_port=8010):
     global STATE
+    startup_log("starting GeoAI WebGIS")
     STATE = WebGISAppState()
     server = None
     selected_port = None
     last_error = None
 
+    startup_log(f"binding local server on {host}:{port}-{max_port}")
     for candidate_port in range(port, max_port + 1):
         try:
             server = ExclusiveThreadingHTTPServer((host, candidate_port), WebGISRequestHandler)
+            server.last_request_at = time.monotonic()
+            server.idle_shutdown_seconds = _read_idle_shutdown_seconds()
             selected_port = candidate_port
             break
         except OSError as exc:
             last_error = exc
+            startup_log(f"port {candidate_port} unavailable: {exc}")
 
     if server is None or selected_port is None:
         raise RuntimeError(
@@ -939,7 +1037,14 @@ def run(host="0.0.0.0", port=8000, max_port=8010):
         ) from last_error
 
     if selected_port != port:
-        print(f"端口 {port} 已被占用，已自动切换到可用端口 {selected_port}。")
+        startup_log(f"port {port} is occupied; switched to {selected_port}")
 
-    print(f"GeoAI WebGIS running at http://{host}:{selected_port}")
-    server.serve_forever()
+    startup_log(f"GeoAI WebGIS running locally at http://{host}:{selected_port}")
+    _start_idle_shutdown_watcher(server)
+    try:
+        server.serve_forever()
+    except KeyboardInterrupt:
+        startup_log("received Ctrl+C; stopping GeoAI WebGIS")
+    finally:
+        server.server_close()
+        startup_log("server stopped; port released")

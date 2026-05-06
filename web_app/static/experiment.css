@@ -913,3 +913,140 @@
     grid-template-columns: 1fr 1fr;
   }
 }
+/* Thesis evidence dashboard */
+.thesis-score-row {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 18px;
+  align-items: stretch;
+  margin-top: 18px;
+}
+
+.thesis-score {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 120px;
+  border: 1px solid #dbeafe;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #eff6ff, #ffffff);
+}
+
+.thesis-score-value {
+  font-size: 34px;
+  font-weight: 800;
+  color: #2563eb;
+  line-height: 1;
+}
+
+.thesis-score-label {
+  margin-top: 8px;
+  font-size: 13px;
+  color: #64748b;
+}
+
+.thesis-checks {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 10px;
+}
+
+.thesis-check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 12px;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  background: #fff;
+  font-size: 13px;
+  color: #334155;
+}
+
+.thesis-check span {
+  width: 20px;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-weight: 800;
+  font-size: 12px;
+}
+
+.thesis-check.ok span {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.thesis-check.todo span {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+.thesis-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.thesis-grid h4 {
+  margin: 0 0 10px;
+  color: #334155;
+}
+
+.thesis-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.thesis-list-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  background: #f8fafc;
+  color: #475569;
+  font-size: 13px;
+}
+
+.thesis-list-item.vertical {
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 5px;
+}
+
+.thesis-list-item strong {
+  color: #0f172a;
+}
+
+.thesis-list-item small,
+.thesis-list-item span {
+  color: #64748b;
+  line-height: 1.55;
+}
+
+.thesis-list-item.warn {
+  border-color: #fed7aa;
+  background: #fff7ed;
+}
+
+.thesis-list-empty {
+  padding: 14px;
+  border: 1px dashed #cbd5e1;
+  border-radius: 10px;
+  color: #94a3b8;
+  text-align: center;
+  background: #f8fafc;
+}
+
+@media (max-width: 900px) {
+  .thesis-score-row,
+  .thesis-grid {
+    grid-template-columns: 1fr;
+  }
+}

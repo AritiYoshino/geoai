@@ -49,6 +49,11 @@
         长上下文对比
         <span class="tab-short">超长序列鲁棒性</span>
       </button>
+      <button class="exp-tab-btn" data-tab="thesis" role="tab">
+        <span class="tab-num">5</span>
+        论文证据
+        <span class="tab-short">五项毕业设计支撑材料</span>
+      </button>
     </div>
 
     <!-- Tab Content -->
@@ -1150,6 +1155,77 @@
                 </tbody>
               </table>
             </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="exp-panel" id="thesis" role="tabpanel">
+        <div class="exp-control-bar">
+          <div class="exp-control-left">
+            <button id="thesis-refresh-btn" class="exp-btn-run" type="button">刷新证据包</button>
+            <button id="thesis-download-btn" class="exp-btn-export" type="button">下载 JSON</button>
+            <span id="thesis-status" class="exp-status"></span>
+          </div>
+          <div class="exp-control-right">
+            <span class="exp-last-run" id="thesis-generated-at"></span>
+          </div>
+        </div>
+
+        <div class="exp-card">
+          <div class="exp-card-header">
+            <div class="exp-card-icon blue">5</div>
+            <div class="exp-card-title-group">
+              <h2>毕业设计证据中心</h2>
+              <p>自动汇总 GeoAnalystBench 任务对齐、Base vs ACE 指标、经验库分类、代码演化轨迹与消融实验结果，用于论文实验章节和答辩展示。</p>
+            </div>
+          </div>
+          <div class="thesis-score-row">
+            <div class="thesis-score">
+              <div class="thesis-score-value" id="thesis-readiness-score">--</div>
+              <div class="thesis-score-label">系统证据完整度</div>
+            </div>
+            <div class="thesis-checks" id="thesis-readiness-checks"></div>
+          </div>
+        </div>
+
+        <div class="exp-card">
+          <div class="exp-section-title">1. GeoAnalystBench 任务类型对齐</div>
+          <div class="metric-table-wrap">
+            <table class="metric-table">
+              <thead><tr><th>任务类型</th><th>对应维度</th><th>当前数量</th><th>缺口</th></tr></thead>
+              <tbody id="thesis-benchmark-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="exp-card">
+          <div class="exp-section-title">2. Zero-shot/Base LLM vs ACE 指标对比</div>
+          <div class="metric-table-wrap">
+            <table class="metric-table">
+              <thead><tr><th>指标</th><th>Base</th><th>ACE</th><th>变化</th></tr></thead>
+              <tbody id="thesis-baseline-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="exp-card">
+          <div class="exp-section-title">3. 经验库演化分类分析</div>
+          <div class="thesis-grid">
+            <div><h4>经验类型分布</h4><div id="thesis-category-list" class="thesis-list"></div></div>
+            <div><h4>高置信经验样例</h4><div id="thesis-top-experience-list" class="thesis-list"></div></div>
+          </div>
+        </div>
+
+        <div class="exp-card">
+          <div class="exp-section-title">4. 代码演化与错误修复轨迹</div>
+          <div id="thesis-code-list" class="thesis-list"></div>
+        </div>
+
+        <div class="exp-card">
+          <div class="exp-section-title">5. 消融实验与长期稳定性汇总</div>
+          <div class="thesis-grid">
+            <div><h4>模块贡献排序</h4><div id="thesis-ablation-list" class="thesis-list"></div></div>
+            <div><h4>缺口与下一步</h4><div id="thesis-missing-list" class="thesis-list"></div></div>
           </div>
         </div>
       </div>

@@ -1,0 +1,8 @@
+geopandas
+langchain-core
+langchain-deepseek
+matplotlib
+numpy
+pandas
+python-dotenv
+shapely

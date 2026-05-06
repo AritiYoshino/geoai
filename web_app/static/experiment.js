@@ -27,6 +27,7 @@ const STATE = {
   exp4Data: null,
   exp4SelectedRunDir: '',
   exp4Running: false,
+  thesisEvidence: null,
 };
 
 // —————————————————————————————————————————————
@@ -40,6 +41,7 @@ document.addEventListener('DOMContentLoaded', function () {
     exp2: document.getElementById('exp2'),
     exp3: document.getElementById('exp3'),
     exp4: document.getElementById('exp4'),
+    thesis: document.getElementById('thesis'),
   };
   tabBtns.forEach(function (btn) {
     btn.addEventListener('click', function () {
@@ -68,6 +70,8 @@ document.addEventListener('DOMContentLoaded', function () {
   document.getElementById('exp4-export-btn').addEventListener('click', function () {
     exportExperimentData('exp4', STATE.exp4SelectedRunDir);
   });
+  document.getElementById('thesis-refresh-btn').addEventListener('click', fetchThesisEvidence);
+  document.getElementById('thesis-download-btn').addEventListener('click', downloadThesisEvidence);
 
   // 首次加载实验数据 + 经验库列表 + 历史记录
   fetchExperiment1Data();
@@ -79,6 +83,7 @@ document.addEventListener('DOMContentLoaded', function () {
   fetchExperiment3History();
   fetchExperiment4Data();
   fetchExperiment4History();
+  fetchThesisEvidence();
 });
 
 // —————————————————————————————————————————————
@@ -241,6 +246,116 @@ function escapeHtml(str) {
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#039;');
+}
+
+async function fetchThesisEvidence() {
+  const status = document.getElementById('thesis-status');
+  if (status) status.textContent = '正在生成证据包...';
+  try {
+    const data = await fetchJson('/api/thesis/evidence');
+    STATE.thesisEvidence = data;
+    renderThesisEvidence(data);
+    if (status) status.textContent = '已更新';
+  } catch (err) {
+    console.error('获取论文证据失败:', err);
+    if (status) status.textContent = '加载失败：' + err.message;
+  }
+}
+
+function renderThesisEvidence(data) {
+  document.getElementById('thesis-generated-at').textContent = data.generated_at ? '生成时间：' + data.generated_at : '';
+  renderThesisReadiness(data.readiness || {});
+  renderThesisBenchmark(data.benchmark_alignment || {});
+  renderThesisBaseline(data.baseline_comparison || {});
+  renderThesisExperience(data.experience_analysis || {});
+  renderThesisCodeEvolution(data.code_evolution || {});
+  renderThesisAblation(data.ablation_summary || {}, data.missing_items || []);
+}
+
+function renderThesisReadiness(readiness) {
+  document.getElementById('thesis-readiness-score').textContent = (readiness.score ?? 0).toFixed(1) + '%';
+  const box = document.getElementById('thesis-readiness-checks');
+  box.innerHTML = (readiness.checks || []).map(function (item) {
+    return '<div class="thesis-check ' + (item.completed ? 'ok' : 'todo') + '">' +
+      '<span>' + (item.completed ? '✓' : '!') + '</span>' +
+      escapeHtml(item.name) +
+      '</div>';
+  }).join('');
+}
+
+function renderThesisBenchmark(alignment) {
+  const tbody = document.getElementById('thesis-benchmark-tbody');
+  tbody.innerHTML = (alignment.rows || []).map(function (row) {
+    return '<tr>' +
+      '<td><span class="tag">' + escapeHtml(row.label) + '</span></td>' +
+      '<td>' + escapeHtml(row.geoanalyst_dimension) + '</td>' +
+      '<td>' + row.task_count + '</td>' +
+      '<td>' + (row.gap ? '<span class="tag orange">缺 ' + row.gap + '</span>' : '<span class="tag green">已覆盖</span>') + '</td>' +
+      '</tr>';
+  }).join('') || '<tr><td colspan="4" style="text-align:center;color:#94a3b8;">暂无实验一任务数据</td></tr>';
+}
+
+function renderThesisBaseline(comparison) {
+  const tbody = document.getElementById('thesis-baseline-tbody');
+  tbody.innerHTML = (comparison.rows || []).map(function (row) {
+    const base = row.base == null ? '-' : row.base.toFixed(1) + '%';
+    const ace = row.ace == null ? '-' : row.ace.toFixed(1) + '%';
+    const delta = row.delta == null ? '-' : (row.delta >= 0 ? '+' : '') + row.delta.toFixed(1) + '%';
+    return '<tr>' +
+      '<td class="metric-name">' + escapeHtml(row.label) + '</td>' +
+      '<td>' + base + '</td>' +
+      '<td>' + ace + '</td>' +
+      '<td>' + delta + '</td>' +
+      '</tr>';
+  }).join('') || '<tr><td colspan="4" style="text-align:center;color:#94a3b8;">请先运行实验一 both 模式</td></tr>';
+}
+
+function renderThesisExperience(analysis) {
+  const categories = document.getElementById('thesis-category-list');
+  categories.innerHTML = (analysis.category_counts || []).map(function (item) {
+    return '<div class="thesis-list-item"><strong>' + escapeHtml(item.category) + '</strong><span>' + item.count + ' 条</span></div>';
+  }).join('') || '<div class="thesis-list-empty">暂无经验库数据</div>';
+
+  const top = document.getElementById('thesis-top-experience-list');
+  top.innerHTML = (analysis.top_experiences || []).slice(0, 8).map(function (item) {
+    return '<div class="thesis-list-item vertical">' +
+      '<strong>' + escapeHtml(item.category || item.id) + ' · confidence=' + item.confidence.toFixed(2) + '</strong>' +
+      '<span>' + escapeHtml(item.strategy || '') + '</span>' +
+      '</div>';
+  }).join('') || '<div class="thesis-list-empty">暂无高置信经验</div>';
+}
+
+function renderThesisCodeEvolution(evolution) {
+  const box = document.getElementById('thesis-code-list');
+  box.innerHTML = (evolution.items || []).slice(0, 10).map(function (item) {
+    return '<div class="thesis-list-item vertical">' +
+      '<strong>#' + escapeHtml(item.task_id) + ' · ' + escapeHtml(item.mode) + ' · ' + escapeHtml(item.stage) + '</strong>' +
+      '<span>' + escapeHtml(item.task || '') + '</span>' +
+      '<small>' + escapeHtml(item.answer_preview || item.error || '') + '</small>' +
+      '</div>';
+  }).join('') || '<div class="thesis-list-empty">暂无代码演化样例；建议运行包含 execute_spatial_code 的实验一任务。</div>';
+}
+
+function renderThesisAblation(ablation, missingItems) {
+  const contributions = ablation.module_ablation?.contributions || [];
+  document.getElementById('thesis-ablation-list').innerHTML = contributions.map(function (item, idx) {
+    return '<div class="thesis-list-item"><strong>' + (idx + 1) + '. ' + escapeHtml(item.module) + '</strong><span>贡献分 ' + item.contribution_score + '</span></div>';
+  }).join('') || '<div class="thesis-list-empty">请先运行实验二消融实验</div>';
+
+  document.getElementById('thesis-missing-list').innerHTML = (missingItems || []).map(function (text) {
+    return '<div class="thesis-list-item vertical warn"><strong>待补充</strong><span>' + escapeHtml(text) + '</span></div>';
+  }).join('') || '<div class="thesis-list-item"><strong>当前证据包完整</strong><span>可进入论文整理阶段</span></div>';
+}
+
+function downloadThesisEvidence() {
+  if (!STATE.thesisEvidence) return;
+  const blob = new Blob([JSON.stringify(STATE.thesisEvidence, null, 2)], { type: 'application/json;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = 'thesis_evidence.json';
+  link.click();
+  URL.revokeObjectURL(url);
 }
 
 async function loadHistoryRun(runDir) {

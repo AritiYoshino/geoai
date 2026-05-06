@@ -1,201 +1,188 @@
-# Experiment Guide（实验运行指南）
+# Experiment Guide
 
-## 运行环境
+本文档说明 GeoAI ACE WebGIS 的实验系统、运行方式、输出文件和论文证据整理入口。
 
-- Python 3.10+
-- `.env` 中配置 `DEEPSEEK_API_KEY`
+## 环境准备
 
-## 数据准备
-
-当前默认数据目录为：
-
-- `data/geodata/住宿服务.geojson`
-- `data/geodata/餐饮.geojson`
-- `data/geodata/成都行政区.geojson`
-
-系统启动时只读取图层元信息，不会把所有图层完整转换为 GeoJSON 发给前端。
-
-## 启动方式
+项目依赖 Python 3.10+。安装依赖：
 
 ```bash
-python main_web.py
+pip install -r requirements.txt
 ```
 
-启动后访问：
+在 `.env` 中配置：
 
 ```text
-http://127.0.0.1:8000
+DEEPSEEK_API_KEY=你的密钥
 ```
 
-若 8000 被占用，系统会自动尝试 8001-8010。
-
-### 公网访问（让别人也能看实验页面）
-
-启动 Web 服务后，另开一个终端运行 ngrok：
+启动服务：
 
 ```bash
-C:\Users\CLIENTS\ngrok\ngrok.exe http 8000
+python main.py
 ```
 
-看到 `Forwarding https://xxxx.ngrok-free.dev -> http://localhost:8000` 后，将 `https://xxxx.ngrok-free.dev/experiment` 分享给他人，即可访问实验页面。
-
-也可直接双击 [`start_public.bat`](start_public.bat) 一键启动。
-
-> 你本地仍然通过 `http://127.0.0.1:8000` 访问，不受影响。
-
----
-
-## 实验系统说明
-
-项目在 [`experiments/`](experiments/) 目录下实现了 4 组对比实验，用于评估 ACE 机制在不同维度上的效果。
-
-### 实验结构
-
-```text
-experiments/
-├─ __init__.py              # 统一导出所有实验入口
-├─ runner.py                # 统一运行入口
-├─ export_utils.py          # matplotlib 图表导出工具（中文标签、全可视化、美观样式）
-├─ exp1/                    # 实验一：基线对比实验
-│  ├─ __init__.py           # 导出 Exp1Runner, Exp1MetricsCollector
-│  ├─ exp1_runner.py
-│  ├─ exp1_analyzer.py
-│  ├─ exp1_suite.json
-│  └─ exp1_experience_library.json
-├─ exp2/                    # 实验二：消融实验
-│  ├─ __init__.py           # 导出 run_exp2
-│  ├─ exp2_runner.py
-│  ├─ exp2_suite.json
-│  └─ exp2_experience_library.json
-├─ exp3/                    # 实验三：记忆抗退化实验
-│  ├─ __init__.py           # 导出 run_exp3
-│  ├─ exp3_runner.py
-│  ├─ exp3_suite.json
-│  └─ exp3_experience_library.json
-├─ exp4/                    # 实验四：长上下文扩展实验
-│  ├─ __init__.py           # 导出 run_exp4
-│  ├─ exp4_runner.py
-│  ├─ exp4_suite.json
-│  └─ exp4_experience_library.json
-└─ experiment_outputs/      # 运行输出目录
-   ├─ exp1/
-   ├─ exp2/
-   ├─ exp3/
-   └─ exp4/
-```
-
-### 实验概览
-
-| 实验 | 目录 | 说明 | 关键指标 |
-|------|------|------|---------|
-| 实验一 | [`exp1/`](experiments/exp1/) | Base LLM vs ACE 增强对比 | 任务完成率、工具成功率、代码成功率、准确率 |
-| 实验二 | [`exp2/`](experiments/exp2/) | 模块消融分析（完整/无Critic/无Evolution/无经验库/无上下文记忆） | 准确率、工具成功率、多轮一致性、模块贡献度 |
-| 实验三 | [`exp3/`](experiments/exp3/) | 长周期 GIS 对话中的记忆抗退化评估 | POI 召回率、偏好持久率、经验复用率、半衰期 |
-| 实验四 | [`exp4/`](experiments/exp4/) | 长上下文扩展场景（完整/截断/压缩） | 长序列准确率、跨轮引用准确率、压缩率、污染率 |
-
-### 运行实验
-
-**方式一：直接运行各实验入口**
-
-```python
-from experiments.exp1.exp1_runner import Exp1Runner
-from experiments.exp1.exp1_analyzer import Exp1MetricsCollector
-
-runner = Exp1Runner(ai_handler, map_handler, mode="ace")
-results = runner.run()
-```
-
-**方式二：使用统一运行器**
-
-```bash
-python -c "
-from experiments.runner import run_exp1
-run_exp1(mode='both')
-"
-```
-
-### 导出图表
-
-每个实验运行后会在输出目录下生成 `summary.json`，可通过 [`export_utils.py`](experiments/export_utils.py) 导出可视化图片：
-
-```python
-from experiments.export_utils import ensure_matplotlib_exports
-
-ensure_matplotlib_exports("experiments/experiment_outputs/exp1/exp1_both_20260429-132217")
-```
-
-#### 导出图片清单
-
-| 实验 | 图片文件 | 对应前端可视化 | 说明 |
-|------|---------|---------------|------|
-| exp1 | `exp1_metric_comparison.png` | renderBarChart | 指标对比柱状图（带提升百分比标注） |
-| exp1 | `exp1_response_time.png` | renderTimeChart | 各任务响应时间对比 |
-| exp1 | `exp1_radar.png` | renderRadarChart | 六维能力雷达图 |
-| exp1 | `exp1_heatmap.png` | renderHeatmap | 任务级通过矩阵热力图 |
-| exp2 | `exp2_ablation_metrics.png` | renderExp2MetricsChart | 各变体消融指标分组柱状图 |
-| exp2 | `exp2_module_contribution.png` | renderExp2ContributionChart | 模块贡献度横向柱状图 |
-| exp2 | `exp2_error_analysis.png` | renderExp2ErrorChart | 错误恢复率 + 传播深度双轴图 |
-| exp3 | `exp3_memory_decay.png` | renderExp3DecayChart | 记忆衰减曲线 |
-| exp3 | `exp3_system_metrics.png` | renderExp3MemoryChart | 系统能力指标分组柱状图 |
-| exp3 | `exp3_pollution.png` | renderExp3PollutionChart | 上下文污染与压缩分析 |
-| exp4 | `exp4_accuracy_curve.png` | renderExp4AccuracyChart | 长上下文准确率变化趋势 |
-| exp4 | `exp4_system_metrics.png` | — | 系统能力指标分组柱状图 |
-| exp4 | `exp4_reference.png` | renderExp4ReferenceChart | 跨轮引用分析柱状图 |
-| exp4 | `exp4_compression.png` | renderExp4CompressionChart | 上下文压缩与污染分析 |
-
-#### 导出特点
-
-1. **中文标签**：所有标题、坐标轴、图例、数值标注均为中文，自动检测系统字体（SimHei → Microsoft YaHei → DengXian）
-2. **全可视化覆盖**：补全了所有前端 Chart.js 可视化对应的 matplotlib 版本
-3. **美观样式**：统一调色板、数值标注、网格虚线、移除冗余边框、高 DPI 输出
-
-#### 打包导出
-
-```python
-from experiments.export_utils import build_export_zip
-
-zip_path = build_export_zip("experiments/experiment_outputs/exp1/exp1_both_20260429-132217")
-# 生成 exports/exp1_both_20260429-132217_export.zip
-# 包含: summary.json, results.csv, figures/*.png, export_manifest.json
-```
-
----
-
-## 前端实验页面
-
-实验系统附带一个独立的前端页面 [`web_app/static/experiment.html`](web_app/static/experiment.html)，提供：
-
-- 各实验数据可视化（Chart.js 图表）
-- 运行历史管理与对比
-- 导出按钮（触发后端 `build_export_zip`）
-
-访问路径：
+访问实验页：
 
 ```text
 http://127.0.0.1:8000/experiment
 ```
 
-## 日志文件
+## 实验目录
 
-运行后可查看：
+```text
+experiments/
+├── runner.py
+├── export_utils.py
+├── thesis_evidence.py
+├── exp1/
+│   ├── exp1_runner.py
+│   ├── exp1_analyzer.py
+│   ├── exp1_suite.json
+│   └── exp1_experience_library.json
+├── exp2/
+│   ├── exp2_runner.py
+│   ├── exp2_suite.json
+│   └── exp2_experience_library.json
+├── exp3/
+│   ├── exp3_runner.py
+│   ├── exp3_suite.json
+│   └── exp3_experience_library.json
+├── exp4/
+│   ├── exp4_runner.py
+│   ├── exp4_suite.json
+│   └── exp4_experience_library.json
+└── experiment_outputs/
+    ├── exp1/
+    ├── exp2/
+    ├── exp3/
+    └── exp4/
+```
 
-- `logs/task_log.jsonl`：任务输入、有效任务、回答摘要
-- `logs/code_log.jsonl`：代码执行与重试过程
-- `logs/evolution_log.jsonl`：经验新增、更新、跳过
-- `logs/error_log.jsonl`：运行异常
+## 四组实验
 
-## 建议实验案例
+| 实验 | 目标 | 主要指标 |
+|---|---|---|
+| 实验一：基线对比 | 比较 Base LLM 与 ACE 增强系统 | 任务完成率、工具成功率、代码成功率、准确率、错误率 |
+| 实验二：模块消融 | 比较 Full ACE、无 Critic、无 Evolution、无经验库、无上下文记忆 | 准确率、工具成功率、多轮一致性、模块贡献度 |
+| 实验三：记忆抗退化 | 测试多轮 GIS 对话中的 POI、偏好和经验保持 | 记忆召回率、POI 召回率、偏好保持率、经验复用率、污染率 |
+| 实验四：长上下文 | 比较 full context、truncated context、ACE compressed | 长序列准确率、跨轮引用准确率、压缩率、上下文污染率 |
 
-1. 说明型问题  
-   例：`聚类怎么用`
+## 前端运行
 
-2. 区域统计  
-   例：`哪个区的餐馆数量第二多，并高亮`
+实验页提供：
 
-3. 用户纠正  
-   例：`不对，应该高亮的是行政区 shp，不是点 shp`
+- 四组实验的运行入口。
+- 实验任务集查看。
+- 历史运行结果管理。
+- Chart.js 可视化。
+- 运行结果重命名和删除。
+- zip 导出。
 
-4. 偏好延续  
-   再次提问：`哪个区的餐馆数量第二多，并高亮`
+相关 API：
 
-观察是否只高亮行政区面图层。
+```text
+GET  /api/experiment/expX/data
+GET  /api/experiment/expX/tasks
+GET  /api/experiment/expX/results
+GET  /api/experiment/expX/export
+POST /api/experiment/expX/run
+POST /api/experiment/expX/rename
+POST /api/experiment/expX/delete
+```
+
+其中 `expX` 可替换为 `exp1`、`exp2`、`exp3` 或 `exp4`。
+
+## Python 运行
+
+实验一可通过统一 runner 调用：
+
+```python
+from experiments.runner import run_exp1
+
+run_exp1(mode="both", use_preset=True)
+```
+
+实验二到实验四可直接调用对应 runner：
+
+```python
+from experiments.exp2.exp2_runner import run_exp2
+from experiments.exp3.exp3_runner import run_exp3
+from experiments.exp4.exp4_runner import run_exp4
+
+run_exp2()
+run_exp3()
+run_exp4()
+```
+
+## 输出文件
+
+每次运行会写入：
+
+```text
+experiments/experiment_outputs/{expX}/{run_name}/
+├── summary.json
+├── results.csv
+└── figures/          # 导出图表时生成
+```
+
+`summary.json` 保存聚合指标，`results.csv` 保存逐任务结果，`figures/` 保存论文可用图表。
+
+## 图表导出
+
+```python
+from experiments.export_utils import ensure_matplotlib_exports, build_export_zip
+
+run_dir = "experiments/experiment_outputs/exp1/exp1_both_20260429-132217"
+
+ensure_matplotlib_exports(run_dir)
+zip_path = build_export_zip(run_dir)
+```
+
+导出图表包括：
+
+| 实验 | 图表 |
+|---|---|
+| exp1 | 指标对比、响应时间、能力雷达图、任务热力图 |
+| exp2 | 消融指标、模块贡献、错误分析 |
+| exp3 | 记忆衰减、系统能力、上下文污染 |
+| exp4 | 准确率曲线、系统能力、跨轮引用、压缩与污染 |
+
+## 论文证据接口
+
+后端提供：
+
+```text
+GET /api/thesis/evidence
+```
+
+该接口会汇总：
+
+- 最近一次四组实验结果。
+- GeoAnalystBench 风格任务类型覆盖情况。
+- Base 与 ACE 指标对比。
+- 经验库分类、来源和质量统计。
+- 代码演化或错误恢复样例。
+- 消融、记忆和长上下文实验摘要。
+- 当前仍缺失的论文证据项。
+
+## 建议实验用例
+
+可以用以下任务验证系统能力：
+
+```text
+搜索名称包含火锅的餐饮 POI
+哪个区的餐饮数量第二多，并高亮该行政区
+在餐饮点周围做 500 米缓冲区分析
+对餐饮 POI 做 DBSCAN 聚类
+不对，应该高亮行政区 shp，不是餐饮点
+再次问：哪个区的餐饮数量第二多，并高亮
+```
+
+重点观察：
+
+- 是否正确选择图层。
+- 是否处理 CRS 和距离单位。
+- 是否把用户纠正写入经验库。
+- 后续任务是否复用偏好。
+- 地图高亮是否符合任务语义。

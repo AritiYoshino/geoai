@@ -61,7 +61,7 @@ async function api(path, options = {}) {
       ...options,
     });
   } catch (error) {
-    throw new Error("无法连接到 Web 服务。请确认 main_web.py 正在运行。");
+    throw new Error("无法连接到 Web 服务。请确认 main.py 正在运行。");
   }
 
   const contentType = response.headers.get("Content-Type") || "";
@@ -348,11 +348,51 @@ function extendBounds(bounds, geometry) {
   else if (geometry.type === "MultiPolygon") c.flat(2).forEach((x) => bounds.extend(x));
 }
 
-function addMessage(sender, content) {
+function getMessageProfile(role, sender) {
+  if (role === "user") return { name: "用户", avatar: "你", className: "user" };
+  return { name: sender || "GeoAI", avatar: "AI", className: "assistant" };
+}
+
+function formatMessageTime(value) {
+  const date = value ? new Date(value) : new Date();
+  if (Number.isNaN(date.getTime())) return value || "";
+  return date.toLocaleTimeString("zh-CN", { hour: "2-digit", minute: "2-digit" });
+}
+
+function inferMessageRole(sender) {
+  if (sender === "user" || sender === "用户" || sender === "鐢ㄦ埛") return "user";
+  if (sender === "system" || sender === "系统" || sender === "绯荤粺") return "system";
+  return "assistant";
+}
+
+function addMessage(sender, content, options = {}) {
   const log = document.getElementById("chatLog");
   const box = document.createElement("div");
-  box.className = "message";
-  box.innerHTML = `<div class="sender">${escapeHtml(sender)}</div><div class="content">${escapeHtml(content)}</div>`;
+  const role = options.role || inferMessageRole(sender);
+  if (role === "system") {
+    box.className = "message-status";
+    box.innerHTML = `
+      <span class="message-status-dot" aria-hidden="true"></span>
+      <span>${escapeHtml(content)}</span>
+      <time>${escapeHtml(formatMessageTime(options.time))}</time>
+    `;
+    log.appendChild(box);
+    log.scrollTop = log.scrollHeight;
+    return;
+  }
+
+  const profile = getMessageProfile(role, sender);
+  box.className = `message message-${profile.className}`;
+  box.innerHTML = `
+    <div class="message-avatar" aria-hidden="true">${escapeHtml(profile.avatar)}</div>
+    <div class="message-main">
+      <div class="message-meta">
+        <span class="message-name">${escapeHtml(profile.name)}</span>
+        <time class="message-time">${escapeHtml(formatMessageTime(options.time))}</time>
+      </div>
+      <div class="message-bubble">${escapeHtml(content)}</div>
+    </div>
+  `;
   log.appendChild(box);
   log.scrollTop = log.scrollHeight;
 }
@@ -377,19 +417,19 @@ async function sendMessage() {
   const message = input.value.trim();
   if (!message) return;
   input.value = "";
-  addMessage("用户", message);
-  addMessage("系统", "正在由多智能体协同分析...");
+  addMessage("用户", message, { role: "user" });
+  addMessage("系统", "正在由多智能体协同分析...", { role: "system" });
   document.getElementById("sendBtn").disabled = true;
   try {
     const data = await api("/api/chat", { method: "POST", body: JSON.stringify({ message }) });
-    addMessage("AI 助手", data.answer);
+    addMessage("GeoAI", data.answer, { role: "assistant" });
     document.getElementById("traceBox").textContent = data.trace || "";
     renderAcePanel(data.ace_panel || {});
     document.getElementById("experienceBox").textContent = data.experience || "";
     setHighlights(data.highlights || emptyFeatureCollection());
     renderSessions(data.sessions, data.session);
   } catch (error) {
-    addMessage("系统", `错误：${error.message}`);
+    addMessage("系统", `错误：${error.message}`, { role: "system" });
   } finally {
     document.getElementById("sendBtn").disabled = false;
   }
@@ -458,7 +498,10 @@ function renderSessionHistory(session) {
   const log = document.getElementById("chatLog");
   log.innerHTML = "";
   (session?.messages || []).forEach((msg) => {
-    addMessage(msg.role === "user" ? "用户" : "AI 助手", msg.content || "");
+    addMessage(msg.role === "user" ? "用户" : "GeoAI", msg.content || "", {
+      role: msg.role === "user" ? "user" : "assistant",
+      time: msg.time,
+    });
   });
 }
 
@@ -541,7 +584,7 @@ async function renameActiveBank() {
   });
   renderBanks(data.banks, data.active);
   document.getElementById("experienceBox").textContent = data.summary || "";
-  addMessage("系统", `已重命名经验库：${data.bank.name}`);
+  addMessage("系统", `已重命名经验库：${data.bank.name}`, { role: "system" });
 }
 
 async function deleteActiveBank() {
@@ -558,7 +601,7 @@ async function deleteActiveBank() {
   });
   renderBanks(data.banks, data.active);
   document.getElementById("experienceBox").textContent = data.summary || "";
-  addMessage("系统", `已删除经验库，当前切换为：${data.active.name}`);
+  addMessage("系统", `已删除经验库，当前切换为：${data.active.name}`, { role: "system" });
 }
 
 function toggleSidebar() {
@@ -618,7 +661,7 @@ document.getElementById("bankSelect").addEventListener("change", async (event) =
   });
   const banksPayload = await api("/api/experience-banks");
   renderBanks(banksPayload.banks, banksPayload.active);
-  addMessage("系统", `已切换经验库：${data.bank.name}`);
+  addMessage("系统", `已切换经验库：${data.bank.name}`, { role: "system" });
   document.getElementById("experienceBox").textContent = data.summary || "";
 });
 
@@ -632,6 +675,6 @@ document.querySelectorAll(".bankCreateBtn").forEach((button) => {
     });
     renderBanks(data.banks, data.bank);
     document.getElementById("experienceBox").textContent = data.summary || "";
-    addMessage("系统", `已创建并切换到经验库：${data.bank.name}`);
+    addMessage("系统", `已创建并切换到经验库：${data.bank.name}`, { role: "system" });
   });
 });

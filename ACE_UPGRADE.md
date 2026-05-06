@@ -1,66 +1,70 @@
 # ACE Upgrade
 
-本项目保留 `ReflectorAgent` 作为统一入口，并在其内部接入：
+本文档说明当前项目中的 ACE（Agentic Context Engineering）自进化升级方案。当前实现保留 `ReflectorAgent` 作为统一反思入口，并在内部接入结构化诊断与经验演化能力：
 
-- `CriticAgent`：负责结构化错误诊断
-- `EvolutionManager`：负责经验抽取、去重、质量更新与写库
+- `core/critic.py`：负责错误类型识别、原因分析、修复策略和经验候选生成。
+- `core/evolution.py`：负责把诊断结果沉淀为经验，交给经验库维护。
+- `core/experience_library.py`：负责经验检索、去重、置信度更新和 prompt 注入过滤。
+- `core/experience_bank_manager.py`：负责多经验库创建、切换、重命名和删除。
 
-因此论文和文档中的角色对应关系为：
+因此，论文或说明文档中的角色可对应为：
 
-- `ReflectorAgent = Critic Agent + Evolution Manager` 的轻量实现
+```text
+ReflectorAgent = Critic Agent + Evolution Manager 的轻量封装入口
+```
 
 ## 闭环流程
 
-1. `CoordinatorAgent` 识别任务意图并组织上下文。
-2. `SpatialAnalystAgent` 调用 GIS 工具或受控代码执行。
-3. 若工具报错、结果为空或代码失败，`ReflectorAgent` 调用 `core/critic.py` 输出结构化诊断。
-4. `ReflectorAgent` 再调用 `core/evolution.py` 将诊断沉淀为经验，并更新经验库。
-5. 高置信经验会在后续任务中重新注入 prompt，形成 ACE 自进化闭环。
+1. `CoordinatorAgent` 识别任务意图，组织上下文、图层信息和相关经验。
+2. `SpatialAnalystAgent` 调用 GIS 工具，或触发 `CodeAgent` 执行受控空间代码。
+3. 当工具报错、代码执行失败、结果为空或用户直接纠正时，`ReflectorAgent` 启动反思流程。
+4. `core/critic.py` 输出结构化诊断，包括错误类型、原因、修复策略、代码提示和经验候选。
+5. `core/evolution.py` 将诊断转成经验条目。
+6. `ExperienceLibrary` 对经验进行去重、质量更新和置信度控制。
+7. 后续相似任务会检索高置信经验，并把经验注入执行上下文。
 
 ## 经验质量控制
 
-经验库不再只是“新增”，还支持：
+经验库不是简单追加列表，而是带有质量控制的动态记忆：
 
-- 相似经验去重
-- `confidence` 置信度
-- `success_count / fail_count`
-- `last_used_at`
-- 按任务类型检索
-- 低置信经验不注入 prompt
+- 使用 `confidence` 表示经验置信度。
+- 维护 `success_count` 和 `fail_count`。
+- 记录 `last_used_at`。
+- 按任务类型检索相关经验。
+- 相似经验会合并或更新，而不是无限重复追加。
+- 低置信经验不会注入 prompt。
+- 用户纠正类经验会保留更高初始可信度，便于会话内快速生效。
 
 ## 用户反馈演化
 
-前端不再依赖“正确 / 不正确 / 纠正”按钮。
+前端不再依赖“正确 / 不正确 / 纠正”按钮。用户可以直接在对话里输入：
 
-用户可以直接在会话里说：
-
-- `对`
-- `不对`
-- `不对，应该高亮行政区 shp，不是餐馆点`
-
-系统会将这类反馈写入经验库，并在需要时同步更新会话偏好。
-
-## 新增可追溯日志
-
-项目新增以下 JSONL 日志：
-
-- `logs/task_log.jsonl`
-- `logs/code_log.jsonl`
-- `logs/evolution_log.jsonl`
-- `logs/error_log.jsonl`
-
-可用于实验复现、错误回放与论文附录说明。
-
----
-
-## 公网访问
-
-启动 Web 服务后，可通过 ngrok 将服务暴露到公网供他人访问：
-
-```bash
-C:\Users\CLIENTS\ngrok\ngrok.exe http 8000
+```text
+对
+不对
+不对，应该高亮行政区 shp，不是餐饮点
+以后统计类结果只高亮行政区面图层
 ```
 
-或双击项目根目录的 [`start_public.bat`](start_public.bat) 一键启动。
+系统会尝试识别这些输入，并完成三类动作：
 
-详细说明参见 [`PUBLIC_ACCESS_GUIDE.md`](PUBLIC_ACCESS_GUIDE.md)。
+1. 写入经验库，作为后续任务的可复用经验。
+2. 写入当前会话上下文，作为短期偏好。
+3. 必要时把纠正后的内容继续作为新任务执行。
+
+## 当前新增能力
+
+- 多经验库管理：创建、切换、复制当前经验库、从默认经验库初始化。
+- 会话级偏好记忆：例如“统计类任务只高亮行政区面图层”。
+- JSONL 可追踪日志：任务、代码执行、经验演化和错误均可回放。
+- 实验系统接入：四组实验可验证 ACE 对准确率、错误恢复、记忆保持和长上下文鲁棒性的影响。
+- 论文证据接口：`GET /api/thesis/evidence` 汇总实验与经验库数据。
+
+## 风险与后续方向
+
+当前实现已经具备闭环雏形，但仍有可继续增强的方向：
+
+- 对经验冲突做显式检测，例如同一任务类型下存在互斥策略。
+- 增加经验版本、回滚和审核机制。
+- 为经验命中和实际任务成功建立更严格的因果关联指标。
+- 修复代码中部分中文字符串的编码错乱问题，避免影响用户反馈识别。

@@ -1,14 +1,33 @@
 import os
 import re
+import time
 
+_MODULE_START = time.perf_counter()
+
+
+def _startup_timing(label, start):
+    print(f"[startup][timing] {label}: {time.perf_counter() - start:.3f}s", flush=True)
+
+
+_step = time.perf_counter()
 from langchain_deepseek import ChatDeepSeek
+_startup_timing("import langchain_deepseek.ChatDeepSeek", _step)
 
+_step = time.perf_counter()
 from agents import CodeAgent, CoordinatorAgent, ReflectorAgent, SpatialAnalystAgent
+_startup_timing("import agents", _step)
+
+_step = time.perf_counter()
 from core.context_manager import ContextManager
 from core.experience_bank_manager import ExperienceBankManager
 from core.experience_library import ExperienceLibrary
 from core.jsonl_logger import log_error, log_task
+_startup_timing("import core AI dependencies", _step)
+
+_step = time.perf_counter()
 from tools import create_tools
+_startup_timing("import tools", _step)
+_startup_timing("import ai_handler module total", _MODULE_START)
 
 
 class AIHandler:
@@ -24,8 +43,13 @@ class AIHandler:
     )
 
     def __init__(self, api_key, map_handler):
+        init_start = time.perf_counter()
         self.map_handler = map_handler
+        step = time.perf_counter()
         self._disable_broken_proxy_env()
+        _startup_timing("AIHandler disable proxy env", step)
+
+        step = time.perf_counter()
         self.llm = ChatDeepSeek(
             model="deepseek-chat",
             temperature=0.3,
@@ -33,21 +57,45 @@ class AIHandler:
             timeout=30,
             max_retries=2,
         )
+        _startup_timing("AIHandler create ChatDeepSeek", step)
 
+        step = time.perf_counter()
         self.experience_bank_manager = ExperienceBankManager()
-        self.experience_library = ExperienceLibrary(self.experience_bank_manager.active_path())
-        self.context_manager = ContextManager(map_handler)
+        _startup_timing("AIHandler create ExperienceBankManager", step)
 
+        step = time.perf_counter()
+        self.experience_library = ExperienceLibrary(self.experience_bank_manager.active_path())
+        _startup_timing("AIHandler create ExperienceLibrary", step)
+
+        step = time.perf_counter()
+        self.context_manager = ContextManager(map_handler)
+        _startup_timing("AIHandler create ContextManager", step)
+
+        step = time.perf_counter()
         self.tools = create_tools(self)
+        _startup_timing("AIHandler create tools", step)
+
+        step = time.perf_counter()
         self.code_agent = CodeAgent(self.llm, self)
+        _startup_timing("AIHandler create CodeAgent", step)
+
+        step = time.perf_counter()
         self.spatial_agent = SpatialAnalystAgent(self.llm, self.tools, self, code_agent=self.code_agent)
+        _startup_timing("AIHandler create SpatialAnalystAgent", step)
+
+        step = time.perf_counter()
         self.reflector_agent = ReflectorAgent(self.experience_library)
+        _startup_timing("AIHandler create ReflectorAgent", step)
+
+        step = time.perf_counter()
         self.coordinator_agent = CoordinatorAgent(
             context_manager=self.context_manager,
             experience_library=self.experience_library,
             spatial_agent=self.spatial_agent,
             reflector_agent=self.reflector_agent,
         )
+        _startup_timing("AIHandler create CoordinatorAgent", step)
+        _startup_timing("AIHandler init total", init_start)
 
     def _disable_broken_proxy_env(self):
         for key in (
