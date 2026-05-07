@@ -107,6 +107,19 @@ class ExclusiveThreadingHTTPServer(ThreadingHTTPServer):
 class WebGISRequestHandler(SimpleHTTPRequestHandler):
     server_version = "GeoAIWeb/0.2"
 
+    def _content_type_for(self, path, default="application/octet-stream"):
+        ext = os.path.splitext(path)[1].lower()
+        explicit_types = {
+            ".js": "text/javascript; charset=utf-8",
+            ".mjs": "text/javascript; charset=utf-8",
+            ".css": "text/css; charset=utf-8",
+            ".html": "text/html; charset=utf-8",
+            ".json": "application/json; charset=utf-8",
+            ".geojson": "application/geo+json; charset=utf-8",
+            ".svg": "image/svg+xml",
+        }
+        return explicit_types.get(ext, mimetypes.guess_type(path)[0] or default)
+
     def do_GET(self):
         self.server.touch()
         parsed = urlparse(self.path)
@@ -883,7 +896,7 @@ class WebGISRequestHandler(SimpleHTTPRequestHandler):
             body = f.read()
         encoded_name = quote(filename)
         self.send_response(200)
-        self.send_header("Content-Type", mimetypes.guess_type(abs_path)[0] or "application/octet-stream")
+        self.send_header("Content-Type", self._content_type_for(abs_path))
         self.send_header("Content-Length", str(len(body)))
         self.send_header("Content-Disposition", f"attachment; filename*=UTF-8''{encoded_name}")
         self.end_headers()
@@ -899,7 +912,7 @@ class WebGISRequestHandler(SimpleHTTPRequestHandler):
         with open(abs_path, "rb") as f:
             body = f.read()
         self.send_response(200)
-        self.send_header("Content-Type", mimetypes.guess_type(abs_path)[0] or "application/json")
+        self.send_header("Content-Type", self._content_type_for(abs_path, "application/json"))
         self.send_header("Content-Length", str(len(body)))
         self.end_headers()
         self.wfile.write(body)
@@ -968,7 +981,8 @@ class WebGISRequestHandler(SimpleHTTPRequestHandler):
         with open(path, "rb") as f:
             body = f.read()
         self.send_response(200)
-        self.send_header("Content-Type", mimetypes.guess_type(path)[0] or "application/octet-stream")
+        self.send_header("Content-Type", self._content_type_for(path))
+        self.send_header("Cache-Control", "no-store, max-age=0")
         self.send_header("Content-Length", str(len(body)))
         self.end_headers()
         self.wfile.write(body)

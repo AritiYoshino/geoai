@@ -85,7 +85,7 @@ def evolve_from_error(
 
 
 class EvolutionManager:
-    """供 ReflectorAgent 调用的轻量经验演化管理器。"""
+    """Lightweight experience evolution manager used by EvolutionAgent."""
 
     def __init__(self, library):
         self.library = library

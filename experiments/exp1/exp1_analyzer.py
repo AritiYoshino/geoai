@@ -99,7 +99,7 @@ class Exp1MetricsCollector:
                                   and "没有相关经验" not in retrieved)
 
         # 6. ACE特有：错误恢复率
-        # 检测 ReflectorAgent/Critic 是否被触发且任务最终完成
+        # 检测 CriticAgent 是否被触发且任务最终完成
         # ace_panel["error_diagnosis"] 非空 = Critic 检测到问题并产生诊断
         # task_completed = True = 系统从问题中恢复，成功产出回答
         error_recovered = False

@@ -5,4 +5,5 @@ matplotlib
 numpy
 pandas
 python-dotenv
+rasterio
 shapely

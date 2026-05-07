@@ -84,7 +84,7 @@ def diagnose_error(task_type, tool_name, tool_args, result, code=""):
 
 
 class CriticAgent:
-    """供 ReflectorAgent 调用的轻量级结构化诊断器。"""
+    """Lightweight structured diagnosis engine used by the agent layer."""
 
     def diagnose(self, task, task_type, tool_name, tool_args, result, code=""):
         return diagnose_error(

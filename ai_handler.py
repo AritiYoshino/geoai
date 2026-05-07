@@ -14,7 +14,7 @@ from langchain_deepseek import ChatDeepSeek
 _startup_timing("import langchain_deepseek.ChatDeepSeek", _step)
 
 _step = time.perf_counter()
-from agents import CodeAgent, CoordinatorAgent, ReflectorAgent, SpatialAnalystAgent
+from agents import CodeAgent, CoordinatorAgent, CriticAgent, EvolutionAgent, SpatialAnalystAgent
 _startup_timing("import agents", _step)
 
 _step = time.perf_counter()
@@ -84,15 +84,20 @@ class AIHandler:
         _startup_timing("AIHandler create SpatialAnalystAgent", step)
 
         step = time.perf_counter()
-        self.reflector_agent = ReflectorAgent(self.experience_library)
-        _startup_timing("AIHandler create ReflectorAgent", step)
+        self.critic_agent = CriticAgent()
+        _startup_timing("AIHandler create CriticAgent", step)
+
+        step = time.perf_counter()
+        self.evolution_agent = EvolutionAgent(self.experience_library)
+        _startup_timing("AIHandler create EvolutionAgent", step)
 
         step = time.perf_counter()
         self.coordinator_agent = CoordinatorAgent(
             context_manager=self.context_manager,
             experience_library=self.experience_library,
             spatial_agent=self.spatial_agent,
-            reflector_agent=self.reflector_agent,
+            critic_agent=self.critic_agent,
+            evolution_agent=self.evolution_agent,
         )
         _startup_timing("AIHandler create CoordinatorAgent", step)
         _startup_timing("AIHandler init total", init_start)
@@ -164,7 +169,7 @@ class AIHandler:
             return "", user_input
 
         task_type = self.context_manager.classify_intent(user_task)
-        exp, created = self.reflector_agent.learn_from_user_feedback(
+        exp, created = self.evolution_agent.learn_from_user_feedback(
             feedback_type=parsed["feedback_type"],
             task_type=task_type,
             user_task=user_task,
@@ -317,7 +322,7 @@ class AIHandler:
             return "还没有可评价的上一轮结果。"
 
         task_type = self.context_manager.classify_intent(user_task)
-        exp, created = self.reflector_agent.learn_from_user_feedback(
+        exp, created = self.evolution_agent.learn_from_user_feedback(
             feedback_type=feedback_type,
             task_type=task_type,
             user_task=user_task,

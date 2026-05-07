@@ -69,16 +69,47 @@ class BrowserMapHandler:
                     "auto_load_recommended": int(record["feature_count"]) < LARGE_LAYER_THRESHOLD,
                     "is_large_layer": int(record["feature_count"]) >= LARGE_LAYER_THRESHOLD,
                     "min_zoom": MIN_ZOOM_FOR_LARGE_LAYER if int(record["feature_count"]) >= LARGE_LAYER_THRESHOLD else 0,
+                    "is_generated": bool(record.get("is_generated")),
+                    "auto_visible": bool(record.get("auto_visible")),
+                    "visualization_style": dict(record.get("visualization_style") or {}),
                 }
             )
         return payload
+
+    def add_generated_layer(self, name, gdf, visualization_style=None, auto_visible=True):
+        display_gdf = self._to_wgs84(gdf.copy())
+        meta = self._metadata_from_gdf(display_gdf)
+        record = {
+            "name": name,
+            "path": None,
+            "feature_count": meta["feature_count"],
+            "fields": meta["fields"],
+            "geometry_types": meta["geometry_types"],
+            "bbox": meta["bbox"],
+            "crs": meta["crs"],
+            "gdf": display_gdf,
+            "is_generated": True,
+            "auto_visible": auto_visible,
+            "visualization_style": visualization_style or {},
+        }
+
+        existing = self._get_record(name)
+        if existing is None:
+            self.layer_records.append(record)
+        else:
+            existing.update(record)
 
     def layer_data_payload(self, layer_name, bbox=None, zoom=None):
         record = self._get_record(layer_name)
         if record is None:
             raise ValueError(f"未找到图层 {layer_name}")
 
-        if record["feature_count"] >= LARGE_LAYER_THRESHOLD and zoom is not None and float(zoom) < MIN_ZOOM_FOR_LARGE_LAYER:
+        if (
+            not record.get("is_generated")
+            and record["feature_count"] >= LARGE_LAYER_THRESHOLD
+            and zoom is not None
+            and float(zoom) < MIN_ZOOM_FOR_LARGE_LAYER
+        ):
             return {
                 "name": record["name"],
                 "geojson": {"type": "FeatureCollection", "features": []},
@@ -137,6 +168,8 @@ class BrowserMapHandler:
         if record is None:
             raise ValueError(f"未找到图层 {layer_name}")
         if record["gdf"] is None:
+            if not record.get("path"):
+                raise ValueError(f"鍥惧眰 {layer_name} 娌℃湁鍙鍙栫殑鏁版嵁婧?")
             gdf = gpd.read_file(record["path"])
             record["gdf"] = self._to_wgs84(gdf)
         return record["gdf"]
@@ -186,6 +219,21 @@ class BrowserMapHandler:
             "geometry_types": geometry_types or ["Unknown"],
             "bbox": bbox or [0, 0, 0, 0],
             "crs": "EPSG:4326",
+        }
+
+    def _metadata_from_gdf(self, gdf):
+        fields = [column for column in gdf.columns if column != gdf.geometry.name]
+        geometry_types = []
+        for geom_type in gdf.geometry.geom_type.dropna().unique().tolist():
+            if geom_type not in geometry_types:
+                geometry_types.append(geom_type)
+        bounds = gdf.total_bounds.tolist() if not gdf.empty else []
+        return {
+            "feature_count": int(len(gdf)),
+            "fields": fields,
+            "geometry_types": geometry_types or ["Unknown"],
+            "bbox": bounds,
+            "crs": gdf.crs.to_string() if gdf.crs else "EPSG:4326",
         }
 
     def _compute_bbox(self, features):

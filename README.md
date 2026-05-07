@@ -13,18 +13,21 @@ GeoAI ACE WebGIS 是一个面向地理空间问答与空间分析的多 Agent We
 - 地理智能系统：`/gis`
 - 对比实验系统：`/experiment`
 - 默认 GeoJSON 数据目录：`data/geodata/`
-- Shapefile 原始数据目录：`geodata/`
 
 ## 项目结构
 
 ```text
 geoai/
 ├── agents/                 # 多 Agent 协同层
+│   ├── __init__.py
 │   ├── coordinator_agent.py
 │   ├── spatial_analyst_agent.py
 │   ├── code_agent.py
-│   └── reflector_agent.py
+│   ├── critic_agent.py
+│   └── evolution_agent.py
 ├── core/                   # ACE、上下文、经验库、诊断、日志
+│   ├── __init__.py
+│   ├── ace_core.py
 │   ├── context_manager.py
 │   ├── experience_library.py
 │   ├── experience_bank_manager.py
@@ -33,17 +36,22 @@ geoai/
 │   ├── session_store.py
 │   └── jsonl_logger.py
 ├── tools/                  # GIS 工具集合
-│   ├── search.py
-│   ├── query.py
-│   ├── nearby.py
+│   ├── __init__.py
+│   ├── advanced_common.py
 │   ├── buffer_tool.py
+│   ├── clustering_tool.py
+│   ├── code_executor.py
+│   ├── detail.py
+│   ├── export_tool.py
+│   ├── nearby.py
 │   ├── overlay_tool.py
 │   ├── proximity_tool.py
-│   ├── clustering_tool.py
+│   ├── query.py
+│   ├── search.py
 │   ├── statistics_tool.py
-│   ├── export_tool.py
-│   └── code_executor.py
+│   └── utils_geo.py
 ├── web_app/                # HTTP 服务与前端静态页面
+│   ├── __init__.py
 │   ├── server.py
 │   ├── web_map_handler.py
 │   └── static/
@@ -53,8 +61,20 @@ geoai/
 │       ├── app.js
 │       ├── experiment.js
 │       ├── styles.css
-│       └── experiment.css
+│       ├── experiment.css
+│       └── js/
+│           ├── gis/
+│           │   ├── api.js
+│           │   ├── layers.js
+│           │   ├── map_view.js
+│           │   └── panels.js
+│           └── experiment/
+│               ├── chart_setup.js
+│               ├── logic.js
+│               ├── main.js
+│               └── state.js
 ├── experiments/            # 四组对比实验与论文证据接口
+│   ├── __init__.py
 │   ├── runner.py
 │   ├── export_utils.py
 │   ├── thesis_evidence.py
@@ -63,17 +83,24 @@ geoai/
 │   ├── exp3/
 │   └── exp4/
 ├── data/
-│   ├── geodata/
-│   ├── experience_libraries/
+│   ├── geodata/            # GeoJSON 空间数据
+│   ├── experience_libraries/ # 用户创建的经验库
+│   ├── exports/            # 导出文件
 │   ├── ace_experience_library.json
 │   ├── experience_banks.json
 │   └── sessions.json
 ├── logs/                   # JSONL 运行日志
 ├── plans/                  # 方案、分析和论文草稿
+├── experiment_outputs/     # 实验输出（符号链接或实际目录）
+├── .env.example
 ├── ai_handler.py
 ├── main.py
 ├── requirements.txt
-└── README.md
+├── utils.py
+├── README.md
+├── SYSTEM_ARCHITECTURE.md
+├── ACE_UPGRADE.md
+└── EXPERIMENT_GUIDE.md
 ```
 
 ## 核心流程
@@ -82,30 +109,30 @@ geoai/
 2. `AIHandler` 组织 LLM、上下文、经验库、工具和 Agent。
 3. `CoordinatorAgent` 识别任务类型，检索会话上下文和经验库，生成执行计划。
 4. `SpatialAnalystAgent` 选择固定 GIS 工具，或触发 `CodeAgent` 执行受控 GeoPandas 代码。
-5. `ReflectorAgent` 在错误、空结果或用户纠正时调用 `core/critic.py` 和 `core/evolution.py`，把诊断沉淀为经验。
+5. `CriticAgent` 在错误、空结果或用户纠正时进行结构化诊断，`EvolutionAgent` 将诊断沉淀为经验。
 6. 前端展示自然语言回答、Trace、ACE 面板、经验库摘要和地图高亮结果。
 
 ## GIS 工具能力
 
-当前 `tools.create_tools()` 注册的工具包括：
+当前 [`tools/__init__.py`](tools/__init__.py) 的 `create_tools()` 注册的工具包括：
 
-| 工具 | 说明 |
-|---|---|
-| `search_poi` | 跨图层 POI 检索 |
-| `query_poi_by_conditions` | 按属性条件查询 POI |
-| `get_poi_by_index` | 按索引查看 POI 详情 |
-| `find_nearby` | 图层间邻近分析 |
-| `find_nearby_point` | 以单个点为中心的邻近分析 |
-| `find_nearby_point_filtered` | 带关键词过滤的邻近分析 |
-| `buffer_analysis` | 缓冲区分析 |
-| `overlay_layers` | 图层叠加分析 |
-| `spatial_join` | 空间连接 |
-| `nearest_neighbor` | 最近邻分析 |
-| `dbscan` | DBSCAN 聚类 |
-| `hotspot` | 热点分析 |
-| `statistics` | 图层统计汇总 |
-| `export` | 分析结果导出 |
-| `execute_spatial_code` | 受控空间代码执行 |
+| 工具 | 实现文件 | 说明 |
+|---|---|---|
+| `search_poi` | [`tools/search.py`](tools/search.py) | 跨图层 POI 检索 |
+| `query_poi_by_conditions` | [`tools/query.py`](tools/query.py) | 按属性条件查询 POI |
+| `get_poi_by_index` | [`tools/detail.py`](tools/detail.py) | 按索引查看 POI 详情 |
+| `find_nearby` | [`tools/nearby.py`](tools/nearby.py) | 图层间邻近分析 |
+| `find_nearby_point` | [`tools/nearby.py`](tools/nearby.py) | 以单个点为中心的邻近分析 |
+| `find_nearby_point_filtered` | [`tools/nearby.py`](tools/nearby.py) | 带关键词过滤的邻近分析 |
+| `buffer_analysis` | [`tools/buffer_tool.py`](tools/buffer_tool.py) | 缓冲区分析 |
+| `overlay_layers` | [`tools/overlay_tool.py`](tools/overlay_tool.py) | 图层叠加分析 |
+| `spatial_join` | [`tools/overlay_tool.py`](tools/overlay_tool.py) | 空间连接 |
+| `nearest_neighbor` | [`tools/proximity_tool.py`](tools/proximity_tool.py) | 最近邻分析 |
+| `dbscan` | [`tools/clustering_tool.py`](tools/clustering_tool.py) | DBSCAN 聚类 |
+| `hotspot` | [`tools/clustering_tool.py`](tools/clustering_tool.py) | 热点分析 |
+| `statistics` | [`tools/statistics_tool.py`](tools/statistics_tool.py) | 图层统计汇总 |
+| `export` | [`tools/export_tool.py`](tools/export_tool.py) | 分析结果导出 |
+| `execute_spatial_code` | [`tools/code_executor.py`](tools/code_executor.py) | 受控空间代码执行 |
 
 ## Web API
 
@@ -209,9 +236,9 @@ http://127.0.0.1:8000
 
 ## 相关文档
 
-- `ACE_UPGRADE.md`：ACE 自进化机制说明
-- `SYSTEM_ARCHITECTURE.md`：系统架构与模块关系
-- `EXPERIMENT_GUIDE.md`：实验系统运行指南
-- `plans/project_analysis.md`：项目分析报告
-- `plans/thesis_initial_draft.md`：论文初稿
-- `plans/upgrade_landing_page.md`：统一入口首页升级记录
+- [`ACE_UPGRADE.md`](ACE_UPGRADE.md)：ACE 自进化机制说明
+- [`SYSTEM_ARCHITECTURE.md`](SYSTEM_ARCHITECTURE.md)：系统架构与模块关系
+- [`EXPERIMENT_GUIDE.md`](EXPERIMENT_GUIDE.md)：实验系统运行指南
+- [`plans/project_analysis.md`](plans/project_analysis.md)：项目分析报告
+- [`plans/thesis_initial_draft.md`](plans/thesis_initial_draft.md)：论文初稿
+- [`plans/upgrade_landing_page.md`](plans/upgrade_landing_page.md)：统一入口首页升级记录

@@ -457,5 +457,22 @@
     "created_at": "2026-05-06T18:14:21",
     "updated_at": "2026-05-06T18:14:21",
     "last_used_at": "2026-05-06T18:14:21"
+  },
+  {
+    "id": "ace-20260507235220-28",
+    "category": "DISTANCE_UNIT_ERROR",
+    "task_types": [
+      "nearby"
+    ],
+    "trigger": "tool=buffer_analysis; args={'layer_name': '住宿服务', 'distance': 1000, 'unit': 'm', 'dissolve': True, 'feature_index': 6443}",
+    "problem": "任务中很可能混淆了米和公里，或传入了与预期不一致的距离单位。 原始错误信息: 已完成缓冲区分析，生成结果图层 住宿服务_6443_buffer_1000m，共 1 条记录。\n分析对象: 住宿服务 索引 6443 的单个 POI\n距离: 1000.0m\n预览:\nEmpty DataFrame\nColumns: []\nIndex: [0]",
+    "strategy": "先确认用户输入单位，内部统一换算为米，并在回答中明确说明单位假设。 代码提示: 先把 km 统一换算为 m，再在同一米制坐标系中做所有距离比较。",
+    "source": "critic",
+    "success_count": 0,
+    "fail_count": 1,
+    "confidence": 0.333,
+    "created_at": "2026-05-07T23:52:20",
+    "updated_at": "2026-05-07T23:52:20",
+    "last_used_at": "2026-05-07T23:52:20"
   }
 ]

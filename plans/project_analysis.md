@@ -38,9 +38,8 @@ flowchart TD
     C --> SA[SpatialAnalystAgent]
     SA --> T[GIS Tools]
     SA --> CA[CodeAgent]
-    C --> R[ReflectorAgent]
-    R --> CR[Critic]
-    R --> EV[Evolution]
+    C --> CR[CriticAgent]
+    CR --> EV[EvolutionAgent]
     EV --> EL
     API --> EXP[Experiments]
     EXP --> OUT[experiment_outputs]
@@ -54,7 +53,8 @@ flowchart TD
 | `CoordinatorAgent` | `agents/coordinator_agent.py` | 任务分类、上下文组织、经验检索、调度 |
 | `SpatialAnalystAgent` | `agents/spatial_analyst_agent.py` | 选择和调用 GIS 工具 |
 | `CodeAgent` | `agents/code_agent.py` | 生成、执行和修复空间分析代码 |
-| `ReflectorAgent` | `agents/reflector_agent.py` | 连接错误诊断、用户反馈和经验演化 |
+| `CriticAgent` | `agents/critic_agent.py` | 对工具错误、空结果、代码异常和用户纠正进行结构化诊断 |
+| `EvolutionAgent` | `agents/evolution_agent.py` | 将诊断结果和用户反馈沉淀为可复用经验 |
 
 ## 5. ACE 闭环
 
@@ -70,59 +70,76 @@ ACE 在本项目中体现为：
 
 ## 6. GIS 工具集
 
-当前工具层覆盖三类能力：
+当前工具层覆盖三类能力，共 15 个注册工具，由 [`tools/__init__.py`](tools/__init__.py) 统一注册：
 
-基础查询：
+| 工具 | 实现文件 | 能力分类 |
+|---|---|---|
+| `search_poi` | [`tools/search.py`](tools/search.py) | 基础查询 |
+| `query_poi_by_conditions` | [`tools/query.py`](tools/query.py) | 基础查询 |
+| `get_poi_by_index` | [`tools/detail.py`](tools/detail.py) | 基础查询 |
+| `find_nearby` | [`tools/nearby.py`](tools/nearby.py) | 空间分析 |
+| `find_nearby_point` | [`tools/nearby.py`](tools/nearby.py) | 空间分析 |
+| `find_nearby_point_filtered` | [`tools/nearby.py`](tools/nearby.py) | 空间分析 |
+| `buffer_analysis` | [`tools/buffer_tool.py`](tools/buffer_tool.py) | 空间分析 |
+| `overlay_layers` | [`tools/overlay_tool.py`](tools/overlay_tool.py) | 空间分析 |
+| `spatial_join` | [`tools/overlay_tool.py`](tools/overlay_tool.py) | 空间分析 |
+| `nearest_neighbor` | [`tools/proximity_tool.py`](tools/proximity_tool.py) | 空间分析 |
+| `dbscan` | [`tools/clustering_tool.py`](tools/clustering_tool.py) | 空间分析 |
+| `hotspot` | [`tools/clustering_tool.py`](tools/clustering_tool.py) | 空间分析 |
+| `statistics` | [`tools/statistics_tool.py`](tools/statistics_tool.py) | 空间分析 |
+| `export` | [`tools/export_tool.py`](tools/export_tool.py) | 高级能力 |
+| `execute_spatial_code` | [`tools/code_executor.py`](tools/code_executor.py) | 高级能力 |
 
-- `search_poi`
-- `query_poi_by_conditions`
-- `get_poi_by_index`
+辅助模块：
 
-空间分析：
-
-- `find_nearby`
-- `find_nearby_point`
-- `find_nearby_point_filtered`
-- `buffer_analysis`
-- `overlay_layers`
-- `spatial_join`
-- `nearest_neighbor`
-- `dbscan`
-- `hotspot`
-- `statistics`
-
-高级能力：
-
-- `export`
-- `execute_spatial_code`
+| 文件 | 作用 |
+|---|---|
+| [`tools/advanced_common.py`](tools/advanced_common.py) | 高级空间分析通用工具函数 |
+| [`tools/utils_geo.py`](tools/utils_geo.py) | 地理空间工具函数集 |
 
 ## 7. 数据与接口
 
 默认数据：
 
-- `data/geodata/餐饮.geojson`
-- `data/geodata/住宿服务.geojson`
-- `data/geodata/成都行政区.geojson`
+| 数据 | 文件 | 类型 | 用途 |
+|---|---|---|---|
+| 餐饮 POI | [`data/geodata/餐饮.geojson`](data/geodata/餐饮.geojson) | 点 | POI 检索、统计、聚类 |
+| 住宿服务 POI | [`data/geodata/住宿服务.geojson`](data/geodata/住宿服务.geojson) | 点 | 查询和邻近分析 |
+| 成都行政区 | [`data/geodata/成都行政区.geojson`](data/geodata/成都行政区.geojson) | 面 | 行政区统计和地图高亮 |
+| 风景 POI | [`data/geodata/风景.geojson`](data/geodata/风景.geojson) | 点 | POI 检索 |
+| 交通设施 POI | [`data/geodata/交通设施.geojson`](data/geodata/交通设施.geojson) | 点 | POI 检索 |
+| 购物 POI | [`data/geodata/购物.geojson`](data/geodata/购物.geojson) | 点 | POI 检索 |
+| 公司 POI | [`data/geodata/公司.geojson`](data/geodata/公司.geojson) | 点 | POI 检索 |
+| 科教文化 POI | [`data/geodata/科教文化.geojson`](data/geodata/科教文化.geojson) | 点 | POI 检索 |
+| 金融服务 POI | [`data/geodata/金融服务.geojson`](data/geodata/金融服务.geojson) | 点 | POI 检索 |
+| 商务住宅 POI | [`data/geodata/商务住宅.geojson`](data/geodata/商务住宅.geojson) | 点 | POI 检索 |
+| 生活服务 POI | [`data/geodata/生活服务.geojson`](data/geodata/生活服务.geojson) | 点 | POI 检索 |
+| 体育 POI | [`data/geodata/体育.geojson`](data/geodata/体育.geojson) | 点 | POI 检索 |
+| 医疗 POI | [`data/geodata/医疗.geojson`](data/geodata/医疗.geojson) | 点 | POI 检索 |
+| 政府 POI | [`data/geodata/政府.geojson`](data/geodata/政府.geojson) | 点 | POI 检索 |
 
-原始 Shapefile：
+数据存储目录：
 
-- `geodata/餐饮_61102.*`
-- `geodata/住宿服务_6474.*`
-- `geodata/成都行政区__加高新天府东区.*`
+- [`data/geodata/`](data/geodata/)：GeoJSON 空间数据
+- [`data/experience_libraries/`](data/experience_libraries/)：用户创建的经验库
+- [`data/exports/`](data/exports/)：导出文件
+- [`data/ace_experience_library.json`](data/ace_experience_library.json)：默认经验库
+- [`data/experience_banks.json`](data/experience_banks.json)：经验库索引
+- [`data/sessions.json`](data/sessions.json)：会话数据
 
 关键 API：
 
-- `/api/layers`
-- `/api/layer_data`
-- `/api/chat`
-- `/api/highlights`
-- `/api/trace`
-- `/api/ace-panel`
-- `/api/experience`
-- `/api/sessions`
-- `/api/experience-banks`
-- `/api/experiment/expX/*`
-- `/api/thesis/evidence`
+- `GET /api/layers`：图层元信息
+- `GET /api/layer_data`：按视野加载 GeoJSON
+- `POST /api/chat`：发送自然语言任务
+- `GET /api/highlights`：地图高亮
+- `GET /api/trace`：任务 Trace
+- `GET /api/ace-panel`：ACE 面板
+- `GET /api/experience`：经验库内容
+- `GET /api/sessions`：会话管理
+- `GET /api/experience-banks`：经验库管理
+- `GET/POST /api/experiment/expX/*`：实验系统
+- `GET /api/thesis/evidence`：论文证据汇总
 
 ## 8. 实验系统分析
 

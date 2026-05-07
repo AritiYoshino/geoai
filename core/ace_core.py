@@ -23,6 +23,7 @@ TASK_KEYWORDS = {
     "search": ["搜索", "查找", "找", "包含", "名字", "名称", "search"],
     "mapping": ["地图", "高亮", "显示", "制图", "可视化"],
     "overlay": ["叠加", "相交", "覆盖", "裁剪", "overlay", "intersect"],
+    "clustering": ["聚类", "dbscan", "热点", "hotspot", "密度", "高密度"],
 }
 
 

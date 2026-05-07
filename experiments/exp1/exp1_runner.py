@@ -70,7 +70,7 @@ class Exp1Runner:
         跳过所有 ACE 机制：
         - ❌ ExperienceLibrary.retrieve() — 无经验检索
         - ❌ ContextManager.format_conversation_context() — 无会话上下文
-        - ❌ ReflectorAgent.evaluate() — 无 Critic/Evolution
+        - ❌ CriticAgent/EvolutionAgent — 无错误诊断和经验演化
         - ❌ _dispatch_loop 多轮循环 — 仅单轮 LLM 调用
         """
         output = {

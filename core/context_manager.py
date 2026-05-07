@@ -197,12 +197,12 @@ class ContextManager:
 4. find_nearby_point(reference_layer, reference_index, target_layer, distance, unit): 以单个要素为中心做邻近分析。
 5. find_nearby_point_filtered(reference_layer, reference_index, target_layer, distance, keyword, unit): 以单个要素为中心做带关键词过滤的邻近分析。
 6. get_poi_by_index(layer_name, feature_index): 按上下文解析出的图层和索引获取单个 POI 详情并高亮。
-7. buffer_analysis(layer_name, distance, unit, dissolve): 缓冲区分析，并保存可导出的派生结果。
+7. buffer_analysis(layer_name, distance, unit, dissolve, feature_index, feature_indices): 缓冲区分析；若用户指定某个 POI、上文中的“这个点/该店/该 POI”，必须传 feature_index，只生成该单个 POI 的缓冲区；若用户指定“某类/这些/满足条件的 POI”，必须先查询命中要素，再传 feature_indices，只生成这些命中 POI 的缓冲区；不传 feature_index/feature_indices 才表示整层缓冲。
 8. overlay_layers(input_layer, overlay_layer, how): 空间叠加 overlay。
 9. spatial_join_layers(target_layer, join_layer, predicate, how): 空间连接 sjoin。
 10. nearest_neighbor_search(reference_layer, reference_index, target_layer, top_k, max_distance, unit): 最近邻分析。
 11. cluster_points_dbscan(layer_name, eps, min_samples, unit): DBSCAN 聚类分析。
-12. hotspot_analysis(layer_name, cell_size, unit, top_n): 网格热点分析。
+12. hotspot_analysis(layer_name, cell_size, unit, top_n): 以成都行政区边界为研究范围生成完整网格/栅格面热点分析，count 字段表示每个格子的 POI 数量。
 13. summarize_layer_statistics(layer_name, group_by, numeric_field): 结果统计汇总。
 14. export_analysis_result(source_type, layer_name, export_format, output_name): 导出 GeoJSON / CSV。
 15. execute_spatial_code(task_description, code): 当固定工具不足时，生成并执行受控 GeoPandas/Pandas 空间分析代码。
@@ -220,6 +220,8 @@ class ContextManager:
 - 属性查询必须使用 schema 中真实存在的字段名，禁止猜字段。
 - “它、这个、那个、X 的店、上面那个”等省略表达必须优先参考“最可能指代的上一轮 POI”。
 - 如果只是查询上下文中某个店的详情，优先调用 get_poi_by_index。
+- 如果用户要求“某 POI 点/这个点/该店/以此为基础生成缓冲区”，必须先定位单个 POI 的 layer/index，再调用 buffer_analysis 并传入 feature_index；禁止直接对整个住宿、餐饮等 POI 图层做缓冲。
+- 如果用户要求“某类酒店/这些酒店/满足条件的 POI 的缓冲区”，必须先用 query_poi_by_conditions 或 search_poi 找到目标 POI 索引，再调用 buffer_analysis 并传入 feature_indices；只缓冲查询命中的集合，不缓冲整个图层。
 - 如果用户是在询问某个分析能力怎么用、适合什么场景、有哪些参数，应直接文字说明，不调用工具。
 - 如果当前会话偏好要求“只高亮行政区 shp / 不高亮餐馆点”，则“哪个区最多/第二多并高亮”这类任务必须只高亮行政区面图层。
 - 涉及“附近、距离、公里、米”的任务必须考虑 CRS 和米制投影风险。
@@ -313,8 +315,8 @@ class ContextManager:
             "retrieved_experiences": pick_latest("Experience Library"),
             "generated_code": pick_latest("Code Agent / Generated Code"),
             "execution_status": pick_latest("Code Agent / Execution") or pick_latest("Tool Feedback"),
-            "error_diagnosis": pick_latest("Reflector Agent / Diagnosis"),
-            "experience_update": pick_latest("Reflector Agent / Evolution"),
-            "reflection": pick_latest("Reflector Agent"),
+            "error_diagnosis": pick_latest("Critic Agent / Diagnosis"),
+            "experience_update": pick_latest("Evolution Agent / Experience Update"),
+            "reflection": pick_latest("Critic Agent"),
             "tool_feedbacks": pick_all("Tool Feedback"),
         }

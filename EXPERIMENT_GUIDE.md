@@ -32,27 +32,28 @@ http://127.0.0.1:8000/experiment
 
 ```text
 experiments/
-├── runner.py
-├── export_utils.py
-├── thesis_evidence.py
-├── exp1/
+├── __init__.py
+├── runner.py               # 统一实验入口
+├── export_utils.py         # 图表导出与 zip 打包
+├── thesis_evidence.py      # 论文证据汇总
+├── exp1/                   # 实验一：基线对比
 │   ├── exp1_runner.py
 │   ├── exp1_analyzer.py
 │   ├── exp1_suite.json
 │   └── exp1_experience_library.json
-├── exp2/
+├── exp2/                   # 实验二：模块消融
 │   ├── exp2_runner.py
 │   ├── exp2_suite.json
 │   └── exp2_experience_library.json
-├── exp3/
+├── exp3/                   # 实验三：记忆抗退化
 │   ├── exp3_runner.py
 │   ├── exp3_suite.json
 │   └── exp3_experience_library.json
-├── exp4/
+├── exp4/                   # 实验四：长上下文扩展
 │   ├── exp4_runner.py
 │   ├── exp4_suite.json
 │   └── exp4_experience_library.json
-└── experiment_outputs/
+└── experiment_outputs/     # 实验运行输出
     ├── exp1/
     ├── exp2/
     ├── exp3/
