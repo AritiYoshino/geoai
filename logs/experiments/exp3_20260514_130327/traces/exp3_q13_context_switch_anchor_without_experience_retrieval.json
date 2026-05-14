@@ -1,0 +1,134 @@
+{
+  "task_id": "exp3_q13_context_switch_anchor",
+  "agent_type": "without_experience_retrieval",
+  "agent_name": "ACE w/o Experience Retrieval",
+  "missing_modules": [
+    "experience_retrieval"
+  ],
+  "query": "不要使用 medical_anchor，切换回上一轮记住的 spring_hotel，查找 600 米范围内购物 POI，并说明发生了上下文切换。",
+  "category": "memory_followup",
+  "expected_tools": [
+    "find_nearby_point",
+    "find_nearby_point_filtered"
+  ],
+  "selected_tools": [
+    "find_nearby_point",
+    "find_nearby_point_filtered"
+  ],
+  "execution_trace": [
+    {
+      "step": "ablation_agent",
+      "detail": "missing_modules=experience_retrieval"
+    },
+    {
+      "step": "tool_selection",
+      "detail": [
+        "find_nearby_point",
+        "find_nearby_point_filtered"
+      ]
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": []
+    },
+    {
+      "step": "critic_diagnosis",
+      "detail": ""
+    },
+    {
+      "step": "experience_update",
+      "detail": []
+    }
+  ],
+  "errors": [],
+  "critic_diagnosis": "",
+  "generated_experience": "",
+  "retrieved_experiences": [],
+  "final_answer": "不要使用 medical_anchor，切换回上一轮记住的 spring_hotel，查找 600 米范围内购物 POI，并说明发生了上下文切换。 missing_modules=experience_retrieval  spring_hotel 购物 600 上下文切换 记忆 中心点 上一轮 邻近",
+  "structured_response": {
+    "answer": "不要使用 medical_anchor，切换回上一轮记住的 spring_hotel，查找 600 米范围内购物 POI，并说明发生了上下文切换。 missing_modules=experience_retrieval  spring_hotel 购物 600 上下文切换 记忆 中心点 上一轮 邻近",
+    "selected_tools": [
+      "find_nearby_point",
+      "find_nearby_point_filtered"
+    ],
+    "output_types": [
+      "map_layer",
+      "table",
+      "explanation"
+    ],
+    "entities": [
+      "spring_hotel",
+      "购物",
+      "600",
+      "上下文切换"
+    ],
+    "keywords": [
+      "记忆",
+      "中心点",
+      "上一轮",
+      "邻近"
+    ],
+    "result_count": 1,
+    "retrieved_experience_ids": [],
+    "generated_experience_ids": [],
+    "experience_retrieved": false,
+    "experience_added": false,
+    "memory_used": true,
+    "code_executed": false,
+    "trace_events": [
+      {
+        "step": "ablation_agent",
+        "detail": "missing_modules=experience_retrieval"
+      },
+      {
+        "step": "tool_selection",
+        "detail": [
+          "find_nearby_point",
+          "find_nearby_point_filtered"
+        ]
+      },
+      {
+        "step": "experience_retrieval",
+        "detail": []
+      },
+      {
+        "step": "critic_diagnosis",
+        "detail": ""
+      },
+      {
+        "step": "experience_update",
+        "detail": []
+      }
+    ]
+  },
+  "validation": {
+    "score": 1.0,
+    "success": true,
+    "threshold": 0.86,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "outputs": 1.0,
+      "entities": 1.0,
+      "keywords": 1.0,
+      "result_count": 1.0,
+      "memory_used": 1.0
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 3.95,
+    "runtime": 0.19,
+    "execution_success": true,
+    "result_correctness": 1.0,
+    "has_map_layer": true,
+    "has_table": true,
+    "result_count": 1,
+    "experience_retrieved": false,
+    "experience_added": false,
+    "memory_used": true,
+    "code_executed": false,
+    "critic_used": false,
+    "missing_module_count": 1
+  }
+}

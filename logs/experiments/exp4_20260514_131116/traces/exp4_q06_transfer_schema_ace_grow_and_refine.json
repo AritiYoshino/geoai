@@ -1,0 +1,126 @@
+{
+  "task_id": "exp4_q06_transfer_schema",
+  "agent_type": "ace_grow_and_refine",
+  "strategy": "ace_grow_and_refine",
+  "query": "复用字段 schema 经验：查询生活服务中 type/name 包含“维修”的 POI，先确认可用字段。",
+  "category": "attribute_query",
+  "stage": "mid_transfer",
+  "expected_tools": [
+    "query_poi_by_conditions"
+  ],
+  "selected_tools": [
+    "query_poi_by_conditions"
+  ],
+  "execution_trace": [
+    {
+      "step": "strategy",
+      "detail": "ace_grow_and_refine"
+    },
+    {
+      "step": "tool_selection",
+      "detail": [
+        "query_poi_by_conditions"
+      ]
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "exp4-schema-check"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": []
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "",
+  "retrieved_experiences": [
+    "exp4-schema-check"
+  ],
+  "final_answer": "复用字段 schema 经验：查询生活服务中 type/name 包含“维修”的 POI，先确认可用字段。 ace_grow_and_refine exp4-schema-check 生活服务 维修 schema 字段 经验 type name 确认",
+  "structured_response": {
+    "answer": "复用字段 schema 经验：查询生活服务中 type/name 包含“维修”的 POI，先确认可用字段。 ace_grow_and_refine exp4-schema-check 生活服务 维修 schema 字段 经验 type name 确认",
+    "selected_tools": [
+      "query_poi_by_conditions"
+    ],
+    "output_types": [
+      "map_layer",
+      "table",
+      "explanation"
+    ],
+    "entities": [
+      "生活服务",
+      "维修",
+      "schema",
+      "字段"
+    ],
+    "keywords": [
+      "经验",
+      "type",
+      "name",
+      "确认"
+    ],
+    "result_count": 1,
+    "retrieved_experience_ids": [
+      "exp4-schema-check"
+    ],
+    "generated_experience_ids": [],
+    "experience_retrieved": true,
+    "experience_added": false,
+    "code_executed": false,
+    "diagnosis": "",
+    "trace_events": [
+      {
+        "step": "strategy",
+        "detail": "ace_grow_and_refine"
+      },
+      {
+        "step": "tool_selection",
+        "detail": [
+          "query_poi_by_conditions"
+        ]
+      },
+      {
+        "step": "experience_retrieval",
+        "detail": [
+          "exp4-schema-check"
+        ]
+      },
+      {
+        "step": "experience_update",
+        "detail": []
+      }
+    ]
+  },
+  "validation": {
+    "score": 1.0,
+    "success": true,
+    "threshold": 0.84,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "outputs": 1.0,
+      "entities": 1.0,
+      "keywords": 1.0,
+      "result_count": 1.0,
+      "experience_retrieved": 1.0
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 3.15,
+    "runtime": 0.125,
+    "execution_success": true,
+    "result_correctness": 1.0,
+    "has_map_layer": true,
+    "has_table": true,
+    "result_count": 1,
+    "experience_retrieved": true,
+    "experience_added": false,
+    "code_executed": false,
+    "library_size": 4
+  }
+}

@@ -1,0 +1,64 @@
+[startup] importing web server modules...
+[startup] web server modules imported
+[startup] starting GeoAI WebGIS
+[startup] loading .env
+[startup] [timing] load .env: 0.002s
+[startup] importing map handler
+[startup] [timing] import map handler: 0.715s
+[startup] initializing map handler
+[startup] [timing] initialize map handler: 0.001s
+[startup] loading GeoJSON layers from data/geodata
+[startup] [timing] load GeoJSON layer metadata: 2.049s
+[startup] importing AI handler and agent modules
+[startup][timing] import langchain_deepseek.ChatDeepSeek: 2.311s
+[startup][timing] import tools.buffer_tool: 0.002s
+[startup][timing] import tools.clustering_tool: 0.849s
+[startup][timing] import tools.code_executor: 0.001s
+[startup][timing] import tools.detail: 0.001s
+[startup][timing] import tools.export_tool: 0.001s
+[startup][timing] import tools.overlay_tool: 0.001s
+[startup][timing] import tools.proximity_tool: 0.001s
+[startup][timing] import tools.query: 0.001s
+[startup][timing] import tools.nearby: 0.001s
+[startup][timing] import tools.search: 0.000s
+[startup][timing] import tools.statistics_tool: 0.000s
+[startup][timing] import tools package total: 0.862s
+[startup][timing] import agents: 0.867s
+[startup][timing] import core AI dependencies: 0.000s
+[startup][timing] import tools: 0.000s
+[startup][timing] import ai_handler module total: 3.181s
+[startup] [timing] import AI handler and agent modules: 3.184s
+[startup] initializing AI handler and agents
+[startup][timing] AIHandler disable proxy env: 0.000s
+[startup][timing] AIHandler create ChatDeepSeek: 0.827s
+[startup][timing] AIHandler create ExperienceBankManager: 0.001s
+[startup][timing] AIHandler create ExperienceLibrary: 0.000s
+[startup][timing] AIHandler create ContextManager: 0.004s
+[startup][timing] create tool execute_spatial_code: 0.002s
+[startup][timing] create tool get_poi_by_index: 0.002s
+[startup][timing] create tool search_poi: 0.002s
+[startup][timing] create tool query_poi_by_conditions: 0.002s
+[startup][timing] create tool find_nearby: 0.002s
+[startup][timing] create tool find_nearby_point: 0.003s
+[startup][timing] create tool find_nearby_point_filtered: 0.003s
+[startup][timing] create tool buffer_analysis: 0.005s
+[startup][timing] create tool overlay_layers: 0.002s
+[startup][timing] create tool spatial_join: 0.002s
+[startup][timing] create tool nearest_neighbor: 0.003s
+[startup][timing] create tool dbscan: 0.002s
+[startup][timing] create tool hotspot: 0.003s
+[startup][timing] create tool statistics: 0.002s
+[startup][timing] create tool export: 0.003s
+[startup][timing] AIHandler create tools: 0.040s
+[startup][timing] AIHandler create CodeAgent: 0.000s
+[startup][timing] AIHandler create SpatialAnalystAgent: 0.053s
+[startup][timing] AIHandler create CriticAgent: 0.000s
+[startup][timing] AIHandler create EvolutionAgent: 0.000s
+[startup][timing] AIHandler create CoordinatorAgent: 0.000s
+[startup][timing] AIHandler init total: 0.929s
+[startup] [timing] initialize AI handler and agents: 0.929s
+[startup] application state ready
+[startup] [timing] application state total: 6.890s
+[startup] binding local server on 127.0.0.1:8000-8010
+[startup] GeoAI WebGIS running locally at http://127.0.0.1:8000
+[startup] idle auto-shutdown enabled after 3600s without requests

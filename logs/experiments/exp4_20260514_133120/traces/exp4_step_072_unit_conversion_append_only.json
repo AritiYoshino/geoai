@@ -1,0 +1,90 @@
+{
+  "task_id": "exp4_step_072_unit_conversion",
+  "agent_type": "append_only",
+  "strategy": "append_only",
+  "adaptation_step": 72,
+  "query": "Step 72: 处理 容量 中的单位换算和阈值判断，保留前序换算规则。",
+  "category": "quantitative_reasoning",
+  "expected_skill": "unit_conversion",
+  "novelty": "new_pattern",
+  "expected_tools": [
+    "reasoning",
+    "calculator"
+  ],
+  "selected_tools": [
+    "reasoning"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 72
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "unit_conversion-002"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "unit_conversion-072"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 25299
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [
+    "context_stability_miss:unit_conversion"
+  ],
+  "error_signature": [
+    "unit_conversion"
+  ],
+  "critic_diagnosis": "unit_conversion evidence missing after context update",
+  "generated_experience": "unit_conversion-072",
+  "retrieved_experiences": [
+    "unit_conversion-002"
+  ],
+  "final_answer": "append_only step=72 skill=unit_conversion accuracy=0.256 context_tokens=25299 retrieved=1 generated=1",
+  "structured_response": {
+    "accuracy": 0.256,
+    "context_token_count": 25299,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "unit_conversion-002"
+    ],
+    "generated_experience_ids": [
+      "unit_conversion-072"
+    ]
+  },
+  "validation": {
+    "score": 0.256,
+    "success": false,
+    "threshold": 0.72,
+    "missing": [
+      "unit_conversion"
+    ],
+    "details": {
+      "tools": 1.0,
+      "accuracy": 0.256
+    }
+  },
+  "success": false,
+  "metrics": {
+    "turns": 3.55,
+    "runtime": 0.12,
+    "execution_success": false,
+    "result_correctness": 0.256,
+    "context_token_count": 25299,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 82,
+    "compression_event": ""
+  }
+}

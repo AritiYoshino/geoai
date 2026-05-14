@@ -1,0 +1,3909 @@
+{
+  "run_id": "exp1_20260512_183605",
+  "experiment_id": "exp1",
+  "name": "总体任务成功率对比",
+  "created_at": "2026-05-12T18:36:05",
+  "config": {
+    "use_critic": true,
+    "use_evolution": true,
+    "use_experience_retrieval": true,
+    "use_code_agent": true,
+    "use_context_manager": true,
+    "use_real_ace": false,
+    "mock_mode": true
+  },
+  "frameworks": {
+    "base_agent": {
+      "name": "Base Agent",
+      "meaning": "复用主系统工具/代码执行接口，但不使用历史对话记忆、经验检索和经验写入，作为无上下文基线。"
+    },
+    "rag_agent": {
+      "name": "RAG Agent",
+      "meaning": "复用主系统工具/代码执行接口，并启用经验库检索；不把本轮诊断写回经验库，用于验证检索增强本身的收益。"
+    },
+    "ace_agent": {
+      "name": "ACE Agent",
+      "meaning": "完整复用主系统 ACE 链路：上下文记忆、经验检索、工具/代码执行、Critic 诊断和 Evolution 经验写入。"
+    }
+  },
+  "dataset": {
+    "workbook": "data\\experiments\\exp1_workbook.json",
+    "reference_answers": "data\\experiments\\exp1_reference_answers.json",
+    "task_count": 12,
+    "success_threshold": 0.72,
+    "capability_coverage": {
+      "tool_search": 2,
+      "map_highlight": 3,
+      "tool_query": 1,
+      "schema_following": 2,
+      "nearby_analysis": 2,
+      "crs_awareness": 2,
+      "buffer_analysis": 1,
+      "map_layer": 1,
+      "overlay_analysis": 1,
+      "geometry_type": 1,
+      "spatial_join": 2,
+      "aggregation": 1,
+      "polygon_highlight": 1,
+      "hotspot_analysis": 1,
+      "raster_or_grid_output": 1,
+      "execute_code": 1,
+      "area_calculation": 1,
+      "conversation_memory": 2,
+      "experience_retrieval": 1,
+      "critic_diagnosis": 1,
+      "experience_evolution": 1
+    }
+  },
+  "groups": {
+    "base_agent": {
+      "task_success_rate": 0.75,
+      "tool_selection_accuracy": 0.9166666666666666,
+      "execution_success_rate": 0.75,
+      "result_correctness": 0.87475,
+      "average_turns": 2.5,
+      "average_runtime": 0.1075,
+      "memory_success_rate": 0.0,
+      "experience_retrieval_rate": 0.0,
+      "experience_add_rate": 0.0,
+      "code_execution_success_rate": 1.0,
+      "user_intervention_count": 0,
+      "error_count": 3
+    },
+    "rag_agent": {
+      "task_success_rate": 0.9166666666666666,
+      "tool_selection_accuracy": 0.9166666666666666,
+      "execution_success_rate": 0.9166666666666666,
+      "result_correctness": 0.93,
+      "average_turns": 3.1,
+      "average_runtime": 0.11,
+      "memory_success_rate": 0.0,
+      "experience_retrieval_rate": 1.0,
+      "experience_add_rate": 0.0,
+      "code_execution_success_rate": 1.0,
+      "user_intervention_count": 0,
+      "error_count": 1
+    },
+    "ace_agent": {
+      "task_success_rate": 1.0,
+      "tool_selection_accuracy": 1.0,
+      "execution_success_rate": 1.0,
+      "result_correctness": 1.0,
+      "average_turns": 3.5,
+      "average_runtime": 0.1125,
+      "memory_success_rate": 1.0,
+      "experience_retrieval_rate": 1.0,
+      "experience_add_rate": 1.0,
+      "code_execution_success_rate": 1.0,
+      "user_intervention_count": 0,
+      "error_count": 0
+    }
+  },
+  "traces": [
+    {
+      "task_id": "exp1_q01_search",
+      "agent_type": "base_agent",
+      "query": "搜索名称包含医院的 POI，并在地图上高亮结果。",
+      "category": "poi_search",
+      "expected_tools": [
+        "search_poi"
+      ],
+      "selected_tools": [
+        "search_poi"
+      ],
+      "execution_trace": [
+        {
+          "step": "agent_mode",
+          "detail": "base_agent"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "search_poi"
+          ]
+        },
+        {
+          "step": "reference_validation",
+          "detail": "structured answer will be scored against reference answers"
+        }
+      ],
+      "errors": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "搜索名称包含医院的 POI，并在地图上高亮结果。 已按主系统工具链执行。 医院 医疗 搜索 高亮 POI",
+      "structured_response": {
+        "answer": "搜索名称包含医院的 POI，并在地图上高亮结果。 已按主系统工具链执行。 医院 医疗 搜索 高亮 POI",
+        "selected_tools": [
+          "search_poi"
+        ],
+        "output_types": [
+          "map_layer",
+          "table"
+        ],
+        "entities": [
+          "医院",
+          "医疗"
+        ],
+        "keywords": [
+          "搜索",
+          "高亮",
+          "POI"
+        ],
+        "result_count": 1,
+        "memory_used": false,
+        "memory_written": false,
+        "experience_retrieved": false,
+        "experience_added": false,
+        "code_executed": false,
+        "trace_events": [
+          {
+            "step": "agent_mode",
+            "detail": "base_agent"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "search_poi"
+            ]
+          },
+          {
+            "step": "reference_validation",
+            "detail": "structured answer will be scored against reference answers"
+          }
+        ],
+        "diagnosis": ""
+      },
+      "validation": {
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.72,
+        "missing": [],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 2.0,
+        "runtime": 0.11,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "memory_used": false,
+        "experience_retrieved": false,
+        "experience_added": false,
+        "code_executed": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "exp1_q02_attribute_query",
+      "agent_type": "base_agent",
+      "query": "查询餐饮图层中 type 包含火锅的点位，返回结果表并高亮。",
+      "category": "attribute_query",
+      "expected_tools": [
+        "query_poi_by_conditions"
+      ],
+      "selected_tools": [
+        "query_poi_by_conditions"
+      ],
+      "execution_trace": [
+        {
+          "step": "agent_mode",
+          "detail": "base_agent"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "query_poi_by_conditions"
+          ]
+        },
+        {
+          "step": "reference_validation",
+          "detail": "structured answer will be scored against reference answers"
+        }
+      ],
+      "errors": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "查询餐饮图层中 type 包含火锅的点位，返回结果表并高亮。 已按主系统工具链执行。 餐饮 火锅 type 查询 字段 高亮",
+      "structured_response": {
+        "answer": "查询餐饮图层中 type 包含火锅的点位，返回结果表并高亮。 已按主系统工具链执行。 餐饮 火锅 type 查询 字段 高亮",
+        "selected_tools": [
+          "query_poi_by_conditions"
+        ],
+        "output_types": [
+          "map_layer",
+          "table"
+        ],
+        "entities": [
+          "餐饮",
+          "火锅",
+          "type"
+        ],
+        "keywords": [
+          "查询",
+          "字段",
+          "高亮"
+        ],
+        "result_count": 1,
+        "memory_used": false,
+        "memory_written": false,
+        "experience_retrieved": false,
+        "experience_added": false,
+        "code_executed": false,
+        "trace_events": [
+          {
+            "step": "agent_mode",
+            "detail": "base_agent"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "query_poi_by_conditions"
+            ]
+          },
+          {
+            "step": "reference_validation",
+            "detail": "structured answer will be scored against reference answers"
+          }
+        ],
+        "diagnosis": ""
+      },
+      "validation": {
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.72,
+        "missing": [],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 2.0,
+        "runtime": 0.11,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "memory_used": false,
+        "experience_retrieved": false,
+        "experience_added": false,
+        "code_executed": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "exp1_q03_nearby_crs",
+      "agent_type": "base_agent",
+      "query": "找出科教文化图层中学校 500 米范围内的餐饮点。",
+      "category": "nearby_analysis",
+      "expected_tools": [
+        "find_nearby"
+      ],
+      "selected_tools": [
+        "find_nearby"
+      ],
+      "execution_trace": [
+        {
+          "step": "agent_mode",
+          "detail": "base_agent"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "find_nearby"
+          ]
+        },
+        {
+          "step": "reference_validation",
+          "detail": "structured answer will be scored against reference answers"
+        }
+      ],
+      "errors": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "找出科教文化图层中学校 500 米范围内的餐饮点。 已按主系统工具链执行。 科教文化 学校 餐饮 500 米 邻近 距离 CRS 投影",
+      "structured_response": {
+        "answer": "找出科教文化图层中学校 500 米范围内的餐饮点。 已按主系统工具链执行。 科教文化 学校 餐饮 500 米 邻近 距离 CRS 投影",
+        "selected_tools": [
+          "find_nearby"
+        ],
+        "output_types": [
+          "map_layer",
+          "table"
+        ],
+        "entities": [
+          "科教文化",
+          "学校",
+          "餐饮",
+          "500",
+          "米"
+        ],
+        "keywords": [
+          "邻近",
+          "距离",
+          "CRS",
+          "投影"
+        ],
+        "result_count": 1,
+        "memory_used": false,
+        "memory_written": false,
+        "experience_retrieved": false,
+        "experience_added": false,
+        "code_executed": false,
+        "trace_events": [
+          {
+            "step": "agent_mode",
+            "detail": "base_agent"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "find_nearby"
+            ]
+          },
+          {
+            "step": "reference_validation",
+            "detail": "structured answer will be scored against reference answers"
+          }
+        ],
+        "diagnosis": ""
+      },
+      "validation": {
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.72,
+        "missing": [],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 2.0,
+        "runtime": 0.11,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "memory_used": false,
+        "experience_retrieved": false,
+        "experience_added": false,
+        "code_executed": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "exp1_q04_buffer",
+      "agent_type": "base_agent",
+      "query": "为医疗图层生成 800 米缓冲区，并显示缓冲区图层。",
+      "category": "buffer_analysis",
+      "expected_tools": [
+        "buffer_analysis"
+      ],
+      "selected_tools": [
+        "buffer_analysis"
+      ],
+      "execution_trace": [
+        {
+          "step": "agent_mode",
+          "detail": "base_agent"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "buffer_analysis"
+          ]
+        },
+        {
+          "step": "reference_validation",
+          "detail": "structured answer will be scored against reference answers"
+        }
+      ],
+      "errors": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "为医疗图层生成 800 米缓冲区，并显示缓冲区图层。 已按主系统工具链执行。 医疗 800 缓冲区 缓冲区 图层",
+      "structured_response": {
+        "answer": "为医疗图层生成 800 米缓冲区，并显示缓冲区图层。 已按主系统工具链执行。 医疗 800 缓冲区 缓冲区 图层",
+        "selected_tools": [
+          "buffer_analysis"
+        ],
+        "output_types": [
+          "map_layer"
+        ],
+        "entities": [
+          "医疗",
+          "800",
+          "缓冲区"
+        ],
+        "keywords": [
+          "缓冲区",
+          "图层"
+        ],
+        "result_count": 1,
+        "memory_used": false,
+        "memory_written": false,
+        "experience_retrieved": false,
+        "experience_added": false,
+        "code_executed": false,
+        "trace_events": [
+          {
+            "step": "agent_mode",
+            "detail": "base_agent"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "buffer_analysis"
+            ]
+          },
+          {
+            "step": "reference_validation",
+            "detail": "structured answer will be scored against reference answers"
+          }
+        ],
+        "diagnosis": ""
+      },
+      "validation": {
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.72,
+        "missing": [],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 2.0,
+        "runtime": 0.11,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": false,
+        "result_count": 1,
+        "memory_used": false,
+        "experience_retrieved": false,
+        "experience_added": false,
+        "code_executed": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "exp1_q05_overlay",
+      "agent_type": "base_agent",
+      "query": "叠加餐饮点和成都行政区，找出行政区内餐饮覆盖情况。",
+      "category": "overlay_analysis",
+      "expected_tools": [
+        "overlay_layers"
+      ],
+      "selected_tools": [
+        "overlay_layers"
+      ],
+      "execution_trace": [
+        {
+          "step": "agent_mode",
+          "detail": "base_agent"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "overlay_layers"
+          ]
+        },
+        {
+          "step": "reference_validation",
+          "detail": "structured answer will be scored against reference answers"
+        }
+      ],
+      "errors": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "叠加餐饮点和成都行政区，找出行政区内餐饮覆盖情况。 已按主系统工具链执行。 餐饮 成都行政区 叠加 叠加 行政区 覆盖",
+      "structured_response": {
+        "answer": "叠加餐饮点和成都行政区，找出行政区内餐饮覆盖情况。 已按主系统工具链执行。 餐饮 成都行政区 叠加 叠加 行政区 覆盖",
+        "selected_tools": [
+          "overlay_layers"
+        ],
+        "output_types": [
+          "map_layer",
+          "table"
+        ],
+        "entities": [
+          "餐饮",
+          "成都行政区",
+          "叠加"
+        ],
+        "keywords": [
+          "叠加",
+          "行政区",
+          "覆盖"
+        ],
+        "result_count": 1,
+        "memory_used": false,
+        "memory_written": false,
+        "experience_retrieved": false,
+        "experience_added": false,
+        "code_executed": false,
+        "trace_events": [
+          {
+            "step": "agent_mode",
+            "detail": "base_agent"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "overlay_layers"
+            ]
+          },
+          {
+            "step": "reference_validation",
+            "detail": "structured answer will be scored against reference answers"
+          }
+        ],
+        "diagnosis": ""
+      },
+      "validation": {
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.72,
+        "missing": [],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 3.0,
+        "runtime": 0.11,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "memory_used": false,
+        "experience_retrieved": false,
+        "experience_added": false,
+        "code_executed": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "exp1_q06_spatial_join",
+      "agent_type": "base_agent",
+      "query": "统计每个行政区内购物 POI 数量，并按数量着色显示。",
+      "category": "spatial_join",
+      "expected_tools": [
+        "spatial_join_layers"
+      ],
+      "selected_tools": [
+        "spatial_join_layers"
+      ],
+      "execution_trace": [
+        {
+          "step": "agent_mode",
+          "detail": "base_agent"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "spatial_join_layers"
+          ]
+        },
+        {
+          "step": "reference_validation",
+          "detail": "structured answer will be scored against reference answers"
+        }
+      ],
+      "errors": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "统计每个行政区内购物 POI 数量，并按数量着色显示。 已按主系统工具链执行。 购物 行政区 poi_count 统计 数量 着色",
+      "structured_response": {
+        "answer": "统计每个行政区内购物 POI 数量，并按数量着色显示。 已按主系统工具链执行。 购物 行政区 poi_count 统计 数量 着色",
+        "selected_tools": [
+          "spatial_join_layers"
+        ],
+        "output_types": [
+          "map_layer",
+          "table"
+        ],
+        "entities": [
+          "购物",
+          "行政区",
+          "poi_count"
+        ],
+        "keywords": [
+          "统计",
+          "数量",
+          "着色"
+        ],
+        "result_count": 1,
+        "memory_used": false,
+        "memory_written": false,
+        "experience_retrieved": false,
+        "experience_added": false,
+        "code_executed": false,
+        "trace_events": [
+          {
+            "step": "agent_mode",
+            "detail": "base_agent"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "spatial_join_layers"
+            ]
+          },
+          {
+            "step": "reference_validation",
+            "detail": "structured answer will be scored against reference answers"
+          }
+        ],
+        "diagnosis": ""
+      },
+      "validation": {
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.72,
+        "missing": [],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 3.0,
+        "runtime": 0.11,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "memory_used": false,
+        "experience_retrieved": false,
+        "experience_added": false,
+        "code_executed": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "exp1_q07_hotspot",
+      "agent_type": "base_agent",
+      "query": "生成医疗 POI 的 1000 米网格热点分析图层。",
+      "category": "hotspot",
+      "expected_tools": [
+        "hotspot_analysis"
+      ],
+      "selected_tools": [
+        "hotspot_analysis"
+      ],
+      "execution_trace": [
+        {
+          "step": "agent_mode",
+          "detail": "base_agent"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "hotspot_analysis"
+          ]
+        },
+        {
+          "step": "reference_validation",
+          "detail": "structured answer will be scored against reference answers"
+        }
+      ],
+      "errors": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "生成医疗 POI 的 1000 米网格热点分析图层。 已按主系统工具链执行。 医疗 1000 网格 热点 热点 网格 count",
+      "structured_response": {
+        "answer": "生成医疗 POI 的 1000 米网格热点分析图层。 已按主系统工具链执行。 医疗 1000 网格 热点 热点 网格 count",
+        "selected_tools": [
+          "hotspot_analysis"
+        ],
+        "output_types": [
+          "map_layer",
+          "grid"
+        ],
+        "entities": [
+          "医疗",
+          "1000",
+          "网格",
+          "热点"
+        ],
+        "keywords": [
+          "热点",
+          "网格",
+          "count"
+        ],
+        "result_count": 1,
+        "memory_used": false,
+        "memory_written": false,
+        "experience_retrieved": false,
+        "experience_added": false,
+        "code_executed": false,
+        "trace_events": [
+          {
+            "step": "agent_mode",
+            "detail": "base_agent"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "hotspot_analysis"
+            ]
+          },
+          {
+            "step": "reference_validation",
+            "detail": "structured answer will be scored against reference answers"
+          }
+        ],
+        "diagnosis": ""
+      },
+      "validation": {
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.72,
+        "missing": [],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 3.0,
+        "runtime": 0.11,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": false,
+        "result_count": 1,
+        "memory_used": false,
+        "experience_retrieved": false,
+        "experience_added": false,
+        "code_executed": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "exp1_q08_code_density",
+      "agent_type": "base_agent",
+      "query": "计算各行政区餐饮 POI 密度，并输出排名前 5 的行政区。",
+      "category": "code_required",
+      "expected_tools": [
+        "execute_spatial_code"
+      ],
+      "selected_tools": [
+        "execute_spatial_code"
+      ],
+      "execution_trace": [
+        {
+          "step": "agent_mode",
+          "detail": "base_agent"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "execute_spatial_code"
+          ]
+        },
+        {
+          "step": "reference_validation",
+          "detail": "structured answer will be scored against reference answers"
+        }
+      ],
+      "errors": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "计算各行政区餐饮 POI 密度，并输出排名前 5 的行政区。 已按主系统工具链执行。 使用 GeoPandas 代码计算行政区面积、餐饮数量和密度排名。 餐饮 行政区 密度 前 5 GeoPandas 面积 密度 排名",
+      "structured_response": {
+        "answer": "计算各行政区餐饮 POI 密度，并输出排名前 5 的行政区。 已按主系统工具链执行。 使用 GeoPandas 代码计算行政区面积、餐饮数量和密度排名。 餐饮 行政区 密度 前 5 GeoPandas 面积 密度 排名",
+        "selected_tools": [
+          "execute_spatial_code"
+        ],
+        "output_types": [
+          "table"
+        ],
+        "entities": [
+          "餐饮",
+          "行政区",
+          "密度",
+          "前 5"
+        ],
+        "keywords": [
+          "GeoPandas",
+          "面积",
+          "密度",
+          "排名"
+        ],
+        "result_count": 1,
+        "memory_used": false,
+        "memory_written": false,
+        "experience_retrieved": false,
+        "experience_added": false,
+        "code_executed": true,
+        "trace_events": [
+          {
+            "step": "agent_mode",
+            "detail": "base_agent"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "execute_spatial_code"
+            ]
+          },
+          {
+            "step": "reference_validation",
+            "detail": "structured answer will be scored against reference answers"
+          }
+        ],
+        "diagnosis": ""
+      },
+      "validation": {
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.72,
+        "missing": [],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0,
+          "code_executed": 1.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 3.0,
+        "runtime": 0.11,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": false,
+        "has_table": true,
+        "result_count": 1,
+        "memory_used": false,
+        "experience_retrieved": false,
+        "experience_added": false,
+        "code_executed": true,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "exp1_q09_memory_seed",
+      "agent_type": "base_agent",
+      "query": "搜索名称包含春熙路的住宿服务 POI，记住最可能的第一个结果。",
+      "category": "memory_seed",
+      "expected_tools": [
+        "search_poi"
+      ],
+      "selected_tools": [
+        "search_poi"
+      ],
+      "execution_trace": [
+        {
+          "step": "agent_mode",
+          "detail": "base_agent"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "search_poi"
+          ]
+        },
+        {
+          "step": "reference_validation",
+          "detail": "structured answer will be scored against reference answers"
+        }
+      ],
+      "errors": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "搜索名称包含春熙路的住宿服务 POI，记住最可能的第一个结果。 已按主系统工具链执行。 春熙路 住宿服务 记住 第一个结果 POI",
+      "structured_response": {
+        "answer": "搜索名称包含春熙路的住宿服务 POI，记住最可能的第一个结果。 已按主系统工具链执行。 春熙路 住宿服务 记住 第一个结果 POI",
+        "selected_tools": [
+          "search_poi"
+        ],
+        "output_types": [
+          "map_layer",
+          "table"
+        ],
+        "entities": [
+          "春熙路",
+          "住宿服务"
+        ],
+        "keywords": [
+          "记住",
+          "第一个结果",
+          "POI"
+        ],
+        "result_count": 1,
+        "memory_used": false,
+        "memory_written": false,
+        "experience_retrieved": false,
+        "experience_added": false,
+        "code_executed": false,
+        "trace_events": [
+          {
+            "step": "agent_mode",
+            "detail": "base_agent"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "search_poi"
+            ]
+          },
+          {
+            "step": "reference_validation",
+            "detail": "structured answer will be scored against reference answers"
+          }
+        ],
+        "diagnosis": ""
+      },
+      "validation": {
+        "score": 0.8,
+        "success": true,
+        "threshold": 0.72,
+        "missing": [
+          "memory_written"
+        ],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0,
+          "memory_written": 0.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 2.0,
+        "runtime": 0.11,
+        "execution_success": true,
+        "result_correctness": 0.8,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "memory_used": false,
+        "experience_retrieved": false,
+        "experience_added": false,
+        "code_executed": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "exp1_q10_memory_followup",
+      "agent_type": "base_agent",
+      "query": "以上面那个住宿点为中心，找 1 公里范围内的餐饮点。",
+      "category": "memory_followup",
+      "expected_tools": [
+        "find_nearby_point",
+        "find_nearby_point_filtered"
+      ],
+      "selected_tools": [],
+      "execution_trace": [
+        {
+          "step": "agent_mode",
+          "detail": "base_agent"
+        },
+        {
+          "step": "tool_selection",
+          "detail": []
+        },
+        {
+          "step": "reference_validation",
+          "detail": "structured answer will be scored against reference answers"
+        }
+      ],
+      "errors": [
+        "answer_mismatch:expected_tools,result_count,memory_used"
+      ],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "以那个点为中心，找 1 公里范围内的餐饮点。 已按主系统工具链执行。  餐饮 1 公里  中心 邻近",
+      "structured_response": {
+        "answer": "以那个点为中心，找 1 公里范围内的餐饮点。 已按主系统工具链执行。  餐饮 1 公里  中心 邻近",
+        "selected_tools": [],
+        "output_types": [
+          "map_layer",
+          "table"
+        ],
+        "entities": [
+          "餐饮",
+          "1 公里"
+        ],
+        "keywords": [
+          "中心",
+          "邻近"
+        ],
+        "result_count": 0,
+        "memory_used": false,
+        "memory_written": false,
+        "experience_retrieved": false,
+        "experience_added": false,
+        "code_executed": false,
+        "trace_events": [
+          {
+            "step": "agent_mode",
+            "detail": "base_agent"
+          },
+          {
+            "step": "tool_selection",
+            "detail": []
+          },
+          {
+            "step": "reference_validation",
+            "detail": "structured answer will be scored against reference answers"
+          }
+        ],
+        "diagnosis": ""
+      },
+      "validation": {
+        "score": 0.367,
+        "success": false,
+        "threshold": 0.72,
+        "missing": [
+          "expected_tools",
+          "result_count",
+          "memory_used"
+        ],
+        "details": {
+          "tools": 0.0,
+          "outputs": 1.0,
+          "entities": 0.667,
+          "keywords": 0.667,
+          "result_count": 0.0,
+          "memory_used": 0.0
+        }
+      },
+      "success": false,
+      "metrics": {
+        "turns": 3.0,
+        "runtime": 0.08,
+        "execution_success": false,
+        "result_correctness": 0.367,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 0,
+        "memory_used": false,
+        "experience_retrieved": false,
+        "experience_added": false,
+        "code_executed": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "exp1_q11_rag_retrieval",
+      "agent_type": "base_agent",
+      "query": "做 500 米邻近分析前，说明并应用距离分析需要统一到米制投影的经验。",
+      "category": "experience_retrieval",
+      "expected_tools": [
+        "find_nearby"
+      ],
+      "selected_tools": [
+        "find_nearby"
+      ],
+      "execution_trace": [
+        {
+          "step": "agent_mode",
+          "detail": "base_agent"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "find_nearby"
+          ]
+        },
+        {
+          "step": "reference_validation",
+          "detail": "structured answer will be scored against reference answers"
+        }
+      ],
+      "errors": [
+        "answer_mismatch:output_types,experience_retrieved"
+      ],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "做 500 米邻近分析前，说明并应用距离分析需要统一到米制投影的经验。 已按主系统工具链执行。 500 米 CRS 米制投影 经验 CRS 投影",
+      "structured_response": {
+        "answer": "做 500 米邻近分析前，说明并应用距离分析需要统一到米制投影的经验。 已按主系统工具链执行。 500 米 CRS 米制投影 经验 CRS 投影",
+        "selected_tools": [
+          "find_nearby"
+        ],
+        "output_types": [
+          "map_layer"
+        ],
+        "entities": [
+          "500",
+          "米",
+          "CRS",
+          "米制投影"
+        ],
+        "keywords": [
+          "经验",
+          "CRS",
+          "投影"
+        ],
+        "result_count": 1,
+        "memory_used": false,
+        "memory_written": false,
+        "experience_retrieved": false,
+        "experience_added": false,
+        "code_executed": false,
+        "trace_events": [
+          {
+            "step": "agent_mode",
+            "detail": "base_agent"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "find_nearby"
+            ]
+          },
+          {
+            "step": "reference_validation",
+            "detail": "structured answer will be scored against reference answers"
+          }
+        ],
+        "diagnosis": ""
+      },
+      "validation": {
+        "score": 0.71,
+        "success": false,
+        "threshold": 0.72,
+        "missing": [
+          "output_types",
+          "experience_retrieved"
+        ],
+        "details": {
+          "tools": 1.0,
+          "outputs": 0.5,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0,
+          "experience_retrieved": 0.0
+        }
+      },
+      "success": false,
+      "metrics": {
+        "turns": 2.0,
+        "runtime": 0.11,
+        "execution_success": false,
+        "result_correctness": 0.71,
+        "has_map_layer": true,
+        "has_table": false,
+        "result_count": 1,
+        "memory_used": false,
+        "experience_retrieved": false,
+        "experience_added": false,
+        "code_executed": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "exp1_q12_experience_add",
+      "agent_type": "base_agent",
+      "query": "如果字段名写错导致查询失败，请诊断原因并把“先检查图层字段再查询”的策略加入经验库。",
+      "category": "experience_evolution",
+      "expected_tools": [
+        "query_poi_by_conditions"
+      ],
+      "selected_tools": [
+        "query_poi_by_conditions"
+      ],
+      "execution_trace": [
+        {
+          "step": "agent_mode",
+          "detail": "base_agent"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "query_poi_by_conditions"
+          ]
+        },
+        {
+          "step": "reference_validation",
+          "detail": "structured answer will be scored against reference answers"
+        }
+      ],
+      "errors": [
+        "answer_mismatch:output_types,experience_added"
+      ],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "如果字段名写错导致查询失败，请诊断原因并把“先检查图层字段再查询”的策略加入经验库。 已按主系统工具链执行。 字段名 查询 经验库 诊断 字段 经验",
+      "structured_response": {
+        "answer": "如果字段名写错导致查询失败，请诊断原因并把“先检查图层字段再查询”的策略加入经验库。 已按主系统工具链执行。 字段名 查询 经验库 诊断 字段 经验",
+        "selected_tools": [
+          "query_poi_by_conditions"
+        ],
+        "output_types": [],
+        "entities": [
+          "字段名",
+          "查询",
+          "经验库"
+        ],
+        "keywords": [
+          "诊断",
+          "字段",
+          "经验"
+        ],
+        "result_count": 0,
+        "memory_used": false,
+        "memory_written": false,
+        "experience_retrieved": false,
+        "experience_added": false,
+        "code_executed": false,
+        "trace_events": [
+          {
+            "step": "agent_mode",
+            "detail": "base_agent"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "query_poi_by_conditions"
+            ]
+          },
+          {
+            "step": "reference_validation",
+            "detail": "structured answer will be scored against reference answers"
+          }
+        ],
+        "diagnosis": ""
+      },
+      "validation": {
+        "score": 0.62,
+        "success": false,
+        "threshold": 0.72,
+        "missing": [
+          "output_types",
+          "experience_added"
+        ],
+        "details": {
+          "tools": 1.0,
+          "outputs": 0.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0,
+          "experience_added": 0.0
+        }
+      },
+      "success": false,
+      "metrics": {
+        "turns": 3.0,
+        "runtime": 0.11,
+        "execution_success": false,
+        "result_correctness": 0.62,
+        "has_map_layer": false,
+        "has_table": false,
+        "result_count": 0,
+        "memory_used": false,
+        "experience_retrieved": false,
+        "experience_added": false,
+        "code_executed": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "exp1_q01_search",
+      "agent_type": "rag_agent",
+      "query": "搜索名称包含医院的 POI，并在地图上高亮结果。",
+      "category": "poi_search",
+      "expected_tools": [
+        "search_poi"
+      ],
+      "selected_tools": [
+        "search_poi"
+      ],
+      "execution_trace": [
+        {
+          "step": "agent_mode",
+          "detail": "rag_agent"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "search_poi"
+          ]
+        },
+        {
+          "step": "reference_validation",
+          "detail": "structured answer will be scored against reference answers"
+        }
+      ],
+      "errors": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "搜索名称包含医院的 POI，并在地图上高亮结果。 已按主系统工具链执行。 医院 医疗 搜索 高亮 POI",
+      "structured_response": {
+        "answer": "搜索名称包含医院的 POI，并在地图上高亮结果。 已按主系统工具链执行。 医院 医疗 搜索 高亮 POI",
+        "selected_tools": [
+          "search_poi"
+        ],
+        "output_types": [
+          "map_layer",
+          "table"
+        ],
+        "entities": [
+          "医院",
+          "医疗"
+        ],
+        "keywords": [
+          "搜索",
+          "高亮",
+          "POI"
+        ],
+        "result_count": 1,
+        "memory_used": false,
+        "memory_written": false,
+        "experience_retrieved": false,
+        "experience_added": false,
+        "code_executed": false,
+        "trace_events": [
+          {
+            "step": "agent_mode",
+            "detail": "rag_agent"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "search_poi"
+            ]
+          },
+          {
+            "step": "reference_validation",
+            "detail": "structured answer will be scored against reference answers"
+          }
+        ],
+        "diagnosis": ""
+      },
+      "validation": {
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.72,
+        "missing": [],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 2.6,
+        "runtime": 0.11,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "memory_used": false,
+        "experience_retrieved": false,
+        "experience_added": false,
+        "code_executed": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "exp1_q02_attribute_query",
+      "agent_type": "rag_agent",
+      "query": "查询餐饮图层中 type 包含火锅的点位，返回结果表并高亮。",
+      "category": "attribute_query",
+      "expected_tools": [
+        "query_poi_by_conditions"
+      ],
+      "selected_tools": [
+        "query_poi_by_conditions"
+      ],
+      "execution_trace": [
+        {
+          "step": "agent_mode",
+          "detail": "rag_agent"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "query_poi_by_conditions"
+          ]
+        },
+        {
+          "step": "reference_validation",
+          "detail": "structured answer will be scored against reference answers"
+        }
+      ],
+      "errors": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "查询餐饮图层中 type 包含火锅的点位，返回结果表并高亮。 已按主系统工具链执行。 餐饮 火锅 type 查询 字段 高亮",
+      "structured_response": {
+        "answer": "查询餐饮图层中 type 包含火锅的点位，返回结果表并高亮。 已按主系统工具链执行。 餐饮 火锅 type 查询 字段 高亮",
+        "selected_tools": [
+          "query_poi_by_conditions"
+        ],
+        "output_types": [
+          "map_layer",
+          "table"
+        ],
+        "entities": [
+          "餐饮",
+          "火锅",
+          "type"
+        ],
+        "keywords": [
+          "查询",
+          "字段",
+          "高亮"
+        ],
+        "result_count": 1,
+        "memory_used": false,
+        "memory_written": false,
+        "experience_retrieved": false,
+        "experience_added": false,
+        "code_executed": false,
+        "trace_events": [
+          {
+            "step": "agent_mode",
+            "detail": "rag_agent"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "query_poi_by_conditions"
+            ]
+          },
+          {
+            "step": "reference_validation",
+            "detail": "structured answer will be scored against reference answers"
+          }
+        ],
+        "diagnosis": ""
+      },
+      "validation": {
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.72,
+        "missing": [],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 2.6,
+        "runtime": 0.11,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "memory_used": false,
+        "experience_retrieved": false,
+        "experience_added": false,
+        "code_executed": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "exp1_q03_nearby_crs",
+      "agent_type": "rag_agent",
+      "query": "找出科教文化图层中学校 500 米范围内的餐饮点。",
+      "category": "nearby_analysis",
+      "expected_tools": [
+        "find_nearby"
+      ],
+      "selected_tools": [
+        "find_nearby"
+      ],
+      "execution_trace": [
+        {
+          "step": "agent_mode",
+          "detail": "rag_agent"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "find_nearby"
+          ]
+        },
+        {
+          "step": "reference_validation",
+          "detail": "structured answer will be scored against reference answers"
+        }
+      ],
+      "errors": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [
+        "gis-crs-001"
+      ],
+      "final_answer": "找出科教文化图层中学校 500 米范围内的餐饮点。 已按主系统工具链执行。 根据经验，距离分析前需要检查 CRS 并统一到米制投影。 科教文化 学校 餐饮 500 米 邻近 距离 CRS 投影",
+      "structured_response": {
+        "answer": "找出科教文化图层中学校 500 米范围内的餐饮点。 已按主系统工具链执行。 根据经验，距离分析前需要检查 CRS 并统一到米制投影。 科教文化 学校 餐饮 500 米 邻近 距离 CRS 投影",
+        "selected_tools": [
+          "find_nearby"
+        ],
+        "output_types": [
+          "map_layer",
+          "table"
+        ],
+        "entities": [
+          "科教文化",
+          "学校",
+          "餐饮",
+          "500",
+          "米"
+        ],
+        "keywords": [
+          "邻近",
+          "距离",
+          "CRS",
+          "投影"
+        ],
+        "result_count": 1,
+        "memory_used": false,
+        "memory_written": false,
+        "experience_retrieved": true,
+        "experience_added": false,
+        "code_executed": false,
+        "trace_events": [
+          {
+            "step": "agent_mode",
+            "detail": "rag_agent"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "find_nearby"
+            ]
+          },
+          {
+            "step": "reference_validation",
+            "detail": "structured answer will be scored against reference answers"
+          }
+        ],
+        "diagnosis": ""
+      },
+      "validation": {
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.72,
+        "missing": [],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 2.6,
+        "runtime": 0.11,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "memory_used": false,
+        "experience_retrieved": true,
+        "experience_added": false,
+        "code_executed": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "exp1_q04_buffer",
+      "agent_type": "rag_agent",
+      "query": "为医疗图层生成 800 米缓冲区，并显示缓冲区图层。",
+      "category": "buffer_analysis",
+      "expected_tools": [
+        "buffer_analysis"
+      ],
+      "selected_tools": [
+        "buffer_analysis"
+      ],
+      "execution_trace": [
+        {
+          "step": "agent_mode",
+          "detail": "rag_agent"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "buffer_analysis"
+          ]
+        },
+        {
+          "step": "reference_validation",
+          "detail": "structured answer will be scored against reference answers"
+        }
+      ],
+      "errors": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "为医疗图层生成 800 米缓冲区，并显示缓冲区图层。 已按主系统工具链执行。 医疗 800 缓冲区 缓冲区 图层",
+      "structured_response": {
+        "answer": "为医疗图层生成 800 米缓冲区，并显示缓冲区图层。 已按主系统工具链执行。 医疗 800 缓冲区 缓冲区 图层",
+        "selected_tools": [
+          "buffer_analysis"
+        ],
+        "output_types": [
+          "map_layer"
+        ],
+        "entities": [
+          "医疗",
+          "800",
+          "缓冲区"
+        ],
+        "keywords": [
+          "缓冲区",
+          "图层"
+        ],
+        "result_count": 1,
+        "memory_used": false,
+        "memory_written": false,
+        "experience_retrieved": false,
+        "experience_added": false,
+        "code_executed": false,
+        "trace_events": [
+          {
+            "step": "agent_mode",
+            "detail": "rag_agent"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "buffer_analysis"
+            ]
+          },
+          {
+            "step": "reference_validation",
+            "detail": "structured answer will be scored against reference answers"
+          }
+        ],
+        "diagnosis": ""
+      },
+      "validation": {
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.72,
+        "missing": [],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 2.6,
+        "runtime": 0.11,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": false,
+        "result_count": 1,
+        "memory_used": false,
+        "experience_retrieved": false,
+        "experience_added": false,
+        "code_executed": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "exp1_q05_overlay",
+      "agent_type": "rag_agent",
+      "query": "叠加餐饮点和成都行政区，找出行政区内餐饮覆盖情况。",
+      "category": "overlay_analysis",
+      "expected_tools": [
+        "overlay_layers"
+      ],
+      "selected_tools": [
+        "overlay_layers"
+      ],
+      "execution_trace": [
+        {
+          "step": "agent_mode",
+          "detail": "rag_agent"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "overlay_layers"
+          ]
+        },
+        {
+          "step": "reference_validation",
+          "detail": "structured answer will be scored against reference answers"
+        }
+      ],
+      "errors": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "叠加餐饮点和成都行政区，找出行政区内餐饮覆盖情况。 已按主系统工具链执行。 餐饮 成都行政区 叠加 叠加 行政区 覆盖",
+      "structured_response": {
+        "answer": "叠加餐饮点和成都行政区，找出行政区内餐饮覆盖情况。 已按主系统工具链执行。 餐饮 成都行政区 叠加 叠加 行政区 覆盖",
+        "selected_tools": [
+          "overlay_layers"
+        ],
+        "output_types": [
+          "map_layer",
+          "table"
+        ],
+        "entities": [
+          "餐饮",
+          "成都行政区",
+          "叠加"
+        ],
+        "keywords": [
+          "叠加",
+          "行政区",
+          "覆盖"
+        ],
+        "result_count": 1,
+        "memory_used": false,
+        "memory_written": false,
+        "experience_retrieved": false,
+        "experience_added": false,
+        "code_executed": false,
+        "trace_events": [
+          {
+            "step": "agent_mode",
+            "detail": "rag_agent"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "overlay_layers"
+            ]
+          },
+          {
+            "step": "reference_validation",
+            "detail": "structured answer will be scored against reference answers"
+          }
+        ],
+        "diagnosis": ""
+      },
+      "validation": {
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.72,
+        "missing": [],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 3.6,
+        "runtime": 0.11,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "memory_used": false,
+        "experience_retrieved": false,
+        "experience_added": false,
+        "code_executed": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "exp1_q06_spatial_join",
+      "agent_type": "rag_agent",
+      "query": "统计每个行政区内购物 POI 数量，并按数量着色显示。",
+      "category": "spatial_join",
+      "expected_tools": [
+        "spatial_join_layers"
+      ],
+      "selected_tools": [
+        "spatial_join_layers"
+      ],
+      "execution_trace": [
+        {
+          "step": "agent_mode",
+          "detail": "rag_agent"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "spatial_join_layers"
+          ]
+        },
+        {
+          "step": "reference_validation",
+          "detail": "structured answer will be scored against reference answers"
+        }
+      ],
+      "errors": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "统计每个行政区内购物 POI 数量，并按数量着色显示。 已按主系统工具链执行。 购物 行政区 poi_count 统计 数量 着色",
+      "structured_response": {
+        "answer": "统计每个行政区内购物 POI 数量，并按数量着色显示。 已按主系统工具链执行。 购物 行政区 poi_count 统计 数量 着色",
+        "selected_tools": [
+          "spatial_join_layers"
+        ],
+        "output_types": [
+          "map_layer",
+          "table"
+        ],
+        "entities": [
+          "购物",
+          "行政区",
+          "poi_count"
+        ],
+        "keywords": [
+          "统计",
+          "数量",
+          "着色"
+        ],
+        "result_count": 1,
+        "memory_used": false,
+        "memory_written": false,
+        "experience_retrieved": false,
+        "experience_added": false,
+        "code_executed": false,
+        "trace_events": [
+          {
+            "step": "agent_mode",
+            "detail": "rag_agent"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "spatial_join_layers"
+            ]
+          },
+          {
+            "step": "reference_validation",
+            "detail": "structured answer will be scored against reference answers"
+          }
+        ],
+        "diagnosis": ""
+      },
+      "validation": {
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.72,
+        "missing": [],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 3.6,
+        "runtime": 0.11,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "memory_used": false,
+        "experience_retrieved": false,
+        "experience_added": false,
+        "code_executed": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "exp1_q07_hotspot",
+      "agent_type": "rag_agent",
+      "query": "生成医疗 POI 的 1000 米网格热点分析图层。",
+      "category": "hotspot",
+      "expected_tools": [
+        "hotspot_analysis"
+      ],
+      "selected_tools": [
+        "hotspot_analysis"
+      ],
+      "execution_trace": [
+        {
+          "step": "agent_mode",
+          "detail": "rag_agent"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "hotspot_analysis"
+          ]
+        },
+        {
+          "step": "reference_validation",
+          "detail": "structured answer will be scored against reference answers"
+        }
+      ],
+      "errors": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "生成医疗 POI 的 1000 米网格热点分析图层。 已按主系统工具链执行。 医疗 1000 网格 热点 热点 网格 count",
+      "structured_response": {
+        "answer": "生成医疗 POI 的 1000 米网格热点分析图层。 已按主系统工具链执行。 医疗 1000 网格 热点 热点 网格 count",
+        "selected_tools": [
+          "hotspot_analysis"
+        ],
+        "output_types": [
+          "map_layer",
+          "grid"
+        ],
+        "entities": [
+          "医疗",
+          "1000",
+          "网格",
+          "热点"
+        ],
+        "keywords": [
+          "热点",
+          "网格",
+          "count"
+        ],
+        "result_count": 1,
+        "memory_used": false,
+        "memory_written": false,
+        "experience_retrieved": false,
+        "experience_added": false,
+        "code_executed": false,
+        "trace_events": [
+          {
+            "step": "agent_mode",
+            "detail": "rag_agent"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "hotspot_analysis"
+            ]
+          },
+          {
+            "step": "reference_validation",
+            "detail": "structured answer will be scored against reference answers"
+          }
+        ],
+        "diagnosis": ""
+      },
+      "validation": {
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.72,
+        "missing": [],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 3.6,
+        "runtime": 0.11,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": false,
+        "result_count": 1,
+        "memory_used": false,
+        "experience_retrieved": false,
+        "experience_added": false,
+        "code_executed": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "exp1_q08_code_density",
+      "agent_type": "rag_agent",
+      "query": "计算各行政区餐饮 POI 密度，并输出排名前 5 的行政区。",
+      "category": "code_required",
+      "expected_tools": [
+        "execute_spatial_code"
+      ],
+      "selected_tools": [
+        "execute_spatial_code"
+      ],
+      "execution_trace": [
+        {
+          "step": "agent_mode",
+          "detail": "rag_agent"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "execute_spatial_code"
+          ]
+        },
+        {
+          "step": "reference_validation",
+          "detail": "structured answer will be scored against reference answers"
+        }
+      ],
+      "errors": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "计算各行政区餐饮 POI 密度，并输出排名前 5 的行政区。 已按主系统工具链执行。 使用 GeoPandas 代码计算行政区面积、餐饮数量和密度排名。 餐饮 行政区 密度 前 5 GeoPandas 面积 密度 排名",
+      "structured_response": {
+        "answer": "计算各行政区餐饮 POI 密度，并输出排名前 5 的行政区。 已按主系统工具链执行。 使用 GeoPandas 代码计算行政区面积、餐饮数量和密度排名。 餐饮 行政区 密度 前 5 GeoPandas 面积 密度 排名",
+        "selected_tools": [
+          "execute_spatial_code"
+        ],
+        "output_types": [
+          "table"
+        ],
+        "entities": [
+          "餐饮",
+          "行政区",
+          "密度",
+          "前 5"
+        ],
+        "keywords": [
+          "GeoPandas",
+          "面积",
+          "密度",
+          "排名"
+        ],
+        "result_count": 1,
+        "memory_used": false,
+        "memory_written": false,
+        "experience_retrieved": false,
+        "experience_added": false,
+        "code_executed": true,
+        "trace_events": [
+          {
+            "step": "agent_mode",
+            "detail": "rag_agent"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "execute_spatial_code"
+            ]
+          },
+          {
+            "step": "reference_validation",
+            "detail": "structured answer will be scored against reference answers"
+          }
+        ],
+        "diagnosis": ""
+      },
+      "validation": {
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.72,
+        "missing": [],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0,
+          "code_executed": 1.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 3.6,
+        "runtime": 0.11,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": false,
+        "has_table": true,
+        "result_count": 1,
+        "memory_used": false,
+        "experience_retrieved": false,
+        "experience_added": false,
+        "code_executed": true,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "exp1_q09_memory_seed",
+      "agent_type": "rag_agent",
+      "query": "搜索名称包含春熙路的住宿服务 POI，记住最可能的第一个结果。",
+      "category": "memory_seed",
+      "expected_tools": [
+        "search_poi"
+      ],
+      "selected_tools": [
+        "search_poi"
+      ],
+      "execution_trace": [
+        {
+          "step": "agent_mode",
+          "detail": "rag_agent"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "search_poi"
+          ]
+        },
+        {
+          "step": "reference_validation",
+          "detail": "structured answer will be scored against reference answers"
+        }
+      ],
+      "errors": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "搜索名称包含春熙路的住宿服务 POI，记住最可能的第一个结果。 已按主系统工具链执行。 春熙路 住宿服务 记住 第一个结果 POI",
+      "structured_response": {
+        "answer": "搜索名称包含春熙路的住宿服务 POI，记住最可能的第一个结果。 已按主系统工具链执行。 春熙路 住宿服务 记住 第一个结果 POI",
+        "selected_tools": [
+          "search_poi"
+        ],
+        "output_types": [
+          "map_layer",
+          "table"
+        ],
+        "entities": [
+          "春熙路",
+          "住宿服务"
+        ],
+        "keywords": [
+          "记住",
+          "第一个结果",
+          "POI"
+        ],
+        "result_count": 1,
+        "memory_used": false,
+        "memory_written": false,
+        "experience_retrieved": false,
+        "experience_added": false,
+        "code_executed": false,
+        "trace_events": [
+          {
+            "step": "agent_mode",
+            "detail": "rag_agent"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "search_poi"
+            ]
+          },
+          {
+            "step": "reference_validation",
+            "detail": "structured answer will be scored against reference answers"
+          }
+        ],
+        "diagnosis": ""
+      },
+      "validation": {
+        "score": 0.8,
+        "success": true,
+        "threshold": 0.72,
+        "missing": [
+          "memory_written"
+        ],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0,
+          "memory_written": 0.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 2.6,
+        "runtime": 0.11,
+        "execution_success": true,
+        "result_correctness": 0.8,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "memory_used": false,
+        "experience_retrieved": false,
+        "experience_added": false,
+        "code_executed": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "exp1_q10_memory_followup",
+      "agent_type": "rag_agent",
+      "query": "以上面那个住宿点为中心，找 1 公里范围内的餐饮点。",
+      "category": "memory_followup",
+      "expected_tools": [
+        "find_nearby_point",
+        "find_nearby_point_filtered"
+      ],
+      "selected_tools": [
+        "find_nearby"
+      ],
+      "execution_trace": [
+        {
+          "step": "agent_mode",
+          "detail": "rag_agent"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "find_nearby"
+          ]
+        },
+        {
+          "step": "reference_validation",
+          "detail": "structured answer will be scored against reference answers"
+        }
+      ],
+      "errors": [
+        "answer_mismatch:expected_tools,memory_used"
+      ],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "以上面那个住宿点为中心，找 1 公里范围内的餐饮点。 已按主系统工具链执行。 住宿 餐饮 1 公里 上面 中心 邻近",
+      "structured_response": {
+        "answer": "以上面那个住宿点为中心，找 1 公里范围内的餐饮点。 已按主系统工具链执行。 住宿 餐饮 1 公里 上面 中心 邻近",
+        "selected_tools": [
+          "find_nearby"
+        ],
+        "output_types": [
+          "map_layer",
+          "table"
+        ],
+        "entities": [
+          "住宿",
+          "餐饮",
+          "1 公里"
+        ],
+        "keywords": [
+          "上面",
+          "中心",
+          "邻近"
+        ],
+        "result_count": 1,
+        "memory_used": false,
+        "memory_written": false,
+        "experience_retrieved": false,
+        "experience_added": false,
+        "code_executed": false,
+        "trace_events": [
+          {
+            "step": "agent_mode",
+            "detail": "rag_agent"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "find_nearby"
+            ]
+          },
+          {
+            "step": "reference_validation",
+            "detail": "structured answer will be scored against reference answers"
+          }
+        ],
+        "diagnosis": ""
+      },
+      "validation": {
+        "score": 0.56,
+        "success": false,
+        "threshold": 0.72,
+        "missing": [
+          "expected_tools",
+          "memory_used"
+        ],
+        "details": {
+          "tools": 0.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0,
+          "memory_used": 0.0
+        }
+      },
+      "success": false,
+      "metrics": {
+        "turns": 3.6,
+        "runtime": 0.11,
+        "execution_success": false,
+        "result_correctness": 0.56,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "memory_used": false,
+        "experience_retrieved": false,
+        "experience_added": false,
+        "code_executed": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "exp1_q11_rag_retrieval",
+      "agent_type": "rag_agent",
+      "query": "做 500 米邻近分析前，说明并应用距离分析需要统一到米制投影的经验。",
+      "category": "experience_retrieval",
+      "expected_tools": [
+        "find_nearby"
+      ],
+      "selected_tools": [
+        "find_nearby"
+      ],
+      "execution_trace": [
+        {
+          "step": "agent_mode",
+          "detail": "rag_agent"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "find_nearby"
+          ]
+        },
+        {
+          "step": "reference_validation",
+          "detail": "structured answer will be scored against reference answers"
+        }
+      ],
+      "errors": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [
+        "gis-crs-001"
+      ],
+      "final_answer": "做 500 米邻近分析前，说明并应用距离分析需要统一到米制投影的经验。 已按主系统工具链执行。 根据经验，距离分析前需要检查 CRS 并统一到米制投影。 500 米 CRS 米制投影 经验 CRS 投影",
+      "structured_response": {
+        "answer": "做 500 米邻近分析前，说明并应用距离分析需要统一到米制投影的经验。 已按主系统工具链执行。 根据经验，距离分析前需要检查 CRS 并统一到米制投影。 500 米 CRS 米制投影 经验 CRS 投影",
+        "selected_tools": [
+          "find_nearby"
+        ],
+        "output_types": [
+          "explanation",
+          "map_layer"
+        ],
+        "entities": [
+          "500",
+          "米",
+          "CRS",
+          "米制投影"
+        ],
+        "keywords": [
+          "经验",
+          "CRS",
+          "投影"
+        ],
+        "result_count": 1,
+        "memory_used": false,
+        "memory_written": false,
+        "experience_retrieved": true,
+        "experience_added": false,
+        "code_executed": false,
+        "trace_events": [
+          {
+            "step": "agent_mode",
+            "detail": "rag_agent"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "find_nearby"
+            ]
+          },
+          {
+            "step": "reference_validation",
+            "detail": "structured answer will be scored against reference answers"
+          }
+        ],
+        "diagnosis": ""
+      },
+      "validation": {
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.72,
+        "missing": [],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0,
+          "experience_retrieved": 1.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 2.6,
+        "runtime": 0.11,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": false,
+        "result_count": 1,
+        "memory_used": false,
+        "experience_retrieved": true,
+        "experience_added": false,
+        "code_executed": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "exp1_q12_experience_add",
+      "agent_type": "rag_agent",
+      "query": "如果字段名写错导致查询失败，请诊断原因并把“先检查图层字段再查询”的策略加入经验库。",
+      "category": "experience_evolution",
+      "expected_tools": [
+        "query_poi_by_conditions"
+      ],
+      "selected_tools": [
+        "query_poi_by_conditions"
+      ],
+      "execution_trace": [
+        {
+          "step": "agent_mode",
+          "detail": "rag_agent"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "query_poi_by_conditions"
+          ]
+        },
+        {
+          "step": "reference_validation",
+          "detail": "structured answer will be scored against reference answers"
+        }
+      ],
+      "errors": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "如果字段名写错导致查询失败，请诊断原因并把“先检查图层字段再查询”的策略加入经验库。 已按主系统工具链执行。 字段名 查询 经验库 诊断 字段 经验",
+      "structured_response": {
+        "answer": "如果字段名写错导致查询失败，请诊断原因并把“先检查图层字段再查询”的策略加入经验库。 已按主系统工具链执行。 字段名 查询 经验库 诊断 字段 经验",
+        "selected_tools": [
+          "query_poi_by_conditions"
+        ],
+        "output_types": [
+          "diagnosis"
+        ],
+        "entities": [
+          "字段名",
+          "查询",
+          "经验库"
+        ],
+        "keywords": [
+          "诊断",
+          "字段",
+          "经验"
+        ],
+        "result_count": 0,
+        "memory_used": false,
+        "memory_written": false,
+        "experience_retrieved": false,
+        "experience_added": false,
+        "code_executed": false,
+        "trace_events": [
+          {
+            "step": "agent_mode",
+            "detail": "rag_agent"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "query_poi_by_conditions"
+            ]
+          },
+          {
+            "step": "reference_validation",
+            "detail": "structured answer will be scored against reference answers"
+          }
+        ],
+        "diagnosis": ""
+      },
+      "validation": {
+        "score": 0.8,
+        "success": true,
+        "threshold": 0.72,
+        "missing": [
+          "experience_added"
+        ],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0,
+          "experience_added": 0.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 3.6,
+        "runtime": 0.11,
+        "execution_success": true,
+        "result_correctness": 0.8,
+        "has_map_layer": false,
+        "has_table": false,
+        "result_count": 0,
+        "memory_used": false,
+        "experience_retrieved": false,
+        "experience_added": false,
+        "code_executed": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "exp1_q01_search",
+      "agent_type": "ace_agent",
+      "query": "搜索名称包含医院的 POI，并在地图上高亮结果。",
+      "category": "poi_search",
+      "expected_tools": [
+        "search_poi"
+      ],
+      "selected_tools": [
+        "search_poi"
+      ],
+      "execution_trace": [
+        {
+          "step": "agent_mode",
+          "detail": "ace_agent"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "search_poi"
+          ]
+        },
+        {
+          "step": "reference_validation",
+          "detail": "structured answer will be scored against reference answers"
+        }
+      ],
+      "errors": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "搜索名称包含医院的 POI，并在地图上高亮结果。 已按主系统工具链执行。 医院 医疗 搜索 高亮 POI",
+      "structured_response": {
+        "answer": "搜索名称包含医院的 POI，并在地图上高亮结果。 已按主系统工具链执行。 医院 医疗 搜索 高亮 POI",
+        "selected_tools": [
+          "search_poi"
+        ],
+        "output_types": [
+          "map_layer",
+          "table"
+        ],
+        "entities": [
+          "医院",
+          "医疗"
+        ],
+        "keywords": [
+          "搜索",
+          "高亮",
+          "POI"
+        ],
+        "result_count": 1,
+        "memory_used": false,
+        "memory_written": false,
+        "experience_retrieved": false,
+        "experience_added": false,
+        "code_executed": false,
+        "trace_events": [
+          {
+            "step": "agent_mode",
+            "detail": "ace_agent"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "search_poi"
+            ]
+          },
+          {
+            "step": "reference_validation",
+            "detail": "structured answer will be scored against reference answers"
+          }
+        ],
+        "diagnosis": ""
+      },
+      "validation": {
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.72,
+        "missing": [],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 3.0,
+        "runtime": 0.11,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "memory_used": false,
+        "experience_retrieved": false,
+        "experience_added": false,
+        "code_executed": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "exp1_q02_attribute_query",
+      "agent_type": "ace_agent",
+      "query": "查询餐饮图层中 type 包含火锅的点位，返回结果表并高亮。",
+      "category": "attribute_query",
+      "expected_tools": [
+        "query_poi_by_conditions"
+      ],
+      "selected_tools": [
+        "query_poi_by_conditions"
+      ],
+      "execution_trace": [
+        {
+          "step": "agent_mode",
+          "detail": "ace_agent"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "query_poi_by_conditions"
+          ]
+        },
+        {
+          "step": "reference_validation",
+          "detail": "structured answer will be scored against reference answers"
+        }
+      ],
+      "errors": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "查询餐饮图层中 type 包含火锅的点位，返回结果表并高亮。 已按主系统工具链执行。 餐饮 火锅 type 查询 字段 高亮",
+      "structured_response": {
+        "answer": "查询餐饮图层中 type 包含火锅的点位，返回结果表并高亮。 已按主系统工具链执行。 餐饮 火锅 type 查询 字段 高亮",
+        "selected_tools": [
+          "query_poi_by_conditions"
+        ],
+        "output_types": [
+          "map_layer",
+          "table"
+        ],
+        "entities": [
+          "餐饮",
+          "火锅",
+          "type"
+        ],
+        "keywords": [
+          "查询",
+          "字段",
+          "高亮"
+        ],
+        "result_count": 1,
+        "memory_used": false,
+        "memory_written": false,
+        "experience_retrieved": false,
+        "experience_added": false,
+        "code_executed": false,
+        "trace_events": [
+          {
+            "step": "agent_mode",
+            "detail": "ace_agent"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "query_poi_by_conditions"
+            ]
+          },
+          {
+            "step": "reference_validation",
+            "detail": "structured answer will be scored against reference answers"
+          }
+        ],
+        "diagnosis": ""
+      },
+      "validation": {
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.72,
+        "missing": [],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 3.0,
+        "runtime": 0.11,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "memory_used": false,
+        "experience_retrieved": false,
+        "experience_added": false,
+        "code_executed": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "exp1_q03_nearby_crs",
+      "agent_type": "ace_agent",
+      "query": "找出科教文化图层中学校 500 米范围内的餐饮点。",
+      "category": "nearby_analysis",
+      "expected_tools": [
+        "find_nearby"
+      ],
+      "selected_tools": [
+        "find_nearby"
+      ],
+      "execution_trace": [
+        {
+          "step": "agent_mode",
+          "detail": "ace_agent"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "find_nearby"
+          ]
+        },
+        {
+          "step": "reference_validation",
+          "detail": "structured answer will be scored against reference answers"
+        }
+      ],
+      "errors": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [
+        "gis-crs-001"
+      ],
+      "final_answer": "找出科教文化图层中学校 500 米范围内的餐饮点。 已按主系统工具链执行。 根据经验，距离分析前需要检查 CRS 并统一到米制投影。 科教文化 学校 餐饮 500 米 邻近 距离 CRS 投影",
+      "structured_response": {
+        "answer": "找出科教文化图层中学校 500 米范围内的餐饮点。 已按主系统工具链执行。 根据经验，距离分析前需要检查 CRS 并统一到米制投影。 科教文化 学校 餐饮 500 米 邻近 距离 CRS 投影",
+        "selected_tools": [
+          "find_nearby"
+        ],
+        "output_types": [
+          "map_layer",
+          "table"
+        ],
+        "entities": [
+          "科教文化",
+          "学校",
+          "餐饮",
+          "500",
+          "米"
+        ],
+        "keywords": [
+          "邻近",
+          "距离",
+          "CRS",
+          "投影"
+        ],
+        "result_count": 1,
+        "memory_used": false,
+        "memory_written": false,
+        "experience_retrieved": true,
+        "experience_added": false,
+        "code_executed": false,
+        "trace_events": [
+          {
+            "step": "agent_mode",
+            "detail": "ace_agent"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "find_nearby"
+            ]
+          },
+          {
+            "step": "reference_validation",
+            "detail": "structured answer will be scored against reference answers"
+          }
+        ],
+        "diagnosis": ""
+      },
+      "validation": {
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.72,
+        "missing": [],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 3.0,
+        "runtime": 0.11,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "memory_used": false,
+        "experience_retrieved": true,
+        "experience_added": false,
+        "code_executed": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "exp1_q04_buffer",
+      "agent_type": "ace_agent",
+      "query": "为医疗图层生成 800 米缓冲区，并显示缓冲区图层。",
+      "category": "buffer_analysis",
+      "expected_tools": [
+        "buffer_analysis"
+      ],
+      "selected_tools": [
+        "buffer_analysis"
+      ],
+      "execution_trace": [
+        {
+          "step": "agent_mode",
+          "detail": "ace_agent"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "buffer_analysis"
+          ]
+        },
+        {
+          "step": "reference_validation",
+          "detail": "structured answer will be scored against reference answers"
+        }
+      ],
+      "errors": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "为医疗图层生成 800 米缓冲区，并显示缓冲区图层。 已按主系统工具链执行。 医疗 800 缓冲区 缓冲区 图层",
+      "structured_response": {
+        "answer": "为医疗图层生成 800 米缓冲区，并显示缓冲区图层。 已按主系统工具链执行。 医疗 800 缓冲区 缓冲区 图层",
+        "selected_tools": [
+          "buffer_analysis"
+        ],
+        "output_types": [
+          "map_layer"
+        ],
+        "entities": [
+          "医疗",
+          "800",
+          "缓冲区"
+        ],
+        "keywords": [
+          "缓冲区",
+          "图层"
+        ],
+        "result_count": 1,
+        "memory_used": false,
+        "memory_written": false,
+        "experience_retrieved": false,
+        "experience_added": false,
+        "code_executed": false,
+        "trace_events": [
+          {
+            "step": "agent_mode",
+            "detail": "ace_agent"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "buffer_analysis"
+            ]
+          },
+          {
+            "step": "reference_validation",
+            "detail": "structured answer will be scored against reference answers"
+          }
+        ],
+        "diagnosis": ""
+      },
+      "validation": {
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.72,
+        "missing": [],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 3.0,
+        "runtime": 0.11,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": false,
+        "result_count": 1,
+        "memory_used": false,
+        "experience_retrieved": false,
+        "experience_added": false,
+        "code_executed": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "exp1_q05_overlay",
+      "agent_type": "ace_agent",
+      "query": "叠加餐饮点和成都行政区，找出行政区内餐饮覆盖情况。",
+      "category": "overlay_analysis",
+      "expected_tools": [
+        "overlay_layers"
+      ],
+      "selected_tools": [
+        "overlay_layers"
+      ],
+      "execution_trace": [
+        {
+          "step": "agent_mode",
+          "detail": "ace_agent"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "overlay_layers"
+          ]
+        },
+        {
+          "step": "reference_validation",
+          "detail": "structured answer will be scored against reference answers"
+        }
+      ],
+      "errors": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "叠加餐饮点和成都行政区，找出行政区内餐饮覆盖情况。 已按主系统工具链执行。 餐饮 成都行政区 叠加 叠加 行政区 覆盖",
+      "structured_response": {
+        "answer": "叠加餐饮点和成都行政区，找出行政区内餐饮覆盖情况。 已按主系统工具链执行。 餐饮 成都行政区 叠加 叠加 行政区 覆盖",
+        "selected_tools": [
+          "overlay_layers"
+        ],
+        "output_types": [
+          "map_layer",
+          "table"
+        ],
+        "entities": [
+          "餐饮",
+          "成都行政区",
+          "叠加"
+        ],
+        "keywords": [
+          "叠加",
+          "行政区",
+          "覆盖"
+        ],
+        "result_count": 1,
+        "memory_used": false,
+        "memory_written": false,
+        "experience_retrieved": false,
+        "experience_added": false,
+        "code_executed": false,
+        "trace_events": [
+          {
+            "step": "agent_mode",
+            "detail": "ace_agent"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "overlay_layers"
+            ]
+          },
+          {
+            "step": "reference_validation",
+            "detail": "structured answer will be scored against reference answers"
+          }
+        ],
+        "diagnosis": ""
+      },
+      "validation": {
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.72,
+        "missing": [],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 4.0,
+        "runtime": 0.11,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "memory_used": false,
+        "experience_retrieved": false,
+        "experience_added": false,
+        "code_executed": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "exp1_q06_spatial_join",
+      "agent_type": "ace_agent",
+      "query": "统计每个行政区内购物 POI 数量，并按数量着色显示。",
+      "category": "spatial_join",
+      "expected_tools": [
+        "spatial_join_layers"
+      ],
+      "selected_tools": [
+        "spatial_join_layers"
+      ],
+      "execution_trace": [
+        {
+          "step": "agent_mode",
+          "detail": "ace_agent"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "spatial_join_layers"
+          ]
+        },
+        {
+          "step": "reference_validation",
+          "detail": "structured answer will be scored against reference answers"
+        }
+      ],
+      "errors": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "统计每个行政区内购物 POI 数量，并按数量着色显示。 已按主系统工具链执行。 购物 行政区 poi_count 统计 数量 着色",
+      "structured_response": {
+        "answer": "统计每个行政区内购物 POI 数量，并按数量着色显示。 已按主系统工具链执行。 购物 行政区 poi_count 统计 数量 着色",
+        "selected_tools": [
+          "spatial_join_layers"
+        ],
+        "output_types": [
+          "map_layer",
+          "table"
+        ],
+        "entities": [
+          "购物",
+          "行政区",
+          "poi_count"
+        ],
+        "keywords": [
+          "统计",
+          "数量",
+          "着色"
+        ],
+        "result_count": 1,
+        "memory_used": false,
+        "memory_written": false,
+        "experience_retrieved": false,
+        "experience_added": false,
+        "code_executed": false,
+        "trace_events": [
+          {
+            "step": "agent_mode",
+            "detail": "ace_agent"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "spatial_join_layers"
+            ]
+          },
+          {
+            "step": "reference_validation",
+            "detail": "structured answer will be scored against reference answers"
+          }
+        ],
+        "diagnosis": ""
+      },
+      "validation": {
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.72,
+        "missing": [],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 4.0,
+        "runtime": 0.11,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "memory_used": false,
+        "experience_retrieved": false,
+        "experience_added": false,
+        "code_executed": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "exp1_q07_hotspot",
+      "agent_type": "ace_agent",
+      "query": "生成医疗 POI 的 1000 米网格热点分析图层。",
+      "category": "hotspot",
+      "expected_tools": [
+        "hotspot_analysis"
+      ],
+      "selected_tools": [
+        "hotspot_analysis"
+      ],
+      "execution_trace": [
+        {
+          "step": "agent_mode",
+          "detail": "ace_agent"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "hotspot_analysis"
+          ]
+        },
+        {
+          "step": "reference_validation",
+          "detail": "structured answer will be scored against reference answers"
+        }
+      ],
+      "errors": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "生成医疗 POI 的 1000 米网格热点分析图层。 已按主系统工具链执行。 医疗 1000 网格 热点 热点 网格 count",
+      "structured_response": {
+        "answer": "生成医疗 POI 的 1000 米网格热点分析图层。 已按主系统工具链执行。 医疗 1000 网格 热点 热点 网格 count",
+        "selected_tools": [
+          "hotspot_analysis"
+        ],
+        "output_types": [
+          "map_layer",
+          "grid"
+        ],
+        "entities": [
+          "医疗",
+          "1000",
+          "网格",
+          "热点"
+        ],
+        "keywords": [
+          "热点",
+          "网格",
+          "count"
+        ],
+        "result_count": 1,
+        "memory_used": false,
+        "memory_written": false,
+        "experience_retrieved": false,
+        "experience_added": false,
+        "code_executed": false,
+        "trace_events": [
+          {
+            "step": "agent_mode",
+            "detail": "ace_agent"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "hotspot_analysis"
+            ]
+          },
+          {
+            "step": "reference_validation",
+            "detail": "structured answer will be scored against reference answers"
+          }
+        ],
+        "diagnosis": ""
+      },
+      "validation": {
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.72,
+        "missing": [],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 4.0,
+        "runtime": 0.11,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": false,
+        "result_count": 1,
+        "memory_used": false,
+        "experience_retrieved": false,
+        "experience_added": false,
+        "code_executed": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "exp1_q08_code_density",
+      "agent_type": "ace_agent",
+      "query": "计算各行政区餐饮 POI 密度，并输出排名前 5 的行政区。",
+      "category": "code_required",
+      "expected_tools": [
+        "execute_spatial_code"
+      ],
+      "selected_tools": [
+        "execute_spatial_code"
+      ],
+      "execution_trace": [
+        {
+          "step": "agent_mode",
+          "detail": "ace_agent"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "execute_spatial_code"
+          ]
+        },
+        {
+          "step": "reference_validation",
+          "detail": "structured answer will be scored against reference answers"
+        }
+      ],
+      "errors": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "计算各行政区餐饮 POI 密度，并输出排名前 5 的行政区。 已按主系统工具链执行。 使用 GeoPandas 代码计算行政区面积、餐饮数量和密度排名。 餐饮 行政区 密度 前 5 GeoPandas 面积 密度 排名",
+      "structured_response": {
+        "answer": "计算各行政区餐饮 POI 密度，并输出排名前 5 的行政区。 已按主系统工具链执行。 使用 GeoPandas 代码计算行政区面积、餐饮数量和密度排名。 餐饮 行政区 密度 前 5 GeoPandas 面积 密度 排名",
+        "selected_tools": [
+          "execute_spatial_code"
+        ],
+        "output_types": [
+          "table"
+        ],
+        "entities": [
+          "餐饮",
+          "行政区",
+          "密度",
+          "前 5"
+        ],
+        "keywords": [
+          "GeoPandas",
+          "面积",
+          "密度",
+          "排名"
+        ],
+        "result_count": 1,
+        "memory_used": false,
+        "memory_written": false,
+        "experience_retrieved": false,
+        "experience_added": false,
+        "code_executed": true,
+        "trace_events": [
+          {
+            "step": "agent_mode",
+            "detail": "ace_agent"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "execute_spatial_code"
+            ]
+          },
+          {
+            "step": "reference_validation",
+            "detail": "structured answer will be scored against reference answers"
+          }
+        ],
+        "diagnosis": ""
+      },
+      "validation": {
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.72,
+        "missing": [],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0,
+          "code_executed": 1.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 4.0,
+        "runtime": 0.11,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": false,
+        "has_table": true,
+        "result_count": 1,
+        "memory_used": false,
+        "experience_retrieved": false,
+        "experience_added": false,
+        "code_executed": true,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "exp1_q09_memory_seed",
+      "agent_type": "ace_agent",
+      "query": "搜索名称包含春熙路的住宿服务 POI，记住最可能的第一个结果。",
+      "category": "memory_seed",
+      "expected_tools": [
+        "search_poi"
+      ],
+      "selected_tools": [
+        "search_poi"
+      ],
+      "execution_trace": [
+        {
+          "step": "agent_mode",
+          "detail": "ace_agent"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "search_poi"
+          ]
+        },
+        {
+          "step": "reference_validation",
+          "detail": "structured answer will be scored against reference answers"
+        }
+      ],
+      "errors": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "搜索名称包含春熙路的住宿服务 POI，记住最可能的第一个结果。 已按主系统工具链执行。 春熙路 住宿服务 记住 第一个结果 POI",
+      "structured_response": {
+        "answer": "搜索名称包含春熙路的住宿服务 POI，记住最可能的第一个结果。 已按主系统工具链执行。 春熙路 住宿服务 记住 第一个结果 POI",
+        "selected_tools": [
+          "search_poi"
+        ],
+        "output_types": [
+          "map_layer",
+          "table"
+        ],
+        "entities": [
+          "春熙路",
+          "住宿服务"
+        ],
+        "keywords": [
+          "记住",
+          "第一个结果",
+          "POI"
+        ],
+        "result_count": 1,
+        "memory_used": false,
+        "memory_written": true,
+        "experience_retrieved": false,
+        "experience_added": false,
+        "code_executed": false,
+        "trace_events": [
+          {
+            "step": "agent_mode",
+            "detail": "ace_agent"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "search_poi"
+            ]
+          },
+          {
+            "step": "reference_validation",
+            "detail": "structured answer will be scored against reference answers"
+          }
+        ],
+        "diagnosis": ""
+      },
+      "validation": {
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.72,
+        "missing": [],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0,
+          "memory_written": 1.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 3.0,
+        "runtime": 0.11,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "memory_used": false,
+        "experience_retrieved": false,
+        "experience_added": false,
+        "code_executed": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "exp1_q10_memory_followup",
+      "agent_type": "ace_agent",
+      "query": "以上面那个住宿点为中心，找 1 公里范围内的餐饮点。",
+      "category": "memory_followup",
+      "expected_tools": [
+        "find_nearby_point",
+        "find_nearby_point_filtered"
+      ],
+      "selected_tools": [
+        "find_nearby_point",
+        "find_nearby_point_filtered"
+      ],
+      "execution_trace": [
+        {
+          "step": "agent_mode",
+          "detail": "ace_agent"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "find_nearby_point",
+            "find_nearby_point_filtered"
+          ]
+        },
+        {
+          "step": "reference_validation",
+          "detail": "structured answer will be scored against reference answers"
+        }
+      ],
+      "errors": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "以上面那个住宿点为中心，找 1 公里范围内的餐饮点。 已按主系统工具链执行。 已读取上面那个住宿服务 POI 作为中心点。 住宿 餐饮 1 公里 上面 中心 邻近",
+      "structured_response": {
+        "answer": "以上面那个住宿点为中心，找 1 公里范围内的餐饮点。 已按主系统工具链执行。 已读取上面那个住宿服务 POI 作为中心点。 住宿 餐饮 1 公里 上面 中心 邻近",
+        "selected_tools": [
+          "find_nearby_point",
+          "find_nearby_point_filtered"
+        ],
+        "output_types": [
+          "map_layer",
+          "table"
+        ],
+        "entities": [
+          "住宿",
+          "餐饮",
+          "1 公里"
+        ],
+        "keywords": [
+          "上面",
+          "中心",
+          "邻近"
+        ],
+        "result_count": 1,
+        "memory_used": true,
+        "memory_written": false,
+        "experience_retrieved": false,
+        "experience_added": false,
+        "code_executed": false,
+        "trace_events": [
+          {
+            "step": "agent_mode",
+            "detail": "ace_agent"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "find_nearby_point",
+              "find_nearby_point_filtered"
+            ]
+          },
+          {
+            "step": "reference_validation",
+            "detail": "structured answer will be scored against reference answers"
+          }
+        ],
+        "diagnosis": ""
+      },
+      "validation": {
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.72,
+        "missing": [],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0,
+          "memory_used": 1.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 4.0,
+        "runtime": 0.14,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "memory_used": true,
+        "experience_retrieved": false,
+        "experience_added": false,
+        "code_executed": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "exp1_q11_rag_retrieval",
+      "agent_type": "ace_agent",
+      "query": "做 500 米邻近分析前，说明并应用距离分析需要统一到米制投影的经验。",
+      "category": "experience_retrieval",
+      "expected_tools": [
+        "find_nearby"
+      ],
+      "selected_tools": [
+        "find_nearby"
+      ],
+      "execution_trace": [
+        {
+          "step": "agent_mode",
+          "detail": "ace_agent"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "find_nearby"
+          ]
+        },
+        {
+          "step": "reference_validation",
+          "detail": "structured answer will be scored against reference answers"
+        }
+      ],
+      "errors": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [
+        "gis-crs-001"
+      ],
+      "final_answer": "做 500 米邻近分析前，说明并应用距离分析需要统一到米制投影的经验。 已按主系统工具链执行。 根据经验，距离分析前需要检查 CRS 并统一到米制投影。 500 米 CRS 米制投影 经验 CRS 投影",
+      "structured_response": {
+        "answer": "做 500 米邻近分析前，说明并应用距离分析需要统一到米制投影的经验。 已按主系统工具链执行。 根据经验，距离分析前需要检查 CRS 并统一到米制投影。 500 米 CRS 米制投影 经验 CRS 投影",
+        "selected_tools": [
+          "find_nearby"
+        ],
+        "output_types": [
+          "explanation",
+          "map_layer"
+        ],
+        "entities": [
+          "500",
+          "米",
+          "CRS",
+          "米制投影"
+        ],
+        "keywords": [
+          "经验",
+          "CRS",
+          "投影"
+        ],
+        "result_count": 1,
+        "memory_used": false,
+        "memory_written": false,
+        "experience_retrieved": true,
+        "experience_added": false,
+        "code_executed": false,
+        "trace_events": [
+          {
+            "step": "agent_mode",
+            "detail": "ace_agent"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "find_nearby"
+            ]
+          },
+          {
+            "step": "reference_validation",
+            "detail": "structured answer will be scored against reference answers"
+          }
+        ],
+        "diagnosis": ""
+      },
+      "validation": {
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.72,
+        "missing": [],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0,
+          "experience_retrieved": 1.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 3.0,
+        "runtime": 0.11,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": false,
+        "result_count": 1,
+        "memory_used": false,
+        "experience_retrieved": true,
+        "experience_added": false,
+        "code_executed": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "exp1_q12_experience_add",
+      "agent_type": "ace_agent",
+      "query": "如果字段名写错导致查询失败，请诊断原因并把“先检查图层字段再查询”的策略加入经验库。",
+      "category": "experience_evolution",
+      "expected_tools": [
+        "query_poi_by_conditions"
+      ],
+      "selected_tools": [
+        "query_poi_by_conditions"
+      ],
+      "execution_trace": [
+        {
+          "step": "agent_mode",
+          "detail": "ace_agent"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "query_poi_by_conditions"
+          ]
+        },
+        {
+          "step": "reference_validation",
+          "detail": "structured answer will be scored against reference answers"
+        }
+      ],
+      "errors": [],
+      "critic_diagnosis": "字段名写错；应先读取 schema 再查询。",
+      "generated_experience": "exp1-learned-exp1_q12_experience_add",
+      "retrieved_experiences": [],
+      "final_answer": "如果字段名写错导致查询失败，请诊断原因并把“先检查图层字段再查询”的策略加入经验库。 已按主系统工具链执行。 已诊断字段名问题，并把先检查图层字段再查询的策略加入经验库。 字段名 查询 经验库 诊断 字段 经验",
+      "structured_response": {
+        "answer": "如果字段名写错导致查询失败，请诊断原因并把“先检查图层字段再查询”的策略加入经验库。 已按主系统工具链执行。 已诊断字段名问题，并把先检查图层字段再查询的策略加入经验库。 字段名 查询 经验库 诊断 字段 经验",
+        "selected_tools": [
+          "query_poi_by_conditions"
+        ],
+        "output_types": [
+          "diagnosis"
+        ],
+        "entities": [
+          "字段名",
+          "查询",
+          "经验库"
+        ],
+        "keywords": [
+          "诊断",
+          "字段",
+          "经验"
+        ],
+        "result_count": 0,
+        "memory_used": false,
+        "memory_written": false,
+        "experience_retrieved": false,
+        "experience_added": true,
+        "code_executed": false,
+        "trace_events": [
+          {
+            "step": "agent_mode",
+            "detail": "ace_agent"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "query_poi_by_conditions"
+            ]
+          },
+          {
+            "step": "reference_validation",
+            "detail": "structured answer will be scored against reference answers"
+          }
+        ],
+        "diagnosis": "字段名写错；应先读取 schema 再查询。"
+      },
+      "validation": {
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.72,
+        "missing": [],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0,
+          "experience_added": 1.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 4.0,
+        "runtime": 0.11,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": false,
+        "has_table": false,
+        "result_count": 0,
+        "memory_used": false,
+        "experience_retrieved": false,
+        "experience_added": true,
+        "code_executed": false,
+        "user_intervention_count": 0
+      }
+    }
+  ],
+  "report": {
+    "run_id": "exp1_20260512_183605",
+    "report_id": "exp1_20260512_183605_report",
+    "title": "exp1_20260512_183605_report",
+    "markdown_path": "logs\\experiments\\exp1_20260512_183605\\reports\\exp1_20260512_183605_report.md",
+    "html_path": "logs\\experiments\\exp1_20260512_183605\\reports\\exp1_20260512_183605_report.html",
+    "markdown_url": "/experiment-reports/exp1_20260512_183605/exp1_20260512_183605_report.md?download=1",
+    "html_url": "/experiment-reports/exp1_20260512_183605/exp1_20260512_183605_report.html",
+    "charts": [
+      "logs\\experiments\\exp1_20260512_183605\\reports\\charts\\success_rate.png"
+    ],
+    "created_at": "2026-05-12T18:36:07",
+    "ai_summary_enabled": false
+  }
+}

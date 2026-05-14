@@ -1,0 +1,125 @@
+{
+  "task_id": "exp2_b2_learn_adaptive_buffer_seed",
+  "batch_id": 2,
+  "agent_type": "ace_agent",
+  "query": "学习动态缓冲经验：按学校、医院、购物中心三类 POI 使用不同缓冲半径。",
+  "category": "buffer_analysis",
+  "expected_tools": [
+    "find_nearby"
+  ],
+  "selected_tools": [
+    "find_nearby"
+  ],
+  "execution_trace": [
+    {
+      "step": "agent_mode",
+      "detail": "ace_agent"
+    },
+    {
+      "step": "tool_selection",
+      "detail": [
+        "find_nearby"
+      ]
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": []
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "exp2-adaptive-buffer"
+      ]
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "critic_to_evolution",
+  "generated_experience": "exp2-adaptive-buffer",
+  "retrieved_experiences": [],
+  "final_answer": "学习动态缓冲经验：按学校、医院、购物中心三类 POI 使用不同缓冲半径。 tool_flow_completed learn exp2-adaptive-buffer buffer POI coverage learn dynamic_buffer tiered_radius",
+  "structured_response": {
+    "answer": "学习动态缓冲经验：按学校、医院、购物中心三类 POI 使用不同缓冲半径。 tool_flow_completed learn exp2-adaptive-buffer buffer POI coverage learn dynamic_buffer tiered_radius",
+    "selected_tools": [
+      "find_nearby"
+    ],
+    "output_types": [
+      "map_layer",
+      "table",
+      "diagnosis"
+    ],
+    "entities": [
+      "buffer",
+      "POI",
+      "coverage"
+    ],
+    "keywords": [
+      "learn",
+      "dynamic_buffer",
+      "tiered_radius"
+    ],
+    "result_count": 1,
+    "retrieved_experience_ids": [],
+    "generated_experience_ids": [
+      "exp2-adaptive-buffer"
+    ],
+    "experience_retrieved": false,
+    "experience_added": true,
+    "memory_used": false,
+    "code_executed": false,
+    "trace_events": [
+      {
+        "step": "agent_mode",
+        "detail": "ace_agent"
+      },
+      {
+        "step": "tool_selection",
+        "detail": [
+          "find_nearby"
+        ]
+      },
+      {
+        "step": "experience_retrieval",
+        "detail": []
+      },
+      {
+        "step": "experience_update",
+        "detail": [
+          "exp2-adaptive-buffer"
+        ]
+      }
+    ],
+    "diagnosis": "critic_to_evolution"
+  },
+  "validation": {
+    "score": 1.0,
+    "success": true,
+    "threshold": 0.86,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "outputs": 1.0,
+      "entities": 1.0,
+      "keywords": 1.0,
+      "result_count": 1.0,
+      "experience_added": 1.0
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 3.85,
+    "runtime": 0.16,
+    "execution_success": true,
+    "result_correctness": 1.0,
+    "has_map_layer": true,
+    "has_table": true,
+    "result_count": 1,
+    "experience_retrieved": false,
+    "experience_added": true,
+    "memory_used": false,
+    "code_executed": false,
+    "repair_attempted": false,
+    "repair_success": false,
+    "user_intervention_count": 0
+  }
+}

@@ -1,0 +1,137 @@
+{
+  "task_id": "exp3_q16_adaptive_buffer_transfer_2",
+  "agent_type": "without_code_agent",
+  "agent_name": "ACE w/o CodeAgent",
+  "missing_modules": [
+    "code_agent"
+  ],
+  "query": "按金融服务、餐饮、生活服务三类 POI 使用分级缓冲半径统计覆盖范围，必须复用动态缓冲经验。",
+  "category": "buffer_analysis",
+  "expected_tools": [
+    "find_nearby"
+  ],
+  "selected_tools": [
+    "find_nearby"
+  ],
+  "execution_trace": [
+    {
+      "step": "ablation_agent",
+      "detail": "missing_modules=code_agent"
+    },
+    {
+      "step": "tool_selection",
+      "detail": [
+        "find_nearby"
+      ]
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "exp3-adaptive-buffer"
+      ]
+    },
+    {
+      "step": "critic_diagnosis",
+      "detail": ""
+    },
+    {
+      "step": "experience_update",
+      "detail": []
+    }
+  ],
+  "errors": [],
+  "critic_diagnosis": "",
+  "generated_experience": "",
+  "retrieved_experiences": [
+    "exp3-adaptive-buffer"
+  ],
+  "final_answer": "按金融服务、餐饮、生活服务三类 POI 使用分级缓冲半径统计覆盖范围，必须复用动态缓冲经验。 missing_modules=code_agent  exp3-adaptive-buffer 金融服务 餐饮 生活服务 缓冲 经验 动态缓冲 分级半径 覆盖",
+  "structured_response": {
+    "answer": "按金融服务、餐饮、生活服务三类 POI 使用分级缓冲半径统计覆盖范围，必须复用动态缓冲经验。 missing_modules=code_agent  exp3-adaptive-buffer 金融服务 餐饮 生活服务 缓冲 经验 动态缓冲 分级半径 覆盖",
+    "selected_tools": [
+      "find_nearby"
+    ],
+    "output_types": [
+      "map_layer",
+      "table",
+      "explanation"
+    ],
+    "entities": [
+      "金融服务",
+      "餐饮",
+      "生活服务",
+      "缓冲"
+    ],
+    "keywords": [
+      "经验",
+      "动态缓冲",
+      "分级半径",
+      "覆盖"
+    ],
+    "result_count": 1,
+    "retrieved_experience_ids": [
+      "exp3-adaptive-buffer"
+    ],
+    "generated_experience_ids": [],
+    "experience_retrieved": true,
+    "experience_added": false,
+    "memory_used": false,
+    "code_executed": false,
+    "trace_events": [
+      {
+        "step": "ablation_agent",
+        "detail": "missing_modules=code_agent"
+      },
+      {
+        "step": "tool_selection",
+        "detail": [
+          "find_nearby"
+        ]
+      },
+      {
+        "step": "experience_retrieval",
+        "detail": [
+          "exp3-adaptive-buffer"
+        ]
+      },
+      {
+        "step": "critic_diagnosis",
+        "detail": ""
+      },
+      {
+        "step": "experience_update",
+        "detail": []
+      }
+    ]
+  },
+  "validation": {
+    "score": 1.0,
+    "success": true,
+    "threshold": 0.86,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "outputs": 1.0,
+      "entities": 1.0,
+      "keywords": 1.0,
+      "result_count": 1.0,
+      "experience_retrieved": 1.0
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 3.75,
+    "runtime": 0.15,
+    "execution_success": true,
+    "result_correctness": 1.0,
+    "has_map_layer": true,
+    "has_table": true,
+    "result_count": 1,
+    "experience_retrieved": true,
+    "experience_added": false,
+    "memory_used": false,
+    "code_executed": false,
+    "critic_used": false,
+    "missing_module_count": 1
+  }
+}

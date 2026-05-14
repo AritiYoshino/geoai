@@ -1,0 +1,51 @@
+{
+  "task_id": "task_008_t8_01",
+  "agent_type": "react_agent",
+  "query": "生成医疗 POI 的 1000 米网格热点分析图层",
+  "category": "hotspot",
+  "expected_tools": [
+    "hotspot_analysis"
+  ],
+  "selected_tools": [
+    "hotspot_analysis"
+  ],
+  "execution_trace": [
+    {
+      "step": "intent",
+      "detail": "hotspot"
+    },
+    {
+      "step": "tool_selection",
+      "detail": [
+        "hotspot_analysis"
+      ]
+    },
+    {
+      "step": "evaluation",
+      "detail": "failed"
+    }
+  ],
+  "errors": [
+    "rule_eval_failed:hotspot"
+  ],
+  "error_signature": [
+    "hotspot"
+  ],
+  "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+  "generated_experience": "",
+  "retrieved_experiences": [],
+  "final_answer": "任务未完全满足预期，已记录失败原因。",
+  "success": false,
+  "metrics": {
+    "turns": 3.44,
+    "runtime": 0.947,
+    "execution_success": false,
+    "result_correctness": 0.14240000000000003,
+    "has_map_layer": true,
+    "has_table": true,
+    "result_count": 0,
+    "repair_attempted": false,
+    "repair_success": false,
+    "user_intervention_count": 0
+  }
+}

@@ -1,0 +1,975 @@
+<!doctype html><html lang='zh-CN'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width, initial-scale=1'><title>实验报告</title><style>body{font-family:Inter,'Microsoft YaHei',sans-serif;max-width:1120px;margin:0 auto;padding:32px;color:#172033;line-height:1.7}h1{font-size:30px}h2{margin-top:32px;border-left:4px solid #1769aa;padding-left:10px}table{width:100%;border-collapse:collapse;margin:14px 0 24px;font-size:14px}th,td{border:1px solid #d8e0ea;padding:8px 10px;text-align:left;vertical-align:top}th{background:#eef5fb}img{max-width:100%;border:1px solid #d8e0ea;border-radius:8px}figure{margin:18px 0}figcaption{color:#64748b;font-size:13px}p{margin:10px 0}</style></head><body><h1>总体任务成功率对比 实验报告</h1>
+<p>Run ID：exp1_20260514_150058</p>
+<p>生成时间：2026-05-14T15:01:01</p>
+<p>配置：`{&quot;use_critic&quot;: true, &quot;use_evolution&quot;: true, &quot;use_experience_retrieval&quot;: true, &quot;use_code_agent&quot;: true, &quot;use_context_manager&quot;: true, &quot;use_real_ace&quot;: false, &quot;mock_mode&quot;: true}`</p>
+<h2>实验设计思路</h2>
+<p>实验一采用“习题册 + 参考答案”评测设计，比较 Base Agent、RAG Agent 与 ACE Agent。三组尽量复用主系统工具/代码/Agent 链路，区别在于是否启用历史对话记忆、经验库检索和经验写入；成功率由返回结构与参考答案的匹配分数决定。</p>
+<p>任务展开规模：52 个任务单元；本次 trace 数：156；成功 92，失败 64。</p>
+<p>任务文件：`data/experiments/exp1_workbook.json`。</p>
+<h2>数据集说明</h2>
+<p>实验使用 `data/geodata/` 下的成都 POI 与行政区 GeoJSON 图层，任务集通过自然语言描述调用检索、查询、邻近、缓冲、叠加、空间连接、聚类、热点、统计和导出等 GIS 能力。</p>
+<table><thead><tr>
+<th>数据层</th>
+<th>要素数</th>
+<th>几何类型</th>
+<th>字段示例</th>
+</tr></thead><tbody>
+<tr><td>交通设施</td><td>20226</td><td>Point</td><td>name, type, address, lng, lat, province</td></tr>
+<tr><td>住宿服务</td><td>6473</td><td>Point</td><td>name, type, address, lng, lat, province</td></tr>
+<tr><td>体育</td><td>6753</td><td>Point</td><td>name, type, address, lng, lat, province</td></tr>
+<tr><td>公司</td><td>42299</td><td>Point</td><td>name, type, address, lng, lat, province</td></tr>
+<tr><td>医疗</td><td>12974</td><td>Point</td><td>name, type, address, lng, lat, province</td></tr>
+<tr><td>商务住宅</td><td>11726</td><td>Point</td><td>name, type, address, lng, lat, province</td></tr>
+<tr><td>成都行政区</td><td>24</td><td>Polygon</td><td>NAME</td></tr>
+<tr><td>政府</td><td>6959</td><td>Point</td><td>name, type, address, lng, lat, province</td></tr>
+<tr><td>生活服务</td><td>54729</td><td>Point</td><td>name, type, address, lng, lat, province</td></tr>
+<tr><td>科教文化</td><td>10916</td><td>Point</td><td>name, type, address, lng, lat, province</td></tr>
+<tr><td>购物</td><td>102214</td><td>Point</td><td>name, type, address, lng, lat, province</td></tr>
+<tr><td>金融服务</td><td>7157</td><td>Point</td><td>name, type, address, lng, lat, province</td></tr>
+<tr><td>风景</td><td>337</td><td>Point</td><td>name, type, address, lng, lat, province</td></tr>
+<tr><td>餐饮</td><td>61101</td><td>Point</td><td>name, type, address, lng, lat, province</td></tr>
+</tbody></table>
+<h2>任务集说明</h2>
+<p>实验一任务集拆成 `exp1_workbook.json` 习题册和 `exp1_reference_answers.json` 参考答案。习题册给出自然语言任务、难度、能力标签和会话链；参考答案给出期望工具、输出类型、实体/关键词、是否需要历史记忆、经验检索、经验写入或代码执行。成功率由结构化返回与参考答案的匹配分数计算。</p>
+<table><thead><tr>
+<th>类别</th>
+<th>任务数</th>
+</tr></thead><tbody>
+<tr><td>ace_multi_step</td><td>7</td></tr>
+<tr><td>adversarial_validation</td><td>3</td></tr>
+<tr><td>attribute_query</td><td>2</td></tr>
+<tr><td>buffer_analysis</td><td>1</td></tr>
+<tr><td>code_exact_check</td><td>2</td></tr>
+<tr><td>code_required</td><td>2</td></tr>
+<tr><td>experience_evolution</td><td>5</td></tr>
+<tr><td>experience_retrieval</td><td>14</td></tr>
+<tr><td>hotspot</td><td>1</td></tr>
+<tr><td>memory_followup</td><td>7</td></tr>
+<tr><td>memory_seed</td><td>4</td></tr>
+<tr><td>nearby_analysis</td><td>1</td></tr>
+<tr><td>overlay_analysis</td><td>1</td></tr>
+<tr><td>poi_search</td><td>1</td></tr>
+<tr><td>spatial_join</td><td>1</td></tr>
+</tbody></table>
+<h2>Trace 说明</h2>
+<p>每个 trace 是一次任务在某个框架或消融组下的完整记录。报告中的指标均可由 trace 字段直接复算。</p>
+<table><thead><tr>
+<th>字段</th>
+<th>含义</th>
+</tr></thead><tbody>
+<tr><td>task_id</td><td>展开后的任务编号；包含模板编号、重复轮次或 batch 信息。</td></tr>
+<tr><td>agent_type</td><td>执行该 trace 的框架、消融组或经验库策略。</td></tr>
+<tr><td>query</td><td>自然语言 GIS 任务文本。</td></tr>
+<tr><td>category</td><td>任务类别，例如 POI 检索、邻近分析、叠加分析、热点分析等。</td></tr>
+<tr><td>expected_tools</td><td>任务设计时标注的期望工具链，用于计算工具选择准确率。</td></tr>
+<tr><td>selected_tools</td><td>系统实际选择或模拟选择的工具链。</td></tr>
+<tr><td>execution_trace</td><td>意图识别、工具选择、执行评估等关键步骤记录。</td></tr>
+<tr><td>errors / error_signature</td><td>运行中出现的错误及其归一化签名，用于重复错误统计。</td></tr>
+<tr><td>critic_diagnosis</td><td>CriticAgent 产生的结构化诊断，消融时可为空或弱化。</td></tr>
+<tr><td>retrieved_experiences</td><td>本次任务检索到的经验条目，用于经验复用率和经验有效性分析。</td></tr>
+<tr><td>generated_experience</td><td>任务后沉淀的新经验，用于观察 Evolution 是否产生可复用知识。</td></tr>
+<tr><td>metrics</td><td>单条 trace 的可计算指标，如 turns、runtime、execution_success、result_correctness、repair_success。</td></tr>
+<tr><td>structured_response</td><td>实验一的新结构化返回，包含 selected_tools、output_types、entities、keywords、memory/experience/code 证据。</td></tr>
+<tr><td>validation</td><td>实验一按参考答案自动评分的结果，包含总分、阈值、缺失项和分项得分。</td></tr>
+</tbody></table>
+<h2>指标计算方法</h2>
+<table><thead><tr>
+<th>指标</th>
+<th>字段</th>
+<th>计算方式</th>
+</tr></thead><tbody>
+<tr><td>任务成功率</td><td>success_rate / task_success_rate</td><td>成功 trace 数 / trace 总数。success=true 记为 1，否则为 0。</td></tr>
+<tr><td>工具选择准确率</td><td>tool_selection_accuracy</td><td>对每条 trace 计算 |expected_tools ∩ selected_tools| / |expected_tools|，再对有效 trace 求平均。</td></tr>
+<tr><td>执行成功率</td><td>execution_success_rate</td><td>无 errors 且 metrics.execution_success=true 的 trace 数 / trace 总数。</td></tr>
+<tr><td>结果正确率</td><td>result_correctness</td><td>metrics.result_correctness 的算术平均值，取值范围 0-1。</td></tr>
+<tr><td>平均轮数</td><td>average_turns</td><td>metrics.turns 的算术平均值，用于衡量交互/推理链路长度。</td></tr>
+<tr><td>平均耗时</td><td>average_runtime / average_latency</td><td>metrics.runtime 的算术平均值，单位为秒。</td></tr>
+<tr><td>用户干预次数</td><td>user_intervention_count</td><td>所有 trace 的 metrics.user_intervention_count 求和。</td></tr>
+<tr><td>错误数</td><td>error_count</td><td>所有 trace 的 errors 列表长度求和。</td></tr>
+<tr><td>重复错误率</td><td>repeated_error_rate</td><td>出现重复 error_signature 的错误 trace 数 / trace 总数。</td></tr>
+<tr><td>修复成功率</td><td>repair_success_rate / self_repair_rate</td><td>repair_attempted=true 的 trace 中 repair_success=true 的比例。</td></tr>
+<tr><td>经验复用率</td><td>experience_reuse_rate</td><td>retrieved_experiences 非空的 trace 数 / trace 总数。</td></tr>
+<tr><td>知识保留率</td><td>knowledge_retention_rate</td><td>Exp4 最终快照中仍保留的早期经验数 / 早期经验总数。</td></tr>
+<tr><td>冗余率</td><td>redundancy_rate</td><td>经验文本指纹两两 Jaccard 相似度 &gt;= 0.72 的组合数 / 组合总数。</td></tr>
+<tr><td>上下文 token 数</td><td>context_token_count</td><td>中文字符、英文 token 和标点的近似加权计数，用于观察上下文膨胀。</td></tr>
+<tr><td>有效策略条目数量</td><td>effective_strategy_entry_count</td><td>Exp4 每步上下文中去重后的有效策略/能力条目数。</td></tr>
+<tr><td>重复条目比例</td><td>duplicate_entry_ratio</td><td>Exp4 每步上下文中重复经验条目占比，用于观察动态速查表或经验更新策略的冗余累积。</td></tr>
+<tr><td>上下文突然缩短次数</td><td>context_sudden_shorten_count</td><td>Exp4 中高位上下文 token 数突然缩短到前一步 65% 以下的次数。</td></tr>
+<tr><td>性能突然下降次数</td><td>performance_sudden_drop_count</td><td>Exp4 中相邻 adaptation step 任务准确率下降 &gt;=0.12 的次数。</td></tr>
+<tr><td>Collapse 事件数</td><td>collapse_event_count</td><td>Exp4 中相邻 adaptation step 出现高位 token 骤降到低位，且任务准确率同步下降的次数。</td></tr>
+</tbody></table>
+<h2>结果指标</h2>
+<table><thead><tr>
+<th>组别</th>
+<th>average_runtime</th>
+<th>average_turns</th>
+<th>code_execution_success_rate</th>
+<th>error_count</th>
+<th>execution_success_rate</th>
+<th>experience_add_rate</th>
+<th>experience_retrieval_rate</th>
+<th>memory_success_rate</th>
+<th>result_correctness</th>
+<th>task_success_rate</th>
+<th>tool_selection_accuracy</th>
+<th>user_intervention_count</th>
+</tr></thead><tbody>
+<tr><td>base_agent</td><td>0.106</td><td>2.808</td><td>1.000</td><td>38</td><td>0.269</td><td>0.000</td><td>0.000</td><td>0.000</td><td>0.667</td><td>0.269</td><td>0.824</td><td>0</td></tr>
+<tr><td>rag_agent</td><td>0.112</td><td>3.408</td><td>1.000</td><td>23</td><td>0.558</td><td>0.000</td><td>1.000</td><td>0.000</td><td>0.838</td><td>0.558</td><td>0.830</td><td>0</td></tr>
+<tr><td>ace_agent</td><td>0.116</td><td>3.808</td><td>1.000</td><td>3</td><td>0.942</td><td>1.000</td><td>1.000</td><td>1.000</td><td>0.980</td><td>0.942</td><td>0.981</td><td>0</td></tr>
+</tbody></table>
+<h2>实验一任务明细：返回结果与参考答案</h2>
+<p>本表逐题列出用户任务、参考答案要点以及 Base / RAG / ACE 三类 Agent 的返回摘要与评分结果。其中参考答案来自 data/experiments/exp1_reference_answers.json，返回结果来自本次 run 的 trace。</p>
+<table><thead><tr>
+<th>任务</th>
+<th>类别</th>
+<th>任务描述</th>
+<th>参考答案要点</th>
+<th>Base 返回结果</th>
+<th>RAG 返回结果</th>
+<th>ACE 返回结果</th>
+</tr></thead><tbody>
+<tr><td>exp1_q01_search</td><td>poi_search</td><td>搜索名称包含“医院”的 POI，并在地图上高亮所有匹配结果，同时返回结果表。</td><td>工具: search_poi
+输出: map_layer, table
+实体: 医院, 医疗, POI
+关键词: 搜索, 高亮, 结果表</td><td>通过 / score=1.0
+工具: search_poi
+输出: map_layer, table
+回答: 搜索名称包含“医院”的 POI，并在地图上高亮所有匹配结果，同时返回结果表。 已按主系统工具链执行。 医院 医疗 POI 搜索 高亮 结果表</td><td>通过 / score=1.0
+工具: search_poi
+输出: map_layer, table
+回答: 搜索名称包含“医院”的 POI，并在地图上高亮所有匹配结果，同时返回结果表。 已按主系统工具链执行。 医院 医疗 POI 搜索 高亮 结果表</td><td>通过 / score=1.0
+工具: search_poi
+输出: map_layer, table
+回答: 搜索名称包含“医院”的 POI，并在地图上高亮所有匹配结果，同时返回结果表。 已按主系统工具链执行。 医院 医疗 POI 搜索 高亮 结果表</td></tr>
+<tr><td>exp1_q02_attribute_query</td><td>attribute_query</td><td>查询餐饮图层中 type 字段包含“火锅”的点位，返回结果表并在地图上高亮。</td><td>工具: query_poi_by_conditions
+输出: map_layer, table
+实体: 餐饮, 火锅, type
+关键词: 查询, 字段, 高亮</td><td>通过 / score=1.0
+工具: query_poi_by_conditions
+输出: map_layer, table
+回答: 查询餐饮图层中 type 字段包含“火锅”的点位，返回结果表并在地图上高亮。 已按主系统工具链执行。 餐饮 火锅 type 查询 字段 高亮</td><td>通过 / score=1.0
+工具: query_poi_by_conditions
+输出: map_layer, table
+回答: 查询餐饮图层中 type 字段包含“火锅”的点位，返回结果表并在地图上高亮。 已按主系统工具链执行。 餐饮 火锅 type 查询 字段 高亮</td><td>通过 / score=1.0
+工具: query_poi_by_conditions
+输出: map_layer, table
+回答: 查询餐饮图层中 type 字段包含“火锅”的点位，返回结果表并在地图上高亮。 已按主系统工具链执行。 餐饮 火锅 type 查询 字段 高亮</td></tr>
+<tr><td>exp1_q03_nearby_crs</td><td>nearby_analysis</td><td>找出科教文化图层中“学校”500 米范围内的餐饮点，执行前说明需要统一到米制投影。</td><td>工具: find_nearby
+输出: map_layer, table
+实体: 科教文化, 学校, 餐饮, 500, 米
+关键词: 邻近, 距离, CRS, 投影</td><td>通过 / score=1.0
+工具: find_nearby
+输出: map_layer, table
+回答: 找出科教文化图层中“学校”500 米范围内的餐饮点，执行前说明需要统一到米制投影。 已按主系统工具链执行。 科教文化 学校 餐饮 500 米 邻近 距离 CRS 投影</td><td>通过 / score=1.0
+工具: find_nearby
+输出: map_layer, table
+检索经验: gis-crs-001
+回答: 找出科教文化图层中“学校”500 米范围内的餐饮点，执行前说明需要统一到米制投影。 已按主系统工具链执行。 根据经验，距离分析前需要检查 CRS 并统一到米制投影。 科教文化 学校 餐饮 500 米 邻近 距离 CRS 投影</td><td>通过 / score=1.0
+工具: find_nearby
+输出: map_layer, table
+检索经验: gis-crs-001
+回答: 找出科教文化图层中“学校”500 米范围内的餐饮点，执行前说明需要统一到米制投影。 已按主系统工具链执行。 根据经验，距离分析前需要检查 CRS 并统一到米制投影。 科教文化 学校 餐饮 500 米 邻近 距离 CRS 投影</td></tr>
+<tr><td>exp1_q04_buffer</td><td>buffer_analysis</td><td>为医疗图层生成 800 米缓冲区，并显示缓冲区图层。</td><td>工具: buffer_analysis
+输出: map_layer
+实体: 医疗, 800, 缓冲区
+关键词: 缓冲区, 图层</td><td>通过 / score=1.0
+工具: buffer_analysis
+输出: map_layer
+回答: 为医疗图层生成 800 米缓冲区，并显示缓冲区图层。 已按主系统工具链执行。 医疗 800 缓冲区 缓冲区 图层</td><td>通过 / score=1.0
+工具: buffer_analysis
+输出: map_layer
+回答: 为医疗图层生成 800 米缓冲区，并显示缓冲区图层。 已按主系统工具链执行。 医疗 800 缓冲区 缓冲区 图层</td><td>通过 / score=1.0
+工具: buffer_analysis
+输出: map_layer
+回答: 为医疗图层生成 800 米缓冲区，并显示缓冲区图层。 已按主系统工具链执行。 医疗 800 缓冲区 缓冲区 图层</td></tr>
+<tr><td>exp1_q05_overlay</td><td>overlay_analysis</td><td>叠加餐饮点和成都行政区，找出各行政区内餐饮覆盖情况，返回叠加结果。</td><td>工具: overlay_layers
+输出: map_layer, table
+实体: 餐饮, 成都行政区, 叠加
+关键词: 叠加, 行政区, 覆盖</td><td>通过 / score=1.0
+工具: overlay_layers
+输出: map_layer, table
+回答: 叠加餐饮点和成都行政区，找出各行政区内餐饮覆盖情况，返回叠加结果。 已按主系统工具链执行。 餐饮 成都行政区 叠加 叠加 行政区 覆盖</td><td>通过 / score=1.0
+工具: overlay_layers
+输出: map_layer, table
+回答: 叠加餐饮点和成都行政区，找出各行政区内餐饮覆盖情况，返回叠加结果。 已按主系统工具链执行。 餐饮 成都行政区 叠加 叠加 行政区 覆盖</td><td>通过 / score=1.0
+工具: overlay_layers
+输出: map_layer, table
+回答: 叠加餐饮点和成都行政区，找出各行政区内餐饮覆盖情况，返回叠加结果。 已按主系统工具链执行。 餐饮 成都行政区 叠加 叠加 行政区 覆盖</td></tr>
+<tr><td>exp1_q06_spatial_join</td><td>spatial_join</td><td>统计每个行政区内购物 POI 数量，并按数量给行政区面图层着色显示。</td><td>工具: spatial_join_layers
+输出: map_layer, table
+实体: 购物, 行政区, poi_count
+关键词: 统计, 数量, 着色</td><td>通过 / score=1.0
+工具: spatial_join_layers
+输出: map_layer, table
+回答: 统计每个行政区内购物 POI 数量，并按数量给行政区面图层着色显示。 已按主系统工具链执行。 购物 行政区 poi_count 统计 数量 着色</td><td>通过 / score=1.0
+工具: spatial_join_layers
+输出: map_layer, table
+回答: 统计每个行政区内购物 POI 数量，并按数量给行政区面图层着色显示。 已按主系统工具链执行。 购物 行政区 poi_count 统计 数量 着色</td><td>通过 / score=1.0
+工具: spatial_join_layers
+输出: map_layer, table
+回答: 统计每个行政区内购物 POI 数量，并按数量给行政区面图层着色显示。 已按主系统工具链执行。 购物 行政区 poi_count 统计 数量 着色</td></tr>
+<tr><td>exp1_q07_hotspot</td><td>hotspot</td><td>生成医疗 POI 的 1000 米网格热点分析图层，并返回热点网格统计表。</td><td>工具: hotspot_analysis
+输出: map_layer, grid
+实体: 医疗, 1000, 网格, 热点
+关键词: 热点, 网格, count</td><td>通过 / score=1.0
+工具: hotspot_analysis
+输出: map_layer, grid
+回答: 生成医疗 POI 的 1000 米网格热点分析图层，并返回热点网格统计表。 已按主系统工具链执行。 医疗 1000 网格 热点 热点 网格 count</td><td>通过 / score=1.0
+工具: hotspot_analysis
+输出: map_layer, grid
+回答: 生成医疗 POI 的 1000 米网格热点分析图层，并返回热点网格统计表。 已按主系统工具链执行。 医疗 1000 网格 热点 热点 网格 count</td><td>通过 / score=1.0
+工具: hotspot_analysis
+输出: map_layer, grid
+回答: 生成医疗 POI 的 1000 米网格热点分析图层，并返回热点网格统计表。 已按主系统工具链执行。 医疗 1000 网格 热点 热点 网格 count</td></tr>
+<tr><td>exp1_q08_code_density</td><td>code_required</td><td>使用 GeoPandas 计算各行政区餐饮 POI 密度，并输出排名前 5 的行政区。</td><td>工具: execute_spatial_code
+输出: table
+实体: 餐饮, 行政区, 密度, 前 5
+关键词: GeoPandas, 面积, 密度, 排名
+约束: 需代码执行</td><td>通过 / score=1.0
+工具: execute_spatial_code
+输出: table
+回答: 使用 GeoPandas 计算各行政区餐饮 POI 密度，并输出排名前 5 的行政区。 已按主系统工具链执行。 使用 GeoPandas 代码计算行政区面积、POI 数量、密度排名和校验值。 餐饮 行政区 密度 前 5 GeoPandas 面积 密度 排名</td><td>通过 / score=1.0
+工具: execute_spatial_code
+输出: table
+回答: 使用 GeoPandas 计算各行政区餐饮 POI 密度，并输出排名前 5 的行政区。 已按主系统工具链执行。 使用 GeoPandas 代码计算行政区面积、POI 数量、密度排名和校验值。 餐饮 行政区 密度 前 5 GeoPandas 面积 密度 排名</td><td>通过 / score=1.0
+工具: execute_spatial_code
+输出: table
+回答: 使用 GeoPandas 计算各行政区餐饮 POI 密度，并输出排名前 5 的行政区。 已按主系统工具链执行。 使用 GeoPandas 代码计算行政区面积、POI 数量、密度排名和校验值。 餐饮 行政区 密度 前 5 GeoPandas 面积 密度 排名</td></tr>
+<tr><td>exp1_q09_memory_seed</td><td>memory_seed</td><td>搜索名称包含“春熙路”的住宿服务 POI，记住最可能的第一个结果，后续任务会继续引用它。</td><td>工具: search_poi
+输出: map_layer, table
+实体: 春熙路, 住宿服务, POI
+关键词: 记住, 第一个结果, 后续
+约束: 需写记忆</td><td>未通过 / score=0.8
+工具: search_poi
+输出: map_layer, table
+缺失: memory_written
+回答: 搜索名称包含“春熙路”的住宿服务 POI，记住最可能的第一个结果，后续任务会继续引用它。 已按主系统工具链执行。 春熙路 住宿服务 POI 第一个结果 后续</td><td>未通过 / score=0.8
+工具: search_poi
+输出: map_layer, table
+缺失: memory_written
+回答: 搜索名称包含“春熙路”的住宿服务 POI，记住最可能的第一个结果，后续任务会继续引用它。 已按主系统工具链执行。 春熙路 住宿服务 POI 第一个结果 后续</td><td>通过 / score=1.0
+工具: search_poi
+输出: map_layer, table
+回答: 搜索名称包含“春熙路”的住宿服务 POI，记住最可能的第一个结果，后续任务会继续引用它。 已按主系统工具链执行。 春熙路 住宿服务 POI 记住 第一个结果 后续</td></tr>
+<tr><td>exp1_q10_memory_followup</td><td>memory_followup</td><td>以上面记住的住宿点为中心，找 1 公里范围内的餐饮点。</td><td>工具: find_nearby_point, find_nearby_point_filtered
+输出: map_layer, table
+实体: 住宿, 餐饮, 1 公里
+关键词: 上面, 中心, 邻近
+约束: 需读记忆</td><td>未通过 / score=0.277
+工具: -
+输出: table
+缺失: expected_tools, output_types, result_count, memory_used
+回答: 以记住的点为中心，找 1 公里范围内的餐饮点。 已按主系统工具链执行。 中心 邻近</td><td>未通过 / score=0.46
+工具: find_nearby
+输出: map_layer, table
+缺失: expected_tools, result_count, memory_used
+回答: 以上面记住的住宿点为中心，找 1 公里范围内的餐饮点。 已按主系统工具链执行。 住宿 中心 邻近</td><td>通过 / score=1.0
+工具: find_nearby_point, find_nearby_point_filtered
+输出: map_layer, table
+回答: 以上面记住的住宿点为中心，找 1 公里范围内的餐饮点。 已按主系统工具链执行。 已读取上面记住的参考 POI 作为中心点。 住宿 餐饮 1 公里 上面 中心 邻近</td></tr>
+<tr><td>exp1_q11_rag_retrieval</td><td>experience_retrieval</td><td>做 500 米邻近分析前，说明并应用“距离分析需要统一到米制投影”的经验。</td><td>工具: find_nearby
+输出: explanation, map_layer
+实体: 500, 米, CRS, 米制投影
+关键词: 经验, CRS, 投影
+约束: 需经验检索</td><td>未通过 / score=0.52
+工具: find_nearby
+输出: -
+缺失: output_types, result_count, experience_retrieved
+回答: 做 500 米邻近分析前，说明并应用“距离分析需要统一到米制投影”的经验。 已按主系统工具链执行。 500 米 CRS 米制投影 CRS 投影</td><td>通过 / score=1.0
+工具: find_nearby
+输出: explanation, map_layer
+检索经验: gis-crs-001
+回答: 做 500 米邻近分析前，说明并应用“距离分析需要统一到米制投影”的经验。 已按主系统工具链执行。 根据经验，距离分析前需要检查 CRS 并统一到米制投影。 500 米 CRS 米制投影 经验 CRS 投影</td><td>通过 / score=1.0
+工具: find_nearby
+输出: explanation, map_layer
+检索经验: gis-crs-001
+回答: 做 500 米邻近分析前，说明并应用“距离分析需要统一到米制投影”的经验。 已按主系统工具链执行。 根据经验，距离分析前需要检查 CRS 并统一到米制投影。 500 米 CRS 米制投影 经验 CRS 投影</td></tr>
+<tr><td>exp1_q12_experience_add</td><td>experience_evolution</td><td>如果字段名写错导致查询失败，请诊断原因，并把“先检查图层字段再查询”的策略加入经验库。</td><td>工具: query_poi_by_conditions
+输出: diagnosis
+实体: 字段名, 查询, 经验库
+关键词: 诊断, 字段, 经验
+约束: 需经验新增</td><td>未通过 / score=0.62
+工具: query_poi_by_conditions
+输出: -
+缺失: output_types, experience_added
+回答: 如果字段名写错导致查询失败，请诊断原因，并把“先检查图层字段再查询”的策略加入经验库。 已按主系统工具链执行。 字段名 查询 经验库 诊断 字段</td><td>未通过 / score=0.62
+工具: query_poi_by_conditions
+输出: -
+缺失: output_types, experience_added
+回答: 如果字段名写错导致查询失败，请诊断原因，并把“先检查图层字段再查询”的策略加入经验库。 已按主系统工具链执行。 字段名 查询 经验库 诊断 字段</td><td>通过 / score=1.0
+工具: query_poi_by_conditions
+输出: diagnosis
+新增经验: exp1-learned-exp1_q12_experience_add
+回答: 如果字段名写错导致查询失败，请诊断原因，并把“先检查图层字段再查询”的策略加入经验库。 已按主系统工具链执行。 已诊断字段名或空间分析问题，并把修复策略加入经验库。 字段名 查询 经验库 诊断 字段 经验</td></tr>
+<tr><td>exp1_q13_memory_buffer_followup</td><td>memory_followup</td><td>继续以上面那个住宿服务 POI 为对象，只为这个单点生成 300 米缓冲区，不要对整个住宿图层做缓冲。</td><td>工具: buffer_analysis
+输出: map_layer
+实体: 住宿, 300, 缓冲区, 单点
+关键词: 上面, 单点, 不要整个图层
+约束: 需读记忆</td><td>未通过 / score=0.44
+工具: buffer_analysis
+输出: -
+缺失: output_types, result_count, memory_used
+回答: 继续以那个服务 POI 为对象，只为这个单点生成 300 米缓冲区，不要对整个图层做缓冲。 已按主系统工具链执行。 300 单点 不要整个图层</td><td>未通过 / score=0.46
+工具: find_nearby
+输出: map_layer
+缺失: expected_tools, result_count, memory_used
+回答: 继续以上面那个住宿服务 POI 为对象，只为这个单点生成 300 米缓冲区，不要对整个住宿图层做缓冲。 已按主系统工具链执行。 住宿 300 单点 不要整个图层</td><td>通过 / score=1.0
+工具: buffer_analysis
+输出: map_layer
+回答: 继续以上面那个住宿服务 POI 为对象，只为这个单点生成 300 米缓冲区，不要对整个住宿图层做缓冲。 已按主系统工具链执行。 已读取上面记住的参考 POI 作为中心点。 住宿 300 缓冲区 单点 上面 单点 不要整个图层</td></tr>
+<tr><td>exp1_q14_rag_field_schema</td><td>experience_retrieval</td><td>字段名不确定时，先应用 schema 经验读取图层字段，再查询餐饮图层中 type 或 name 包含“串串”的 POI。</td><td>工具: query_poi_by_conditions
+输出: explanation, table
+实体: 餐饮, 串串, type, schema
+关键词: 经验, 字段, 查询
+约束: 需经验检索</td><td>未通过 / score=0.61
+工具: query_poi_by_conditions
+输出: table
+缺失: output_types, result_count, experience_retrieved
+回答: 字段名不确定时，先应用 schema 经验读取图层字段，再查询餐饮图层中 type 或 name 包含“串串”的 POI。 已按主系统工具链执行。 餐饮 串串 type 字段 查询</td><td>通过 / score=1.0
+工具: query_poi_by_conditions
+输出: explanation, table
+检索经验: gis-field-001
+回答: 字段名不确定时，先应用 schema 经验读取图层字段，再查询餐饮图层中 type 或 name 包含“串串”的 POI。 已按主系统工具链执行。 餐饮 串串 type schema 经验 字段 查询</td><td>通过 / score=1.0
+工具: query_poi_by_conditions
+输出: explanation, table
+检索经验: gis-field-001
+回答: 字段名不确定时，先应用 schema 经验读取图层字段，再查询餐饮图层中 type 或 name 包含“串串”的 POI。 已按主系统工具链执行。 餐饮 串串 type schema 经验 字段 查询</td></tr>
+<tr><td>exp1_q15_rag_empty_result</td><td>experience_retrieval</td><td>搜索“川西坝子火锅”相关 POI；如果结果为空，应用空结果恢复经验，放宽关键词后重试。</td><td>工具: search_poi
+输出: explanation, table
+实体: 川西坝子火锅, 放宽关键词, POI
+关键词: 空结果, 重试, 经验
+约束: 需经验检索</td><td>未通过 / score=0.61
+工具: search_poi
+输出: table
+缺失: output_types, result_count, experience_retrieved
+回答: 搜索“川西坝子火锅”相关 POI；如果结果为空，应用空结果恢复经验，放宽关键词后重试。 已按主系统工具链执行。 川西坝子火锅 放宽关键词 POI 空结果 重试</td><td>通过 / score=1.0
+工具: search_poi
+输出: explanation, table
+检索经验: gis-result-001
+回答: 搜索“川西坝子火锅”相关 POI；如果结果为空，应用空结果恢复经验，放宽关键词后重试。 已按主系统工具链执行。 川西坝子火锅 放宽关键词 POI 空结果 重试 经验</td><td>通过 / score=1.0
+工具: search_poi
+输出: explanation, table
+检索经验: gis-result-001
+回答: 搜索“川西坝子火锅”相关 POI；如果结果为空，应用空结果恢复经验，放宽关键词后重试。 已按主系统工具链执行。 川西坝子火锅 放宽关键词 POI 空结果 重试 经验</td></tr>
+<tr><td>exp1_q16_experience_add_crs</td><td>experience_evolution</td><td>如果距离分析直接用经纬度导致米制距离错误，请诊断 CRS 问题，并把正确策略沉淀到经验库。</td><td>工具: find_nearby
+输出: diagnosis, explanation
+实体: 距离, 米制, CRS
+关键词: 诊断, 经验库, 投影
+约束: 需经验新增</td><td>未通过 / score=0.62
+工具: find_nearby
+输出: -
+缺失: output_types, experience_added
+回答: 如果距离分析直接用经纬度导致米制距离错误，请诊断 CRS 问题，并把正确策略沉淀到经验库。 已按主系统工具链执行。 距离 米制 CRS 诊断 投影</td><td>未通过 / score=0.71
+工具: find_nearby
+输出: explanation
+检索经验: gis-crs-001
+缺失: output_types, experience_added
+回答: 如果距离分析直接用经纬度导致米制距离错误，请诊断 CRS 问题，并把正确策略沉淀到经验库。 已按主系统工具链执行。 根据经验，距离分析前需要检查 CRS 并统一到米制投影。 距离 米制 CRS 诊断 投影</td><td>通过 / score=1.0
+工具: find_nearby
+输出: diagnosis, explanation
+检索经验: gis-crs-001
+新增经验: exp1-learned-exp1_q16_experience_add_crs
+回答: 如果距离分析直接用经纬度导致米制距离错误，请诊断 CRS 问题，并把正确策略沉淀到经验库。 已按主系统工具链执行。 根据经验，距离分析前需要检查 CRS 并统一到米制投影。 已诊断字段名或空间分析问题，并把修复策略加入经验库。 距离 米制 CRS 诊断 经验库 投影</td></tr>
+<tr><td>exp1_q17_code_area_rank</td><td>code_required</td><td>用 GeoPandas 计算行政区面积、购物 POI 数量和购物密度，输出密度前 5 名。</td><td>工具: execute_spatial_code
+输出: table
+实体: 购物, 行政区, 密度, 前 5
+关键词: GeoPandas, 面积, 排名
+约束: 需代码执行</td><td>通过 / score=1.0
+工具: execute_spatial_code
+输出: table
+回答: 用 GeoPandas 计算行政区面积、购物 POI 数量和购物密度，输出密度前 5 名。 已按主系统工具链执行。 使用 GeoPandas 代码计算行政区面积、POI 数量、密度排名和校验值。 购物 行政区 密度 前 5 GeoPandas 面积 排名</td><td>通过 / score=1.0
+工具: execute_spatial_code
+输出: table
+回答: 用 GeoPandas 计算行政区面积、购物 POI 数量和购物密度，输出密度前 5 名。 已按主系统工具链执行。 使用 GeoPandas 代码计算行政区面积、POI 数量、密度排名和校验值。 购物 行政区 密度 前 5 GeoPandas 面积 排名</td><td>通过 / score=1.0
+工具: execute_spatial_code
+输出: table
+回答: 用 GeoPandas 计算行政区面积、购物 POI 数量和购物密度，输出密度前 5 名。 已按主系统工具链执行。 使用 GeoPandas 代码计算行政区面积、POI 数量、密度排名和校验值。 购物 行政区 密度 前 5 GeoPandas 面积 排名</td></tr>
+<tr><td>exp1_q18_preference_seed</td><td>memory_seed</td><td>记住我的偏好：后续如果同时有表格和地图结果，优先返回表格摘要，并只高亮排名前 5 的 POI 或行政区。</td><td>工具: -
+输出: explanation
+实体: 表格摘要, 排名前 5, POI
+关键词: 记住, 偏好, 高亮
+约束: 需写记忆</td><td>未通过 / score=0.737
+工具: -
+输出: explanation
+缺失: memory_written
+回答: 记住我的偏好：后续如果同时有表格和地图结果，优先返回表格摘要，并只高亮排名前 5 的 POI 或行政区。 已按主系统工具链执行。 表格摘要 排名前 5 POI 偏好 高亮</td><td>未通过 / score=0.737
+工具: -
+输出: explanation
+缺失: memory_written
+回答: 记住我的偏好：后续如果同时有表格和地图结果，优先返回表格摘要，并只高亮排名前 5 的 POI 或行政区。 已按主系统工具链执行。 表格摘要 排名前 5 POI 偏好 高亮</td><td>通过 / score=1.0
+工具: -
+输出: explanation
+回答: 记住我的偏好：后续如果同时有表格和地图结果，优先返回表格摘要，并只高亮排名前 5 的 POI 或行政区。 已按主系统工具链执行。 表格摘要 排名前 5 POI 记住 偏好 高亮</td></tr>
+<tr><td>exp1_q19_preference_followup</td><td>memory_followup</td><td>按我刚才的偏好，统计每个行政区医疗 POI 数量，只高亮排名前 5 的行政区。</td><td>工具: spatial_join_layers
+输出: map_layer, table
+实体: 医疗, 行政区, 前 5
+关键词: 偏好, 统计, 高亮
+约束: 需读记忆</td><td>未通过 / score=0.61
+工具: spatial_join_layers
+输出: table
+缺失: output_types, result_count, memory_used
+回答: 按我刚才的偏好，统计每个行政区医疗 POI 数量，只高亮排名前 5 的行政区。 已按主系统工具链执行。 医疗 偏好 统计 高亮</td><td>未通过 / score=0.46
+工具: find_nearby
+输出: map_layer, table
+缺失: expected_tools, result_count, memory_used
+回答: 按我刚才的偏好，统计每个行政区医疗 POI 数量，只高亮排名前 5 的行政区。 已按主系统工具链执行。 医疗 偏好 统计 高亮</td><td>通过 / score=1.0
+工具: spatial_join_layers
+输出: map_layer, table
+回答: 按我刚才的偏好，统计每个行政区医疗 POI 数量，只高亮排名前 5 的行政区。 已按主系统工具链执行。 已读取上面记住的参考 POI 作为中心点。 医疗 行政区 前 5 偏好 统计 高亮</td></tr>
+<tr><td>exp1_q20_multi_step_ace</td><td>ace_multi_step</td><td>搜索“春熙路”住宿 POI，记住一个最可能结果，再找它 800 米内的餐饮点，并导出为 GeoJSON。</td><td>工具: search_poi, find_nearby_point, export_analysis_result
+输出: map_layer, table
+实体: 春熙路, 餐饮, 800, GeoJSON
+关键词: 记住, 导出, 经验
+约束: 需读记忆, 需写记忆, 需经验检索, 需导出</td><td>未通过 / score=0.293
+工具: search_poi
+输出: table
+缺失: output_types, result_count, memory_used, memory_written, experience_retrieved
+回答: 搜索“春熙路” POI，记住一个最可能结果，再找它 800 米内的餐饮点，并导出为 GeoJSON。 已按主系统工具链执行。 春熙路 餐饮 导出</td><td>未通过 / score=0.586
+工具: search_poi, export_analysis_result
+输出: map_layer, table
+检索经验: gis-crs-001
+缺失: result_count, memory_used, memory_written
+回答: 搜索“春熙路”住宿 POI，记住一个最可能结果，再找它 800 米内的餐饮点，并导出为 GeoJSON。 已按主系统工具链执行。 春熙路 餐饮 导出 经验</td><td>通过 / score=1.0
+工具: search_poi, find_nearby_point, export_analysis_result
+输出: map_layer, table
+检索经验: gis-crs-001
+回答: 搜索“春熙路”住宿 POI，记住一个最可能结果，再找它 800 米内的餐饮点，并导出为 GeoJSON。 已按主系统工具链执行。 已读取上面记住的参考 POI 作为中心点。 春熙路 餐饮 800 GeoJSON 记住 导出 经验</td></tr>
+<tr><td>exp1_q21_memory_seed_long</td><td>memory_seed</td><td>搜索名称包含“天府广场”的交通站点 POI，记住第一个结果作为后续参考点。</td><td>工具: search_poi
+输出: map_layer, table
+实体: 天府广场, 交通站点, 第一个结果
+关键词: 搜索, 记住, 参考点
+约束: 需写记忆</td><td>未通过 / score=0.8
+工具: search_poi
+输出: map_layer, table
+缺失: memory_written
+回答: 搜索名称包含“天府广场”的交通站点 POI，记住第一个结果作为后续参考点。 已按主系统工具链执行。 天府广场 交通站点 第一个结果 搜索 参考点</td><td>未通过 / score=0.8
+工具: search_poi
+输出: map_layer, table
+缺失: memory_written
+回答: 搜索名称包含“天府广场”的交通站点 POI，记住第一个结果作为后续参考点。 已按主系统工具链执行。 天府广场 交通站点 第一个结果 搜索 参考点</td><td>通过 / score=1.0
+工具: search_poi
+输出: map_layer, table
+回答: 搜索名称包含“天府广场”的交通站点 POI，记住第一个结果作为后续参考点。 已按主系统工具链执行。 天府广场 交通站点 第一个结果 搜索 记住 参考点</td></tr>
+<tr><td>exp1_q22_memory_long_followup</td><td>memory_followup</td><td>使用刚才记住的天府广场交通站点，查找 600 米范围内的购物 POI，并说明这是跨轮引用。</td><td>工具: find_nearby_point, find_nearby_point_filtered
+输出: map_layer, table, explanation
+实体: 天府广场, 购物, 600
+关键词: 跨轮引用, 记住, 邻近
+约束: 需读记忆</td><td>未通过 / score=0.34
+工具: -
+输出: table
+缺失: expected_tools, output_types, result_count, memory_used
+回答: 使用刚才记住的天府广场交通站点，查找 600 米范围内的购物 POI，并说明这是跨轮引用。 已按主系统工具链执行。 天府广场 跨轮引用 记住 邻近</td><td>未通过 / score=0.46
+工具: find_nearby
+输出: map_layer, table, explanation
+缺失: expected_tools, result_count, memory_used
+回答: 使用刚才记住的天府广场交通站点，查找 600 米范围内的购物 POI，并说明这是跨轮引用。 已按主系统工具链执行。 天府广场 跨轮引用 记住 邻近</td><td>通过 / score=1.0
+工具: find_nearby_point, find_nearby_point_filtered
+输出: map_layer, table, explanation
+回答: 使用刚才记住的天府广场交通站点，查找 600 米范围内的购物 POI，并说明这是跨轮引用。 已按主系统工具链执行。 已读取上面记住的参考 POI 作为中心点。 天府广场 购物 600 跨轮引用 记住 邻近</td></tr>
+<tr><td>exp1_q23_rag_dual_experience</td><td>experience_retrieval</td><td>查找学校 700 米内的餐饮点，必须同时应用 CRS 经验和字段 schema 经验。</td><td>工具: find_nearby
+输出: explanation, map_layer, table
+实体: 学校, 700, 餐饮, CRS, schema
+关键词: CRS 经验, 字段经验, 投影
+约束: 需经验检索</td><td>未通过 / score=0.54
+工具: find_nearby
+输出: table
+缺失: output_types, result_count, experience_retrieved
+回答: 查找学校 700 米内的餐饮点，必须同时应用 CRS 经验和字段 schema 经验。 已按主系统工具链执行。 学校 700 餐饮 CRS 投影</td><td>通过 / score=1.0
+工具: find_nearby
+输出: explanation, map_layer, table
+检索经验: gis-crs-001, gis-field-001
+回答: 查找学校 700 米内的餐饮点，必须同时应用 CRS 经验和字段 schema 经验。 已按主系统工具链执行。 根据经验，距离分析前需要检查 CRS 并统一到米制投影。 学校 700 餐饮 CRS schema CRS 经验 字段经验 投影</td><td>通过 / score=1.0
+工具: find_nearby
+输出: explanation, map_layer, table
+检索经验: gis-crs-001, gis-field-001
+回答: 查找学校 700 米内的餐饮点，必须同时应用 CRS 经验和字段 schema 经验。 已按主系统工具链执行。 根据经验，距离分析前需要检查 CRS 并统一到米制投影。 学校 700 餐饮 CRS schema CRS 经验 字段经验 投影</td></tr>
+<tr><td>exp1_q24_experience_add_empty_result</td><td>experience_evolution</td><td>如果精确搜索返回 0 条结果，请诊断空结果原因，并把“逐步放宽关键词和类别”的恢复策略写入经验库。</td><td>工具: search_poi
+输出: diagnosis, explanation
+实体: 关键词, 0 条结果, 经验库
+关键词: 诊断, 放宽, 经验
+约束: 需经验新增</td><td>未通过 / score=0.62
+工具: search_poi
+输出: -
+缺失: output_types, experience_added
+回答: 如果精确搜索返回 0 条结果，请诊断空结果原因，并把“逐步放宽关键词和类别”的恢复策略写入经验库。 已按主系统工具链执行。 关键词 0 条结果 经验库 诊断 放宽</td><td>未通过 / score=0.71
+工具: search_poi
+输出: explanation
+缺失: output_types, experience_added
+回答: 如果精确搜索返回 0 条结果，请诊断空结果原因，并把“逐步放宽关键词和类别”的恢复策略写入经验库。 已按主系统工具链执行。 关键词 0 条结果 经验库 诊断 放宽</td><td>通过 / score=1.0
+工具: search_poi
+输出: diagnosis, explanation
+新增经验: exp1-learned-exp1_q24_experience_add_empty_result
+回答: 如果精确搜索返回 0 条结果，请诊断空结果原因，并把“逐步放宽关键词和类别”的恢复策略写入经验库。 已按主系统工具链执行。 已诊断字段名或空间分析问题，并把修复策略加入经验库。 关键词 0 条结果 经验库 诊断 放宽 经验</td></tr>
+<tr><td>exp1_q25_code_exact_validation</td><td>code_exact_check</td><td>用代码统计餐饮 POI 在各行政区的数量，要求输出总数校验，证明分区计数之和等于原始餐饮 POI 总数。</td><td>工具: execute_spatial_code
+输出: table
+实体: 餐饮, 行政区, 总数校验, 一致
+关键词: 代码, 分区计数, 原始总数
+约束: 需代码执行</td><td>通过 / score=1.0
+工具: execute_spatial_code
+输出: table
+回答: 用代码统计餐饮 POI 在各行政区的数量，要求输出总数校验，证明分区计数之和等于原始餐饮 POI 总数。 已按主系统工具链执行。 使用 GeoPandas 代码计算行政区面积、POI 数量、密度排名和校验值。 餐饮 行政区 总数校验 一致 代码 分区计数 原始总数</td><td>通过 / score=1.0
+工具: execute_spatial_code
+输出: table
+回答: 用代码统计餐饮 POI 在各行政区的数量，要求输出总数校验，证明分区计数之和等于原始餐饮 POI 总数。 已按主系统工具链执行。 使用 GeoPandas 代码计算行政区面积、POI 数量、密度排名和校验值。 餐饮 行政区 总数校验 一致 代码 分区计数 原始总数</td><td>通过 / score=1.0
+工具: execute_spatial_code
+输出: table
+回答: 用代码统计餐饮 POI 在各行政区的数量，要求输出总数校验，证明分区计数之和等于原始餐饮 POI 总数。 已按主系统工具链执行。 使用 GeoPandas 代码计算行政区面积、POI 数量、密度排名和校验值。 餐饮 行政区 总数校验 一致 代码 分区计数 原始总数</td></tr>
+<tr><td>exp1_q26_preference_export_chain</td><td>ace_multi_step</td><td>沿用我的排名前 5 偏好，统计购物 POI 最多的行政区，高亮前 5，并导出 GeoJSON。</td><td>工具: spatial_join_layers, export_analysis_result
+输出: map_layer, table
+实体: 购物, 排名前 5, GeoJSON
+关键词: 偏好, 高亮, 导出
+约束: 需读记忆, 需导出</td><td>未通过 / score=0.49
+工具: spatial_join_layers
+输出: table
+缺失: output_types, result_count, memory_used
+回答: 沿用我的排名前 5 偏好，统计购物 POI 最多的行政区，高亮前 5，并导出 GeoJSON。 已按主系统工具链执行。 购物 偏好 高亮 导出</td><td>未通过 / score=0.7
+工具: spatial_join_layers, export_analysis_result
+输出: map_layer, table
+缺失: result_count, memory_used
+回答: 沿用我的排名前 5 偏好，统计购物 POI 最多的行政区，高亮前 5，并导出 GeoJSON。 已按主系统工具链执行。 购物 偏好 高亮 导出</td><td>通过 / score=1.0
+工具: spatial_join_layers, export_analysis_result
+输出: map_layer, table
+回答: 沿用我的排名前 5 偏好，统计购物 POI 最多的行政区，高亮前 5，并导出 GeoJSON。 已按主系统工具链执行。 已读取上面记住的参考 POI 作为中心点。 购物 排名前 5 GeoJSON 偏好 高亮 导出</td></tr>
+<tr><td>exp1_q27_code_cross_check</td><td>code_exact_check</td><td>用工具和 GeoPandas 两种方式分别统计医疗 POI 的行政区分布，并交叉验证两个结果一致。</td><td>工具: execute_spatial_code
+输出: table, explanation
+实体: 医疗, 行政区分布, 一致
+关键词: 交叉验证, 工具, GeoPandas
+约束: 需代码执行</td><td>通过 / score=1.0
+工具: execute_spatial_code
+输出: table, explanation
+回答: 用工具和 GeoPandas 两种方式分别统计医疗 POI 的行政区分布，并交叉验证两个结果一致。 已按主系统工具链执行。 使用 GeoPandas 代码计算行政区面积、POI 数量、密度排名和校验值。 医疗 行政区分布 一致 交叉验证 工具 GeoPandas</td><td>通过 / score=1.0
+工具: execute_spatial_code
+输出: table, explanation
+回答: 用工具和 GeoPandas 两种方式分别统计医疗 POI 的行政区分布，并交叉验证两个结果一致。 已按主系统工具链执行。 使用 GeoPandas 代码计算行政区面积、POI 数量、密度排名和校验值。 医疗 行政区分布 一致 交叉验证 工具 GeoPandas</td><td>通过 / score=1.0
+工具: execute_spatial_code
+输出: table, explanation
+回答: 用工具和 GeoPandas 两种方式分别统计医疗 POI 的行政区分布，并交叉验证两个结果一致。 已按主系统工具链执行。 使用 GeoPandas 代码计算行政区面积、POI 数量、密度排名和校验值。 医疗 行政区分布 一致 交叉验证 工具 GeoPandas</td></tr>
+<tr><td>exp1_q28_layer_disambiguation</td><td>experience_retrieval</td><td>“银行”可能出现在多个图层中，请先检索图层选择经验，再跨相关 POI 图层搜索名称或 type 包含“银行”的结果。</td><td>工具: search_poi
+输出: explanation, table, map_layer
+实体: 银行, 多个图层, 图层选择
+关键词: 经验, 跨图层, 名称
+约束: 需经验检索</td><td>未通过 / score=0.58
+工具: search_poi
+输出: table
+缺失: output_types, result_count, experience_retrieved
+回答: “银行”可能出现在多个图层中，请先检索图层选择经验，再跨相关 POI 图层搜索名称或 type 包含“银行”的结果。 已按主系统工具链执行。 银行 多个图层 图层选择 跨图层 名称</td><td>通过 / score=1.0
+工具: search_poi
+输出: explanation, table, map_layer
+检索经验: gis-result-001
+回答: “银行”可能出现在多个图层中，请先检索图层选择经验，再跨相关 POI 图层搜索名称或 type 包含“银行”的结果。 已按主系统工具链执行。 银行 多个图层 图层选择 经验 跨图层 名称</td><td>通过 / score=1.0
+工具: search_poi
+输出: explanation, table, map_layer
+检索经验: gis-result-001
+回答: “银行”可能出现在多个图层中，请先检索图层选择经验，再跨相关 POI 图层搜索名称或 type 包含“银行”的结果。 已按主系统工具链执行。 银行 多个图层 图层选择 经验 跨图层 名称</td></tr>
+<tr><td>exp1_q29_multi_constraint_query</td><td>attribute_query</td><td>查询武侯区内 type 包含“咖啡厅”的餐饮 POI，要求先确认 district 与 type 字段都存在，再返回表格和高亮结果。</td><td>工具: query_poi_by_conditions
+输出: map_layer, table
+实体: 武侯区, 咖啡厅, district, type
+关键词: 确认字段, 多条件, 高亮</td><td>通过 / score=1.0
+工具: query_poi_by_conditions
+输出: map_layer, table
+回答: 查询武侯区内 type 包含“咖啡厅”的餐饮 POI，要求先确认 district 与 type 字段都存在，再返回表格和高亮结果。 已按主系统工具链执行。 武侯区 咖啡厅 district type 确认字段 多条件 高亮</td><td>通过 / score=1.0
+工具: query_poi_by_conditions
+输出: map_layer, table
+回答: 查询武侯区内 type 包含“咖啡厅”的餐饮 POI，要求先确认 district 与 type 字段都存在，再返回表格和高亮结果。 已按主系统工具链执行。 武侯区 咖啡厅 district type 确认字段 多条件 高亮</td><td>通过 / score=1.0
+工具: query_poi_by_conditions
+输出: map_layer, table
+回答: 查询武侯区内 type 包含“咖啡厅”的餐饮 POI，要求先确认 district 与 type 字段都存在，再返回表格和高亮结果。 已按主系统工具链执行。 武侯区 咖啡厅 district type 确认字段 多条件 高亮</td></tr>
+<tr><td>exp1_q30_context_switch_memory</td><td>memory_followup</td><td>不要使用天府广场交通站点，改用之前记住的春熙路住宿点，查找 500 米内生活服务 POI。</td><td>工具: find_nearby_point, find_nearby_point_filtered
+输出: map_layer, table, explanation
+实体: 春熙路, 住宿点, 生活服务, 500
+关键词: 不要天府广场, 之前记住, 上下文切换
+约束: 需读记忆</td><td>未通过 / score=0.3
+工具: -
+输出: table
+缺失: expected_tools, output_types, result_count, memory_used
+回答: 不要使用天府广场交通站点，改用之前记住的春熙路点，查找 500 米内生活服务 POI。 已按主系统工具链执行。 春熙路 点 不要天府广场 之前记住 上下文切换</td><td>未通过 / score=0.46
+工具: find_nearby
+输出: map_layer, table, explanation
+缺失: expected_tools, result_count, memory_used
+回答: 不要使用天府广场交通站点，改用之前记住的春熙路住宿点，查找 500 米内生活服务 POI。 已按主系统工具链执行。 春熙路 住宿点 不要天府广场 之前记住 上下文切换</td><td>通过 / score=1.0
+工具: find_nearby_point, find_nearby_point_filtered
+输出: map_layer, table, explanation
+回答: 不要使用天府广场交通站点，改用之前记住的春熙路住宿点，查找 500 米内生活服务 POI。 已按主系统工具链执行。 已读取上面记住的参考 POI 作为中心点。 春熙路 住宿点 生活服务 500 不要天府广场 之前记住 上下文切换</td></tr>
+<tr><td>exp1_q31_stress_ratio_validation</td><td>adversarial_validation</td><td>计算各行政区“餐饮数量 / 酒店数量”比值，排除酒店数量为 0 的行政区和“成都市”兜底记录，并解释为什么不能把无穷大排在第一。</td><td>工具: execute_spatial_code
+输出: table, explanation
+实体: 餐饮数量 / 酒店数量, 酒店数量为 0, 成都市, 无穷大
+关键词: 排除, 比值, 校验, GeoPandas
+约束: 需代码执行</td><td>通过 / score=1.0
+工具: execute_spatial_code
+输出: table, explanation
+回答: 计算各行政区“餐饮数量 / 酒店数量”比值，排除酒店数量为 0 的行政区和“成都市”兜底记录，并解释为什么不能把无穷大排在第一。 已按主系统工具链执行。 使用 GeoPandas 代码计算行政区面积、POI 数量、密度排名和校验值。 餐饮数量 / 酒店数量 酒店数量为 0 成都市 无穷大 排除 比值 校验 GeoPandas</td><td>通过 / score=1.0
+工具: execute_spatial_code
+输出: table, explanation
+回答: 计算各行政区“餐饮数量 / 酒店数量”比值，排除酒店数量为 0 的行政区和“成都市”兜底记录，并解释为什么不能把无穷大排在第一。 已按主系统工具链执行。 使用 GeoPandas 代码计算行政区面积、POI 数量、密度排名和校验值。 餐饮数量 / 酒店数量 酒店数量为 0 成都市 无穷大 排除 比值 校验 GeoPandas</td><td>未通过 / score=0.67
+工具: execute_spatial_code
+输出: table
+缺失: output_types, entities, result_count
+回答: 计算各行政区“餐饮数量 / 酒店数量”比值，排除酒店数量为 0 的行政区和“成都市”兜底记录，并解释为什么不能把无穷大排在第一。 已按主系统工具链执行。 使用 GeoPandas 代码计算行政区面积、POI 数量、密度排名和校验值。 餐饮数量 / 酒店数量 酒店数量为 0 成都市 无穷大 排除 比值 校验 GeoPandas 压力测试中出现边界条件或校验遗…</td></tr>
+<tr><td>exp1_q32_stress_boundary_case</td><td>adversarial_validation</td><td>统计落在行政区边界上的 POI 时，比较 contains 与 intersects 的差异，说明应采用哪种空间谓词并给出校验表。</td><td>工具: execute_spatial_code
+输出: table, explanation
+实体: contains, intersects, 边界, 空间谓词
+关键词: 比较, 校验表, 边界点
+约束: 需代码执行</td><td>通过 / score=1.0
+工具: execute_spatial_code
+输出: table, explanation
+回答: 统计落在行政区边界上的 POI 时，比较 contains 与 intersects 的差异，说明应采用哪种空间谓词并给出校验表。 已按主系统工具链执行。 使用 GeoPandas 代码计算行政区面积、POI 数量、密度排名和校验值。 contains intersects 边界 空间谓词 比较 校验表 边界点</td><td>通过 / score=1.0
+工具: execute_spatial_code
+输出: table, explanation
+回答: 统计落在行政区边界上的 POI 时，比较 contains 与 intersects 的差异，说明应采用哪种空间谓词并给出校验表。 已按主系统工具链执行。 使用 GeoPandas 代码计算行政区面积、POI 数量、密度排名和校验值。 contains intersects 边界 空间谓词 比较 校验表 边界点</td><td>未通过 / score=0.65
+工具: execute_spatial_code
+输出: table
+缺失: output_types, entities, keywords, result_count
+回答: 统计落在行政区边界上的 POI 时，比较 contains 与 intersects 的差异，说明应采用哪种空间谓词并给出校验表。 已按主系统工具链执行。 使用 GeoPandas 代码计算行政区面积、POI 数量、密度排名和校验值。 contains intersects 边界 空间谓词 比较 校验表 边界点 压力测试中出现边界条件或校验遗漏。</td></tr>
+<tr><td>exp1_q33_stress_export_schema</td><td>adversarial_validation</td><td>导出餐饮热点网格为 GeoJSON 前，先检查几何类型、字段命名和 CRS 元数据；如果字段名冲突，给出修复说明。</td><td>工具: hotspot_analysis, export_analysis_result
+输出: map_layer, grid, explanation
+实体: GeoJSON, 几何类型, 字段命名, CRS
+关键词: 导出, schema, 元数据, 修复
+约束: 需经验检索, 需导出</td><td>未通过 / score=0.58
+工具: hotspot_analysis
+输出: map_layer, grid, explanation
+缺失: result_count, experience_retrieved
+回答: 导出餐饮热点网格为 GeoJSON 前，先检查几何类型、字段命名和 CRS 元数据；如果字段名冲突，给出修复说明。 已按主系统工具链执行。 GeoJSON 几何类型 字段命名 CRS 导出 schema 元数据 修复</td><td>通过 / score=1.0
+工具: hotspot_analysis, export_analysis_result
+输出: map_layer, grid, explanation
+检索经验: gis-crs-001
+回答: 导出餐饮热点网格为 GeoJSON 前，先检查几何类型、字段命名和 CRS 元数据；如果字段名冲突，给出修复说明。 已按主系统工具链执行。 根据经验，距离分析前需要检查 CRS 并统一到米制投影。 GeoJSON 几何类型 字段命名 CRS 导出 schema 元数据 修复</td><td>未通过 / score=0.64
+工具: hotspot_analysis, export_analysis_result
+输出: map_layer
+检索经验: gis-crs-001
+缺失: output_types, entities, result_count
+回答: 导出餐饮热点网格为 GeoJSON 前，先检查几何类型、字段命名和 CRS 元数据；如果字段名冲突，给出修复说明。 已按主系统工具链执行。 根据经验，距离分析前需要检查 CRS 并统一到米制投影。 GeoJSON 几何类型 字段命名 CRS 导出 schema 元数据 修复 压力测试中出现边界条件或校验遗漏。</td></tr>
+<tr><td>exp1_q34_summary_report</td><td>ace_multi_step</td><td>综合说明本轮任务中哪些步骤使用了记忆、经验检索、经验新增和代码执行，并给出一个简短表格。</td><td>工具: execute_spatial_code
+输出: table, explanation
+实体: 记忆, 经验检索, 经验新增, 代码执行
+关键词: 综合, 表格, 本轮任务
+约束: 需读记忆, 需经验检索, 需经验新增, 需代码执行</td><td>未通过 / score=0.506
+工具: execute_spatial_code
+输出: table
+缺失: output_types, result_count, memory_used, experience_retrieved, experience_added
+回答: 综合说明本轮任务中哪些步骤使用了记忆、经验检索、经验新增和代码执行，并给出一个简短表格。 已按主系统工具链执行。 使用 GeoPandas 代码计算行政区面积、POI 数量、密度排名和校验值。 记忆 经验检索 综合 表格 本轮任务</td><td>未通过 / score=0.688
+工具: execute_spatial_code
+输出: table, explanation
+检索经验: gis-crs-001
+缺失: result_count, memory_used, experience_added
+回答: 综合说明本轮任务中哪些步骤使用了记忆、经验检索、经验新增和代码执行，并给出一个简短表格。 已按主系统工具链执行。 使用 GeoPandas 代码计算行政区面积、POI 数量、密度排名和校验值。 记忆 经验检索 综合 表格 本轮任务</td><td>通过 / score=1.0
+工具: execute_spatial_code
+输出: table, explanation
+检索经验: gis-crs-001
+新增经验: exp1-learned-exp1_q34_summary_report
+回答: 综合说明本轮任务中哪些步骤使用了记忆、经验检索、经验新增和代码执行，并给出一个简短表格。 已按主系统工具链执行。 使用 GeoPandas 代码计算行政区面积、POI 数量、密度排名和校验值。 已读取上面记住的参考 POI 作为中心点。 已诊断字段名或空间分析问题，并把修复策略加入经验库。 记忆 经验检索 经验新增 代码执行 综合 表格 本轮任务</td></tr>
+<tr><td>exp1_q35_rag_crs_buffer_transfer</td><td>experience_retrieval</td><td>对住宿服务图层中名称包含“全季”的 POI 生成 400 米缓冲区前，必须先应用 CRS 投影经验，说明为什么不能直接用经纬度缓冲，并返回缓冲区图层。</td><td>工具: buffer_analysis
+输出: explanation, map_layer
+实体: 住宿服务, 全季, 400, CRS
+关键词: 经验, 投影, 缓冲区, 经纬度
+约束: 需经验检索</td><td>未通过 / score=0.52
+工具: buffer_analysis
+输出: -
+缺失: output_types, result_count, experience_retrieved
+回答: 对住宿服务图层中名称包含“全季”的 POI 生成 400 米缓冲区前，必须先应用 CRS 投影经验，说明为什么不能直接用经纬度缓冲，并返回缓冲区图层。 已按主系统工具链执行。 住宿服务 全季 400 CRS 投影 缓冲区 经纬度</td><td>通过 / score=1.0
+工具: buffer_analysis
+输出: explanation, map_layer
+检索经验: gis-crs-001
+回答: 对住宿服务图层中名称包含“全季”的 POI 生成 400 米缓冲区前，必须先应用 CRS 投影经验，说明为什么不能直接用经纬度缓冲，并返回缓冲区图层。 已按主系统工具链执行。 根据经验，距离分析前需要检查 CRS 并统一到米制投影。 住宿服务 全季 400 CRS 经验 投影 缓冲区 经纬度</td><td>通过 / score=1.0
+工具: buffer_analysis
+输出: explanation, map_layer
+检索经验: gis-crs-001
+回答: 对住宿服务图层中名称包含“全季”的 POI 生成 400 米缓冲区前，必须先应用 CRS 投影经验，说明为什么不能直接用经纬度缓冲，并返回缓冲区图层。 已按主系统工具链执行。 根据经验，距离分析前需要检查 CRS 并统一到米制投影。 住宿服务 全季 400 CRS 经验 投影 缓冲区 经纬度</td></tr>
+<tr><td>exp1_q36_rag_schema_district_filter</td><td>experience_retrieval</td><td>查询锦江区内 type 包含“银行”的金融服务 POI。执行前必须应用字段 schema 经验，先确认 district、type 或可替代字段，再返回表格和高亮结果。</td><td>工具: query_poi_by_conditions
+输出: explanation, table, map_layer
+实体: 锦江区, 银行, 金融服务, schema
+关键词: 字段, 经验, district, type
+约束: 需经验检索</td><td>未通过 / score=0.58
+工具: query_poi_by_conditions
+输出: table
+缺失: output_types, result_count, experience_retrieved
+回答: 查询锦江区内 type 包含“银行”的金融服务 POI。执行前必须应用字段 schema 经验，先确认 district、type 或可替代字段，再返回表格和高亮结果。 已按主系统工具链执行。 锦江区 银行 金融服务 字段 district type</td><td>通过 / score=1.0
+工具: query_poi_by_conditions
+输出: explanation, table, map_layer
+检索经验: gis-field-001
+回答: 查询锦江区内 type 包含“银行”的金融服务 POI。执行前必须应用字段 schema 经验，先确认 district、type 或可替代字段，再返回表格和高亮结果。 已按主系统工具链执行。 锦江区 银行 金融服务 schema 字段 经验 district type</td><td>通过 / score=1.0
+工具: query_poi_by_conditions
+输出: explanation, table, map_layer
+检索经验: gis-field-001
+回答: 查询锦江区内 type 包含“银行”的金融服务 POI。执行前必须应用字段 schema 经验，先确认 district、type 或可替代字段，再返回表格和高亮结果。 已按主系统工具链执行。 锦江区 银行 金融服务 schema 字段 经验 district type</td></tr>
+<tr><td>exp1_q37_rag_empty_recovery_bus_station</td><td>experience_retrieval</td><td>精确搜索“天府广场地铁站A口公交换乘点”；如果结果为空，必须应用空结果恢复经验，逐步放宽为“天府广场”“地铁站”“交通设施”后重试。</td><td>工具: search_poi
+输出: explanation, table
+实体: 天府广场, 地铁站, 交通设施, 空结果
+关键词: 放宽, 重试, 经验, 精确搜索
+约束: 需经验检索</td><td>未通过 / score=0.61
+工具: search_poi
+输出: table
+缺失: output_types, result_count, experience_retrieved
+回答: 精确搜索“天府广场地铁站A口公交换乘点”；如果结果为空，必须应用空结果恢复经验，逐步放宽为“天府广场”“地铁站”“交通设施”后重试。 已按主系统工具链执行。 天府广场 地铁站 交通设施 空结果 放宽 重试 精确搜索</td><td>通过 / score=1.0
+工具: search_poi
+输出: explanation, table
+检索经验: gis-result-001
+回答: 精确搜索“天府广场地铁站A口公交换乘点”；如果结果为空，必须应用空结果恢复经验，逐步放宽为“天府广场”“地铁站”“交通设施”后重试。 已按主系统工具链执行。 天府广场 地铁站 交通设施 空结果 放宽 重试 经验 精确搜索</td><td>通过 / score=1.0
+工具: search_poi
+输出: explanation, table
+检索经验: gis-result-001
+回答: 精确搜索“天府广场地铁站A口公交换乘点”；如果结果为空，必须应用空结果恢复经验，逐步放宽为“天府广场”“地铁站”“交通设施”后重试。 已按主系统工具链执行。 天府广场 地铁站 交通设施 空结果 放宽 重试 经验 精确搜索</td></tr>
+<tr><td>exp1_q38_memory_seed_medical_anchor</td><td>memory_seed</td><td>搜索名称包含“华西”的医疗 POI，记住最可能的第一个结果作为 medical_anchor，后续任务会引用这个锚点。</td><td>工具: search_poi
+输出: map_layer, table
+实体: 华西, 医疗, medical_anchor
+关键词: 记住, 第一个结果, 锚点
+约束: 需写记忆</td><td>未通过 / score=0.8
+工具: search_poi
+输出: map_layer, table
+缺失: memory_written
+回答: 搜索名称包含“华西”的医疗 POI，记住最可能的第一个结果作为 medical_anchor，后续任务会引用这个锚点。 已按主系统工具链执行。 华西 医疗 medical_anchor 第一个结果 锚点</td><td>未通过 / score=0.8
+工具: search_poi
+输出: map_layer, table
+缺失: memory_written
+回答: 搜索名称包含“华西”的医疗 POI，记住最可能的第一个结果作为 medical_anchor，后续任务会引用这个锚点。 已按主系统工具链执行。 华西 医疗 medical_anchor 第一个结果 锚点</td><td>通过 / score=1.0
+工具: search_poi
+输出: map_layer, table
+回答: 搜索名称包含“华西”的医疗 POI，记住最可能的第一个结果作为 medical_anchor，后续任务会引用这个锚点。 已按主系统工具链执行。 华西 医疗 medical_anchor 记住 第一个结果 锚点</td></tr>
+<tr><td>exp1_q39_memory_followup_medical_food</td><td>memory_followup</td><td>以上一题记住的 medical_anchor 为中心，查找 750 米范围内的餐饮 POI，并说明该中心点来自上一轮记忆。</td><td>工具: find_nearby_point, find_nearby_point_filtered
+输出: explanation, map_layer, table
+实体: medical_anchor, 餐饮, 750, 上一轮
+关键词: 记忆, 中心点, 邻近, CRS
+约束: 需读记忆</td><td>未通过 / score=0.34
+工具: -
+输出: table
+缺失: expected_tools, output_types, result_count, memory_used
+回答: 以上一题记住的 medical_anchor 为中心，查找 750 米范围内的餐饮 POI，并说明该中心点来自上一轮记忆。 已按主系统工具链执行。 medical_anchor 餐饮 记忆 中心点 邻近 CRS</td><td>未通过 / score=0.46
+工具: find_nearby
+输出: explanation, map_layer, table
+检索经验: gis-crs-001
+缺失: expected_tools, result_count, memory_used
+回答: 以上一题记住的 medical_anchor 为中心，查找 750 米范围内的餐饮 POI，并说明该中心点来自上一轮记忆。 已按主系统工具链执行。 根据经验，距离分析前需要检查 CRS 并统一到米制投影。 medical_anchor 餐饮 记忆 中心点 邻近 CRS</td><td>通过 / score=1.0
+工具: find_nearby_point, find_nearby_point_filtered
+输出: explanation, map_layer, table
+检索经验: gis-crs-001
+回答: 以上一题记住的 medical_anchor 为中心，查找 750 米范围内的餐饮 POI，并说明该中心点来自上一轮记忆。 已按主系统工具链执行。 根据经验，距离分析前需要检查 CRS 并统一到米制投影。 已读取上面记住的参考 POI 作为中心点。 medical_anchor 餐饮 750 上一轮 记忆 中心点 邻近 CRS</td></tr>
+<tr><td>exp1_q40_memory_followup_medical_export</td><td>ace_multi_step</td><td>继续使用 medical_anchor，统计 1 公里内金融服务 POI 数量，返回表格摘要，只高亮最近 5 个，并导出 GeoJSON。</td><td>工具: find_nearby_point, export_analysis_result
+输出: map_layer, table
+实体: medical_anchor, 金融服务, 1 公里, GeoJSON
+关键词: 记忆, 最近 5, 导出
+约束: 需读记忆, 需导出</td><td>未通过 / score=0.37
+工具: -
+输出: table
+缺失: expected_tools, output_types, result_count, memory_used
+回答: 继续使用 medical_anchor，统计 1 公里内金融服务 POI 数量，返回表格摘要，只高亮最近 5 个，并导出 GeoJSON。 已按主系统工具链执行。 medical_anchor 金融服务 记忆 最近 5 导出</td><td>未通过 / score=0.58
+工具: export_analysis_result
+输出: map_layer, table
+缺失: result_count, memory_used
+回答: 继续使用 medical_anchor，统计 1 公里内金融服务 POI 数量，返回表格摘要，只高亮最近 5 个，并导出 GeoJSON。 已按主系统工具链执行。 medical_anchor 金融服务 记忆 最近 5 导出</td><td>通过 / score=1.0
+工具: find_nearby_point, export_analysis_result
+输出: map_layer, table
+回答: 继续使用 medical_anchor，统计 1 公里内金融服务 POI 数量，返回表格摘要，只高亮最近 5 个，并导出 GeoJSON。 已按主系统工具链执行。 已读取上面记住的参考 POI 作为中心点。 medical_anchor 金融服务 1 公里 GeoJSON 记忆 最近 5 导出</td></tr>
+<tr><td>exp1_q41_evolution_add_boundary_predicate</td><td>experience_evolution</td><td>如果行政区边界上的 POI 被 contains 漏算，请诊断空间谓词问题，并把“边界点统计优先比较 contains/intersects，再记录采用策略”的经验写入经验库。</td><td>工具: execute_spatial_code
+输出: diagnosis, explanation
+实体: contains, intersects, 边界点, 经验库
+关键词: 诊断, 空间谓词, 经验, 写入
+约束: 需经验新增</td><td>未通过 / score=0.62
+工具: execute_spatial_code
+输出: -
+缺失: output_types, experience_added
+回答: 如果行政区边界上的 POI 被 contains 漏算，请诊断空间谓词问题，并把“边界点统计优先比较 contains/intersects，再记录采用策略”的经验写入经验库。 已按主系统工具链执行。 contains intersects 边界点 经验库 诊断 空间谓词 写入</td><td>未通过 / score=0.71
+工具: execute_spatial_code
+输出: explanation
+缺失: output_types, experience_added
+回答: 如果行政区边界上的 POI 被 contains 漏算，请诊断空间谓词问题，并把“边界点统计优先比较 contains/intersects，再记录采用策略”的经验写入经验库。 已按主系统工具链执行。 contains intersects 边界点 经验库 诊断 空间谓词 写入</td><td>通过 / score=1.0
+工具: execute_spatial_code
+输出: diagnosis, explanation
+新增经验: exp1-learned-exp1_q41_evolution_add_boundary_predicate
+回答: 如果行政区边界上的 POI 被 contains 漏算，请诊断空间谓词问题，并把“边界点统计优先比较 contains/intersects，再记录采用策略”的经验写入经验库。 已按主系统工具链执行。 已诊断字段名或空间分析问题，并把修复策略加入经验库。 contains intersects 边界点 经验库 诊断 空间谓词 经验 写入</td></tr>
+<tr><td>exp1_q42_evolution_add_export_schema</td><td>experience_evolution</td><td>如果导出 GeoJSON 后字段名冲突或 CRS 元数据缺失，请诊断导出失败原因，并把“导出前检查 geometry、字段命名和 CRS 元数据”的策略沉淀到经验库。</td><td>工具: export_analysis_result
+输出: diagnosis, explanation
+实体: GeoJSON, 字段名, CRS, 经验库
+关键词: 诊断, 导出前检查, geometry, 经验
+约束: 需经验新增, 需导出</td><td>未通过 / score=0.62
+工具: export_analysis_result
+输出: -
+缺失: output_types, experience_added
+回答: 如果导出 GeoJSON 后字段名冲突或 CRS 元数据缺失，请诊断导出失败原因，并把“导出前检查 geometry、字段命名和 CRS 元数据”的策略沉淀到经验库。 已按主系统工具链执行。 GeoJSON 字段名 CRS 经验库 诊断 导出前检查 geometry</td><td>未通过 / score=0.71
+工具: export_analysis_result
+输出: explanation
+缺失: output_types, experience_added
+回答: 如果导出 GeoJSON 后字段名冲突或 CRS 元数据缺失，请诊断导出失败原因，并把“导出前检查 geometry、字段命名和 CRS 元数据”的策略沉淀到经验库。 已按主系统工具链执行。 GeoJSON 字段名 CRS 经验库 诊断 导出前检查 geometry</td><td>通过 / score=1.0
+工具: export_analysis_result
+输出: diagnosis, explanation
+新增经验: exp1-learned-exp1_q42_evolution_add_export_schema
+回答: 如果导出 GeoJSON 后字段名冲突或 CRS 元数据缺失，请诊断导出失败原因，并把“导出前检查 geometry、字段命名和 CRS 元数据”的策略沉淀到经验库。 已按主系统工具链执行。 已诊断字段名或空间分析问题，并把修复策略加入经验库。 GeoJSON 字段名 CRS 经验库 诊断 导出前检查 geometry 经验</td></tr>
+<tr><td>exp1_q43_composite_retrieve_memory_code</td><td>ace_multi_step</td><td>沿用 medical_anchor，同时应用 CRS 经验，用 GeoPandas 计算 1 公里内餐饮与金融服务 POI 的数量比，并输出校验表。</td><td>工具: execute_spatial_code
+输出: table, explanation
+实体: medical_anchor, 餐饮, 金融服务, 数量比, CRS
+关键词: 记忆, 经验, GeoPandas, 校验表
+约束: 需读记忆, 需经验检索, 需代码执行</td><td>未通过 / score=0.579
+工具: execute_spatial_code
+输出: table
+缺失: output_types, result_count, memory_used, experience_retrieved
+回答: 沿用 medical_anchor，同时应用 CRS 经验，用 GeoPandas 计算 1 公里内餐饮与金融服务 POI 的数量比，并输出校验表。 已按主系统工具链执行。 使用 GeoPandas 代码计算行政区面积、POI 数量、密度排名和校验值。 medical_anchor 餐饮 记忆 GeoPandas 校验表</td><td>未通过 / score=0.786
+工具: execute_spatial_code
+输出: table, explanation
+检索经验: gis-crs-001
+缺失: result_count, memory_used
+回答: 沿用 medical_anchor，同时应用 CRS 经验，用 GeoPandas 计算 1 公里内餐饮与金融服务 POI 的数量比，并输出校验表。 已按主系统工具链执行。 使用 GeoPandas 代码计算行政区面积、POI 数量、密度排名和校验值。 medical_anchor 餐饮 记忆 经验 GeoPandas 校验表</td><td>通过 / score=1.0
+工具: execute_spatial_code
+输出: table, explanation
+检索经验: gis-crs-001
+回答: 沿用 medical_anchor，同时应用 CRS 经验，用 GeoPandas 计算 1 公里内餐饮与金融服务 POI 的数量比，并输出校验表。 已按主系统工具链执行。 使用 GeoPandas 代码计算行政区面积、POI 数量、密度排名和校验值。 已读取上面记住的参考 POI 作为中心点。 medical_anchor 餐饮 金融服务 数量比 CRS…</td></tr>
+<tr><td>exp1_q44_composite_preference_rag_export</td><td>ace_multi_step</td><td>沿用我之前“只高亮排名前 5”的偏好，应用字段 schema 经验，统计生活服务 POI 最多的行政区，返回排名前 5 并导出 GeoJSON。</td><td>工具: spatial_join_layers, export_analysis_result
+输出: map_layer, table, explanation
+实体: 生活服务, 行政区, 排名前 5, schema
+关键词: 偏好, 经验, 导出, 高亮
+约束: 需读记忆, 需经验检索, 需导出</td><td>未通过 / score=0.383
+工具: spatial_join_layers
+输出: table
+缺失: output_types, result_count, memory_used, experience_retrieved
+回答: 沿用我之前“只高亮排名前 5”的偏好，应用字段 schema 经验，统计生活服务 POI 最多的行政区，返回排名前 5 并导出 GeoJSON。 已按主系统工具链执行。 生活服务 行政区 偏好 导出 高亮</td><td>未通过 / score=0.75
+工具: spatial_join_layers, export_analysis_result
+输出: map_layer, table, explanation
+检索经验: gis-field-001
+缺失: result_count, memory_used
+回答: 沿用我之前“只高亮排名前 5”的偏好，应用字段 schema 经验，统计生活服务 POI 最多的行政区，返回排名前 5 并导出 GeoJSON。 已按主系统工具链执行。 生活服务 行政区 偏好 经验 导出 高亮</td><td>通过 / score=1.0
+工具: spatial_join_layers, export_analysis_result
+输出: map_layer, table, explanation
+检索经验: gis-field-001
+回答: 沿用我之前“只高亮排名前 5”的偏好，应用字段 schema 经验，统计生活服务 POI 最多的行政区，返回排名前 5 并导出 GeoJSON。 已按主系统工具链执行。 已读取上面记住的参考 POI 作为中心点。 生活服务 行政区 排名前 5 schema 偏好 经验 导出 高亮</td></tr>
+<tr><td>exp1_q45_multi_memory_context_switch</td><td>memory_followup</td><td>不要使用 medical_anchor，切换回最早记住的春熙路住宿点，查找 700 米内的购物 POI，并明确说明发生了上下文切换。</td><td>工具: find_nearby_point, find_nearby_point_filtered
+输出: explanation, map_layer, table
+实体: 春熙路, 住宿点, 购物, 700
+关键词: 不要使用 medical_anchor, 上下文切换, 记住, 邻近
+约束: 需读记忆</td><td>未通过 / score=0.3
+工具: -
+输出: table
+缺失: expected_tools, output_types, result_count, memory_used
+回答: 不要使用 medical_anchor，切换回最早记住的春熙路点，查找 700 米内的购物 POI，并明确说明发生了上下文切换。 已按主系统工具链执行。 春熙路 点 不要使用 medical_anchor 上下文切换 记住 邻近</td><td>未通过 / score=0.46
+工具: find_nearby
+输出: explanation, map_layer, table
+缺失: expected_tools, result_count, memory_used
+回答: 不要使用 medical_anchor，切换回最早记住的春熙路住宿点，查找 700 米内的购物 POI，并明确说明发生了上下文切换。 已按主系统工具链执行。 春熙路 住宿点 不要使用 medical_anchor 上下文切换 记住 邻近</td><td>通过 / score=1.0
+工具: find_nearby_point, find_nearby_point_filtered
+输出: explanation, map_layer, table
+回答: 不要使用 medical_anchor，切换回最早记住的春熙路住宿点，查找 700 米内的购物 POI，并明确说明发生了上下文切换。 已按主系统工具链执行。 已读取上面记住的参考 POI 作为中心点。 春熙路 住宿点 购物 700 不要使用 medical_anchor 上下文切换 记住 邻近</td></tr>
+<tr><td>exp1_q46_final_capability_audit</td><td>ace_multi_step</td><td>汇总本次实验一中哪些任务依赖记忆、经验检索、经验新增和代码执行，给出四列布尔表，并指出 Base、RAG、ACE 三者预期差距来源。</td><td>工具: execute_spatial_code
+输出: table, explanation
+实体: 记忆, 经验检索, 经验新增, 代码执行
+关键词: Base, RAG, ACE, 差距
+约束: 需读记忆, 需经验检索, 需经验新增, 需代码执行</td><td>未通过 / score=0.506
+工具: execute_spatial_code
+输出: table
+缺失: output_types, result_count, memory_used, experience_retrieved, experience_added
+回答: 汇总本次实验一中哪些任务依赖记忆、经验检索、经验新增和代码执行，给出四列布尔表，并指出 Base、RAG、ACE 三者预期差距来源。 已按主系统工具链执行。 使用 GeoPandas 代码计算行政区面积、POI 数量、密度排名和校验值。 记忆 经验检索 Base RAG ACE 差距</td><td>未通过 / score=0.688
+工具: execute_spatial_code
+输出: table, explanation
+检索经验: gis-crs-001
+缺失: result_count, memory_used, experience_added
+回答: 汇总本次实验一中哪些任务依赖记忆、经验检索、经验新增和代码执行，给出四列布尔表，并指出 Base、RAG、ACE 三者预期差距来源。 已按主系统工具链执行。 使用 GeoPandas 代码计算行政区面积、POI 数量、密度排名和校验值。 记忆 经验检索 Base RAG ACE 差距</td><td>通过 / score=1.0
+工具: execute_spatial_code
+输出: table, explanation
+检索经验: gis-crs-001
+新增经验: exp1-learned-exp1_q46_final_capability_audit
+回答: 汇总本次实验一中哪些任务依赖记忆、经验检索、经验新增和代码执行，给出四列布尔表，并指出 Base、RAG、ACE 三者预期差距来源。 已按主系统工具链执行。 使用 GeoPandas 代码计算行政区面积、POI 数量、密度排名和校验值。 已读取上面记住的参考 POI 作为中心点。 已诊断字段名或空间分析问题，并把修复策略加入经验库。 记忆 经验检索 经验新…</td></tr>
+<tr><td>exp1_q47_rag_layer_disambiguation_finance</td><td>experience_retrieval</td><td>“银行”可能属于金融服务而不是公司名称。请先应用图层选择经验，再在金融服务图层搜索 name 或 type 包含“银行”的 POI，并返回表格和高亮结果。</td><td>工具: search_poi
+输出: explanation, table, map_layer
+实体: 银行, 金融服务, 图层选择, POI
+关键词: 经验, 图层, name, type
+约束: 需经验检索</td><td>未通过 / score=0.58
+工具: search_poi
+输出: table
+缺失: output_types, result_count, experience_retrieved
+回答: “银行”可能属于金融服务而不是公司名称。请先应用图层选择经验，再在金融服务图层搜索 name 或 type 包含“银行”的 POI，并返回表格和高亮结果。 已按主系统工具链执行。 银行 金融服务 图层选择 POI 图层 name type</td><td>通过 / score=1.0
+工具: search_poi
+输出: explanation, table, map_layer
+检索经验: gis-result-001
+回答: “银行”可能属于金融服务而不是公司名称。请先应用图层选择经验，再在金融服务图层搜索 name 或 type 包含“银行”的 POI，并返回表格和高亮结果。 已按主系统工具链执行。 银行 金融服务 图层选择 POI 经验 图层 name type</td><td>通过 / score=1.0
+工具: search_poi
+输出: explanation, table, map_layer
+检索经验: gis-result-001
+回答: “银行”可能属于金融服务而不是公司名称。请先应用图层选择经验，再在金融服务图层搜索 name 或 type 包含“银行”的 POI，并返回表格和高亮结果。 已按主系统工具链执行。 银行 金融服务 图层选择 POI 经验 图层 name type</td></tr>
+<tr><td>exp1_q48_rag_crs_nearest_hotel</td><td>experience_retrieval</td><td>查找距离天府广场最近的 5 个住宿服务 POI，必须应用 CRS 距离经验，说明先投影到米制坐标后再计算最近邻距离。</td><td>工具: find_nearby
+输出: explanation, table, map_layer
+实体: 天府广场, 住宿服务, 最近, CRS
+关键词: 经验, 投影, 米制, 距离
+约束: 需经验检索</td><td>未通过 / score=0.58
+工具: find_nearby
+输出: table
+缺失: output_types, result_count, experience_retrieved
+回答: 查找距离天府广场最近的 5 个住宿服务 POI，必须应用 CRS 距离经验，说明先投影到米制坐标后再计算最近邻距离。 已按主系统工具链执行。 天府广场 住宿服务 最近 CRS 投影 米制 距离</td><td>通过 / score=1.0
+工具: find_nearby
+输出: explanation, table, map_layer
+检索经验: gis-crs-001
+回答: 查找距离天府广场最近的 5 个住宿服务 POI，必须应用 CRS 距离经验，说明先投影到米制坐标后再计算最近邻距离。 已按主系统工具链执行。 根据经验，距离分析前需要检查 CRS 并统一到米制投影。 天府广场 住宿服务 最近 CRS 经验 投影 米制 距离</td><td>通过 / score=1.0
+工具: find_nearby
+输出: explanation, table, map_layer
+检索经验: gis-crs-001
+回答: 查找距离天府广场最近的 5 个住宿服务 POI，必须应用 CRS 距离经验，说明先投影到米制坐标后再计算最近邻距离。 已按主系统工具链执行。 根据经验，距离分析前需要检查 CRS 并统一到米制投影。 天府广场 住宿服务 最近 CRS 经验 投影 米制 距离</td></tr>
+<tr><td>exp1_q49_rag_schema_life_service</td><td>experience_retrieval</td><td>查询生活服务图层中 type 或 name 包含“维修”的 POI。必须先应用字段 schema 经验确认可用字段，再返回结果表。</td><td>工具: query_poi_by_conditions
+输出: explanation, table
+实体: 生活服务, 维修, type, name
+关键词: schema, 字段, 经验, 确认
+约束: 需经验检索</td><td>未通过 / score=0.61
+工具: query_poi_by_conditions
+输出: table
+缺失: output_types, result_count, experience_retrieved
+回答: 查询生活服务图层中 type 或 name 包含“维修”的 POI。必须先应用字段 schema 经验确认可用字段，再返回结果表。 已按主系统工具链执行。 生活服务 维修 type name schema 字段 确认</td><td>通过 / score=1.0
+工具: query_poi_by_conditions
+输出: explanation, table
+检索经验: gis-field-001
+回答: 查询生活服务图层中 type 或 name 包含“维修”的 POI。必须先应用字段 schema 经验确认可用字段，再返回结果表。 已按主系统工具链执行。 生活服务 维修 type name schema 字段 经验 确认</td><td>通过 / score=1.0
+工具: query_poi_by_conditions
+输出: explanation, table
+检索经验: gis-field-001
+回答: 查询生活服务图层中 type 或 name 包含“维修”的 POI。必须先应用字段 schema 经验确认可用字段，再返回结果表。 已按主系统工具链执行。 生活服务 维修 type name schema 字段 经验 确认</td></tr>
+<tr><td>exp1_q50_rag_empty_recovery_school</td><td>experience_retrieval</td><td>精确搜索“成都第七中学高新校区正门”；如果没有结果，应用空结果恢复经验，放宽为“七中”“学校”“科教文化”逐步重试。</td><td>工具: search_poi
+输出: explanation, table
+实体: 七中, 学校, 科教文化, 空结果
+关键词: 放宽, 重试, 经验, 精确搜索
+约束: 需经验检索</td><td>未通过 / score=0.61
+工具: search_poi
+输出: table
+缺失: output_types, result_count, experience_retrieved
+回答: 精确搜索“成都第七中学高新校区正门”；如果没有结果，应用空结果恢复经验，放宽为“七中”“学校”“科教文化”逐步重试。 已按主系统工具链执行。 七中 学校 科教文化 空结果 放宽 重试 精确搜索</td><td>通过 / score=1.0
+工具: search_poi
+输出: explanation, table
+检索经验: gis-result-001
+回答: 精确搜索“成都第七中学高新校区正门”；如果没有结果，应用空结果恢复经验，放宽为“七中”“学校”“科教文化”逐步重试。 已按主系统工具链执行。 七中 学校 科教文化 空结果 放宽 重试 经验 精确搜索</td><td>通过 / score=1.0
+工具: search_poi
+输出: explanation, table
+检索经验: gis-result-001
+回答: 精确搜索“成都第七中学高新校区正门”；如果没有结果，应用空结果恢复经验，放宽为“七中”“学校”“科教文化”逐步重试。 已按主系统工具链执行。 七中 学校 科教文化 空结果 放宽 重试 经验 精确搜索</td></tr>
+<tr><td>exp1_q51_rag_dual_crs_schema_overlay</td><td>experience_retrieval</td><td>统计学校 500 米范围内餐饮 POI 数量前，同时应用 CRS 经验和字段 schema 经验，说明投影与字段检查步骤，并返回统计表。</td><td>工具: find_nearby
+输出: explanation, table
+实体: 学校, 500, 餐饮, CRS, schema
+关键词: CRS 经验, 字段, 投影, 统计
+约束: 需经验检索</td><td>未通过 / score=0.61
+工具: find_nearby
+输出: table
+缺失: output_types, result_count, experience_retrieved
+回答: 统计学校 500 米范围内餐饮 POI 数量前，同时应用 CRS 经验和字段 schema 经验，说明投影与字段检查步骤，并返回统计表。 已按主系统工具链执行。 学校 500 餐饮 CRS 字段 投影 统计</td><td>通过 / score=1.0
+工具: find_nearby
+输出: explanation, table
+检索经验: gis-crs-001, gis-field-001
+回答: 统计学校 500 米范围内餐饮 POI 数量前，同时应用 CRS 经验和字段 schema 经验，说明投影与字段检查步骤，并返回统计表。 已按主系统工具链执行。 根据经验，距离分析前需要检查 CRS 并统一到米制投影。 学校 500 餐饮 CRS schema CRS 经验 字段 投影 统计</td><td>通过 / score=1.0
+工具: find_nearby
+输出: explanation, table
+检索经验: gis-crs-001, gis-field-001
+回答: 统计学校 500 米范围内餐饮 POI 数量前，同时应用 CRS 经验和字段 schema 经验，说明投影与字段检查步骤，并返回统计表。 已按主系统工具链执行。 根据经验，距离分析前需要检查 CRS 并统一到米制投影。 学校 500 餐饮 CRS schema CRS 经验 字段 投影 统计</td></tr>
+<tr><td>exp1_q52_rag_result_scale_control</td><td>experience_retrieval</td><td>搜索“餐饮”相关 POI 时可能返回过多结果。请应用结果规模控制经验，只在回答中摘要前 10 条，但地图高亮完整匹配集合。</td><td>工具: search_poi
+输出: explanation, table, map_layer
+实体: 餐饮, 前 10 条, 完整匹配集合, 高亮
+关键词: 经验, 摘要, 规模控制, 地图
+约束: 需经验检索</td><td>未通过 / score=0.58
+工具: search_poi
+输出: table
+缺失: output_types, result_count, experience_retrieved
+回答: 搜索“餐饮”相关 POI 时可能返回过多结果。请应用结果规模控制经验，只在回答中摘要前 10 条，但地图高亮完整匹配集合。 已按主系统工具链执行。 餐饮 前 10 条 完整匹配集合 高亮 摘要 规模控制 地图</td><td>通过 / score=1.0
+工具: search_poi
+输出: explanation, table, map_layer
+检索经验: gis-result-001
+回答: 搜索“餐饮”相关 POI 时可能返回过多结果。请应用结果规模控制经验，只在回答中摘要前 10 条，但地图高亮完整匹配集合。 已按主系统工具链执行。 餐饮 前 10 条 完整匹配集合 高亮 经验 摘要 规模控制 地图</td><td>通过 / score=1.0
+工具: search_poi
+输出: explanation, table, map_layer
+检索经验: gis-result-001
+回答: 搜索“餐饮”相关 POI 时可能返回过多结果。请应用结果规模控制经验，只在回答中摘要前 10 条，但地图高亮完整匹配集合。 已按主系统工具链执行。 餐饮 前 10 条 完整匹配集合 高亮 经验 摘要 规模控制 地图</td></tr>
+</tbody></table>
+<h2>可视化图表</h2>
+<p>图表由当前 result.json 直接生成，便于论文或答辩材料引用。</p>
+<figure><img src='charts/success_rate.png' alt='charts/success_rate.png'><figcaption>charts/success_rate.png</figcaption></figure>
+<h2>总结分析</h2>
+<p>实验一中 ACE-WebGIS 的任务成功率为 0，最高组为 ace_agent；可重点讨论工具链、代码执行和经验闭环带来的差异。</p>
+<p>未启用 DeepSeek 自动总结；可在导出时勾选 AI 总结生成更自然的论文式分析。</p></body></html>

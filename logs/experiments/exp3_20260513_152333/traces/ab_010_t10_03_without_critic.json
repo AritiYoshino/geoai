@@ -1,0 +1,55 @@
+{
+  "task_id": "ab_010_t10_03",
+  "agent_type": "without_critic",
+  "query": "导出空间连接结果，同时保持行政区面图层高亮",
+  "category": "export_highlight",
+  "expected_tools": [
+    "export_analysis_result"
+  ],
+  "selected_tools": [
+    "export_analysis_result"
+  ],
+  "execution_trace": [
+    {
+      "step": "intent",
+      "detail": "export_highlight"
+    },
+    {
+      "step": "tool_selection",
+      "detail": [
+        "export_analysis_result"
+      ]
+    },
+    {
+      "step": "evaluation",
+      "detail": "failed"
+    }
+  ],
+  "errors": [
+    "rule_eval_failed:export_highlight"
+  ],
+  "error_signature": [
+    "export_highlight"
+  ],
+  "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+  "generated_experience": "exp:export_highlight:check schema/CRS/result before final answer",
+  "retrieved_experiences": [
+    "crs-check",
+    "field-check",
+    "empty-result-relaxation"
+  ],
+  "final_answer": "任务未完全满足预期，已记录失败原因。",
+  "success": false,
+  "metrics": {
+    "turns": 3.87,
+    "runtime": 1.168,
+    "execution_success": false,
+    "result_correctness": 0.28379999999999983,
+    "has_map_layer": true,
+    "has_table": true,
+    "result_count": 0,
+    "repair_attempted": false,
+    "repair_success": false,
+    "user_intervention_count": 1
+  }
+}

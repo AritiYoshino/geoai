@@ -1,0 +1,81 @@
+{
+  "task_id": "exp4_step_047_multi_hop_retrieval",
+  "agent_type": "monolithic_rewrite",
+  "strategy": "monolithic_rewrite",
+  "adaptation_step": 47,
+  "query": "Step 47: 对 城市-政策 做多跳检索，先定位实体再验证关系。",
+  "category": "retrieval_reasoning",
+  "expected_skill": "multi_hop_retrieval",
+  "novelty": "transfer",
+  "expected_tools": [
+    "retrieval",
+    "reasoning"
+  ],
+  "selected_tools": [
+    "retrieval",
+    "reasoning"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 47
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "multi_hop_retrieval-037"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "multi_hop_retrieval-047"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 2374
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "multi_hop_retrieval-047",
+  "retrieved_experiences": [
+    "multi_hop_retrieval-037"
+  ],
+  "final_answer": "monolithic_rewrite step=47 skill=multi_hop_retrieval accuracy=0.733 context_tokens=2374 retrieved=1 generated=1",
+  "structured_response": {
+    "accuracy": 0.733,
+    "context_token_count": 2374,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "multi_hop_retrieval-037"
+    ],
+    "generated_experience_ids": [
+      "multi_hop_retrieval-047"
+    ]
+  },
+  "validation": {
+    "score": 0.733,
+    "success": true,
+    "threshold": 0.72,
+    "missing": []
+  },
+  "success": true,
+  "metrics": {
+    "turns": 3.4,
+    "runtime": 0.12,
+    "execution_success": true,
+    "result_correctness": 0.733,
+    "context_token_count": 2374,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 11,
+    "compression_event": ""
+  }
+}

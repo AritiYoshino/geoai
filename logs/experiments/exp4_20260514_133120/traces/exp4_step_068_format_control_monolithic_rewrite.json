@@ -1,0 +1,91 @@
+{
+  "task_id": "exp4_step_068_format_control",
+  "agent_type": "monolithic_rewrite",
+  "strategy": "monolithic_rewrite",
+  "adaptation_step": 68,
+  "query": "Step 68: 将 任务清单 输出为指定 JSON/表格格式，避免字段遗漏。",
+  "category": "output_control",
+  "expected_skill": "format_control",
+  "novelty": "new_pattern",
+  "expected_tools": [
+    "reasoning",
+    "format_validator"
+  ],
+  "selected_tools": [
+    "reasoning",
+    "format_validator"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 68
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "format_control-038",
+        "format_control-048",
+        "format_control-058"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "format_control-068"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 8608
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "format_control-068",
+  "retrieved_experiences": [
+    "format_control-038",
+    "format_control-048",
+    "format_control-058"
+  ],
+  "final_answer": "monolithic_rewrite step=68 skill=format_control accuracy=0.78 context_tokens=8608 retrieved=3 generated=1",
+  "structured_response": {
+    "accuracy": 0.78,
+    "context_token_count": 8608,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "format_control-038",
+      "format_control-048",
+      "format_control-058"
+    ],
+    "generated_experience_ids": [
+      "format_control-068"
+    ]
+  },
+  "validation": {
+    "score": 0.78,
+    "success": true,
+    "threshold": 0.72,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "accuracy": 0.78
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 3.75,
+    "runtime": 0.12,
+    "execution_success": true,
+    "result_correctness": 0.78,
+    "context_token_count": 8608,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 32,
+    "compression_event": ""
+  }
+}

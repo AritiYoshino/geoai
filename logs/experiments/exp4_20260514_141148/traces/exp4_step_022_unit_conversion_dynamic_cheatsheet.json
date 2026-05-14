@@ -1,0 +1,88 @@
+{
+  "task_id": "exp4_step_022_unit_conversion",
+  "agent_type": "dynamic_cheatsheet",
+  "strategy": "dynamic_cheatsheet",
+  "adaptation_step": 22,
+  "query": "Step 22: 处理 价格 中的单位换算和阈值判断，保留前序换算规则。",
+  "category": "quantitative_reasoning",
+  "expected_skill": "unit_conversion",
+  "novelty": "transfer",
+  "expected_tools": [
+    "reasoning",
+    "calculator"
+  ],
+  "selected_tools": [
+    "reasoning",
+    "calculator"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 22
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "unit_conversion-012",
+        "unit_conversion-012-shortcut"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "unit_conversion-022"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 4369
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "unit_conversion-022",
+  "retrieved_experiences": [
+    "unit_conversion-012",
+    "unit_conversion-012-shortcut"
+  ],
+  "final_answer": "dynamic_cheatsheet step=22 skill=unit_conversion accuracy=0.808 context_tokens=4369 retrieved=2 generated=1",
+  "structured_response": {
+    "accuracy": 0.808,
+    "context_token_count": 4369,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "unit_conversion-012",
+      "unit_conversion-012-shortcut"
+    ],
+    "generated_experience_ids": [
+      "unit_conversion-022"
+    ]
+  },
+  "validation": {
+    "score": 0.808,
+    "success": true,
+    "threshold": 0.72,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "accuracy": 0.808
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 3.0,
+    "runtime": 0.12,
+    "execution_success": true,
+    "result_correctness": 0.808,
+    "context_token_count": 4369,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 10,
+    "compression_event": ""
+  }
+}

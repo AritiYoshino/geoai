@@ -1,0 +1,131 @@
+{
+  "task_id": "exp2_b2_q05_learn_validation",
+  "batch_id": 2,
+  "agent_type": "ace_agent",
+  "query": "学习跨图层校验经验：检查餐饮 POI 是否落在行政区外，并列出异常记录。",
+  "category": "validation",
+  "expected_tools": [
+    "spatial_join_layers",
+    "execute_spatial_code"
+  ],
+  "selected_tools": [
+    "spatial_join_layers",
+    "execute_spatial_code"
+  ],
+  "execution_trace": [
+    {
+      "step": "agent_mode",
+      "detail": "ace_agent"
+    },
+    {
+      "step": "tool_selection",
+      "detail": [
+        "spatial_join_layers",
+        "execute_spatial_code"
+      ]
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": []
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "exp2-cross-validation"
+      ]
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "critic_to_evolution",
+  "generated_experience": "exp2-cross-validation",
+  "retrieved_experiences": [],
+  "final_answer": "学习跨图层校验经验：检查餐饮 POI 是否落在行政区外，并列出异常记录。 tool_flow_completed learn exp2-cross-validation restaurant district outlier learn validation spatial",
+  "structured_response": {
+    "answer": "学习跨图层校验经验：检查餐饮 POI 是否落在行政区外，并列出异常记录。 tool_flow_completed learn exp2-cross-validation restaurant district outlier learn validation spatial",
+    "selected_tools": [
+      "spatial_join_layers",
+      "execute_spatial_code"
+    ],
+    "output_types": [
+      "map_layer",
+      "table",
+      "diagnosis"
+    ],
+    "entities": [
+      "restaurant",
+      "district",
+      "outlier"
+    ],
+    "keywords": [
+      "learn",
+      "validation",
+      "spatial"
+    ],
+    "result_count": 1,
+    "retrieved_experience_ids": [],
+    "generated_experience_ids": [
+      "exp2-cross-validation"
+    ],
+    "experience_retrieved": false,
+    "experience_added": true,
+    "memory_used": false,
+    "code_executed": true,
+    "trace_events": [
+      {
+        "step": "agent_mode",
+        "detail": "ace_agent"
+      },
+      {
+        "step": "tool_selection",
+        "detail": [
+          "spatial_join_layers",
+          "execute_spatial_code"
+        ]
+      },
+      {
+        "step": "experience_retrieval",
+        "detail": []
+      },
+      {
+        "step": "experience_update",
+        "detail": [
+          "exp2-cross-validation"
+        ]
+      }
+    ],
+    "diagnosis": "critic_to_evolution"
+  },
+  "validation": {
+    "score": 1.0,
+    "success": true,
+    "threshold": 0.86,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "outputs": 1.0,
+      "entities": 1.0,
+      "keywords": 1.0,
+      "result_count": 1.0,
+      "experience_added": 1.0,
+      "code_executed": 1.0
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 3.75,
+    "runtime": 0.2,
+    "execution_success": true,
+    "result_correctness": 1.0,
+    "has_map_layer": true,
+    "has_table": true,
+    "result_count": 1,
+    "experience_retrieved": false,
+    "experience_added": true,
+    "memory_used": false,
+    "code_executed": true,
+    "repair_attempted": false,
+    "repair_success": false,
+    "user_intervention_count": 0
+  }
+}

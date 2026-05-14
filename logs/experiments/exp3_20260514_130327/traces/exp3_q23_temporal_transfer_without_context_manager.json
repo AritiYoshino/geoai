@@ -1,0 +1,137 @@
+{
+  "task_id": "exp3_q23_temporal_transfer",
+  "agent_type": "without_context_manager",
+  "agent_name": "ACE w/o ContextManager",
+  "missing_modules": [
+    "context_manager"
+  ],
+  "query": "查询近半年新增科教文化 POI，必须复用时间字段解析经验，并说明日期解析与范围过滤过程。",
+  "category": "temporal_query",
+  "expected_tools": [
+    "query_poi_by_conditions"
+  ],
+  "selected_tools": [
+    "query_poi_by_conditions"
+  ],
+  "execution_trace": [
+    {
+      "step": "ablation_agent",
+      "detail": "missing_modules=context_manager"
+    },
+    {
+      "step": "tool_selection",
+      "detail": [
+        "query_poi_by_conditions"
+      ]
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "exp3-temporal-field-parse"
+      ]
+    },
+    {
+      "step": "critic_diagnosis",
+      "detail": ""
+    },
+    {
+      "step": "experience_update",
+      "detail": []
+    }
+  ],
+  "errors": [],
+  "critic_diagnosis": "",
+  "generated_experience": "",
+  "retrieved_experiences": [
+    "exp3-temporal-field-parse"
+  ],
+  "final_answer": "查询近半年新增科教文化 POI，必须复用时间字段解析经验，并说明日期解析与范围过滤过程。 missing_modules=context_manager  exp3-temporal-field-parse 半年 科教文化 日期解析 范围过滤 经验 时间字段 解析 过滤",
+  "structured_response": {
+    "answer": "查询近半年新增科教文化 POI，必须复用时间字段解析经验，并说明日期解析与范围过滤过程。 missing_modules=context_manager  exp3-temporal-field-parse 半年 科教文化 日期解析 范围过滤 经验 时间字段 解析 过滤",
+    "selected_tools": [
+      "query_poi_by_conditions"
+    ],
+    "output_types": [
+      "map_layer",
+      "table",
+      "explanation"
+    ],
+    "entities": [
+      "半年",
+      "科教文化",
+      "日期解析",
+      "范围过滤"
+    ],
+    "keywords": [
+      "经验",
+      "时间字段",
+      "解析",
+      "过滤"
+    ],
+    "result_count": 1,
+    "retrieved_experience_ids": [
+      "exp3-temporal-field-parse"
+    ],
+    "generated_experience_ids": [],
+    "experience_retrieved": true,
+    "experience_added": false,
+    "memory_used": false,
+    "code_executed": false,
+    "trace_events": [
+      {
+        "step": "ablation_agent",
+        "detail": "missing_modules=context_manager"
+      },
+      {
+        "step": "tool_selection",
+        "detail": [
+          "query_poi_by_conditions"
+        ]
+      },
+      {
+        "step": "experience_retrieval",
+        "detail": [
+          "exp3-temporal-field-parse"
+        ]
+      },
+      {
+        "step": "critic_diagnosis",
+        "detail": ""
+      },
+      {
+        "step": "experience_update",
+        "detail": []
+      }
+    ]
+  },
+  "validation": {
+    "score": 1.0,
+    "success": true,
+    "threshold": 0.86,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "outputs": 1.0,
+      "entities": 1.0,
+      "keywords": 1.0,
+      "result_count": 1.0,
+      "experience_retrieved": 1.0
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 3.75,
+    "runtime": 0.15,
+    "execution_success": true,
+    "result_correctness": 1.0,
+    "has_map_layer": true,
+    "has_table": true,
+    "result_count": 1,
+    "experience_retrieved": true,
+    "experience_added": false,
+    "memory_used": false,
+    "code_executed": false,
+    "critic_used": false,
+    "missing_module_count": 1
+  }
+}

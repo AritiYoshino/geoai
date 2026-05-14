@@ -1,0 +1,125 @@
+{
+  "task_id": "exp2_b3_known_static_crs_company_life",
+  "batch_id": 3,
+  "agent_type": "ace_agent",
+  "query": "复用静态 CRS 距离经验，查找公司 500米内的生活服务 POI。",
+  "category": "nearby_analysis",
+  "expected_tools": [
+    "find_nearby"
+  ],
+  "selected_tools": [
+    "find_nearby"
+  ],
+  "execution_trace": [
+    {
+      "step": "agent_mode",
+      "detail": "ace_agent"
+    },
+    {
+      "step": "tool_selection",
+      "detail": [
+        "find_nearby"
+      ]
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "exp2-crs-distance"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": []
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "",
+  "retrieved_experiences": [
+    "exp2-crs-distance"
+  ],
+  "final_answer": "复用静态 CRS 距离经验，查找公司 500米内的生活服务 POI。 tool_flow_completed reuse exp2-crs-distance distance POI CRS reuse CRS",
+  "structured_response": {
+    "answer": "复用静态 CRS 距离经验，查找公司 500米内的生活服务 POI。 tool_flow_completed reuse exp2-crs-distance distance POI CRS reuse CRS",
+    "selected_tools": [
+      "find_nearby"
+    ],
+    "output_types": [
+      "map_layer",
+      "table"
+    ],
+    "entities": [
+      "distance",
+      "POI",
+      "CRS"
+    ],
+    "keywords": [
+      "reuse",
+      "CRS"
+    ],
+    "result_count": 1,
+    "retrieved_experience_ids": [
+      "exp2-crs-distance"
+    ],
+    "generated_experience_ids": [],
+    "experience_retrieved": true,
+    "experience_added": false,
+    "memory_used": false,
+    "code_executed": false,
+    "trace_events": [
+      {
+        "step": "agent_mode",
+        "detail": "ace_agent"
+      },
+      {
+        "step": "tool_selection",
+        "detail": [
+          "find_nearby"
+        ]
+      },
+      {
+        "step": "experience_retrieval",
+        "detail": [
+          "exp2-crs-distance"
+        ]
+      },
+      {
+        "step": "experience_update",
+        "detail": []
+      }
+    ],
+    "diagnosis": ""
+  },
+  "validation": {
+    "score": 1.0,
+    "success": true,
+    "threshold": 0.86,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "outputs": 1.0,
+      "entities": 1.0,
+      "keywords": 1.0,
+      "result_count": 1.0,
+      "experience_retrieved": 1.0
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 2.61,
+    "runtime": 0.16,
+    "execution_success": true,
+    "result_correctness": 1.0,
+    "has_map_layer": true,
+    "has_table": true,
+    "result_count": 1,
+    "experience_retrieved": true,
+    "experience_added": false,
+    "memory_used": false,
+    "code_executed": false,
+    "repair_attempted": false,
+    "repair_success": false,
+    "user_intervention_count": 0
+  }
+}

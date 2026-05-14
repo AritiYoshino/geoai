@@ -1,0 +1,84 @@
+{
+  "task_id": "exp4_step_004_code_debugging",
+  "agent_type": "append_only",
+  "strategy": "append_only",
+  "adaptation_step": 4,
+  "query": "Step 4: 修复 正则表达式 代码中的运行错误，并把错误模式沉淀为可复用经验。",
+  "category": "code_reasoning",
+  "expected_skill": "code_debugging",
+  "novelty": "warmup",
+  "expected_tools": [
+    "code_execution",
+    "critic"
+  ],
+  "selected_tools": [
+    "code_execution"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 4
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": []
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "code_debugging-004"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 1790
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [
+    "context_stability_miss:code_debugging"
+  ],
+  "error_signature": [
+    "code_debugging"
+  ],
+  "critic_diagnosis": "code_debugging evidence missing after context update",
+  "generated_experience": "code_debugging-004",
+  "retrieved_experiences": [],
+  "final_answer": "append_only step=4 skill=code_debugging accuracy=0.598 context_tokens=1790 retrieved=0 generated=1",
+  "structured_response": {
+    "accuracy": 0.598,
+    "context_token_count": 1790,
+    "compression_event": "",
+    "retrieved_experience_ids": [],
+    "generated_experience_ids": [
+      "code_debugging-004"
+    ]
+  },
+  "validation": {
+    "score": 0.598,
+    "success": false,
+    "threshold": 0.72,
+    "missing": [
+      "code_debugging"
+    ],
+    "details": {
+      "tools": 1.0,
+      "accuracy": 0.598
+    }
+  },
+  "success": false,
+  "metrics": {
+    "turns": 3.2,
+    "runtime": 0.12,
+    "execution_success": false,
+    "result_correctness": 0.598,
+    "context_token_count": 1790,
+    "experience_retrieved": false,
+    "experience_added": true,
+    "library_size": 4,
+    "compression_event": ""
+  }
+}

@@ -1,0 +1,104 @@
+{
+  "task_id": "exp1_q05_overlay",
+  "agent_type": "rag_agent",
+  "query": "叠加餐饮点和成都行政区，找出行政区内餐饮覆盖情况。",
+  "category": "overlay_analysis",
+  "expected_tools": [
+    "overlay_layers"
+  ],
+  "selected_tools": [
+    "overlay_layers"
+  ],
+  "execution_trace": [
+    {
+      "step": "agent_mode",
+      "detail": "rag_agent"
+    },
+    {
+      "step": "tool_selection",
+      "detail": [
+        "overlay_layers"
+      ]
+    },
+    {
+      "step": "reference_validation",
+      "detail": "structured answer will be scored against reference answers"
+    }
+  ],
+  "errors": [],
+  "critic_diagnosis": "",
+  "generated_experience": "",
+  "retrieved_experiences": [],
+  "final_answer": "叠加餐饮点和成都行政区，找出行政区内餐饮覆盖情况。 已按主系统工具链执行。 餐饮 成都行政区 叠加 叠加 行政区 覆盖",
+  "structured_response": {
+    "answer": "叠加餐饮点和成都行政区，找出行政区内餐饮覆盖情况。 已按主系统工具链执行。 餐饮 成都行政区 叠加 叠加 行政区 覆盖",
+    "selected_tools": [
+      "overlay_layers"
+    ],
+    "output_types": [
+      "map_layer",
+      "table"
+    ],
+    "entities": [
+      "餐饮",
+      "成都行政区",
+      "叠加"
+    ],
+    "keywords": [
+      "叠加",
+      "行政区",
+      "覆盖"
+    ],
+    "result_count": 1,
+    "memory_used": false,
+    "memory_written": false,
+    "experience_retrieved": false,
+    "experience_added": false,
+    "code_executed": false,
+    "trace_events": [
+      {
+        "step": "agent_mode",
+        "detail": "rag_agent"
+      },
+      {
+        "step": "tool_selection",
+        "detail": [
+          "overlay_layers"
+        ]
+      },
+      {
+        "step": "reference_validation",
+        "detail": "structured answer will be scored against reference answers"
+      }
+    ],
+    "diagnosis": ""
+  },
+  "validation": {
+    "score": 1.0,
+    "success": true,
+    "threshold": 0.82,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "outputs": 1.0,
+      "entities": 1.0,
+      "keywords": 1.0,
+      "result_count": 1.0
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 3.6,
+    "runtime": 0.11,
+    "execution_success": true,
+    "result_correctness": 1.0,
+    "has_map_layer": true,
+    "has_table": true,
+    "result_count": 1,
+    "memory_used": false,
+    "experience_retrieved": false,
+    "experience_added": false,
+    "code_executed": false,
+    "user_intervention_count": 0
+  }
+}

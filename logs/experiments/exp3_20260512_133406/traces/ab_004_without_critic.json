@@ -1,0 +1,51 @@
+{
+  "task_id": "ab_004",
+  "agent_type": "without_critic",
+  "query": "叠加分析前检查几何类型，分析购物 POI 与行政区关系",
+  "category": "overlay_analysis",
+  "expected_tools": [
+    "overlay_layers"
+  ],
+  "selected_tools": [
+    "overlay_layers"
+  ],
+  "execution_trace": [
+    {
+      "step": "intent",
+      "detail": "overlay_analysis"
+    },
+    {
+      "step": "tool_selection",
+      "detail": [
+        "overlay_layers"
+      ]
+    },
+    {
+      "step": "evaluation",
+      "detail": "success"
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "exp:overlay_analysis:check schema/CRS/result before final answer",
+  "retrieved_experiences": [
+    "crs-check",
+    "field-check",
+    "empty-result-relaxation"
+  ],
+  "final_answer": "任务完成，已生成可评估结果。",
+  "success": true,
+  "metrics": {
+    "turns": 2.75,
+    "runtime": 1.005,
+    "execution_success": true,
+    "result_correctness": 1.0,
+    "has_map_layer": true,
+    "has_table": true,
+    "result_count": 1,
+    "repair_attempted": false,
+    "repair_success": false,
+    "user_intervention_count": 0
+  }
+}

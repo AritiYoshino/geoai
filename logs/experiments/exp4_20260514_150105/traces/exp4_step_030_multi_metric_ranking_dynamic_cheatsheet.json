@@ -1,0 +1,85 @@
+{
+  "task_id": "exp4_step_030_multi_metric_ranking",
+  "agent_type": "dynamic_cheatsheet",
+  "strategy": "dynamic_cheatsheet",
+  "adaptation_step": 30,
+  "query": "Step 30: 综合 购物、生活服务 POI 数量 与行政区面积归一化得分，输出综合排名 Top 5 和校验表。",
+  "category": "code_required",
+  "expected_skill": "ranking_validation",
+  "novelty": "transfer",
+  "expected_tools": [
+    "execute_spatial_code",
+    "ranking_check"
+  ],
+  "selected_tools": [
+    "execute_spatial_code",
+    "ranking_check"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 30
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "ranking_validation-020"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "ranking_validation-030"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 5808
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "ranking_validation-030",
+  "retrieved_experiences": [
+    "ranking_validation-020"
+  ],
+  "final_answer": "dynamic_cheatsheet step=30 skill=ranking_validation accuracy=0.826 context_tokens=5808 retrieved=1 generated=1",
+  "structured_response": {
+    "accuracy": 0.826,
+    "context_token_count": 5808,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "ranking_validation-020"
+    ],
+    "generated_experience_ids": [
+      "ranking_validation-030"
+    ]
+  },
+  "validation": {
+    "score": 0.826,
+    "success": true,
+    "threshold": 0.72,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "accuracy": 0.826
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 3.0,
+    "runtime": 0.12,
+    "execution_success": true,
+    "result_correctness": 0.826,
+    "context_token_count": 5808,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 11,
+    "compression_event": ""
+  }
+}

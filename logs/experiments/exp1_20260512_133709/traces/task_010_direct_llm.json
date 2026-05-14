@@ -1,0 +1,47 @@
+{
+  "task_id": "task_010",
+  "agent_type": "direct_llm",
+  "query": "导出最近一次分析结果为 GeoJSON，并返回下载链接",
+  "category": "export_highlight",
+  "expected_tools": [
+    "export_analysis_result"
+  ],
+  "selected_tools": [],
+  "execution_trace": [
+    {
+      "step": "intent",
+      "detail": "export_highlight"
+    },
+    {
+      "step": "tool_selection",
+      "detail": []
+    },
+    {
+      "step": "evaluation",
+      "detail": "failed"
+    }
+  ],
+  "errors": [
+    "rule_eval_failed:export_highlight"
+  ],
+  "error_signature": [
+    "export_highlight"
+  ],
+  "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+  "generated_experience": "",
+  "retrieved_experiences": [],
+  "final_answer": "任务未完全满足预期，已记录失败原因。",
+  "success": false,
+  "metrics": {
+    "turns": 1.89,
+    "runtime": 0.552,
+    "execution_success": false,
+    "result_correctness": 0.0,
+    "has_map_layer": false,
+    "has_table": true,
+    "result_count": 0,
+    "repair_attempted": false,
+    "repair_success": false,
+    "user_intervention_count": 0
+  }
+}

@@ -1,0 +1,125 @@
+{
+  "task_id": "exp4_q09_late_new_temporal",
+  "agent_type": "monolithic_rewrite",
+  "strategy": "monolithic_rewrite",
+  "query": "学习新时间字段经验：查询近 90 天新增医疗 POI，诊断日期格式不一致并写入经验库。",
+  "category": "temporal_query",
+  "stage": "late_new",
+  "expected_tools": [
+    "query_poi_by_conditions"
+  ],
+  "selected_tools": [
+    "query_poi_by_conditions"
+  ],
+  "execution_trace": [
+    {
+      "step": "strategy",
+      "detail": "monolithic_rewrite"
+    },
+    {
+      "step": "tool_selection",
+      "detail": [
+        "query_poi_by_conditions"
+      ]
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": []
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "exp4-temporal-parse"
+      ]
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "experience_stability_update",
+  "generated_experience": "exp4-temporal-parse",
+  "retrieved_experiences": [],
+  "final_answer": "学习新时间字段经验：查询近 90 天新增医疗 POI，诊断日期格式不一致并写入经验库。 monolithic_rewrite exp4-temporal-parse 90 天 医疗 日期 格式 诊断 经验库 时间字段 解析",
+  "structured_response": {
+    "answer": "学习新时间字段经验：查询近 90 天新增医疗 POI，诊断日期格式不一致并写入经验库。 monolithic_rewrite exp4-temporal-parse 90 天 医疗 日期 格式 诊断 经验库 时间字段 解析",
+    "selected_tools": [
+      "query_poi_by_conditions"
+    ],
+    "output_types": [
+      "map_layer",
+      "table",
+      "diagnosis",
+      "explanation"
+    ],
+    "entities": [
+      "90 天",
+      "医疗",
+      "日期",
+      "格式"
+    ],
+    "keywords": [
+      "诊断",
+      "经验库",
+      "时间字段",
+      "解析"
+    ],
+    "result_count": 1,
+    "retrieved_experience_ids": [],
+    "generated_experience_ids": [
+      "exp4-temporal-parse"
+    ],
+    "experience_retrieved": false,
+    "experience_added": true,
+    "code_executed": false,
+    "diagnosis": "experience_stability_update",
+    "trace_events": [
+      {
+        "step": "strategy",
+        "detail": "monolithic_rewrite"
+      },
+      {
+        "step": "tool_selection",
+        "detail": [
+          "query_poi_by_conditions"
+        ]
+      },
+      {
+        "step": "experience_retrieval",
+        "detail": []
+      },
+      {
+        "step": "experience_update",
+        "detail": [
+          "exp4-temporal-parse"
+        ]
+      }
+    ]
+  },
+  "validation": {
+    "score": 1.0,
+    "success": true,
+    "threshold": 0.84,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "outputs": 1.0,
+      "entities": 1.0,
+      "keywords": 1.0,
+      "result_count": 1.0,
+      "experience_added": 1.0
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 4.1,
+    "runtime": 0.125,
+    "execution_success": true,
+    "result_correctness": 1.0,
+    "has_map_layer": true,
+    "has_table": true,
+    "result_count": 1,
+    "experience_retrieved": false,
+    "experience_added": true,
+    "code_executed": false,
+    "library_size": 1
+  }
+}

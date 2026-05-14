@@ -1,0 +1,93 @@
+{
+  "task_id": "exp1_q18_preference_seed",
+  "agent_type": "ace_agent",
+  "query": "记住我的偏好：后续如果同时有表格和地图结果，优先返回表格摘要，并只高亮排名前 5 的 POI 或行政区。",
+  "category": "memory_seed",
+  "expected_tools": [],
+  "selected_tools": [],
+  "execution_trace": [
+    {
+      "step": "agent_mode",
+      "detail": "ace_agent"
+    },
+    {
+      "step": "tool_selection",
+      "detail": []
+    },
+    {
+      "step": "reference_validation",
+      "detail": "structured answer will be scored against reference answers"
+    }
+  ],
+  "errors": [],
+  "critic_diagnosis": "",
+  "generated_experience": "",
+  "retrieved_experiences": [],
+  "final_answer": "记住我的偏好：后续如果同时有表格和地图结果，优先返回表格摘要，并只高亮排名前 5 的 POI 或行政区。 已按主系统工具链执行。 表格摘要 排名前 5 POI 记住 偏好 高亮",
+  "structured_response": {
+    "answer": "记住我的偏好：后续如果同时有表格和地图结果，优先返回表格摘要，并只高亮排名前 5 的 POI 或行政区。 已按主系统工具链执行。 表格摘要 排名前 5 POI 记住 偏好 高亮",
+    "selected_tools": [],
+    "output_types": [
+      "explanation"
+    ],
+    "entities": [
+      "表格摘要",
+      "排名前 5",
+      "POI"
+    ],
+    "keywords": [
+      "记住",
+      "偏好",
+      "高亮"
+    ],
+    "result_count": 0,
+    "memory_used": false,
+    "memory_written": true,
+    "experience_retrieved": false,
+    "experience_added": false,
+    "code_executed": false,
+    "trace_events": [
+      {
+        "step": "agent_mode",
+        "detail": "ace_agent"
+      },
+      {
+        "step": "tool_selection",
+        "detail": []
+      },
+      {
+        "step": "reference_validation",
+        "detail": "structured answer will be scored against reference answers"
+      }
+    ],
+    "diagnosis": ""
+  },
+  "validation": {
+    "score": 1.0,
+    "success": true,
+    "threshold": 0.86,
+    "missing": [],
+    "details": {
+      "outputs": 1.0,
+      "entities": 1.0,
+      "keywords": 1.0,
+      "result_count": 1.0,
+      "memory_written": 1.0
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 3.0,
+    "runtime": 0.08,
+    "execution_success": true,
+    "result_correctness": 1.0,
+    "has_map_layer": false,
+    "has_table": false,
+    "result_count": 0,
+    "memory_used": false,
+    "experience_retrieved": false,
+    "experience_added": false,
+    "code_executed": false,
+    "user_intervention_count": 0
+  }
+}

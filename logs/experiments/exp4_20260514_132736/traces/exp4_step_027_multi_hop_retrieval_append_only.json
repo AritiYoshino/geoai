@@ -1,0 +1,92 @@
+{
+  "task_id": "exp4_step_027_multi_hop_retrieval",
+  "agent_type": "append_only",
+  "strategy": "append_only",
+  "adaptation_step": 27,
+  "query": "Step 27: 对 城市-政策 做多跳检索，先定位实体再验证关系。",
+  "category": "retrieval_reasoning",
+  "expected_skill": "multi_hop_retrieval",
+  "novelty": "transfer",
+  "expected_tools": [
+    "retrieval",
+    "reasoning"
+  ],
+  "selected_tools": [
+    "retrieval"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 27
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "multi_hop_retrieval-007",
+        "multi_hop_retrieval-007-duplicate",
+        "multi_hop_retrieval-017"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "multi_hop_retrieval-027"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 7965
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [
+    "context_stability_miss:multi_hop_retrieval"
+  ],
+  "error_signature": [
+    "multi_hop_retrieval"
+  ],
+  "critic_diagnosis": "multi_hop_retrieval evidence missing after context update",
+  "generated_experience": "multi_hop_retrieval-027",
+  "retrieved_experiences": [
+    "multi_hop_retrieval-007",
+    "multi_hop_retrieval-007-duplicate",
+    "multi_hop_retrieval-017"
+  ],
+  "final_answer": "append_only step=27 skill=multi_hop_retrieval accuracy=0.684 context_tokens=7965 retrieved=3 generated=1",
+  "structured_response": {
+    "accuracy": 0.684,
+    "context_token_count": 7965,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "multi_hop_retrieval-007",
+      "multi_hop_retrieval-007-duplicate",
+      "multi_hop_retrieval-017"
+    ],
+    "generated_experience_ids": [
+      "multi_hop_retrieval-027"
+    ]
+  },
+  "validation": {
+    "score": 0.684,
+    "success": false,
+    "threshold": 0.72,
+    "missing": [
+      "multi_hop_retrieval"
+    ]
+  },
+  "success": false,
+  "metrics": {
+    "turns": 3.2,
+    "runtime": 0.12,
+    "execution_success": false,
+    "result_correctness": 0.684,
+    "context_token_count": 7965,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 30,
+    "compression_event": ""
+  }
+}

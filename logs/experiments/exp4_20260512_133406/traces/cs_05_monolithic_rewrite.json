@@ -1,0 +1,51 @@
+{
+  "task_id": "cs_05",
+  "agent_type": "monolithic_rewrite",
+  "query": "第 80 个任务后的早期经验回测：空结果时放宽条件并检查 CRS",
+  "category": "nearby_analysis",
+  "expected_tools": [
+    "find_nearby"
+  ],
+  "selected_tools": [
+    "find_nearby"
+  ],
+  "execution_trace": [
+    {
+      "step": "intent",
+      "detail": "nearby_analysis"
+    },
+    {
+      "step": "tool_selection",
+      "detail": [
+        "find_nearby"
+      ]
+    },
+    {
+      "step": "evaluation",
+      "detail": "success"
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "exp:nearby_analysis:check schema/CRS/result before final answer",
+  "retrieved_experiences": [
+    "rewrite-89-0",
+    "rewrite-89-1",
+    "rewrite-89-2"
+  ],
+  "final_answer": "任务完成，已生成可评估结果。",
+  "success": true,
+  "metrics": {
+    "turns": 3.2,
+    "runtime": 1.097,
+    "execution_success": true,
+    "result_correctness": 1.0,
+    "has_map_layer": true,
+    "has_table": true,
+    "result_count": 1,
+    "repair_attempted": false,
+    "repair_success": false,
+    "user_intervention_count": 0
+  }
+}

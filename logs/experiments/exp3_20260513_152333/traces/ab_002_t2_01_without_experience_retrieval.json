@@ -1,0 +1,51 @@
+{
+  "task_id": "ab_002_t2_01",
+  "agent_type": "without_experience_retrieval",
+  "query": "字段名不确定时先读取 schema，再查询 type/name/category 中包含火锅的餐饮点",
+  "category": "attribute_query",
+  "expected_tools": [
+    "query_poi_by_conditions"
+  ],
+  "selected_tools": [
+    "query_poi_by_conditions"
+  ],
+  "execution_trace": [
+    {
+      "step": "intent",
+      "detail": "attribute_query"
+    },
+    {
+      "step": "tool_selection",
+      "detail": [
+        "query_poi_by_conditions"
+      ]
+    },
+    {
+      "step": "evaluation",
+      "detail": "failed"
+    }
+  ],
+  "errors": [
+    "rule_eval_failed:field_name_mismatch"
+  ],
+  "error_signature": [
+    "field_name_mismatch"
+  ],
+  "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+  "generated_experience": "exp:attribute_query:check schema/CRS/result before final answer",
+  "retrieved_experiences": [],
+  "final_answer": "任务未完全满足预期，已记录失败原因。",
+  "success": false,
+  "metrics": {
+    "turns": 3.53,
+    "runtime": 0.863,
+    "execution_success": false,
+    "result_correctness": 0.0,
+    "has_map_layer": true,
+    "has_table": true,
+    "result_count": 0,
+    "repair_attempted": true,
+    "repair_success": true,
+    "user_intervention_count": 0
+  }
+}

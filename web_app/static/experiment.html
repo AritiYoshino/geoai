@@ -3,1240 +3,216 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>对比实验系统 - GeoAI</title>
-  <link rel="stylesheet" href="/static/styles.css" />
-  <link rel="stylesheet" href="/static/experiment.css" />
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
+  <title>ACE 对比实验 · GeoAI</title>
+  <meta name="description" content="GeoAI ACE 对比实验系统 — 运行四组对比实验，查看指标、图表与任务 Trace" />
+  <link rel="stylesheet" href="/static/styles.css?v=20260513-svg-chart" />
+  <link rel="stylesheet" href="/static/experiment.css?v=20260513-svg-chart" />
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+  <script src="/static/theme.js?v=20260513-svg-chart"></script>
 </head>
 <body class="exp-body">
-  <div class="landing-bg">
-    <div class="bg-circle bg-circle-1"></div>
-    <div class="bg-circle bg-circle-2"></div>
-    <div class="bg-circle bg-circle-3"></div>
-  </div>
+  <!-- 主题切换按钮 -->
+  <button
+    class="theme-toggle"
+    type="button"
+    onclick="__theme?.toggleTheme()"
+    aria-label="切换主题"
+    style="position:fixed;top:20px;right:20px;z-index:1000;"
+  >&#x263E;</button>
 
-  <main class="exp-main">
-    <!-- Navigation -->
+  <main id="experimentApp" class="exp-shell" v-cloak>
+    <!-- 导航栏 (Glass Nav) -->
     <nav class="exp-nav">
       <div class="exp-nav-left">
-        <span class="nav-logo" style="font-size:28px;">🌍</span>
-        <span class="exp-nav-title">GeoAI 对比实验系统</span>
-        <span class="exp-nav-subtitle">| ACE机制 · 系统性验证</span>
+        <span class="nav-logo">GeoAI</span>
+        <span class="exp-nav-title">ACE 对比实验</span>
       </div>
-      <a href="/" class="exp-nav-back">← 返回首页</a>
+      <div class="exp-nav-actions">
+        <a href="/gis" class="exp-nav-back">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          GIS 系统
+        </a>
+        <a href="/" class="exp-nav-back">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          首页
+        </a>
+      </div>
     </nav>
 
-    <!-- Tab Bar -->
-    <div class="exp-tab-bar" role="tablist">
-      <button class="exp-tab-btn active" data-tab="exp1" role="tab">
-        <span class="tab-num">1</span>
-        基线对比
-        <span class="tab-short">核心性能增益验证</span>
-      </button>
-      <button class="exp-tab-btn" data-tab="exp2" role="tab">
-        <span class="tab-num">2</span>
-        消融实验
-        <span class="tab-short">各模块必要性检验</span>
-      </button>
-      <button class="exp-tab-btn" data-tab="exp3" role="tab">
-        <span class="tab-num">3</span>
-        抗退化实验
-        <span class="tab-short">记忆持久性验证</span>
-      </button>
-      <button class="exp-tab-btn" data-tab="exp4" role="tab">
-        <span class="tab-num">4</span>
-        长上下文对比
-        <span class="tab-short">超长序列鲁棒性</span>
-      </button>
-      <button class="exp-tab-btn" data-tab="thesis" role="tab">
-        <span class="tab-num">5</span>
-        论文证据
-        <span class="tab-short">五项毕业设计支撑材料</span>
-      </button>
-    </div>
+    <!-- 工具栏 -->
+    <section class="exp-toolbar">
+      <div>
+        <p class="exp-eyebrow">Experiment Bench</p>
+        <h1>ACE-WebGIS 实验工作台</h1>
+        <p class="exp-subtitle">统一运行四组对比实验，查看指标、图表与任务 Trace。</p>
+      </div>
+      <div class="exp-controls">
+        <button type="button" @click="loadResult()" :disabled="loading">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:4px"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          读取结果
+        </button>
+        <button type="button" class="primary" @click="runExperiment" :disabled="loading">
+          <span v-if="loading" class="btn-spinner"></span>
+          <svg v-else width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:4px"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          {{ loading ? "处理中..." : "运行实验" }}
+        </button>
+        <label class="report-toggle" title="勾选后导出报告时调用 .env 中的 DeepSeek 生成总结">
+          <input type="checkbox" v-model="includeAiSummary" :disabled="loading || reportLoading" />
+          AI 总结
+        </label>
+        <button type="button" @click="exportReport" :disabled="loading || reportLoading || !result">
+          <span v-if="reportLoading" class="btn-spinner"></span>
+          <svg v-else width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:4px"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          {{ reportLoading ? "生成中..." : "导出报告" }}
+        </button>
+        <a v-if="reportLinks.html" class="exp-report-link" :href="reportLinks.html" target="_blank" rel="noreferrer">查看报告</a>
+      </div>
+    </section>
 
-    <!-- Tab Content -->
-    <div class="exp-content">
+    <section class="exp-tabs" role="tablist" aria-label="选择实验">
+      <button
+        v-for="item in experiments"
+        :key="item.id"
+        type="button"
+        role="tab"
+        :aria-selected="selectedExp === item.id"
+        :class="{ active: selectedExp === item.id }"
+        :disabled="loading || reportLoading"
+        @click="switchExperiment(item.id)"
+      >
+        <span>{{ item.shortLabel }}</span>
+        <strong>{{ item.title }}</strong>
+      </button>
+    </section>
 
-      <!-- ============================================================
-           Experiment 1: 基线对比实验
-           ============================================================ -->
-      <div class="exp-panel active" id="exp1" role="tabpanel">
-        <!-- 实验控制栏 -->
-        <div class="exp-control-bar" id="exp1-controls">
-          <div class="exp-control-left">
-            <span class="exp-control-label">经验库：</span>
-            <select id="exp1-bank-select" class="exp-select" style="max-width:180px;">
-              <option value="default">实验预设</option>
-            </select>
-            <button id="exp1-run-btn" class="exp-btn-run">
-              <span class="exp-btn-icon">▶</span> 运行实验
+    <!-- 状态消息 -->
+    <section v-if="statusMessage" class="exp-status-line" :class="{ error: statusKind === 'error' }">
+      {{ statusMessage }}
+    </section>
+
+    <section class="bank-layout">
+      <article class="bank-panel">
+        <div class="panel-head">
+          <h2>历史实验管理</h2>
+          <span>{{ experimentRuns.length }} runs</span>
+        </div>
+        <div class="bank-list">
+          <div
+            v-for="run in experimentRuns"
+            :key="run.run_id"
+            class="bank-row"
+            :class="{ active: result?.run_id === run.run_id }"
+          >
+            <button type="button" class="bank-main" @click="selectRun(run.run_id)" :disabled="loading">
+              <strong>{{ run.name }}</strong>
+              <span>{{ run.run_id }} · {{ run.created_at || "unknown" }} · {{ run.trace_count }} traces</span>
             </button>
-            <button id="exp1-export-btn" class="exp-btn-export" type="button">导出数据</button>
-            <span id="exp1-status" class="exp-status"></span>
+            <div class="bank-actions">
+              <button type="button" @click="renameRun(run)" :disabled="loading">重命名</button>
+              <button type="button" class="danger" @click="deleteRun(run)" :disabled="loading">删除</button>
+            </div>
           </div>
-          <div class="exp-control-right">
-            <span class="exp-last-run" id="exp1-last-run"></span>
-          </div>
+          <p v-if="!experimentRuns.length" class="bank-empty">当前实验还没有历史运行记录。</p>
         </div>
+      </article>
 
-        <div class="exp-card">
-          <div class="exp-card-header">
-            <div class="exp-card-icon blue">📊</div>
-            <div class="exp-card-title-group">
-              <h2>实验一：基线对比实验 —— 核心性能增益验证</h2>
-              <p>通过在同一组标准化 GIS 任务集上分别运行 <strong>Base LLM（无 ACE 机制）</strong> 与 <strong>ACE 增强系统</strong>，定量比较各维度性能指标的差异，验证 ACE 机制带来的核心增益。</p>
-            </div>
-          </div>
-
-          <!-- 实验设计 -->
-          <div class="exp-section">
-            <div class="exp-section-title">
-              🧪 实验设计
-              <span class="badge">对比组设置</span>
-            </div>
-            <div class="design-grid">
-              <div class="design-item">
-                <h4>🔴 对照组：Base LLM</h4>
-                <p>直接使用 DeepSeek 基础模型，无 ACE 上下文增强、无经验检索、无 Critic/Evolution 闭环、无会话记忆管理。每次提问为独立交互。</p>
-              </div>
-              <div class="design-item">
-                <h4>🟢 实验组：ACE 增强系统</h4>
-                <p>完整 ACE 管道：任务分类 → 经验检索 → 上下文组装 → 多智能体协同 → Critic 诊断 → Evolution 沉淀。具备会话级记忆和自进化能力。</p>
-              </div>
-            </div>
-          </div>
-
-          <!-- 评估指标体系 -->
-          <div class="exp-section">
-            <div class="exp-section-title">
-              📏 评估指标体系
-              <span class="badge green">7 项核心指标</span>
-            </div>
-            <div class="metric-table-wrap">
-              <table class="metric-table">
-                <thead>
-                  <tr>
-                    <th>指标</th>
-                    <th>定义</th>
-                    <th>计算方式</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td class="metric-name">🎯 任务完成率</td>
-                    <td class="metric-desc">系统成功产出有效回答的任务比例</td>
-                    <td><span class="metric-formula">完成数 / 总任务数 × 100%</span></td>
-                  </tr>
-                  <tr>
-                    <td class="metric-name">⚙️ 工具调用成功率</td>
-                    <td class="metric-desc">GIS 工具调用未抛出异常的比例</td>
-                    <td><span class="metric-formula">成功调用数 / 总调用数 × 100%</span></td>
-                  </tr>
-                  <tr>
-                    <td class="metric-name">💻 代码执行成功率</td>
-                    <td class="metric-desc">自动生成的空间分析代码一次执行通过的比例</td>
-                    <td><span class="metric-formula">一次通过数 / 总执行数 × 100%</span></td>
-                  </tr>
-                  <tr>
-                    <td class="metric-name">🎯 结果准确率</td>
-                    <td class="metric-desc">回答包含期望关键词且调用了正确工具的任务比例（规则判定，非数值对比）</td>
-                    <td><span class="metric-formula">正确数 / 总任务数 × 100%</span></td>
-                  </tr>
-                  <tr>
-                    <td class="metric-name">📖 经验命中率</td>
-                    <td class="metric-desc">ACE 成功从经验库检索到相关经验的次数占比</td>
-                    <td><span class="metric-formula">命中次数 / 总任务数 × 100%</span></td>
-                  </tr>
-                  <tr>
-                    <td class="metric-name">🔄 错误恢复率</td>
-                    <td class="metric-desc">首次失败后通过 Critic/Evolution 成功修复的比例</td>
-                    <td><span class="metric-formula">恢复数 / 失败数 × 100%</span></td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          <!-- 测试任务集 -->
-          <div class="exp-section">
-            <div class="exp-section-title">
-              📋 标准化测试任务集
-              <span class="badge purple">15 个基准任务</span>
-            </div>
-            <div class="metric-table-wrap">
-              <table class="testcase-table">
-                <thead>
-                  <tr>
-                    <th style="width:40px;">#</th>
-                    <th>任务描述</th>
-                    <th style="width:120px;">任务类型</th>
-                    <th style="width:100px;">难度</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>1</td>
-                    <td>查询成华区有哪些餐饮店</td>
-                    <td><span class="tag">query</span></td>
-                    <td><span class="tag green">简单</span></td>
-                  </tr>
-                  <tr>
-                    <td>2</td>
-                    <td>搜索名字包含"火锅"的 POI</td>
-                    <td><span class="tag">search</span></td>
-                    <td><span class="tag green">简单</span></td>
-                  </tr>
-                  <tr>
-                    <td>3</td>
-                    <td>哪个区的餐馆数量最多，并高亮该行政区</td>
-                    <td><span class="tag purple">query+map</span></td>
-                    <td><span class="tag">中等</span></td>
-                  </tr>
-                  <tr>
-                    <td>4</td>
-                    <td>哪个区的餐馆数量第二多，并高亮显示</td>
-                    <td><span class="tag purple">query+map</span></td>
-                    <td><span class="tag">中等</span></td>
-                  </tr>
-                  <tr>
-                    <td>5</td>
-                    <td>查找距离"天府广场"最近的 5 个住宿点</td>
-                    <td><span class="tag">nearby</span></td>
-                    <td><span class="tag">中等</span></td>
-                  </tr>
-                  <tr>
-                    <td>6</td>
-                    <td>在餐饮点周围做 500 米缓冲区</td>
-                    <td><span class="tag">nearby</span></td>
-                    <td><span class="tag">中等</span></td>
-                  </tr>
-                  <tr>
-                    <td>7</td>
-                    <td>对餐饮点进行 DBSCAN 聚类分析</td>
-                    <td><span class="tag">cluster</span></td>
-                    <td><span class="tag orange">较难</span></td>
-                  </tr>
-                  <tr>
-                    <td>8</td>
-                    <td>统计各行政区内餐饮点的数量分布</td>
-                    <td><span class="tag purple">query+map</span></td>
-                    <td><span class="tag">中等</span></td>
-                  </tr>
-                  <tr>
-                    <td>9</td>
-                    <td>查找武侯区内的住宿服务 POI</td>
-                    <td><span class="tag">query</span></td>
-                    <td><span class="tag green">简单</span></td>
-                  </tr>
-                  <tr>
-                    <td>10</td>
-                    <td>餐饮与行政区叠加分析，统计各区餐馆密度</td>
-                    <td><span class="tag purple">overlay</span></td>
-                    <td><span class="tag orange">较难</span></td>
-                  </tr>
-                  <tr>
-                    <td>11</td>
-                    <td>对住宿服务做热点分析（hotspot）</td>
-                    <td><span class="tag">cluster</span></td>
-                    <td><span class="tag orange">较难</span></td>
-                  </tr>
-                  <tr>
-                    <td>12</td>
-                    <td>导出餐饮点数据为 CSV</td>
-                    <td><span class="tag">export</span></td>
-                    <td><span class="tag green">简单</span></td>
-                  </tr>
-                  <tr>
-                    <td>13</td>
-                    <td>"不对，高亮的是行政区不是餐馆点"（纠正反馈）</td>
-                    <td><span class="tag purple">feedback</span></td>
-                    <td><span class="tag">中等</span></td>
-                  </tr>
-                  <tr>
-                    <td>14</td>
-                    <td>重复第 3 题，验证偏好是否被记住</td>
-                    <td><span class="tag purple">memory</span></td>
-                    <td><span class="tag">中等</span></td>
-                  </tr>
-                  <tr>
-                    <td>15</td>
-                    <td>聚类分析怎么用？（帮助型问题）</td>
-                    <td><span class="tag">help</span></td>
-                    <td><span class="tag green">简单</span></td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          <!-- 结果可视化区域 -->
-          <div class="exp-section">
-            <div class="exp-section-title">
-              📈 结果可视化
-              <span class="badge">对比图表</span>
-            </div>
-            <div class="chart-area">
-              <div class="chart-container">
-                <canvas id="chart-radar"></canvas>
-              </div>
-              <div class="chart-container">
-                <canvas id="chart-bar"></canvas>
-              </div>
-              <div class="chart-container tall">
-                <canvas id="chart-heatmap"></canvas>
-              </div>
-              <div class="chart-container">
-                <canvas id="chart-time"></canvas>
-              </div>
-            </div>
-          </div>
-
-          <!-- 统计摘要区域 -->
-          <div class="exp-section">
-            <div class="exp-section-title">
-              📊 统计摘要
-              <span class="badge green">关键数字</span>
-            </div>
-            <div class="stat-cards">
-              <div class="stat-card">
-                <div class="stat-value">--% <span class="delta up">▲</span></div>
-                <div class="stat-label">任务完成率提升</div>
-                <div class="stat-compare"><span>Base: --%</span><span>ACE: --%</span></div>
-              </div>
-              <div class="stat-card">
-                <div class="stat-value">--% <span class="delta up">▲</span></div>
-                <div class="stat-label">结果准确率提升</div>
-                <div class="stat-compare"><span>Base: --%</span><span>ACE: --%</span></div>
-              </div>
-              <div class="stat-card">
-                <div class="stat-value">--% <span class="delta up">▲</span></div>
-                <div class="stat-label">错误恢复率</div>
-                <div class="stat-compare"><span>Base: --%</span><span>ACE: --%</span></div>
-              </div>
-            </div>
-          </div>
-
-          <!-- 加载/错误/空状态 -->
-          <div id="exp1-loading" class="exp-state-msg" style="display:none;">
-            <div class="exp-spinner"></div>
-            <span>正在加载实验数据...</span>
-          </div>
-          <div id="exp1-error" class="exp-state-msg error" style="display:none;">
-            <span>⚠️</span>
-            <span id="exp1-error-text">加载数据失败</span>
-          </div>
-          <div id="exp1-empty" class="exp-state-msg" style="display:none;">
-            <span>📭</span>
-            <span>暂无实验数据，请点击「运行实验」按钮启动实验。</span>
-          </div>
+      <article class="bank-panel">
+        <div class="panel-head">
+          <h2>报告管理</h2>
+          <span>{{ reports.length }} reports</span>
         </div>
-
-        <!-- 历史实验管理 -->
-        <div class="exp-card" id="exp1-history-card" style="margin-top:16px;">
-          <div class="exp-card-header">
-            <div class="exp-card-icon gray">📜</div>
-            <div class="exp-card-title-group">
-              <h2>历史实验记录</h2>
-              <p>点击记录查看该次实验结果，支持重命名和删除。</p>
+        <div class="bank-list">
+          <div v-for="report in reports" :key="report.report_id" class="bank-row">
+            <a class="bank-main" :href="report.html_url" target="_blank" rel="noreferrer">
+              <strong>{{ report.title }}</strong>
+              <span>{{ report.run_id }} · {{ report.created_at }}</span>
+            </a>
+            <div class="bank-actions report-actions">
+              <a v-if="report.markdown_url" :href="report.markdown_url">下载</a>
+              <button type="button" @click="renameReport(report)" :disabled="reportLoading">重命名</button>
+              <button type="button" class="danger" @click="deleteReport(report)" :disabled="reportLoading">删除</button>
             </div>
           </div>
-          <div class="exp-section">
-            <div class="metric-table-wrap">
-              <table class="metric-table" id="exp1-history-table">
-                <thead>
-                  <tr>
-                    <th style="width:160px;">名称 / 时间</th>
-                    <th style="width:70px;">完成率</th>
-                    <th style="width:70px;">准确率</th>
-                    <th style="width:70px;">工具成功率</th>
-                    <th style="width:180px;">操作</th>
-                  </tr>
-                </thead>
-                <tbody id="exp1-history-tbody">
-                  <tr><td colspan="5" style="text-align:center;color:#94a3b8;">加载中...</td></tr>
-                </tbody>
-              </table>
-            </div>
+          <p v-if="!reports.length" class="bank-empty">当前历史实验还没有报告。</p>
+        </div>
+      </article>
+    </section>
+
+    <section v-if="groupOptions.length" class="group-filter-panel">
+      <div>
+        <span class="group-filter-label">观察对象</span>
+        <p>{{ selectedGroupDescription }}</p>
+      </div>
+      <select v-model="selectedGroup" aria-label="选择观察对象或模块">
+        <option v-for="item in groupOptions" :key="item.value" :value="item.value">
+          {{ item.label }}
+        </option>
+      </select>
+    </section>
+
+    <!-- 指标卡片 (含骨架屏) -->
+    <section class="metric-grid">
+      <template v-if="loading && !result">
+        <article v-for="n in 6" :key="'skeleton-'+n" class="metric-card skeleton skeleton-metric">
+          <span>&nbsp;</span>
+          <strong>&nbsp;</strong>
+        </article>
+      </template>
+      <template v-else>
+        <article v-for="card in metricCards" :key="card.key" class="metric-card">
+          <span class="metric-icon">{{ card.icon }}</span>
+          <span>{{ card.label }}</span>
+          <strong :class="card.valueClass">{{ formatMetric(card.value) }}</strong>
+        </article>
+      </template>
+    </section>
+
+    <!-- 实验一框架含义 -->
+    <section v-if="frameworkEntries.length" class="framework-panel">
+      <div class="panel-head">
+        <h2>实验一框架含义</h2>
+      </div>
+      <div class="framework-grid">
+        <article v-for="item in frameworkEntries" :key="item.key" class="framework-card">
+          <strong>{{ item.name }}</strong>
+          <p>{{ item.meaning }}</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- 图表 + Trace 查看器 -->
+    <section class="exp-layout">
+      <div class="chart-panel">
+        <div class="panel-head">
+          <h2>{{ chartTitle }}</h2>
+          <span>{{ runMeta }}</span>
+        </div>
+        <p class="chart-note">{{ chartNote }}</p>
+        <div class="chart-container">
+          <canvas ref="mainChart" height="140"></canvas>
+          <div ref="fallbackChart" class="chart-fallback" aria-live="polite"></div>
+          <!-- 空状态 -->
+          <div v-if="!result && !loading" class="exp-empty-state">
+            <div class="exp-empty-icon">&#x1F4CA;</div>
+            <p>选择一个实验并点击「读取结果」或「运行实验」来查看图表数据。</p>
           </div>
         </div>
       </div>
 
-      <!-- ============================================================
-           Experiment 2: 消融实验
-           ============================================================ -->
-      <div class="exp-panel" id="exp2" role="tabpanel">
-       <div class="exp-control-bar" id="exp2-controls">
-         <div class="exp-control-left">
-           <button id="exp2-run-btn" class="exp-btn-run">
-             <span class="exp-btn-icon">▶</span> 运行实验
-           </button>
-           <button id="exp2-export-btn" class="exp-btn-export" type="button">导出数据</button>
-           <span id="exp2-status" class="exp-status"></span>
-         </div>
-         <div class="exp-control-right">
-           <span class="exp-last-run" id="exp2-last-run"></span>
-         </div>
-       </div>
-
-        <div class="exp-card">
-          <div class="exp-card-header">
-            <div class="exp-card-icon purple">🧩</div>
-            <div class="exp-card-title-group">
-              <h2>实验二：消融实验 —— 各模块的必要性检验</h2>
-              <p>通过依次移除 ACE 多智能体系统中的关键模块，观察各模块对整体性能的贡献度，量化每个组件的边际价值。</p>
-            </div>
-          </div>
-
-          <!-- 消融变体 -->
-          <div class="exp-section">
-            <div class="exp-section-title">
-              🔧 消融变体设计
-              <span class="badge">5 种系统配置</span>
-            </div>
-            <div class="variant-grid">
-              <div class="variant-card">
-                <div class="variant-icon">🟢</div>
-                <h4>Full ACE</h4>
-                <div class="variant-desc">完整系统：所有模块启用</div>
-                <span class="variant-badge full">完全体</span>
-              </div>
-              <div class="variant-card">
-                <div class="variant-icon">🔴</div>
-                <h4>w/o Critic</h4>
-                <div class="variant-desc">移除 Critic 错误诊断模块，错误不结构化分析</div>
-                <span class="variant-badge removed">移除 Critic</span>
-              </div>
-              <div class="variant-card">
-                <div class="variant-icon">🔴</div>
-                <h4>w/o Evolution</h4>
-                <div class="variant-desc">移除 Evolution 经验沉淀模块，错误不写入经验库</div>
-                <span class="variant-badge removed">移除 Evolution</span>
-              </div>
-              <div class="variant-card">
-                <div class="variant-icon">🔴</div>
-                <h4>w/o Experience Lib</h4>
-                <div class="variant-desc">移除经验检索模块，完全无历史经验注入</div>
-                <span class="variant-badge removed">移除经验库</span>
-              </div>
-              <div class="variant-card">
-                <div class="variant-icon">🔴</div>
-                <h4>w/o Context Memory</h4>
-                <div class="variant-desc">移除会话级上下文记忆（POI 记忆、用户偏好）</div>
-                <span class="variant-badge removed">移除上下文</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- 模块依赖关系 -->
-          <div class="exp-section">
-            <div class="exp-section-title">
-              🔗 模块依赖与贡献分析
-              <span class="badge purple">贡献度量化</span>
-            </div>
-            <div class="design-grid three-col">
-              <div class="design-item">
-                <h4>🎯 Critic 模块贡献</h4>
-                <ul>
-                  <li>结构化错误分类（字段校验、CRS、空结果等）</li>
-                  <li>提供可复用的诊断策略模板</li>
-                  <li>预期贡献：工具调用成功率 +15~25%</li>
-                </ul>
-              </div>
-              <div class="design-item">
-                <h4>🧬 Evolution 模块贡献</h4>
-                <ul>
-                  <li>将错误经验持久化到经验库</li>
-                  <li>置信度跟踪与质量更新</li>
-                  <li>预期贡献：多轮任务准确率 +10~20%</li>
-                </ul>
-              </div>
-              <div class="design-item">
-                <h4>📚 经验库模块贡献</h4>
-                <ul>
-                  <li>跨会话经验复用（预置 + 用户反馈）</li>
-                  <li>任务类型匹配与模糊检索</li>
-                  <li>预期贡献：任务完成率 +10~30%</li>
-                </ul>
-              </div>
-              <div class="design-item">
-                <h4>🧠 Context Memory 贡献</h4>
-                <ul>
-                  <li>POI 引用记忆（最近 30 条）</li>
-                  <li>用户偏好持久化（高亮策略等）</li>
-                  <li>预期贡献：多轮任务一致性 +20~40%</li>
-                </ul>
-              </div>
-              <div class="design-item">
-                <h4>🔄 模块协同效应</h4>
-                <ul>
-                  <li>Critic → Evolution → 经验库：形成闭环</li>
-                  <li>各模块存在非线性叠加增益</li>
-                  <li>预期 Full ACE > Σ(各模块独立贡献)</li>
-                </ul>
-              </div>
-              <div class="design-item">
-                <h4>📉 边际收益递减分析</h4>
-                <ul>
-                  <li>基础模块（Critic）收益最高</li>
-                  <li>高阶模块（Evolution）在长周期中更显著</li>
-                  <li>识别最优模块组合配置</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-
-          <!-- 评估指标 -->
-          <div class="exp-section">
-            <div class="exp-section-title">
-              📏 评估指标
-              <span class="badge green">与实验一一致 + 消融特定</span>
-            </div>
-            <div class="metric-table-wrap">
-              <table class="metric-table">
-                <thead>
-                  <tr>
-                    <th>指标</th>
-                    <th>说明</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td class="metric-name">模块贡献度</td>
-                    <td class="metric-desc"><span class="metric-formula">Δ = 完整系统 - 移除模块后</span> 各指标的差值</td>
-                  </tr>
-                  <tr>
-                    <td class="metric-name">相对贡献率</td>
-                    <td class="metric-desc"><span class="metric-formula">贡献度 / 完整系统基线</span> 归一化后百分比</td>
-                  </tr>
-                  <tr>
-                    <td class="metric-name">错误传播深度</td>
-                    <td class="metric-desc">模块缺失后，错误能否被后续轮次修复</td>
-                  </tr>
-                  <tr>
-                    <td class="metric-name">多轮一致性</td>
-                    <td class="metric-desc">同一任务在不同轮次中输出的一致程度</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          <!-- 可视化 -->
-          <div class="exp-section">
-            <div class="exp-section-title">
-              📈 结果可视化
-              <span class="badge">消融对比</span>
-            </div>
-            <div class="chart-area three-col">
-              <div class="chart-container">
-                <canvas id="exp2-chart-metrics"></canvas>
-              </div>
-              <div class="chart-container">
-                <canvas id="exp2-chart-contrib"></canvas>
-              </div>
-              <div class="chart-container">
-                <canvas id="exp2-chart-error"></canvas>
-              </div>
-            </div>
-          </div>
-
-          <div class="exp-section">
-            <div class="exp-section-title">
-              📊 指标摘要
-              <span class="badge green">Full ACE 对比</span>
-            </div>
-            <div class="stat-cards">
-              <div class="stat-card">
-                <div class="stat-value" id="exp2-full-accuracy">--%</div>
-                <div class="stat-label">Full ACE 准确率</div>
-                <div class="stat-compare"><span id="exp2-full-completion">完成率 --%</span><span id="exp2-full-tool">工具 --%</span></div>
-              </div>
-              <div class="stat-card">
-                <div class="stat-value" id="exp2-top-module">--</div>
-                <div class="stat-label">最高贡献模块</div>
-                <div class="stat-compare"><span id="exp2-top-score">贡献度 --</span><span id="exp2-top-dim">--</span></div>
-              </div>
-              <div class="stat-card">
-                <div class="stat-value" id="exp2-context-consistency">--%</div>
-                <div class="stat-label">多轮一致性</div>
-                <div class="stat-compare"><span id="exp2-error-depth">错误传播深度 --</span><span id="exp2-recovery">恢复率 --%</span></div>
-              </div>
-            </div>
-          </div>
-
-          <!-- 贡献度排名 -->
-          <div class="exp-section">
-            <div class="exp-section-title">
-              🏆 贡献度排名
-              <span class="badge orange">自动生成</span>
-            </div>
-            <div class="metric-table-wrap">
-              <table class="metric-table">
-                <thead>
-                  <tr>
-                    <th>排名</th>
-                    <th>模块</th>
-                    <th>贡献度</th>
-                    <th>影响维度</th>
-                  </tr>
-                </thead>
-                <tbody id="exp2-ranking-tbody">
-                  <tr><td colspan="4" style="text-align:center;color:#94a3b8;">暂无数据</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          <div class="exp-section">
-            <div class="exp-section-title">
-              📋 任务级结果
-              <span class="badge purple">12 个消融任务</span>
-            </div>
-            <div class="metric-table-wrap">
-              <table class="metric-table">
-                <thead>
-                  <tr>
-                    <th style="width:42px;">#</th>
-                    <th>任务类型</th>
-                    <th style="width:130px;">配置</th>
-                    <th style="width:80px;">得分</th>
-                    <th style="width:80px;">准确</th>
-                    <th style="width:120px;">缺失模块</th>
-                  </tr>
-                </thead>
-                <tbody id="exp2-task-tbody">
-                  <tr><td colspan="6" style="text-align:center;color:#94a3b8;">暂无数据</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          <div id="exp2-loading" class="exp-state-msg" style="display:none;">
-            <div class="exp-spinner"></div>
-            <span>正在加载实验二数据...</span>
-          </div>
-          <div id="exp2-error" class="exp-state-msg error" style="display:none;">
-            <span>⚠️</span>
-            <span id="exp2-error-text">加载数据失败</span>
-          </div>
-          <div id="exp2-empty" class="exp-state-msg" style="display:none;">
-            <span>📭</span>
-            <span>暂无实验二数据，请点击「运行实验」按钮启动。</span>
-          </div>
+      <aside class="trace-panel">
+        <div class="panel-head">
+          <h2>Trace 查看器</h2>
+          <select v-model.number="selectedTraceIndex" aria-label="选择任务 Trace">
+            <option v-for="(trace, index) in filteredTraces" :key="`${trace.task_id}-${trace.agent_type}-${index}`" :value="index">
+              {{ trace.task_id }} | {{ trace.agent_type }} | {{ trace.success ? "success" : "failed" }}
+            </option>
+          </select>
         </div>
-
-        <div class="exp-card" id="exp2-history-card" style="margin-top:16px;">
-          <div class="exp-card-header">
-            <div class="exp-card-icon gray">📜</div>
-            <div class="exp-card-title-group">
-              <h2>实验二历史记录</h2>
-              <p>点击记录查看该次消融实验结果，支持重命名和删除。</p>
-            </div>
-          </div>
-          <div class="exp-section">
-            <div class="metric-table-wrap">
-              <table class="metric-table" id="exp2-history-table">
-                <thead>
-                  <tr>
-                    <th style="width:160px;">名称 / 时间</th>
-                    <th style="width:90px;">任务数</th>
-                    <th style="width:90px;">Full准确率</th>
-                    <th style="width:120px;">最高贡献模块</th>
-                    <th style="width:180px;">操作</th>
-                  </tr>
-                </thead>
-                <tbody id="exp2-history-tbody">
-                  <tr><td colspan="5" style="text-align:center;color:#94a3b8;">加载中...</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ============================================================
-           Experiment 3: 抗退化实验
-           ============================================================ -->
-      <div class="exp-panel" id="exp3" role="tabpanel">
-       <div class="exp-control-bar" id="exp3-controls">
-         <div class="exp-control-left">
-           <button id="exp3-run-btn" class="exp-btn-run">
-             <span class="exp-btn-icon">▶</span> 运行实验
-           </button>
-           <button id="exp3-export-btn" class="exp-btn-export" type="button">导出数据</button>
-           <span id="exp3-status" class="exp-status"></span>
-         </div>
-         <div class="exp-control-right">
-           <span class="exp-last-run" id="exp3-last-run"></span>
-         </div>
-       </div>
-
-        <div class="exp-card">
-          <div class="exp-card-header">
-            <div class="exp-card-icon green">🧠</div>
-            <div class="exp-card-title-group">
-              <h2>实验三：抗退化实验 —— ACE 在长周期 GIS 任务中的记忆持久性</h2>
-              <p>在长序列多轮交互中，验证 ACE 机制是否能够抵抗上下文退化——即随着交互轮次增加，系统能否持续保持对历史 POI 引用、用户偏好、经验约束的准确记忆。</p>
-            </div>
-          </div>
-
-          <!-- 实验设计 -->
-          <div class="exp-section">
-            <div class="exp-section-title">
-              🧪 实验设计
-              <span class="badge">长周期序列测试</span>
-            </div>
-            <div class="design-grid three-col">
-              <div class="design-item">
-                <h4>📋 测试流程</h4>
-                <ol style="padding-left:18px;margin:0;font-size:13px;color:#64748b;line-height:1.7;">
-                  <li>构建 20 轮次的长对话序列</li>
-                  <li>在前 5 轮引入 POI 引用和用户偏好</li>
-                  <li>中间 10 轮穿插无关任务</li>
-                  <li>后 5 轮抽查对早期 POI/偏好的记忆</li>
-                  <li>每个序列重复 5 次取平均</li>
-                </ol>
-              </div>
-              <div class="design-item">
-                <h4>🎯 记忆点设置</h4>
-                <ul>
-                  <li><strong>POI 引用</strong>：第 1 轮搜索"火锅"，第 10 轮问"刚才那家火锅店附近有什么"</li>
-                  <li><strong>用户偏好</strong>：第 2 轮纠正"只高亮行政区"，第 15 轮再问统计类问题</li>
-                  <li><strong>多偏好叠加</strong>：第 3 轮设多个偏好，20 轮后检查是否全部保留</li>
-                </ul>
-              </div>
-              <div class="design-item">
-                <h4>📊 对比基线</h4>
-                <ul>
-                  <li><strong>w/o ACE</strong>：无上下文管理，仅靠 LLM 原生上下文</li>
-                  <li><strong>ACE</strong>：完整 ACE 自进化</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-
-          <!-- 轮次测试序列 -->
-          <div class="exp-section">
-            <div class="exp-section-title">
-              🔄 典型 20 轮测试序列
-              <span class="badge purple">记忆注入 → 衰减 → 召回</span>
-            </div>
-            <div class="timeline" id="timeline-exp3">
-              <div class="timeline-step">
-                <div class="timeline-dot"></div>
-                <div class="timeline-label">Round 1-5</div>
-                <div class="timeline-sub">记忆注入期</div>
-              </div>
-              <div class="timeline-step">
-                <div class="timeline-dot"></div>
-                <div class="timeline-label">Round 6-10</div>
-                <div class="timeline-sub">干扰穿插期</div>
-              </div>
-              <div class="timeline-step">
-                <div class="timeline-dot"></div>
-                <div class="timeline-label">Round 11-15</div>
-                <div class="timeline-sub">深度干扰期</div>
-              </div>
-              <div class="timeline-step">
-                <div class="timeline-dot"></div>
-                <div class="timeline-label">Round 16-20</div>
-                <div class="timeline-sub">记忆召回期</div>
-              </div>
-            </div>
-          </div>
-
-          <!-- 评估指标 -->
-          <div class="exp-section">
-            <div class="exp-section-title">
-              📏 评估指标
-              <span class="badge green">退化 & 持久性</span>
-            </div>
-            <div class="metric-table-wrap">
-              <table class="metric-table">
-                <thead>
-                  <tr>
-                    <th>指标</th>
-                    <th>定义</th>
-                    <th>计算方式</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td class="metric-name">记忆召回率</td>
-                    <td class="metric-desc">早期 POI/偏好被正确引用的比例</td>
-                    <td><span class="metric-formula">成功召回点数 / 总记忆点数 × 100%</span></td>
-                  </tr>
-                  <tr>
-                    <td class="metric-name">记忆衰减曲线</td>
-                    <td class="metric-desc">召回率随间隔轮次的衰减趋势</td>
-                    <td><span class="metric-formula">R(t) = R₀ × e^(-λt) 拟合</span></td>
-                  </tr>
-                  <tr>
-                    <td class="metric-name">记忆半衰期</td>
-                    <td class="metric-desc">召回率衰减到 50% 所需的间隔轮次</td>
-                    <td><span class="metric-formula">T½ = ln(2) / λ</span></td>
-                  </tr>
-                  <tr>
-                    <td class="metric-name">偏好持久性</td>
-                    <td class="metric-desc">用户偏好在多轮后的持续生效比例</td>
-                    <td><span class="metric-formula">生效偏好数 / 总偏好数 × 100%</span></td>
-                  </tr>
-                  <tr>
-                    <td class="metric-name">上下文污染率</td>
-                    <td class="metric-desc">无关信息被错误引入当前回答的比例</td>
-                    <td><span class="metric-formula">受污染回答数 / 总回答数 × 100%</span></td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          <!-- 可视化 -->
-          <div class="exp-section">
-            <div class="exp-section-title">
-              📈 结果可视化
-              <span class="badge">退化分析</span>
-            </div>
-            <div class="chart-area three-col">
-              <div class="chart-container">
-                <canvas id="exp3-chart-decay"></canvas>
-              </div>
-              <div class="chart-container">
-                <canvas id="exp3-chart-memory"></canvas>
-              </div>
-              <div class="chart-container">
-                <canvas id="exp3-chart-pollution"></canvas>
-              </div>
-            </div>
-          </div>
-
-          <div class="exp-section">
-            <div class="exp-section-title">
-              📊 指标摘要
-              <span class="badge green">Base LLM vs ACE</span>
-            </div>
-            <div class="stat-cards">
-              <div class="stat-card">
-                <div class="stat-value" id="exp3-ace-recall">--%</div>
-                <div class="stat-label">ACE 记忆召回率</div>
-                <div class="stat-compare"><span id="exp3-base-recall">Base --%</span><span id="exp3-recall-gain">提升 --</span></div>
-              </div>
-              <div class="stat-card">
-                <div class="stat-value" id="exp3-ace-pref">--%</div>
-                <div class="stat-label">偏好持久性</div>
-                <div class="stat-compare"><span id="exp3-base-pref">Base --%</span><span id="exp3-half-life">半衰期 -- 轮</span></div>
-              </div>
-              <div class="stat-card">
-                <div class="stat-value" id="exp3-ace-robustness">--</div>
-                <div class="stat-label">鲁棒性得分</div>
-                <div class="stat-compare"><span id="exp3-pollution">污染率 --%</span><span id="exp3-compression">压缩率 --%</span></div>
-              </div>
-            </div>
-          </div>
-
-          <div class="exp-section">
-            <div class="exp-section-title">
-              📋 轮次结果
-              <span class="badge purple">20 轮序列</span>
-            </div>
-            <div class="metric-table-wrap">
-              <table class="metric-table">
-                <thead>
-                  <tr>
-                    <th style="width:50px;">轮次</th>
-                    <th style="width:120px;">系统</th>
-                    <th style="width:80px;">阶段</th>
-                    <th style="width:90px;">记忆类型</th>
-                    <th style="width:80px;">间隔</th>
-                    <th style="width:90px;">召回率</th>
-                    <th style="width:90px;">污染率</th>
-                  </tr>
-                </thead>
-                <tbody id="exp3-round-tbody">
-                  <tr><td colspan="7" style="text-align:center;color:#94a3b8;">暂无数据</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          <div id="exp3-loading" class="exp-state-msg" style="display:none;">
-            <div class="exp-spinner"></div>
-            <span>正在加载实验三数据...</span>
-          </div>
-          <div id="exp3-error" class="exp-state-msg error" style="display:none;">
-            <span>⚠️</span>
-            <span id="exp3-error-text">加载数据失败</span>
-          </div>
-          <div id="exp3-empty" class="exp-state-msg" style="display:none;">
-            <span>📭</span>
-            <span>暂无实验三数据，请点击「运行实验」按钮启动。</span>
-          </div>
-        </div>
-
-        <div class="exp-card" id="exp3-history-card" style="margin-top:16px;">
-          <div class="exp-card-header">
-            <div class="exp-card-icon gray">📜</div>
-            <div class="exp-card-title-group">
-              <h2>实验三历史记录</h2>
-              <p>点击记录查看该次抗退化实验结果，支持重命名和删除。</p>
-            </div>
-          </div>
-          <div class="exp-section">
-            <div class="metric-table-wrap">
-              <table class="metric-table" id="exp3-history-table">
-                <thead>
-                  <tr>
-                    <th style="width:160px;">名称 / 时间</th>
-                    <th style="width:90px;">轮次</th>
-                    <th style="width:110px;">ACE召回率</th>
-                    <th style="width:110px;">鲁棒性</th>
-                    <th style="width:180px;">操作</th>
-                  </tr>
-                </thead>
-                <tbody id="exp3-history-tbody">
-                  <tr><td colspan="5" style="text-align:center;color:#94a3b8;">加载中...</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ============================================================
-           Experiment 4: 长上下文扩展场景对比实验
-           ============================================================ -->
-      <div class="exp-panel" id="exp4" role="tabpanel">
-       <div class="exp-control-bar" id="exp4-controls">
-         <div class="exp-control-left">
-           <button id="exp4-run-btn" class="exp-btn-run">
-             <span class="exp-btn-icon">▶</span> 运行实验
-           </button>
-           <button id="exp4-export-btn" class="exp-btn-export" type="button">导出数据</button>
-           <span id="exp4-status" class="exp-status"></span>
-         </div>
-         <div class="exp-control-right">
-           <span class="exp-last-run" id="exp4-last-run"></span>
-         </div>
-       </div>
-
-        <div class="exp-card">
-          <div class="exp-card-header">
-            <div class="exp-card-icon orange">🌐</div>
-            <div class="exp-card-title-group">
-              <h2>实验四：长上下文扩展场景对比实验 —— 验证 ACE 在超长地理序列下的鲁棒性</h2>
-              <p>在超长地理分析序列（30+ 轮交互、多图层叠加、复杂空间推理）中，对比 ACE 机制与原生 Base LLM 在面对上下文膨胀时的性能表现，验证 ACE 的上下文压缩与经验检索机制是否能有效抵抗长上下文退化。</p>
-            </div>
-          </div>
-
-          <!-- 实验设计 -->
-          <div class="exp-section">
-            <div class="exp-section-title">
-              🧪 实验设计
-              <span class="badge">超长序列压力测试</span>
-            </div>
-            <div class="design-grid three-col">
-              <div class="design-item">
-                <h4>📋 测试场景</h4>
-                <ul>
-                  <li>30 轮 + 的长对话序列</li>
-                  <li>多图层交叉分析（餐饮 + 住宿 + 行政区）</li>
-                  <li>复合空间分析链式任务</li>
-                  <li>多样本重复执行 3 次取均值</li>
-                </ul>
-              </div>
-              <div class="design-item">
-                <h4>🎯 压力维度</h4>
-                <ul>
-                  <li><strong>上下文长度</strong>：逐步增加到 8K / 16K / 32K tokens</li>
-                  <li><strong>图层复杂度</strong>：从单图层到多图层叠加</li>
-                  <li><strong>任务链长度</strong>：从单步到 5 步链式分析</li>
-                  <li><strong>引用深度</strong>：跨多轮的前向引用</li>
-                </ul>
-              </div>
-              <div class="design-item">
-                <h4>📊 对比组</h4>
-                <ul>
-                  <li><strong>Base LLM (full context)</strong>：完整历史上下文</li>
-                  <li><strong>Base LLM (truncated)</strong>：截断历史</li>
-                  <li><strong>ACE (compressed)</strong>：ACE 上下文压缩 + 经验检索</li>
-                  <li>对比各配置在长序列中的性能差异</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-
-          <!-- 响应质量对比框架 -->
-          <div class="exp-section">
-            <div class="exp-section-title">
-              🔬 长序列响应质量对比
-              <span class="badge purple">预期对比样例</span>
-            </div>
-            <div class="response-compare">
-              <div class="response-box">
-                <h4>
-                  <span>🔴 Base LLM（长上下文退化）</span>
-                  <span class="resp-badge baseline">退化风险</span>
-                </h4>
-                <p>随着上下文增长，Base LLM 在长距离跨轮引用中容易出现：<br>
-                  • 丢失早期 POI 信息<br>
-                  • 混淆不同轮次的结果<br>
-                  • 忽略用户偏好约束<br>
-                  • 上下文长度超限导致截断<br>
-                  • 注意力分散，关键信息被淹没
-                </p>
-              </div>
-              <div class="response-box">
-                <h4>
-                  <span>🟢 ACE（上下文鲁棒）</span>
-                  <span class="resp-badge ace">鲁棒</span>
-                </h4>
-                <p>ACE 通过以下机制维持长序列稳定：<br>
-                  • Context Manager 主动维护 POI 记忆（最近 30 条）<br>
-                  • 用户偏好结构化持久化<br>
-                  • 经验库检索替代冗余上下文注入<br>
-                  • 关键信息在 Prompt 中高亮前置<br>
-                  • 上下文剪枝与压缩策略
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <!-- 评估指标 -->
-          <div class="exp-section">
-            <div class="exp-section-title">
-              📏 评估指标体系
-              <span class="badge green">鲁棒性 & 可扩展性</span>
-            </div>
-            <div class="metric-table-wrap">
-              <table class="metric-table">
-                <thead>
-                  <tr>
-                    <th>指标</th>
-                    <th>定义</th>
-                    <th>计算方式</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td class="metric-name">长序列准确率</td>
-                    <td class="metric-desc">超长会话中结果正确比例</td>
-                    <td><span class="metric-formula">正确数 / 总轮次数 × 100%</span></td>
-                  </tr>
-                  <tr>
-                    <td class="metric-name">上下文压缩率</td>
-                    <td class="metric-desc">ACE 压缩后 Prompt 长度与原始历史长度之比</td>
-                    <td><span class="metric-formula">1 - (压缩后 / 原始历史)</span></td>
-                  </tr>
-                  <tr>
-                    <td class="metric-name">跨轮引用准确率</td>
-                    <td class="metric-desc">跨越 N 轮以上的 POI/偏好引用正确比例</td>
-                    <td><span class="metric-formula">正确引用数 / 总引用数 × 100%</span></td>
-                  </tr>
-                  <tr>
-                    <td class="metric-name">注意力衰减系数</td>
-                    <td class="metric-desc">轮次间隔与引用准确率的相关系数</td>
-                    <td><span class="metric-formula">Pearson r(间隔轮次, 准确率)</span></td>
-                  </tr>
-                  <tr>
-                    <td class="metric-name">鲁棒性得分</td>
-                    <td class="metric-desc">长序列场景下的综合性能评分</td>
-                    <td><span class="metric-formula">综合加权各维度指标</span></td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          <!-- 可视化 -->
-          <div class="exp-section">
-            <div class="exp-section-title">
-              📈 结果可视化
-              <span class="badge">长序列分析</span>
-            </div>
-            <div class="chart-area three-col">
-              <div class="chart-container">
-                <canvas id="exp4-chart-accuracy"></canvas>
-              </div>
-              <div class="chart-container">
-                <canvas id="exp4-chart-reference"></canvas>
-              </div>
-              <div class="chart-container">
-                <canvas id="exp4-chart-compression"></canvas>
-              </div>
-            </div>
-          </div>
-
-          <div class="exp-section">
-            <div class="exp-section-title">
-              📊 指标摘要
-              <span class="badge green">长上下文鲁棒性</span>
-            </div>
-            <div class="stat-cards">
-              <div class="stat-card">
-                <div class="stat-value" id="exp4-ace-accuracy">--%</div>
-                <div class="stat-label">ACE 长序列准确率</div>
-                <div class="stat-compare"><span id="exp4-base-full">Base full --%</span><span id="exp4-base-truncated">Base truncated --%</span></div>
-              </div>
-              <div class="stat-card">
-                <div class="stat-value" id="exp4-ace-reference">--%</div>
-                <div class="stat-label">跨轮引用准确率</div>
-                <div class="stat-compare"><span id="exp4-compression-rate">压缩率 --%</span><span id="exp4-effective-tokens">有效 tokens --</span></div>
-              </div>
-              <div class="stat-card">
-                <div class="stat-value" id="exp4-ace-robustness">--</div>
-                <div class="stat-label">鲁棒性得分</div>
-                <div class="stat-compare"><span id="exp4-pollution">污染率 --%</span><span id="exp4-completion">完成率 --%</span></div>
-              </div>
-            </div>
-          </div>
-
-          <!-- 长序列轮次对比 -->
-          <div class="exp-section">
-            <div class="exp-section-title">
-              📋 长序列轮次采样对比
-              <span class="badge orange">实验数据</span>
-            </div>
-            <div class="metric-table-wrap">
-              <table class="metric-table">
-                <thead>
-                  <tr>
-                    <th>轮次区间</th>
-                    <th>上下文 Token 数</th>
-                    <th>Base LLM 准确率</th>
-                    <th>ACE 准确率</th>
-                    <th>ACE 压缩后 Token</th>
-                  </tr>
-                </thead>
-                <tbody id="exp4-interval-tbody">
-                  <tr><td colspan="5" style="text-align:center;color:#94a3b8;">暂无数据</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          <div id="exp4-loading" class="exp-state-msg" style="display:none;">
-            <div class="exp-spinner"></div>
-            <span>正在加载实验四数据...</span>
-          </div>
-          <div id="exp4-error" class="exp-state-msg error" style="display:none;">
-            <span>⚠️</span>
-            <span id="exp4-error-text">加载数据失败</span>
-          </div>
-          <div id="exp4-empty" class="exp-state-msg" style="display:none;">
-            <span>📭</span>
-            <span>暂无实验四数据，请点击「运行实验」按钮启动。</span>
-          </div>
-        </div>
-
-        <div class="exp-card" id="exp4-history-card" style="margin-top:16px;">
-          <div class="exp-card-header">
-            <div class="exp-card-icon gray">📜</div>
-            <div class="exp-card-title-group">
-              <h2>实验四历史记录</h2>
-              <p>点击记录查看该次长上下文实验结果，支持重命名和删除。</p>
-            </div>
-          </div>
-          <div class="exp-section">
-            <div class="metric-table-wrap">
-              <table class="metric-table" id="exp4-history-table">
-                <thead>
-                  <tr>
-                    <th style="width:160px;">名称 / 时间</th>
-                    <th style="width:90px;">轮次</th>
-                    <th style="width:110px;">ACE准确率</th>
-                    <th style="width:110px;">鲁棒性</th>
-                    <th style="width:180px;">操作</th>
-                  </tr>
-                </thead>
-                <tbody id="exp4-history-tbody">
-                  <tr><td colspan="5" style="text-align:center;color:#94a3b8;">加载中...</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="exp-panel" id="thesis" role="tabpanel">
-        <div class="exp-control-bar">
-          <div class="exp-control-left">
-            <button id="thesis-refresh-btn" class="exp-btn-run" type="button">刷新证据包</button>
-            <button id="thesis-download-btn" class="exp-btn-export" type="button">下载 JSON</button>
-            <span id="thesis-status" class="exp-status"></span>
-          </div>
-          <div class="exp-control-right">
-            <span class="exp-last-run" id="thesis-generated-at"></span>
-          </div>
-        </div>
-
-        <div class="exp-card">
-          <div class="exp-card-header">
-            <div class="exp-card-icon blue">5</div>
-            <div class="exp-card-title-group">
-              <h2>毕业设计证据中心</h2>
-              <p>自动汇总 GeoAnalystBench 任务对齐、Base vs ACE 指标、经验库分类、代码演化轨迹与消融实验结果，用于论文实验章节和答辩展示。</p>
-            </div>
-          </div>
-          <div class="thesis-score-row">
-            <div class="thesis-score">
-              <div class="thesis-score-value" id="thesis-readiness-score">--</div>
-              <div class="thesis-score-label">系统证据完整度</div>
-            </div>
-            <div class="thesis-checks" id="thesis-readiness-checks"></div>
-          </div>
-        </div>
-
-        <div class="exp-card">
-          <div class="exp-section-title">1. GeoAnalystBench 任务类型对齐</div>
-          <div class="metric-table-wrap">
-            <table class="metric-table">
-              <thead><tr><th>任务类型</th><th>对应维度</th><th>当前数量</th><th>缺口</th></tr></thead>
-              <tbody id="thesis-benchmark-tbody"></tbody>
-            </table>
-          </div>
-        </div>
-
-        <div class="exp-card">
-          <div class="exp-section-title">2. Zero-shot/Base LLM vs ACE 指标对比</div>
-          <div class="metric-table-wrap">
-            <table class="metric-table">
-              <thead><tr><th>指标</th><th>Base</th><th>ACE</th><th>变化</th></tr></thead>
-              <tbody id="thesis-baseline-tbody"></tbody>
-            </table>
-          </div>
-        </div>
-
-        <div class="exp-card">
-          <div class="exp-section-title">3. 经验库演化分类分析</div>
-          <div class="thesis-grid">
-            <div><h4>经验类型分布</h4><div id="thesis-category-list" class="thesis-list"></div></div>
-            <div><h4>高置信经验样例</h4><div id="thesis-top-experience-list" class="thesis-list"></div></div>
-          </div>
-        </div>
-
-        <div class="exp-card">
-          <div class="exp-section-title">4. 代码演化与错误修复轨迹</div>
-          <div id="thesis-code-list" class="thesis-list"></div>
-        </div>
-
-        <div class="exp-card">
-          <div class="exp-section-title">5. 消融实验与长期稳定性汇总</div>
-          <div class="thesis-grid">
-            <div><h4>模块贡献排序</h4><div id="thesis-ablation-list" class="thesis-list"></div></div>
-            <div><h4>缺口与下一步</h4><div id="thesis-missing-list" class="thesis-list"></div></div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-
-    <footer class="exp-footer">
-      <p>&copy; 2026 GeoAI Platform · ACE Mechanism Experiment System</p>
-    </footer>
+        <pre>{{ selectedTraceText }}</pre>
+      </aside>
+    </section>
   </main>
 
-  <script type="module" src="/static/experiment.js"></script>
+  <script src="/static/experiment.js?v=20260513-svg-chart"></script>
 </body>
 </html>

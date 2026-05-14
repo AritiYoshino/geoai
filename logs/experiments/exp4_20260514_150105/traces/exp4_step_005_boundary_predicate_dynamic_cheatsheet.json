@@ -1,0 +1,84 @@
+{
+  "task_id": "exp4_step_005_boundary_predicate",
+  "agent_type": "dynamic_cheatsheet",
+  "strategy": "dynamic_cheatsheet",
+  "adaptation_step": 5,
+  "query": "Step 5: 比较 contains 与 intersects 统计 行政区 边界 POI 的差异，输出校验表。",
+  "category": "validation",
+  "expected_skill": "spatial_predicate_choice",
+  "novelty": "warmup",
+  "expected_tools": [
+    "execute_spatial_code",
+    "predicate_check"
+  ],
+  "selected_tools": [
+    "execute_spatial_code"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 5
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": []
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "spatial_predicate_choice-005"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 1445
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [
+    "context_stability_miss:spatial_predicate_choice"
+  ],
+  "error_signature": [
+    "spatial_predicate_choice"
+  ],
+  "critic_diagnosis": "spatial_predicate_choice evidence missing after context update",
+  "generated_experience": "spatial_predicate_choice-005",
+  "retrieved_experiences": [],
+  "final_answer": "dynamic_cheatsheet step=5 skill=spatial_predicate_choice accuracy=0.671 context_tokens=1445 retrieved=0 generated=1",
+  "structured_response": {
+    "accuracy": 0.671,
+    "context_token_count": 1445,
+    "compression_event": "",
+    "retrieved_experience_ids": [],
+    "generated_experience_ids": [
+      "spatial_predicate_choice-005"
+    ]
+  },
+  "validation": {
+    "score": 0.671,
+    "success": false,
+    "threshold": 0.72,
+    "missing": [
+      "spatial_predicate_choice"
+    ],
+    "details": {
+      "tools": 1.0,
+      "accuracy": 0.671
+    }
+  },
+  "success": false,
+  "metrics": {
+    "turns": 3.0,
+    "runtime": 0.12,
+    "execution_success": false,
+    "result_correctness": 0.671,
+    "context_token_count": 1445,
+    "experience_retrieved": false,
+    "experience_added": true,
+    "library_size": 5,
+    "compression_event": ""
+  }
+}

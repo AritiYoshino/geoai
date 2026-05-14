@@ -1,38 +1,10 @@
-import { debounce } from "./js/gis/api.js";
-import { loadLayers, refreshSelectedLayers } from "./js/gis/layers.js";
-import { map } from "./js/gis/map_view.js";
-import {
-  clearHighlights,
-  createExperienceBank,
-  deleteActiveBank,
-  newSession,
-  refreshAcePanel,
-  refreshBanks,
-  refreshExperience,
-  refreshSessions,
-  refreshTrace,
-  renameActiveBank,
-  sendMessage,
-  switchExperienceBank,
-} from "./js/gis/panels.js";
-
-const shell = document.getElementById("appShell");
-const sidebarToggleBtn = document.getElementById("sidebarToggleBtn");
-const sidebarToggleIcon = sidebarToggleBtn?.querySelector(".toggle-icon");
-
-if (sidebarToggleIcon) sidebarToggleIcon.textContent = "<";
-if (sidebarToggleBtn) {
-  sidebarToggleBtn.title = "收起侧栏";
-  sidebarToggleBtn.setAttribute("aria-label", "收起侧栏");
-}
-
-const refreshSelectedLayersDebounced = debounce(() => refreshSelectedLayers(), 450);
+const {createApp, nextTick} = Vue;
 
 async function runStartupTask(taskName, task) {
   try {
     await task();
   } catch (error) {
-    console.error(`${taskName} 初始化失败:`, error);
+    console.error(`${taskName} 初始化失败`, error);
     if (taskName === "图层") {
       const layerList = document.getElementById("layerList");
       if (layerList) layerList.innerHTML = '<div class="inline-empty">图层加载失败，请刷新或检查服务日志。</div>';
@@ -44,56 +16,122 @@ async function runStartupTask(taskName, task) {
   }
 }
 
-map.on("load", async () => {
-  await Promise.all([
-    runStartupTask("图层", () => loadLayers({ fit: true })),
-    runStartupTask("会话", refreshSessions),
-    runStartupTask("ACE 轨迹", refreshTrace),
-    runStartupTask("ACE 面板", refreshAcePanel),
-    runStartupTask("经验库摘要", refreshExperience),
-    runStartupTask("经验库列表", refreshBanks),
-  ]);
-});
+createApp({
+  data() {
+    return {
+      sidebarCollapsed: false,
+      activeTab: "chat",
+      chatInput: "",
+      sending: false,
+      modulesReady: false,
+      gis: {},
+      tabs: [
+        {id: "chat", label: "对话"},
+        {id: "ace", label: "ACE 面板"},
+        {id: "trace", label: "ACE 轨迹"},
+        {id: "experience", label: "经验库"},
+      ],
+    };
+  },
 
-map.on("moveend", () => {
-  refreshSelectedLayersDebounced();
-});
+  async mounted() {
+    await nextTick();
+    await this.loadGisModules();
+    this.initializeMapAndPanels();
+  },
 
-function toggleSidebar() {
-  shell.classList.toggle("sidebar-collapsed");
-  const collapsed = shell.classList.contains("sidebar-collapsed");
-  const label = collapsed ? "展开侧栏" : "收起侧栏";
-  if (sidebarToggleBtn) {
-    sidebarToggleBtn.title = label;
-    sidebarToggleBtn.setAttribute("aria-label", label);
-  }
-  if (sidebarToggleIcon) sidebarToggleIcon.textContent = collapsed ? ">" : "<";
-  window.setTimeout(() => map.resize(), 260);
-}
+  methods: {
+    async loadGisModules() {
+      const [apiModule, layerModule, mapModule, panelModule] = await Promise.all([
+        import("./js/gis/api.js"),
+        import("./js/gis/layers.js"),
+        import("./js/gis/map_view.js"),
+        import("./js/gis/panels.js"),
+      ]);
+      this.gis = {
+        debounce: apiModule.debounce,
+        loadLayers: layerModule.loadLayers,
+        refreshSelectedLayers: layerModule.refreshSelectedLayers,
+        map: mapModule.map,
+        clearHighlights: panelModule.clearHighlights,
+        createExperienceBank: panelModule.createExperienceBank,
+        deleteActiveBank: panelModule.deleteActiveBank,
+        newSession: panelModule.newSession,
+        refreshAcePanel: panelModule.refreshAcePanel,
+        refreshBanks: panelModule.refreshBanks,
+        refreshExperience: panelModule.refreshExperience,
+        refreshSessions: panelModule.refreshSessions,
+        refreshTrace: panelModule.refreshTrace,
+        renameActiveBank: panelModule.renameActiveBank,
+        sendMessage: panelModule.sendMessage,
+        switchExperienceBank: panelModule.switchExperienceBank,
+      };
+      this.modulesReady = true;
+    },
 
-document.querySelectorAll(".tab").forEach((button) => {
-  button.addEventListener("click", () => {
-    document.querySelectorAll(".tab").forEach((b) => b.classList.remove("active"));
-    document.querySelectorAll(".tab-panel").forEach((p) => p.classList.remove("active"));
-    button.classList.add("active");
-    document.getElementById(`${button.dataset.tab}Tab`)?.classList.add("active");
-  });
-});
+    initializeMapAndPanels() {
+      const {map, debounce, refreshSelectedLayers} = this.gis;
+      const refreshSelectedLayersDebounced = debounce(() => refreshSelectedLayers(), 450);
 
-sidebarToggleBtn?.addEventListener("click", toggleSidebar);
+      map.on("load", async () => {
+        await Promise.all([
+          runStartupTask("图层", () => this.gis.loadLayers({fit: true})),
+          runStartupTask("会话", this.gis.refreshSessions),
+          runStartupTask("ACE 轨迹", this.gis.refreshTrace),
+          runStartupTask("ACE 面板", this.gis.refreshAcePanel),
+          runStartupTask("经验库摘要", this.gis.refreshExperience),
+          runStartupTask("经验库列表", this.gis.refreshBanks),
+        ]);
+      });
 
-document.getElementById("sendBtn")?.addEventListener("click", sendMessage);
-document.getElementById("chatInput")?.addEventListener("keydown", (event) => {
-  if (event.ctrlKey && event.key === "Enter") sendMessage();
-});
+      map.on("moveend", () => {
+        refreshSelectedLayersDebounced();
+      });
+    },
 
-document.getElementById("clearHighlightBtn")?.addEventListener("click", clearHighlights);
-document.getElementById("newSessionBtn")?.addEventListener("click", newSession);
-document.getElementById("refreshExperienceBtn")?.addEventListener("click", refreshExperience);
-document.getElementById("renameBankBtn")?.addEventListener("click", renameActiveBank);
-document.getElementById("deleteBankBtn")?.addEventListener("click", deleteActiveBank);
-document.getElementById("bankSelect")?.addEventListener("change", switchExperienceBank);
+    toggleSidebar() {
+      this.sidebarCollapsed = !this.sidebarCollapsed;
+      window.setTimeout(() => this.gis.map?.resize(), 260);
+    },
 
-document.querySelectorAll(".bankCreateBtn").forEach((button) => {
-  button.addEventListener("click", () => createExperienceBank(button));
-});
+    async sendMessage() {
+      if (!this.chatInput.trim() || this.sending || !this.modulesReady) return;
+      await nextTick();
+      this.sending = true;
+      try {
+        await this.gis.sendMessage();
+        this.chatInput = "";
+      } finally {
+        this.sending = false;
+      }
+    },
+
+    clearHighlights() {
+      return this.gis.clearHighlights?.();
+    },
+
+    newSession() {
+      return this.gis.newSession?.();
+    },
+
+    refreshExperience() {
+      return this.gis.refreshExperience?.();
+    },
+
+    renameActiveBank() {
+      return this.gis.renameActiveBank?.();
+    },
+
+    deleteActiveBank() {
+      return this.gis.deleteActiveBank?.();
+    },
+
+    switchExperienceBank(event) {
+      return this.gis.switchExperienceBank?.(event);
+    },
+
+    createExperienceBank(template) {
+      return this.gis.createExperienceBank?.(template);
+    },
+  },
+}).mount("#gisApp");

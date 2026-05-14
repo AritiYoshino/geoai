@@ -1,0 +1,96 @@
+{
+  "task_id": "exp4_step_070_multi_metric_ranking",
+  "agent_type": "monolithic_rewrite",
+  "strategy": "monolithic_rewrite",
+  "adaptation_step": 70,
+  "query": "Step 70: 综合 购物、生活服务 POI 数量 与行政区面积归一化得分，输出综合排名 Top 5 和校验表。",
+  "category": "code_required",
+  "expected_skill": "ranking_validation",
+  "novelty": "new_pattern",
+  "expected_tools": [
+    "execute_spatial_code",
+    "ranking_check"
+  ],
+  "selected_tools": [
+    "execute_spatial_code"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 70
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "ranking_validation-040",
+        "ranking_validation-050",
+        "ranking_validation-060"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "ranking_validation-070"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 2100
+    },
+    {
+      "step": "compression_event",
+      "detail": "abrupt_rewrite"
+    }
+  ],
+  "errors": [
+    "context_stability_miss:ranking_validation"
+  ],
+  "error_signature": [
+    "ranking_validation"
+  ],
+  "critic_diagnosis": "ranking_validation evidence missing after context update",
+  "generated_experience": "ranking_validation-070",
+  "retrieved_experiences": [
+    "ranking_validation-040",
+    "ranking_validation-050",
+    "ranking_validation-060"
+  ],
+  "final_answer": "monolithic_rewrite step=70 skill=ranking_validation accuracy=0.52 context_tokens=2100 retrieved=3 generated=1",
+  "structured_response": {
+    "accuracy": 0.52,
+    "context_token_count": 2100,
+    "compression_event": "abrupt_rewrite",
+    "retrieved_experience_ids": [
+      "ranking_validation-040",
+      "ranking_validation-050",
+      "ranking_validation-060"
+    ],
+    "generated_experience_ids": [
+      "ranking_validation-070"
+    ]
+  },
+  "validation": {
+    "score": 0.52,
+    "success": false,
+    "threshold": 0.72,
+    "missing": [
+      "ranking_validation"
+    ],
+    "details": {
+      "tools": 1.0,
+      "accuracy": 0.52
+    }
+  },
+  "success": false,
+  "metrics": {
+    "turns": 4.0,
+    "runtime": 0.12,
+    "execution_success": false,
+    "result_correctness": 0.52,
+    "context_token_count": 2100,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 9,
+    "compression_event": "abrupt_rewrite"
+  }
+}

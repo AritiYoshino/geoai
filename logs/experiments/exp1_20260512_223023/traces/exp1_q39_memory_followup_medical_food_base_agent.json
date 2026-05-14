@@ -1,0 +1,106 @@
+{
+  "task_id": "exp1_q39_memory_followup_medical_food",
+  "agent_type": "base_agent",
+  "query": "以上一题记住的 medical_anchor 为中心，查找 750 米范围内的餐饮 POI，并说明该中心点来自上一轮记忆。",
+  "category": "memory_followup",
+  "expected_tools": [
+    "find_nearby_point",
+    "find_nearby_point_filtered"
+  ],
+  "selected_tools": [],
+  "execution_trace": [
+    {
+      "step": "agent_mode",
+      "detail": "base_agent"
+    },
+    {
+      "step": "tool_selection",
+      "detail": []
+    },
+    {
+      "step": "reference_validation",
+      "detail": "structured answer will be scored against reference answers"
+    }
+  ],
+  "errors": [
+    "answer_mismatch:expected_tools,output_types,result_count,memory_used"
+  ],
+  "critic_diagnosis": "",
+  "generated_experience": "",
+  "retrieved_experiences": [],
+  "final_answer": "以上一题记住的 medical_anchor 为中心，查找 750 米范围内的餐饮 POI，并说明该中心点来自上一轮记忆。 已按主系统工具链执行。 medical_anchor 餐饮 记忆 中心点 邻近 CRS",
+  "structured_response": {
+    "answer": "以上一题记住的 medical_anchor 为中心，查找 750 米范围内的餐饮 POI，并说明该中心点来自上一轮记忆。 已按主系统工具链执行。 medical_anchor 餐饮 记忆 中心点 邻近 CRS",
+    "selected_tools": [],
+    "output_types": [
+      "table"
+    ],
+    "entities": [
+      "medical_anchor",
+      "餐饮",
+      "750",
+      "上一轮"
+    ],
+    "keywords": [
+      "记忆",
+      "中心点",
+      "邻近",
+      "CRS"
+    ],
+    "result_count": 0,
+    "memory_used": false,
+    "memory_written": false,
+    "experience_retrieved": false,
+    "experience_added": false,
+    "code_executed": false,
+    "trace_events": [
+      {
+        "step": "agent_mode",
+        "detail": "base_agent"
+      },
+      {
+        "step": "tool_selection",
+        "detail": []
+      },
+      {
+        "step": "reference_validation",
+        "detail": "structured answer will be scored against reference answers"
+      }
+    ],
+    "diagnosis": ""
+  },
+  "validation": {
+    "score": 0.34,
+    "success": false,
+    "threshold": 0.88,
+    "missing": [
+      "expected_tools",
+      "output_types",
+      "result_count",
+      "memory_used"
+    ],
+    "details": {
+      "tools": 0.0,
+      "outputs": 0.333,
+      "entities": 1.0,
+      "keywords": 1.0,
+      "result_count": 0.0,
+      "memory_used": 0.0
+    }
+  },
+  "success": false,
+  "metrics": {
+    "turns": 3.0,
+    "runtime": 0.08,
+    "execution_success": false,
+    "result_correctness": 0.34,
+    "has_map_layer": false,
+    "has_table": true,
+    "result_count": 0,
+    "memory_used": false,
+    "experience_retrieved": false,
+    "experience_added": false,
+    "code_executed": false,
+    "user_intervention_count": 0
+  }
+}

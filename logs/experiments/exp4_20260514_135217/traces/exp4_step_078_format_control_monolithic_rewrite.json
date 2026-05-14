@@ -1,0 +1,85 @@
+{
+  "task_id": "exp4_step_078_format_control",
+  "agent_type": "monolithic_rewrite",
+  "strategy": "monolithic_rewrite",
+  "adaptation_step": 78,
+  "query": "Step 78: 将 用户画像 输出为指定 JSON/表格格式，避免字段遗漏。",
+  "category": "output_control",
+  "expected_skill": "format_control",
+  "novelty": "new_pattern",
+  "expected_tools": [
+    "reasoning",
+    "format_validator"
+  ],
+  "selected_tools": [
+    "reasoning",
+    "format_validator"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 78
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "format_control-068"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "format_control-078"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 4468
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "format_control-078",
+  "retrieved_experiences": [
+    "format_control-068"
+  ],
+  "final_answer": "monolithic_rewrite step=78 skill=format_control accuracy=0.78 context_tokens=4468 retrieved=1 generated=1",
+  "structured_response": {
+    "accuracy": 0.78,
+    "context_token_count": 4468,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "format_control-068"
+    ],
+    "generated_experience_ids": [
+      "format_control-078"
+    ]
+  },
+  "validation": {
+    "score": 0.78,
+    "success": true,
+    "threshold": 0.72,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "accuracy": 0.78
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 3.75,
+    "runtime": 0.12,
+    "execution_success": true,
+    "result_correctness": 0.78,
+    "context_token_count": 4468,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 17,
+    "compression_event": ""
+  }
+}

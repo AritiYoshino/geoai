@@ -1,0 +1,136 @@
+{
+  "task_id": "exp3_q22_temporal_evolution",
+  "agent_type": "without_experience_retrieval",
+  "agent_name": "ACE w/o Experience Retrieval",
+  "missing_modules": [
+    "experience_retrieval"
+  ],
+  "query": "查询近 90 天新增医疗 POI；如果日期字段格式不一致，说明原因并总结时间字段解析策略。",
+  "category": "temporal_query",
+  "expected_tools": [
+    "query_poi_by_conditions"
+  ],
+  "selected_tools": [
+    "query_poi_by_conditions"
+  ],
+  "execution_trace": [
+    {
+      "step": "ablation_agent",
+      "detail": "missing_modules=experience_retrieval"
+    },
+    {
+      "step": "tool_selection",
+      "detail": [
+        "query_poi_by_conditions"
+      ]
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": []
+    },
+    {
+      "step": "critic_diagnosis",
+      "detail": "Critic 诊断：exp3_q22_temporal_evolution 触发可修复错误，需保留失败原因并交给 Evolution。"
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "exp3-temporal-field-parse"
+      ]
+    }
+  ],
+  "errors": [],
+  "critic_diagnosis": "Critic 诊断：exp3_q22_temporal_evolution 触发可修复错误，需保留失败原因并交给 Evolution。",
+  "generated_experience": "exp3-temporal-field-parse",
+  "retrieved_experiences": [],
+  "final_answer": "查询近 90 天新增医疗 POI；如果日期字段格式不一致，说明原因并总结时间字段解析策略。 missing_modules=experience_retrieval Critic 诊断：exp3_q22_temporal_evolution 触发可修复错误，需保留失败原因并交给 Evolution。 exp3-temporal-field-parse 90 天 医疗 日期字段 格式 Critic 诊断 经验库 时间字段",
+  "structured_response": {
+    "answer": "查询近 90 天新增医疗 POI；如果日期字段格式不一致，说明原因并总结时间字段解析策略。 missing_modules=experience_retrieval Critic 诊断：exp3_q22_temporal_evolution 触发可修复错误，需保留失败原因并交给 Evolution。 exp3-temporal-field-parse 90 天 医疗 日期字段 格式 Critic 诊断 经验库 时间字段",
+    "selected_tools": [
+      "query_poi_by_conditions"
+    ],
+    "output_types": [
+      "map_layer",
+      "table",
+      "diagnosis",
+      "explanation"
+    ],
+    "entities": [
+      "90 天",
+      "医疗",
+      "日期字段",
+      "格式"
+    ],
+    "keywords": [
+      "Critic",
+      "诊断",
+      "经验库",
+      "时间字段"
+    ],
+    "result_count": 1,
+    "retrieved_experience_ids": [],
+    "generated_experience_ids": [
+      "exp3-temporal-field-parse"
+    ],
+    "experience_retrieved": false,
+    "experience_added": true,
+    "memory_used": false,
+    "code_executed": false,
+    "trace_events": [
+      {
+        "step": "ablation_agent",
+        "detail": "missing_modules=experience_retrieval"
+      },
+      {
+        "step": "tool_selection",
+        "detail": [
+          "query_poi_by_conditions"
+        ]
+      },
+      {
+        "step": "experience_retrieval",
+        "detail": []
+      },
+      {
+        "step": "critic_diagnosis",
+        "detail": "Critic 诊断：exp3_q22_temporal_evolution 触发可修复错误，需保留失败原因并交给 Evolution。"
+      },
+      {
+        "step": "experience_update",
+        "detail": [
+          "exp3-temporal-field-parse"
+        ]
+      }
+    ]
+  },
+  "validation": {
+    "score": 1.0,
+    "success": true,
+    "threshold": 0.86,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "outputs": 1.0,
+      "entities": 1.0,
+      "keywords": 1.0,
+      "result_count": 1.0,
+      "experience_added": 1.0
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 4.1,
+    "runtime": 0.15,
+    "execution_success": true,
+    "result_correctness": 1.0,
+    "has_map_layer": true,
+    "has_table": true,
+    "result_count": 1,
+    "experience_retrieved": false,
+    "experience_added": true,
+    "memory_used": false,
+    "code_executed": false,
+    "critic_used": true,
+    "missing_module_count": 1
+  }
+}

@@ -1,0 +1,207 @@
+{
+  "id": "exp2_reference_answers_evolution_v2",
+  "workbook_id": "exp2_workbook_evolution_v2",
+  "reference_system": {
+    "name": "ACE-WebGIS Reference System",
+    "description": "Online Adaptation 三批连续在线适应任务：静态经验收益、新错误模式学习、最终迁移小测。"
+  },
+  "success_threshold": 0.86,
+  "answers": {
+    "exp2_b1_easy_search": {
+      "expected_tools": ["search_poi"],
+      "expected_output_types": ["map_layer", "table"],
+      "expected_entities": ["POI", "result"],
+      "required_keywords": ["search", "result"],
+      "min_result_count": 1
+    },
+    "exp2_b1_known_crs": {
+      "expected_tools": ["find_nearby"],
+      "expected_output_types": ["map_layer", "table"],
+      "expected_entities": ["distance", "POI", "CRS"],
+      "required_keywords": ["reuse", "CRS"],
+      "min_result_count": 1,
+      "requires_experience_retrieval": true,
+      "expected_experience_ids": ["exp2-crs-distance"]
+    },
+    "exp2_b1_known_schema": {
+      "expected_tools": ["query_poi_by_conditions"],
+      "expected_output_types": ["map_layer", "table"],
+      "expected_entities": ["POI", "schema", "field"],
+      "required_keywords": ["reuse", "schema"],
+      "min_result_count": 1,
+      "requires_experience_retrieval": true,
+      "expected_experience_ids": ["exp2-schema-check"]
+    },
+    "exp2_b1_known_empty": {
+      "expected_tools": ["search_poi"],
+      "expected_output_types": ["map_layer", "table"],
+      "expected_entities": ["POI", "empty_result", "relax"],
+      "required_keywords": ["reuse", "empty_result"],
+      "min_result_count": 1,
+      "requires_experience_retrieval": true,
+      "expected_experience_ids": ["exp2-empty-result-relax"]
+    },
+    "exp2_b2_static_crs_refresh": {
+      "expected_tools": ["find_nearby"],
+      "expected_output_types": ["map_layer", "table"],
+      "expected_entities": ["distance", "POI", "CRS"],
+      "required_keywords": ["reuse", "CRS"],
+      "min_result_count": 1,
+      "requires_experience_retrieval": true,
+      "expected_experience_ids": ["exp2-crs-distance"]
+    },
+    "exp2_b2_static_schema_refresh": {
+      "expected_tools": ["query_poi_by_conditions"],
+      "expected_output_types": ["map_layer", "table"],
+      "expected_entities": ["POI", "schema", "field"],
+      "required_keywords": ["reuse", "schema"],
+      "min_result_count": 1,
+      "requires_experience_retrieval": true,
+      "expected_experience_ids": ["exp2-schema-check"]
+    },
+    "exp2_b2_learn_temporal_seed": {
+      "expected_tools": ["query_poi_by_conditions"],
+      "expected_output_types": ["map_layer", "table", "diagnosis"],
+      "expected_entities": ["time", "format", "range"],
+      "required_keywords": ["learn", "temporal", "validate"],
+      "min_result_count": 1,
+      "requires_experience_add": true,
+      "expected_generated_experience_ids": ["exp2-temporal-query"],
+      "expected_error_signature": "temporal_query"
+    },
+    "exp2_b2_temporal_transfer": {
+      "expected_tools": ["query_poi_by_conditions"],
+      "expected_output_types": ["map_layer", "table"],
+      "expected_entities": ["time", "format", "range"],
+      "required_keywords": ["reuse", "temporal", "validate"],
+      "min_result_count": 1,
+      "requires_experience_retrieval": true,
+      "expected_experience_ids": ["exp2-temporal-query"],
+      "expected_error_signature": "temporal_query"
+    },
+    "exp2_b2_learn_ranking_seed": {
+      "expected_tools": ["execute_spatial_code"],
+      "expected_output_types": ["table", "map_layer", "diagnosis"],
+      "expected_entities": ["rank", "score", "weight"],
+      "required_keywords": ["learn", "ranking", "normalize"],
+      "min_result_count": 1,
+      "requires_code": true,
+      "requires_experience_add": true,
+      "expected_generated_experience_ids": ["exp2-multi-criteria"],
+      "expected_error_signature": "multi_criteria_rank"
+    },
+    "exp2_b2_ranking_transfer": {
+      "expected_tools": ["execute_spatial_code"],
+      "expected_output_types": ["table", "map_layer"],
+      "expected_entities": ["rank", "score", "weight"],
+      "required_keywords": ["reuse", "ranking", "normalize"],
+      "min_result_count": 1,
+      "requires_code": true,
+      "requires_experience_retrieval": true,
+      "expected_experience_ids": ["exp2-multi-criteria"],
+      "expected_error_signature": "multi_criteria_rank"
+    },
+    "exp2_b2_learn_validation_seed": {
+      "expected_tools": ["spatial_join_layers", "execute_spatial_code"],
+      "expected_output_types": ["map_layer", "table", "diagnosis"],
+      "expected_entities": ["validation", "spatial", "outlier"],
+      "required_keywords": ["learn", "validation", "spatial"],
+      "min_result_count": 1,
+      "requires_code": true,
+      "requires_experience_add": true,
+      "expected_generated_experience_ids": ["exp2-cross-validation"],
+      "expected_error_signature": "cross_layer_validation"
+    },
+    "exp2_b2_validation_transfer": {
+      "expected_tools": ["spatial_join_layers", "execute_spatial_code"],
+      "expected_output_types": ["map_layer", "table"],
+      "expected_entities": ["validation", "spatial", "outlier"],
+      "required_keywords": ["reuse", "validation", "spatial"],
+      "min_result_count": 1,
+      "requires_code": true,
+      "requires_experience_retrieval": true,
+      "expected_experience_ids": ["exp2-cross-validation"],
+      "expected_error_signature": "cross_layer_validation"
+    },
+    "exp2_b2_learn_adaptive_buffer_seed": {
+      "expected_tools": ["find_nearby"],
+      "expected_output_types": ["map_layer", "table", "diagnosis"],
+      "expected_entities": ["buffer", "POI", "coverage"],
+      "required_keywords": ["learn", "dynamic_buffer", "tiered_radius"],
+      "min_result_count": 1,
+      "requires_experience_add": true,
+      "expected_generated_experience_ids": ["exp2-adaptive-buffer"],
+      "expected_error_signature": "adaptive_buffer"
+    },
+    "exp2_b2_adaptive_buffer_transfer": {
+      "expected_tools": ["find_nearby"],
+      "expected_output_types": ["map_layer", "table"],
+      "expected_entities": ["buffer", "POI", "coverage"],
+      "required_keywords": ["reuse", "dynamic_buffer", "coverage"],
+      "min_result_count": 1,
+      "requires_experience_retrieval": true,
+      "expected_experience_ids": ["exp2-adaptive-buffer"],
+      "expected_error_signature": "adaptive_buffer"
+    },
+    "exp2_b3_known_static_crs": {
+      "expected_tools": ["find_nearby"],
+      "expected_output_types": ["map_layer", "table"],
+      "expected_entities": ["distance", "POI", "CRS"],
+      "required_keywords": ["reuse", "CRS"],
+      "min_result_count": 1,
+      "requires_experience_retrieval": true,
+      "expected_experience_ids": ["exp2-crs-distance"]
+    },
+    "exp2_b3_known_static_schema": {
+      "expected_tools": ["query_poi_by_conditions"],
+      "expected_output_types": ["map_layer", "table"],
+      "expected_entities": ["POI", "schema", "field"],
+      "required_keywords": ["reuse", "schema"],
+      "min_result_count": 1,
+      "requires_experience_retrieval": true,
+      "expected_experience_ids": ["exp2-schema-check"]
+    },
+    "exp2_b3_final_temporal": {
+      "expected_tools": ["query_poi_by_conditions"],
+      "expected_output_types": ["map_layer", "table"],
+      "expected_entities": ["time", "format", "range"],
+      "required_keywords": ["reuse", "temporal", "validate"],
+      "min_result_count": 1,
+      "requires_experience_retrieval": true,
+      "expected_experience_ids": ["exp2-temporal-query"],
+      "expected_error_signature": "temporal_query"
+    },
+    "exp2_b3_final_ranking": {
+      "expected_tools": ["execute_spatial_code"],
+      "expected_output_types": ["table", "map_layer"],
+      "expected_entities": ["rank", "score", "weight"],
+      "required_keywords": ["reuse", "ranking", "normalize"],
+      "min_result_count": 1,
+      "requires_code": true,
+      "requires_experience_retrieval": true,
+      "expected_experience_ids": ["exp2-multi-criteria"],
+      "expected_error_signature": "multi_criteria_rank"
+    },
+    "exp2_b3_final_validation": {
+      "expected_tools": ["spatial_join_layers", "execute_spatial_code"],
+      "expected_output_types": ["map_layer", "table"],
+      "expected_entities": ["validation", "spatial", "outlier"],
+      "required_keywords": ["reuse", "validation", "spatial"],
+      "min_result_count": 1,
+      "requires_code": true,
+      "requires_experience_retrieval": true,
+      "expected_experience_ids": ["exp2-cross-validation"],
+      "expected_error_signature": "cross_layer_validation"
+    },
+    "exp2_b3_final_adaptive_buffer": {
+      "expected_tools": ["find_nearby"],
+      "expected_output_types": ["map_layer", "table"],
+      "expected_entities": ["buffer", "POI", "coverage"],
+      "required_keywords": ["reuse", "dynamic_buffer", "coverage"],
+      "min_result_count": 1,
+      "requires_experience_retrieval": true,
+      "expected_experience_ids": ["exp2-adaptive-buffer"],
+      "expected_error_signature": "adaptive_buffer"
+    }
+  }
+}

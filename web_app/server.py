@@ -1,24 +1,18 @@
-import glob
 import json
 import mimetypes
 import os
-import shutil
 import socket
+import subprocess
+import sys
 import threading
 import time
+import traceback
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
-from urllib.parse import parse_qs, quote, urlparse
+from urllib.parse import parse_qs, quote, unquote, urlparse
 
 from dotenv import load_dotenv
 
 from core.jsonl_logger import log_error
-
-
-EXPERIMENT_OUTPUT_ROOT = os.path.join("experiments", "experiment_outputs")
-EXP1_OUTPUT_DIR = os.path.join(EXPERIMENT_OUTPUT_ROOT, "exp1")
-EXP2_OUTPUT_DIR = os.path.join(EXPERIMENT_OUTPUT_ROOT, "exp2")
-EXP3_OUTPUT_DIR = os.path.join(EXPERIMENT_OUTPUT_ROOT, "exp3")
-EXP4_OUTPUT_DIR = os.path.join(EXPERIMENT_OUTPUT_ROOT, "exp4")
 
 
 def startup_log(message):
@@ -27,6 +21,57 @@ def startup_log(message):
 
 def startup_timing(label, start):
     startup_log(f"[timing] {label}: {time.perf_counter() - start:.3f}s")
+
+
+def _kill_listeners_on_port(port):
+    if os.getenv("GEOAI_KILL_STARTUP_PORT", "1").strip().lower() in {"0", "false", "no"}:
+        startup_log(f"startup port cleanup disabled for {port}")
+        return
+
+    try:
+        output = subprocess.check_output(
+            ["netstat", "-ano"],
+            text=True,
+            encoding="utf-8",
+            errors="ignore",
+        )
+    except Exception as exc:
+        startup_log(f"could not inspect port {port}: {exc}")
+        return
+
+    current_pid = os.getpid()
+    pids = set()
+    markers = (f"127.0.0.1:{port}", f"0.0.0.0:{port}", f"[::]:{port}", f"::1:{port}")
+    for line in output.splitlines():
+        if "LISTENING" not in line.upper():
+            continue
+        if not any(marker in line for marker in markers):
+            continue
+        parts = line.split()
+        if not parts:
+            continue
+        try:
+            pid = int(parts[-1])
+        except ValueError:
+            continue
+        if pid and pid != current_pid:
+            pids.add(pid)
+
+    if not pids:
+        startup_log(f"port {port} has no stale listener")
+        return
+
+    for pid in sorted(pids):
+        startup_log(f"killing stale listener on port {port}: pid={pid}")
+        try:
+            subprocess.run(
+                ["taskkill", "/PID", str(pid), "/F"],
+                check=False,
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+            )
+        except Exception as exc:
+            startup_log(f"failed to kill pid={pid} on port {port}: {exc}")
 
 
 class WebGISAppState:
@@ -66,28 +111,9 @@ class WebGISAppState:
         startup_timing("initialize AI handler and agents", step)
         startup_log("application state ready")
         startup_timing("application state total", state_start)
-        self._exp1_lock = threading.Lock()
-        self._exp1_running = False
-        self._exp1_latest = None  # 缓存实验一的最新结果
-        self._exp2_running = False
-        self._exp2_latest = None  # 缓存实验二的最新结果
-        self._exp3_running = False
-        self._exp3_latest = None  # 缓存实验三的最新结果
-        self._exp4_running = False
-        self._exp4_latest = None  # 缓存实验四的最新结果
-
-    def has_running_experiment(self):
-        return any(
-            (
-                self._exp1_running,
-                self._exp2_running,
-                self._exp3_running,
-                self._exp4_running,
-            )
-        )
-
 
 STATE = None
+REPORT_LOCK = threading.Lock()
 
 
 class ExclusiveThreadingHTTPServer(ThreadingHTTPServer):
@@ -117,6 +143,9 @@ class WebGISRequestHandler(SimpleHTTPRequestHandler):
             ".json": "application/json; charset=utf-8",
             ".geojson": "application/geo+json; charset=utf-8",
             ".svg": "image/svg+xml",
+            ".tif": "image/tiff",
+            ".tiff": "image/tiff",
+            ".png": "image/png",
         }
         return explicit_types.get(ext, mimetypes.guess_type(path)[0] or default)
 
@@ -133,6 +162,10 @@ class WebGISRequestHandler(SimpleHTTPRequestHandler):
                 self._send_static("experiment.html")
             elif parsed.path.startswith("/static/"):
                 self._send_static(parsed.path.removeprefix("/static/"))
+            elif parsed.path.startswith("/exports/"):
+                self._send_export_file(parsed.path.removeprefix("/exports/"), download=bool(query.get("download")))
+            elif parsed.path.startswith("/experiment-reports/"):
+                self._send_experiment_report_file(parsed.path.removeprefix("/experiment-reports/"), download=bool(query.get("download")))
             elif parsed.path == "/api/layers":
                 self._send_json({"layers": STATE.map_handler.layers_payload()})
             elif parsed.path == "/api/layer_data":
@@ -159,38 +192,14 @@ class WebGISRequestHandler(SimpleHTTPRequestHandler):
                         "banks": STATE.ai_handler.list_experience_banks(),
                     }
                 )
-            elif parsed.path == "/api/experiment/exp1/data":
-                self._handle_exp1_data(query)
-            elif parsed.path == "/api/experiment/exp1/tasks":
-                self._send_static_file(os.path.join("experiments", "exp1", "exp1_suite.json"))
-            elif parsed.path == "/api/experiment/exp1/results":
-                self._handle_exp1_results()
-            elif parsed.path == "/api/experiment/exp1/export":
-                self._handle_exp_export(query, "exp1_")
-            elif parsed.path == "/api/experiment/exp2/data":
-                self._handle_exp2_data(query)
-            elif parsed.path == "/api/experiment/exp2/tasks":
-                self._send_static_file(os.path.join("experiments", "exp2", "exp2_suite.json"))
-            elif parsed.path == "/api/experiment/exp2/results":
-                self._handle_exp2_results()
-            elif parsed.path == "/api/experiment/exp2/export":
-                self._handle_exp_export(query, "exp2_")
-            elif parsed.path == "/api/experiment/exp3/data":
-                self._handle_exp3_data(query)
-            elif parsed.path == "/api/experiment/exp3/tasks":
-                self._send_static_file(os.path.join("experiments", "exp3", "exp3_suite.json"))
-            elif parsed.path == "/api/experiment/exp3/results":
-                self._handle_exp3_results()
-            elif parsed.path == "/api/experiment/exp3/export":
-                self._handle_exp_export(query, "exp3_")
-            elif parsed.path == "/api/experiment/exp4/data":
-                self._handle_exp4_data(query)
-            elif parsed.path == "/api/experiment/exp4/tasks":
-                self._send_static_file(os.path.join("experiments", "exp4", "exp4_suite.json"))
-            elif parsed.path == "/api/experiment/exp4/results":
-                self._handle_exp4_results()
-            elif parsed.path == "/api/experiment/exp4/export":
-                self._handle_exp_export(query, "exp4_")
+            elif parsed.path == "/api/experiment/list":
+                self._handle_experiment_list()
+            elif parsed.path == "/api/experiment/runs":
+                self._handle_experiment_runs(query)
+            elif parsed.path == "/api/experiment/reports":
+                self._handle_experiment_reports(query)
+            elif parsed.path.startswith("/api/experiment/result/"):
+                self._handle_experiment_result(parsed.path)
             elif parsed.path == "/api/thesis/evidence":
                 self._handle_thesis_evidence()
             else:
@@ -279,614 +288,219 @@ class WebGISRequestHandler(SimpleHTTPRequestHandler):
                         "summary": STATE.ai_handler.get_experience_summary(),
                     }
                 )
-            elif parsed.path == "/api/experiment/exp1/run":
-                self._handle_exp1_run(data)
-            elif parsed.path == "/api/experiment/exp1/rename":
-                self._handle_exp1_rename(data)
-            elif parsed.path == "/api/experiment/exp1/delete":
-                self._handle_exp1_delete(data)
-            elif parsed.path == "/api/experiment/exp2/run":
-                self._handle_exp2_run(data)
-            elif parsed.path == "/api/experiment/exp2/rename":
-                self._handle_exp2_rename(data)
-            elif parsed.path == "/api/experiment/exp2/delete":
-                self._handle_exp2_delete(data)
-            elif parsed.path == "/api/experiment/exp3/run":
-                self._handle_exp3_run(data)
-            elif parsed.path == "/api/experiment/exp3/rename":
-                self._handle_exp3_rename(data)
-            elif parsed.path == "/api/experiment/exp3/delete":
-                self._handle_exp3_delete(data)
-            elif parsed.path == "/api/experiment/exp4/run":
-                self._handle_exp4_run(data)
-            elif parsed.path == "/api/experiment/exp4/rename":
-                self._handle_exp4_rename(data)
-            elif parsed.path == "/api/experiment/exp4/delete":
-                self._handle_exp4_delete(data)
+            elif parsed.path == "/api/experiment/run":
+                self._handle_experiment_run(data)
+            elif parsed.path == "/api/experiment/report":
+                self._handle_experiment_report(data)
+            elif parsed.path == "/api/experiment/run/rename":
+                self._handle_experiment_run_rename(data)
+            elif parsed.path == "/api/experiment/run/delete":
+                self._handle_experiment_run_delete(data)
+            elif parsed.path == "/api/experiment/report/rename":
+                self._handle_experiment_report_rename(data)
+            elif parsed.path == "/api/experiment/report/delete":
+                self._handle_experiment_report_delete(data)
             else:
                 self.send_error(404, "Not found")
         except Exception as exc:
             log_error({"source": "http_post", "path": parsed.path, "error": str(exc)})
             self._send_json({"error": str(exc)}, status=500)
 
-    def _handle_exp1_data(self, query=None):
-        """返回实验一的最新汇总数据。"""
-        query = query or {}
-        requested_run_dir = (query.get("run_dir") or [""])[0]
-        if requested_run_dir:
-            run_dir = self._resolve_exp1_run_dir(requested_run_dir)
-            if not run_dir:
-                self._send_json({"error": "实验目录不存在或路径无效"}, status=404)
-                return
-            data = self._read_exp1_summary(run_dir)
-            if data is None:
-                self._send_json({"error": "实验结果文件不存在或无法读取"}, status=404)
-                return
-            STATE._exp1_latest = data
-            self._send_json(data)
-            return
+    def _send_experiment_removed(self):
+        self._send_json({"status": "removed", "message": "实验模块已移除，界面入口暂时保留。"}, status=410)
 
-        # 先检查是否有缓存（线程完成时设置）
-        if STATE._exp1_latest:
-            self._send_json(STATE._exp1_latest)
-            return
+    def _handle_experiment_list(self):
+        from experiments.runner import list_experiments
 
-        # 如果实验仍在运行中，返回 no_data 让前端继续轮询
-        if STATE._exp1_running:
-            self._send_json({"status": "no_data", "message": "实验运行中..."})
-            return
+        self._send_json({"experiments": list_experiments()})
 
-        # 从 experiments/experiment_outputs/exp1 目录中查找最新结果
-        exp1_pattern = os.path.join(EXP1_OUTPUT_DIR, "exp1_*", "summary.json")
-        all_files = sorted(glob.glob(exp1_pattern), key=os.path.getmtime, reverse=True)
-        if all_files:
-            try:
-                data = self._read_exp1_summary(os.path.dirname(all_files[0]))
-                if data is None:
-                    raise ValueError("summary.json 读取失败")
-                STATE._exp1_latest = data
-                self._send_json(data)
-                return
-            except Exception:
-                pass
+    def _handle_experiment_runs(self, query):
+        from experiments.runner import list_experiment_runs
 
-        # 返回测试套件信息（无数据时）
-        suite_path = os.path.join("experiments", "exp1", "exp1_suite.json")
-        if os.path.exists(suite_path):
-            with open(suite_path, "r", encoding="utf-8") as f:
-                suite = json.load(f)
-            self._send_json({
-                "experiment": "实验一：基线对比实验",
-                "status": "no_data",
-                "message": f"尚未运行实验。请点击「运行实验」按钮启动，或检查 {EXP1_OUTPUT_DIR} 目录。",
-                "test_suite": suite,
-            })
-        else:
-            self._send_json({"status": "error", "message": "测试套件文件未找到"})
+        exp_id = (query.get("experiment_id") or query.get("exp") or [""])[0] or None
+        self._send_json({"runs": list_experiment_runs(exp_id)})
 
-    def _handle_exp1_results(self):
-        """返回实验一的所有历史运行结果列表。"""
-        exp1_dirs = sorted(
-            glob.glob(os.path.join(EXP1_OUTPUT_DIR, "exp1_*")),
-            key=os.path.getmtime,
-            reverse=True,
-        )[:20]
-        results = []
-        for d in exp1_dirs:
-            if os.path.exists(os.path.join(d, "summary.json")):
-                try:
-                    data = self._read_exp1_summary(d)
-                    if data is None:
-                        continue
-                    results.append(data)
-                except Exception:
-                    pass
-        self._send_json({"runs": results})
+    def _handle_experiment_reports(self, query):
+        from experiments.reporting import list_reports
 
-    def _handle_exp1_run(self, data):
-        """异步运行实验一。"""
-        if STATE._exp1_running:
-            self._send_json({"status": "running", "message": "实验已在运行中"}, status=400)
-            return
+        exp_id = (query.get("experiment_id") or query.get("exp") or [""])[0] or None
+        run_id = (query.get("run_id") or [""])[0] or None
+        self._send_json({"reports": list_reports(run_id=run_id, exp_id=exp_id)})
 
-        mode = data.get("mode", "both")  # base, ace, both
-        bank_id = data.get("bank_id", "")
-        STATE._exp1_running = True
+    def _handle_experiment_run(self, data):
+        from experiments.config import ExperimentConfig
 
-        # 保存当前活跃经验库，如果指定了自定义 bank 则切换
-        _original_bank_id = None
-        _use_preset = True
-        if bank_id and bank_id != "default":
-            try:
-                _original_bank_id = STATE.ai_handler.experience_bank_manager.data.get("active_id", "default")
-                STATE.ai_handler.switch_experience_bank(bank_id)
-                _use_preset = False
-                print(f"[Exp1] 已切换到经验库: {bank_id}")
-            except Exception as e:
-                print(f"[Exp1] 切换经验库失败: {e}")
-
-        def _run():
-            nonlocal _original_bank_id
-            try:
-                from experiments import run_exp1
-                summary = run_exp1(
-                    STATE.ai_handler,
-                    STATE.map_handler,
-                    mode=mode,
-                    output_dir=EXP1_OUTPUT_DIR,
-                    use_preset=_use_preset,
-                )
-                STATE._exp1_latest = summary
-            except Exception as e:
-                import traceback
-                STATE._exp1_latest = {
-                    "experiment": "实验一：基线对比实验",
-                    "status": "error",
-                    "error": str(e),
-                    "traceback": traceback.format_exc(),
-                }
-            finally:
-                # 恢复原始经验库
-                if _original_bank_id:
-                    try:
-                        STATE.ai_handler.switch_experience_bank(_original_bank_id)
-                        print(f"[Exp1] 已恢复经验库: {_original_bank_id}")
-                    except Exception as e:
-                        print(f"[Exp1] 恢复经验库失败: {e}")
-                STATE._exp1_running = False
-
-        thread = threading.Thread(target=_run, daemon=True)
-        thread.start()
-        self._send_json({"status": "started", "message": f"实验已启动（模式: {mode}），请稍后刷新查看结果。"})
-
-    def _handle_exp1_rename(self, data):
-        """重命名历史实验运行记录。"""
-        run_dir = data.get("run_dir", "")
-        new_name = data.get("name", "").strip()
-        if not run_dir or not new_name:
-            self._send_json({"error": "参数不完整"}, status=400)
-            return
-        abs_dir = self._resolve_exp1_run_dir(run_dir)
-        if not abs_dir:
-            self._send_json({"error": "实验目录不存在"}, status=404)
-            return
-
-        # 将名称写入 .run_name 文件
-        name_path = os.path.join(abs_dir, ".run_name")
-        clean_name = new_name[:60]
-        with open(name_path, "w", encoding="utf-8") as f:
-            f.write(clean_name)
-
-        if STATE._exp1_latest and STATE._exp1_latest.get("run_dir") == os.path.relpath(abs_dir):
-            STATE._exp1_latest["run_name"] = clean_name
-
-        self._send_json({"status": "ok", "run_dir": os.path.relpath(abs_dir), "name": clean_name})
-
-    def _handle_exp1_delete(self, data):
-        """删除历史实验运行记录。"""
-        run_dir = data.get("run_dir", "")
-        if not run_dir:
-            self._send_json({"error": "参数不完整"}, status=400)
-            return
-        abs_dir = self._resolve_exp1_run_dir(run_dir)
-        if not abs_dir:
-            self._send_json({"error": "实验目录不存在"}, status=404)
-            return
-
-        rel_dir = os.path.relpath(abs_dir)
-        shutil.rmtree(abs_dir)
-        if STATE._exp1_latest and STATE._exp1_latest.get("run_dir") == rel_dir:
-            STATE._exp1_latest = None
-        self._send_json({"status": "deleted", "run_dir": rel_dir})
-
-    def _resolve_exp1_run_dir(self, run_dir):
-        """Return an absolute exp1 run directory path if it is inside experiments/experiment_outputs/exp1."""
-        if not run_dir:
-            return ""
-
-        base = os.path.abspath(EXP1_OUTPUT_DIR)
-        candidate = run_dir
-        if not os.path.isabs(candidate):
-            candidate = os.path.join(os.getcwd(), candidate)
-        candidate = os.path.abspath(candidate)
-
+        exp_id = data.get("experiment_id") or data.get("exp") or "exp1"
+        config = ExperimentConfig(
+            use_critic=bool(data.get("use_critic", True)),
+            use_evolution=bool(data.get("use_evolution", True)),
+            use_experience_retrieval=bool(data.get("use_experience_retrieval", True)),
+            use_code_agent=bool(data.get("use_code_agent", True)),
+            use_context_manager=bool(data.get("use_context_manager", True)),
+            use_real_ace=bool(data.get("use_real_ace", False)),
+            mock_mode=not bool(data.get("use_real_ace", False)),
+        )
+        startup_log(f"experiment run request started: exp_id={exp_id}, real_ace={config.use_real_ace}")
         try:
-            if os.path.commonpath([base, candidate]) != base:
-                return ""
-        except ValueError:
-            return ""
+            if config.use_real_ace:
+                from experiments.runner import run_experiment
 
-        if not os.path.isdir(candidate):
-            return ""
-        if not os.path.basename(candidate).startswith("exp1_"):
-            return ""
-        return candidate
+                result = run_experiment(exp_id, config=config, app_state=STATE)
+            else:
+                result = self._run_experiment_isolated(exp_id, config)
+            if result.get("run_id"):
+                from experiments.runner import LOG_ROOT, write_json
 
-    def _read_exp1_summary(self, run_dir):
-        summary_path = os.path.join(run_dir, "summary.json")
-        if not os.path.exists(summary_path):
-            return None
-        with open(summary_path, "r", encoding="utf-8") as f:
-            data = json.load(f)
-
-        rel_dir = os.path.relpath(os.path.abspath(run_dir))
-        data["run_dir"] = rel_dir
-
-        name_path = os.path.join(run_dir, ".run_name")
-        if os.path.exists(name_path):
-            with open(name_path, "r", encoding="utf-8") as f:
-                data["run_name"] = f.read().strip()
-        else:
-            dir_name = os.path.basename(run_dir)
-            try:
-                ts = dir_name.split("_")[-1]
-                data["run_name"] = f"{ts[:4]}-{ts[4:6]}-{ts[6:8]} {ts[9:11]}:{ts[11:13]}:{ts[13:]}"
-            except Exception:
-                data["run_name"] = dir_name
-        return data
-
-    def _handle_exp2_data(self, query=None):
-        """返回实验二的最新或指定历史汇总数据。"""
-        query = query or {}
-        requested_run_dir = (query.get("run_dir") or [""])[0]
-        if requested_run_dir:
-            run_dir = self._resolve_exp_run_dir(requested_run_dir, "exp2_")
-            if not run_dir:
-                self._send_json({"error": "实验目录不存在或路径无效"}, status=404)
-                return
-            data = self._read_exp_summary(run_dir)
-            if data is None:
-                self._send_json({"error": "实验结果文件不存在或无法读取"}, status=404)
-                return
-            STATE._exp2_latest = data
-            self._send_json(data)
+                with REPORT_LOCK:
+                    result["report"] = self._generate_experiment_report_isolated(result["run_id"], include_ai_summary=False)
+                write_json(LOG_ROOT / result["run_id"] / "result.json", result)
+            startup_log(f"experiment run completed: run_id={result.get('run_id', exp_id)}")
+        except BaseException as exc:
+            detail = "".join(traceback.format_exception(type(exc), exc, exc.__traceback__))
+            log_error({"source": "experiment_run", "exp_id": exp_id, "error": str(exc), "traceback": detail})
+            startup_log(f"experiment run failed: {exc}")
+            self._send_json({"error": f"实验运行失败：{exc}"}, status=500)
             return
+        self._send_json({"result": result})
 
-        if STATE._exp2_latest:
-            self._send_json(STATE._exp2_latest)
-            return
+    def _run_experiment_isolated(self, exp_id, config):
+        env = os.environ.copy()
+        env["MPLBACKEND"] = "Agg"
+        env["PYTHONIOENCODING"] = "utf-8"
+        env["GEOAI_REPORT_SKIP_CHARTS"] = "1"
+        command = [
+            sys.executable,
+            "-m",
+            "experiments.run_worker",
+            str(exp_id),
+            json.dumps(config.to_dict(), ensure_ascii=False),
+        ]
+        completed = subprocess.run(
+            command,
+            cwd=os.path.abspath(os.path.join(os.path.dirname(__file__), "..")),
+            env=env,
+            text=True,
+            encoding="utf-8",
+            errors="replace",
+            capture_output=True,
+            timeout=900,
+        )
+        if completed.returncode != 0:
+            detail = (completed.stderr or completed.stdout or "").strip()
+            raise RuntimeError(detail or f"experiment worker exited with code {completed.returncode}")
+        output = (completed.stdout or "").strip().splitlines()
+        if not output:
+            raise RuntimeError("experiment worker did not return a result payload")
+        return json.loads(output[-1])
 
-        exp2_pattern = os.path.join(EXP2_OUTPUT_DIR, "exp2_*", "summary.json")
-        all_files = sorted(glob.glob(exp2_pattern), key=os.path.getmtime, reverse=True)
-        if all_files:
-            try:
-                data = self._read_exp_summary(os.path.dirname(all_files[0]))
-                if data is None:
-                    raise ValueError("summary.json 读取失败")
-                STATE._exp2_latest = data
-                self._send_json(data)
-                return
-            except Exception:
-                pass
+    def _handle_experiment_result(self, path):
+        from experiments.runner import get_result
 
-        suite_path = os.path.join("experiments", "exp2", "exp2_suite.json")
-        if os.path.exists(suite_path):
-            with open(suite_path, "r", encoding="utf-8") as f:
-                suite = json.load(f)
-            self._send_json({
-                "experiment": "实验二：消融实验",
-                "status": "no_data",
-                "message": f"尚未运行实验二。请点击「运行实验」按钮启动，或检查 {EXP2_OUTPUT_DIR} 目录。",
-                "suite": suite,
-            })
-        else:
-            self._send_json({"status": "error", "message": "实验二数据集文件未找到"})
+        result_id = unquote(path.rsplit("/", 1)[-1])
+        self._send_json({"result": get_result(result_id)})
 
-    def _handle_exp2_results(self):
-        """返回实验二的历史运行结果列表。"""
-        self._send_json({"runs": self._list_exp_runs("exp2_")})
+    def _handle_experiment_report(self, data):
+        from experiments.runner import LOG_ROOT, get_result, write_json
 
-    def _handle_exp2_run(self, data):
-        """运行实验二。"""
-        if STATE._exp2_running:
-            self._send_json({"status": "running", "message": "实验二已在运行中"}, status=400)
-            return
-
-        STATE._exp2_running = True
+        result_id = data.get("run_id") or data.get("experiment_id") or data.get("exp") or "exp1"
+        include_ai_summary = bool(data.get("include_ai_summary", False))
+        startup_log(f"experiment report request started: result_id={result_id}, ai_summary={include_ai_summary}")
         try:
-            from experiments.exp2.exp2_runner import run_exp2
-            STATE._exp2_latest = run_exp2(output_dir=EXP2_OUTPUT_DIR)
-            self._send_json({"status": "done", "summary": STATE._exp2_latest})
-        except Exception as e:
-            import traceback
-            STATE._exp2_latest = {
-                "experiment": "实验二：消融实验",
-                "status": "error",
-                "error": str(e),
-                "traceback": traceback.format_exc(),
-            }
-            self._send_json(STATE._exp2_latest, status=500)
-        finally:
-            STATE._exp2_running = False
-
-    def _handle_exp2_rename(self, data):
-        self._rename_exp_run(data, "exp2_", "_exp2_latest")
-
-    def _handle_exp2_delete(self, data):
-        self._delete_exp_run(data, "exp2_", "_exp2_latest")
-
-    def _handle_exp3_data(self, query=None):
-        """返回实验三的最新或指定历史汇总数据。"""
-        query = query or {}
-        requested_run_dir = (query.get("run_dir") or [""])[0]
-        if requested_run_dir:
-            run_dir = self._resolve_exp_run_dir(requested_run_dir, "exp3_")
-            if not run_dir:
-                self._send_json({"error": "实验目录不存在或路径无效"}, status=404)
-                return
-            data = self._read_exp_summary(run_dir)
-            if data is None:
-                self._send_json({"error": "实验结果文件不存在或无法读取"}, status=404)
-                return
-            STATE._exp3_latest = data
-            self._send_json(data)
+            result = get_result(result_id)
+            startup_log(f"experiment report result loaded: run_id={result.get('run_id')}")
+            with REPORT_LOCK:
+                report = self._generate_experiment_report_isolated(result_id, include_ai_summary)
+            startup_log(f"experiment report generated: {report.get('html_url')}")
+            result["report"] = report
+            if result.get("run_id"):
+                write_json(LOG_ROOT / result["run_id"] / "result.json", result)
+                startup_log(f"experiment report metadata saved: run_id={result.get('run_id')}")
+        except BaseException as exc:
+            detail = "".join(traceback.format_exception(type(exc), exc, exc.__traceback__))
+            log_error({"source": "experiment_report", "result_id": result_id, "error": str(exc), "traceback": detail})
+            startup_log(f"experiment report failed: {exc}")
+            self._send_json({"error": f"报告生成失败：{exc}"}, status=500)
             return
+        self._send_json({"report": report})
 
-        if STATE._exp3_latest:
-            self._send_json(STATE._exp3_latest)
-            return
-
-        exp3_pattern = os.path.join(EXP3_OUTPUT_DIR, "exp3_*", "summary.json")
-        all_files = sorted(glob.glob(exp3_pattern), key=os.path.getmtime, reverse=True)
-        if all_files:
-            data = self._read_exp_summary(os.path.dirname(all_files[0]))
-            if data is not None:
-                STATE._exp3_latest = data
-                self._send_json(data)
-                return
-
-        suite_path = os.path.join("experiments", "exp3", "exp3_suite.json")
-        if os.path.exists(suite_path):
-            with open(suite_path, "r", encoding="utf-8") as f:
-                suite = json.load(f)
-            self._send_json({
-                "experiment": "实验三：抗退化实验",
-                "status": "no_data",
-                "message": f"尚未运行实验三。请点击「运行实验」按钮启动，或检查 {EXP3_OUTPUT_DIR} 目录。",
-                "suite": suite,
-            })
-        else:
-            self._send_json({"status": "error", "message": "实验三数据集文件未找到"})
-
-    def _handle_exp3_results(self):
-        self._send_json({"runs": self._list_exp_runs("exp3_")})
-
-    def _handle_exp3_run(self, data):
-        """运行实验三。"""
-        if STATE._exp3_running:
-            self._send_json({"status": "running", "message": "实验三已在运行中"}, status=400)
-            return
-
-        STATE._exp3_running = True
+    def _generate_experiment_report_isolated(self, result_id, include_ai_summary):
         try:
-            from experiments.exp3.exp3_runner import run_exp3
-            STATE._exp3_latest = run_exp3(output_dir=EXP3_OUTPUT_DIR)
-            self._send_json({"status": "done", "summary": STATE._exp3_latest})
-        except Exception as e:
-            import traceback
-            STATE._exp3_latest = {
-                "experiment": "实验三：抗退化实验",
-                "status": "error",
-                "error": str(e),
-                "traceback": traceback.format_exc(),
-            }
-            self._send_json(STATE._exp3_latest, status=500)
-        finally:
-            STATE._exp3_running = False
+            return self._run_experiment_report_worker(result_id, include_ai_summary, skip_charts=False)
+        except RuntimeError as exc:
+            startup_log(f"experiment report worker failed, retrying without charts: {exc}")
+            return self._run_experiment_report_worker(result_id, include_ai_summary, skip_charts=True)
 
-    def _handle_exp3_rename(self, data):
-        self._rename_exp_run(data, "exp3_", "_exp3_latest")
+    def _run_experiment_report_worker(self, result_id, include_ai_summary, skip_charts=False):
+        env = os.environ.copy()
+        env["MPLBACKEND"] = "Agg"
+        env["PYTHONIOENCODING"] = "utf-8"
+        command = [
+            sys.executable,
+            "-m",
+            "experiments.report_worker",
+            str(result_id),
+            "1" if include_ai_summary else "0",
+        ]
+        if skip_charts:
+            command.append("--skip-charts")
+            env["GEOAI_REPORT_SKIP_CHARTS"] = "1"
+        completed = subprocess.run(
+            command,
+            cwd=os.path.abspath(os.path.join(os.path.dirname(__file__), "..")),
+            env=env,
+            text=True,
+            encoding="utf-8",
+            errors="replace",
+            capture_output=True,
+            timeout=180,
+        )
+        if completed.returncode != 0:
+            detail = (completed.stderr or completed.stdout or "").strip()
+            raise RuntimeError(detail or f"report worker exited with code {completed.returncode}")
+        output = (completed.stdout or "").strip().splitlines()
+        if not output:
+            raise RuntimeError("report worker did not return a report payload")
+        return json.loads(output[-1])
 
-    def _handle_exp3_delete(self, data):
-        self._delete_exp_run(data, "exp3_", "_exp3_latest")
+    def _handle_experiment_run_rename(self, data):
+        from experiments.runner import rename_experiment_run
 
-    def _handle_exp4_data(self, query=None):
-        """返回实验四的最新或指定历史汇总数据。"""
-        query = query or {}
-        requested_run_dir = (query.get("run_dir") or [""])[0]
-        if requested_run_dir:
-            run_dir = self._resolve_exp_run_dir(requested_run_dir, "exp4_")
-            if not run_dir:
-                self._send_json({"error": "实验目录不存在或路径无效"}, status=404)
-                return
-            data = self._read_exp_summary(run_dir)
-            if data is None:
-                self._send_json({"error": "实验结果文件不存在或无法读取"}, status=404)
-                return
-            STATE._exp4_latest = data
-            self._send_json(data)
-            return
+        result = rename_experiment_run(data["run_id"], data.get("name", ""))
+        self._send_json({"run": {"run_id": result.get("run_id"), "name": result.get("display_name") or result.get("name")}})
 
-        if STATE._exp4_latest:
-            self._send_json(STATE._exp4_latest)
-            return
+    def _handle_experiment_run_delete(self, data):
+        from experiments.runner import delete_experiment_run
 
-        exp4_pattern = os.path.join(EXP4_OUTPUT_DIR, "exp4_*", "summary.json")
-        all_files = sorted(glob.glob(exp4_pattern), key=os.path.getmtime, reverse=True)
-        if all_files:
-            data = self._read_exp_summary(os.path.dirname(all_files[0]))
-            if data is not None:
-                STATE._exp4_latest = data
-                self._send_json(data)
-                return
+        self._send_json(delete_experiment_run(data["run_id"]))
 
-        suite_path = os.path.join("experiments", "exp4", "exp4_suite.json")
-        if os.path.exists(suite_path):
-            with open(suite_path, "r", encoding="utf-8") as f:
-                suite = json.load(f)
-            self._send_json({
-                "experiment": "实验四：长上下文扩展场景对比实验",
-                "status": "no_data",
-                "message": f"尚未运行实验四。请点击「运行实验」按钮启动，或检查 {EXP4_OUTPUT_DIR} 目录。",
-                "suite": suite,
-            })
-        else:
-            self._send_json({"status": "error", "message": "实验四数据集文件未找到"})
+    def _handle_experiment_report_rename(self, data):
+        from experiments.reporting import rename_report
 
-    def _handle_exp4_results(self):
-        self._send_json({"runs": self._list_exp_runs("exp4_")})
+        self._send_json({"report": rename_report(data["run_id"], data.get("title", ""))})
 
-    def _handle_exp4_run(self, data):
-        """运行实验四。"""
-        if STATE._exp4_running:
-            self._send_json({"status": "running", "message": "实验四已在运行中"}, status=400)
-            return
+    def _handle_experiment_report_delete(self, data):
+        from experiments.reporting import delete_report
+        from experiments.runner import LOG_ROOT, get_result, write_json
 
-        STATE._exp4_running = True
+        payload = delete_report(data["run_id"], data.get("report_id"))
         try:
-            from experiments.exp4.exp4_runner import run_exp4
-            STATE._exp4_latest = run_exp4(output_dir=EXP4_OUTPUT_DIR)
-            self._send_json({"status": "done", "summary": STATE._exp4_latest})
-        except Exception as e:
-            import traceback
-            STATE._exp4_latest = {
-                "experiment": "实验四：长上下文扩展场景对比实验",
-                "status": "error",
-                "error": str(e),
-                "traceback": traceback.format_exc(),
-            }
-            self._send_json(STATE._exp4_latest, status=500)
-        finally:
-            STATE._exp4_running = False
-
-    def _handle_exp4_rename(self, data):
-        self._rename_exp_run(data, "exp4_", "_exp4_latest")
-
-    def _handle_exp4_delete(self, data):
-        self._delete_exp_run(data, "exp4_", "_exp4_latest")
-
-    def _output_dir_for_prefix(self, prefix):
-        if prefix == "exp1_":
-            return EXP1_OUTPUT_DIR
-        if prefix == "exp2_":
-            return EXP2_OUTPUT_DIR
-        if prefix == "exp3_":
-            return EXP3_OUTPUT_DIR
-        if prefix == "exp4_":
-            return EXP4_OUTPUT_DIR
-        return EXPERIMENT_OUTPUT_ROOT
-
-    def _list_exp_runs(self, prefix):
-        output_dir = self._output_dir_for_prefix(prefix)
-        exp_dirs = sorted(
-            glob.glob(os.path.join(output_dir, f"{prefix}*")),
-            key=os.path.getmtime,
-            reverse=True,
-        )[:20]
-        results = []
-        for d in exp_dirs:
-            if os.path.exists(os.path.join(d, "summary.json")):
-                try:
-                    data = self._read_exp_summary(d)
-                    if data is not None:
-                        results.append(data)
-                except Exception:
-                    pass
-        return results
-
-    def _rename_exp_run(self, data, prefix, cache_attr):
-        run_dir = data.get("run_dir", "")
-        new_name = data.get("name", "").strip()
-        if not run_dir or not new_name:
-            self._send_json({"error": "参数不完整"}, status=400)
-            return
-        abs_dir = self._resolve_exp_run_dir(run_dir, prefix)
-        if not abs_dir:
-            self._send_json({"error": "实验目录不存在"}, status=404)
-            return
-
-        clean_name = new_name[:60]
-        with open(os.path.join(abs_dir, ".run_name"), "w", encoding="utf-8") as f:
-            f.write(clean_name)
-
-        rel_dir = os.path.relpath(abs_dir)
-        cached = getattr(STATE, cache_attr, None)
-        if cached and cached.get("run_dir") == rel_dir:
-            cached["run_name"] = clean_name
-        self._send_json({"status": "ok", "run_dir": rel_dir, "name": clean_name})
-
-    def _delete_exp_run(self, data, prefix, cache_attr):
-        run_dir = data.get("run_dir", "")
-        if not run_dir:
-            self._send_json({"error": "参数不完整"}, status=400)
-            return
-        abs_dir = self._resolve_exp_run_dir(run_dir, prefix)
-        if not abs_dir:
-            self._send_json({"error": "实验目录不存在"}, status=404)
-            return
-
-        rel_dir = os.path.relpath(abs_dir)
-        shutil.rmtree(abs_dir)
-        cached = getattr(STATE, cache_attr, None)
-        if cached and cached.get("run_dir") == rel_dir:
-            setattr(STATE, cache_attr, None)
-        self._send_json({"status": "deleted", "run_dir": rel_dir})
-
-    def _handle_exp_export(self, query, prefix):
-        requested_run_dir = (query.get("run_dir") or [""])[0]
-        if requested_run_dir:
-            abs_dir = self._resolve_exp_run_dir(requested_run_dir, prefix)
-        else:
-            runs = self._list_exp_runs(prefix)
-            abs_dir = self._resolve_exp_run_dir(runs[0]["run_dir"], prefix) if runs else ""
-        if not abs_dir:
-            self._send_json({"error": "实验目录不存在或路径无效"}, status=404)
-            return
-
-        from experiments.export_utils import build_export_zip
-
-        zip_path = build_export_zip(abs_dir)
-        self._send_download(zip_path, os.path.basename(zip_path))
+            result = get_result(data["run_id"])
+            result.pop("report", None)
+            write_json(LOG_ROOT / data["run_id"] / "result.json", result)
+        except Exception:
+            pass
+        self._send_json(payload)
 
     def _handle_thesis_evidence(self):
-        from experiments.thesis_evidence import build_thesis_evidence
+        from experiments.runner import get_result
 
-        self._send_json(build_thesis_evidence())
-
-    def _resolve_exp_run_dir(self, run_dir, prefix):
-        if not run_dir:
-            return ""
-
-        base = os.path.abspath(self._output_dir_for_prefix(prefix))
-        candidate = run_dir
-        if not os.path.isabs(candidate):
-            candidate = os.path.join(os.getcwd(), candidate)
-        candidate = os.path.abspath(candidate)
-
-        try:
-            if os.path.commonpath([base, candidate]) != base:
-                return ""
-        except ValueError:
-            return ""
-
-        if not os.path.isdir(candidate):
-            return ""
-        if not os.path.basename(candidate).startswith(prefix):
-            return ""
-        return candidate
-
-    def _read_exp_summary(self, run_dir):
-        summary_path = os.path.join(run_dir, "summary.json")
-        if not os.path.exists(summary_path):
-            return None
-        with open(summary_path, "r", encoding="utf-8") as f:
-            data = json.load(f)
-
-        rel_dir = os.path.relpath(os.path.abspath(run_dir))
-        data["run_dir"] = rel_dir
-
-        name_path = os.path.join(run_dir, ".run_name")
-        if os.path.exists(name_path):
-            with open(name_path, "r", encoding="utf-8") as f:
-                data["run_name"] = f.read().strip()
-        elif not data.get("run_name"):
-            dir_name = os.path.basename(run_dir)
+        evidence = {}
+        for exp_id in ("exp1", "exp2", "exp3", "exp4"):
             try:
-                ts = dir_name.split("_")[-1]
-                data["run_name"] = f"{ts[:4]}-{ts[4:6]}-{ts[6:8]} {ts[9:11]}:{ts[11:13]}:{ts[13:]}"
+                evidence[exp_id] = get_result(exp_id)
             except Exception:
-                data["run_name"] = dir_name
-        return data
+                evidence[exp_id] = None
+        self._send_json({"evidence": evidence})
 
     def _send_download(self, abs_path, filename):
         if not os.path.exists(abs_path):
@@ -927,6 +541,7 @@ class WebGISRequestHandler(SimpleHTTPRequestHandler):
             STATE.map_handler.batch_highlight(highlight_infos)
 
         answer = STATE.ai_handler.process_message(user_input, highlight_callback)
+        export_info = STATE.ai_handler.consume_last_export()
         self._send_json(
             {
                 "answer": answer,
@@ -936,6 +551,7 @@ class WebGISRequestHandler(SimpleHTTPRequestHandler):
                 "session": STATE.ai_handler.get_current_session(),
                 "sessions": STATE.ai_handler.list_sessions(),
                 "highlights": STATE.map_handler.highlights_geojson(),
+                "exports": [export_info] if export_info else [],
             }
         )
 
@@ -987,11 +603,51 @@ class WebGISRequestHandler(SimpleHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(body)
 
+    def _send_export_file(self, name, download=False):
+        export_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "data", "exports"))
+        path = os.path.abspath(os.path.join(export_dir, unquote(name)))
+        if os.path.commonpath([export_dir, path]) != export_dir or not os.path.exists(path):
+            self.send_error(404, "Export file not found")
+            return
+        with open(path, "rb") as f:
+            body = f.read()
+        self.send_response(200)
+        self.send_header("Content-Type", self._content_type_for(path, "application/octet-stream"))
+        self.send_header("Cache-Control", "no-store, max-age=0")
+        self.send_header("Content-Length", str(len(body)))
+        if download:
+            self.send_header("Content-Disposition", f"attachment; filename*=UTF-8''{quote(os.path.basename(path))}")
+        self.end_headers()
+        self.wfile.write(body)
+
+    def _send_experiment_report_file(self, name, download=False):
+        report_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "logs", "experiments"))
+        parts = unquote(name).replace("\\", "/").split("/")
+        if len(parts) < 2:
+            self.send_error(404, "Report file not found")
+            return
+        run_id = parts[0]
+        relative_name = "/".join(parts[1:])
+        path = os.path.abspath(os.path.join(report_root, run_id, "reports", relative_name))
+        if os.path.commonpath([report_root, path]) != report_root or not os.path.exists(path):
+            self.send_error(404, "Report file not found")
+            return
+        with open(path, "rb") as f:
+            body = f.read()
+        self.send_response(200)
+        self.send_header("Content-Type", self._content_type_for(path, "application/octet-stream"))
+        self.send_header("Cache-Control", "no-store, max-age=0")
+        self.send_header("Content-Length", str(len(body)))
+        if download:
+            self.send_header("Content-Disposition", f"attachment; filename*=UTF-8''{quote(os.path.basename(path))}")
+        self.end_headers()
+        self.wfile.write(body)
+
     def log_message(self, format, *args):
         print("[web]", format % args)
 
 
-def _read_idle_shutdown_seconds(default=600):
+def _read_idle_shutdown_seconds(default=3600):
     raw = os.getenv("GEOAI_IDLE_SHUTDOWN_SECONDS", str(default)).strip()
     try:
         value = int(raw)
@@ -1013,9 +669,6 @@ def _start_idle_shutdown_watcher(server):
             idle_for = time.monotonic() - server.last_request_at
             if idle_for < seconds:
                 continue
-            if STATE is not None and STATE.has_running_experiment():
-                server.touch()
-                continue
             startup_log(f"idle for {int(idle_for)}s; shutting down and releasing port")
             server.shutdown()
             break
@@ -1028,6 +681,7 @@ def _start_idle_shutdown_watcher(server):
 def run(host="127.0.0.1", port=8000, max_port=8010):
     global STATE
     startup_log("starting GeoAI WebGIS")
+    _kill_listeners_on_port(port)
     STATE = WebGISAppState()
     server = None
     selected_port = None
@@ -1055,10 +709,15 @@ def run(host="127.0.0.1", port=8000, max_port=8010):
 
     startup_log(f"GeoAI WebGIS running locally at http://{host}:{selected_port}")
     _start_idle_shutdown_watcher(server)
+    startup_log("HTTP server loop is active; keep this terminal/debug session running while using the browser")
     try:
         server.serve_forever()
     except KeyboardInterrupt:
         startup_log("received Ctrl+C; stopping GeoAI WebGIS")
+    except Exception as exc:
+        startup_log(f"HTTP server loop crashed: {exc}")
+        raise
     finally:
         server.server_close()
         startup_log("server stopped; port released")
+

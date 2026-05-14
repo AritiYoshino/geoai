@@ -1,0 +1,124 @@
+{
+  "task_id": "exp4_q04_learn_export",
+  "agent_type": "ace_grow_and_refine",
+  "strategy": "ace_grow_and_refine",
+  "query": "学习导出元数据经验：导出餐饮结果前检查 CRS、geometry 和字段命名，若冲突则写入经验库。",
+  "category": "export_highlight",
+  "stage": "early_learn",
+  "expected_tools": [
+    "export_analysis_result"
+  ],
+  "selected_tools": [
+    "export_analysis_result"
+  ],
+  "execution_trace": [
+    {
+      "step": "strategy",
+      "detail": "ace_grow_and_refine"
+    },
+    {
+      "step": "tool_selection",
+      "detail": [
+        "export_analysis_result"
+      ]
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": []
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "exp4-export-metadata"
+      ]
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "experience_stability_update",
+  "generated_experience": "exp4-export-metadata",
+  "retrieved_experiences": [],
+  "final_answer": "学习导出元数据经验：导出餐饮结果前检查 CRS、geometry 和字段命名，若冲突则写入经验库。 ace_grow_and_refine exp4-export-metadata CRS geometry 字段命名 导出 诊断 经验库 元数据 GeoJSON",
+  "structured_response": {
+    "answer": "学习导出元数据经验：导出餐饮结果前检查 CRS、geometry 和字段命名，若冲突则写入经验库。 ace_grow_and_refine exp4-export-metadata CRS geometry 字段命名 导出 诊断 经验库 元数据 GeoJSON",
+    "selected_tools": [
+      "export_analysis_result"
+    ],
+    "output_types": [
+      "table",
+      "diagnosis",
+      "explanation"
+    ],
+    "entities": [
+      "CRS",
+      "geometry",
+      "字段命名",
+      "导出"
+    ],
+    "keywords": [
+      "诊断",
+      "经验库",
+      "元数据",
+      "GeoJSON"
+    ],
+    "result_count": 1,
+    "retrieved_experience_ids": [],
+    "generated_experience_ids": [
+      "exp4-export-metadata"
+    ],
+    "experience_retrieved": false,
+    "experience_added": true,
+    "code_executed": false,
+    "diagnosis": "experience_stability_update",
+    "trace_events": [
+      {
+        "step": "strategy",
+        "detail": "ace_grow_and_refine"
+      },
+      {
+        "step": "tool_selection",
+        "detail": [
+          "export_analysis_result"
+        ]
+      },
+      {
+        "step": "experience_retrieval",
+        "detail": []
+      },
+      {
+        "step": "experience_update",
+        "detail": [
+          "exp4-export-metadata"
+        ]
+      }
+    ]
+  },
+  "validation": {
+    "score": 1.0,
+    "success": true,
+    "threshold": 0.84,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "outputs": 1.0,
+      "entities": 1.0,
+      "keywords": 1.0,
+      "result_count": 1.0,
+      "experience_added": 1.0
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 2.95,
+    "runtime": 0.125,
+    "execution_success": true,
+    "result_correctness": 1.0,
+    "has_map_layer": false,
+    "has_table": true,
+    "result_count": 1,
+    "experience_retrieved": false,
+    "experience_added": true,
+    "code_executed": false,
+    "library_size": 4
+  }
+}

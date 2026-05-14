@@ -1,0 +1,55 @@
+{
+  "task_id": "ab_006_t6_03",
+  "agent_type": "full_ace",
+  "query": "用 GeoPandas 计算行政区餐饮密度，并按密度返回前 5 名",
+  "category": "code_required",
+  "expected_tools": [
+    "execute_spatial_code"
+  ],
+  "selected_tools": [
+    "execute_spatial_code"
+  ],
+  "execution_trace": [
+    {
+      "step": "intent",
+      "detail": "code_required"
+    },
+    {
+      "step": "tool_selection",
+      "detail": [
+        "execute_spatial_code"
+      ]
+    },
+    {
+      "step": "evaluation",
+      "detail": "failed"
+    }
+  ],
+  "errors": [
+    "rule_eval_failed:code_required"
+  ],
+  "error_signature": [
+    "code_required"
+  ],
+  "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+  "generated_experience": "exp:code_required:check schema/CRS/result before final answer",
+  "retrieved_experiences": [
+    "crs-check",
+    "field-check",
+    "empty-result-relaxation"
+  ],
+  "final_answer": "任务未完全满足预期，已记录失败原因。",
+  "success": false,
+  "metrics": {
+    "turns": 3.38,
+    "runtime": 1.217,
+    "execution_success": false,
+    "result_correctness": 0.397,
+    "has_map_layer": true,
+    "has_table": true,
+    "result_count": 0,
+    "repair_attempted": false,
+    "repair_success": false,
+    "user_intervention_count": 0
+  }
+}

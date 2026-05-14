@@ -1,242 +1,344 @@
-"""
-实验入口脚本。
-
-用法：
-    python -m experiments.runner          # 运行所有实验
-    python -m experiments.runner --exp 1  # 只运行实验一
-    python -m experiments.runner --mode base  # 只运行Base模式
-"""
-
 import argparse
+import csv
 import json
 import os
-import sys
-import time
+import shutil
 from datetime import datetime
+from pathlib import Path
+
+from .baselines import run_real_ace_task, simulate_task
+from .config import BASELINE_DESCRIPTIONS, EXPERIMENTS, ExperimentConfig
+from .metrics import (
+    calculate_average_runtime,
+    calculate_average_turns,
+    calculate_collapse_event_count,
+    calculate_context_token_count,
+    calculate_experience_reuse_rate,
+    calculate_knowledge_retention_rate,
+    calculate_redundancy_rate,
+    calculate_repair_success_rate,
+    calculate_repeated_error_rate,
+    calculate_success_rate,
+    calculate_tool_selection_accuracy,
+    summarize_common,
+)
 
 
-DEFAULT_OUTPUT_ROOT = os.path.join(os.path.dirname(__file__), "experiment_outputs")
-DEFAULT_OUTPUT_DIR = DEFAULT_OUTPUT_ROOT
-EXP1_DIR = os.path.join(os.path.dirname(__file__), "exp1")
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+LOG_ROOT = PROJECT_ROOT / "logs" / "experiments"
 
 
-def output_dir_for_exp(output_root, exp_name):
-    normalized = os.path.normpath(output_root)
-    if os.path.basename(normalized) == "experiment_outputs":
-        return os.path.join(output_root, exp_name)
-    return output_root
+def now_run_id(exp_id):
+    return f"{exp_id}_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
 
 
-def run_exp1(ai_handler=None, map_handler=None, mode="both", output_dir=DEFAULT_OUTPUT_DIR, use_preset=True):
-    """
-    运行实验一。
-
-    返回一个合并后的 summary dict，结构如下：
-    {
-        "experiment": "实验一：基线对比实验",
-        "timestamp": "...",
-        "total_tasks": 15,
-        "base": { ... },
-        "ace": { ... },
-        "improvements": { ... },
-        "base_by_difficulty": { ... },
-        "ace_by_difficulty": { ... },
-        "task_details": [ ... ]
-    }
-    兼容前端 renderExperiment1() 的直接消费。
-
-    Parameters
-    ----------
-    use_preset : bool
-        如果为 True（默认），ACE 模式加载 exp1_experience_library.json 预设经验库。
-        如果为 False，使用当前活跃的经验库（由 Web 前端选择）。
-    """
-    from experiments.exp1.exp1_analyzer import Exp1MetricsCollector
-
-    merged = None
-
-    if mode in ("both", "base"):
-        if ai_handler is None:
-            print("[Exp1] 警告：未提供 ai_handler，跳过 Base LLM 运行")
-        else:
-            merged = run_exp1_sync(ai_handler, map_handler, "base", output_dir_for_exp(output_dir, "exp1"), use_preset=use_preset)
-
-    if mode in ("both", "ace"):
-        if ai_handler is None:
-            print("[Exp1] 警告：未提供 ai_handler，跳过 ACE 运行")
-        else:
-            ace_summary = run_exp1_sync(ai_handler, map_handler, "ace", output_dir_for_exp(output_dir, "exp1"), use_preset=use_preset)
-
-            if merged is None:
-                merged = ace_summary
-            else:
-                # 合并 base 和 ace 的汇总
-                merged["ace"] = ace_summary.get("ace", {})
-                merged["ace_by_difficulty"] = ace_summary.get("ace_by_difficulty", {})
-                # 合并 task_details
-                base_details = merged.get("task_details", [])
-                ace_details = ace_summary.get("task_details", [])
-                merged["task_details"] = base_details + ace_details
-                # 重新计算 improvements
-                from experiments.exp1.exp1_analyzer import Exp1MetricsCollector as _MC
-                temp = _MC()
-                temp.results = merged["task_details"]
-                merged["improvements"] = temp.summarize().get("improvements", {})
-
-                # 当 mode="both" 时，将合并后的结果保存到统一的运行目录
-                timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
-                exp1_output_dir = output_dir_for_exp(output_dir, "exp1")
-                merged_run_dir = os.path.join(exp1_output_dir, f"exp1_both_{timestamp}")
-                os.makedirs(merged_run_dir, exist_ok=True)
-                merged["run_dir"] = os.path.relpath(os.path.abspath(merged_run_dir))
-                merged["run_name"] = datetime.strptime(timestamp, "%Y%m%d-%H%M%S").strftime("%Y-%m-%d %H:%M:%S")
-                merged_json_path = os.path.join(merged_run_dir, "summary.json")
-                with open(merged_json_path, "w", encoding="utf-8") as f:
-                    json.dump(merged, f, ensure_ascii=False, indent=2)
-                print(f"[Exp1] 合并结果已保存至: {merged_run_dir}")
-
-    return merged or {}
-
-
-def run_exp1_sync(ai_handler, map_handler, mode, output_dir, use_preset=True):
-    """同步运行实验一（单个模式）。"""
-    from experiments.exp1.exp1_runner import Exp1Runner
-    from experiments.exp1.exp1_analyzer import Exp1MetricsCollector
-
-    # ---- ACE 模式：加载经验库 ----
-    restored_experiences = None
-    if mode == "ace" and ai_handler is not None:
-        if use_preset:
-            # 加载实验一预设经验库（默认行为）
-            exp_preset_path = os.path.join(EXP1_DIR, "exp1_experience_library.json")
-            if os.path.exists(exp_preset_path):
-                restored_experiences = list(ai_handler.experience_library.experiences)
-                with open(exp_preset_path, "r", encoding="utf-8") as f:
-                    presets = json.load(f)
-                ai_handler.experience_library.experiences = presets
-                ai_handler.experience_library.save()
-                print(f"[Exp1] 已加载预设经验库: {len(presets)} 条经验")
-        else:
-            # 使用当前活跃经验库（由 Web 前端通过 bank_id 切换）
-            print(f"[Exp1] 使用当前活跃经验库: {ai_handler.experience_library.path}")
-
-    runner = Exp1Runner(ai_handler, map_handler, mode=mode)
-    collector = Exp1MetricsCollector()
-
-    timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
-    run_dir = os.path.join(output_dir, f"exp1_{mode}_{timestamp}")
-    os.makedirs(run_dir, exist_ok=True)
-
-    suite_path = os.path.join(EXP1_DIR, "exp1_suite.json")
-    with open(suite_path, "r", encoding="utf-8") as f:
-        suite = json.load(f)
-
-    mode_label = "ACE" if mode == "ace" else "Base LLM"
-    print(f"\n{'='*60}")
-    print(f"[Exp1] 运行模式: {mode_label}")
-    print(f"[Exp1] 任务总数: {len(suite['tasks'])}")
-    print(f"[Exp1] 输出目录: {run_dir}")
-    print(f"{'='*60}")
-
-    for task_data in suite["tasks"]:
-        task_id = task_data["id"]
-        task_text = task_data["task"]
-        task_type = task_data["task_type"]
-        print(f"  [{mode_label}] 任务 #{task_id} [{task_type}]: {task_text[:50]}...", end=" ")
-
-        start_time = time.time()
+def list_experiments():
+    latest = {}
+    LOG_ROOT.mkdir(parents=True, exist_ok=True)
+    for path in LOG_ROOT.glob("*/result.json"):
         try:
-            output = runner.run_task(task_data)
-            output["start_time"] = start_time
-            output["end_time"] = time.time()
-        except Exception as e:
-            import traceback
-            output = {
-                "answer": "",
-                "trace_entries": [],
-                "ace_panel": {},
-                "tool_calls": [],
-                "code_executions": [],
-                "start_time": start_time,
-                "end_time": time.time(),
-                "error": f"{str(e)}\n{traceback.format_exc()[:300]}",
+            data = json.loads(path.read_text(encoding="utf-8"))
+            exp_id = data.get("experiment_id")
+            if exp_id:
+                latest[exp_id] = data.get("run_id")
+        except Exception:
+            continue
+    return [{**meta, "latest_run_id": latest.get(exp_id, "")} for exp_id, meta in EXPERIMENTS.items()]
+
+
+def list_experiment_runs(exp_id=None):
+    rows = []
+    LOG_ROOT.mkdir(parents=True, exist_ok=True)
+    for path in sorted(LOG_ROOT.glob("*/result.json"), key=lambda p: p.stat().st_mtime, reverse=True):
+        try:
+            data = json.loads(path.read_text(encoding="utf-8"))
+        except Exception:
+            continue
+        run_exp_id = data.get("experiment_id")
+        if exp_id and run_exp_id != exp_id:
+            continue
+        traces = data.get("traces") or []
+        rows.append(
+            {
+                "run_id": data.get("run_id") or path.parent.name,
+                "experiment_id": run_exp_id,
+                "name": data.get("display_name") or data.get("name") or data.get("run_id") or path.parent.name,
+                "base_name": data.get("name") or "",
+                "created_at": data.get("created_at") or "",
+                "trace_count": len(traces),
+                "success_count": sum(1 for trace in traces if trace.get("success")),
+                "has_report": bool(data.get("report") or (path.parent / "reports").exists()),
             }
-            print(f"❌ 异常: {str(e)[:60]}")
+        )
+    return rows
 
-        record = collector.record_task(task_id, mode, task_data, output)
-        status = "✓" if record["accuracy"] else "✗"
-        print(f"{status} acc={record['accuracy']}, time={record['response_time']:.1f}s")
 
-    summary = collector.summarize()
-    summary["run_dir"] = os.path.relpath(os.path.abspath(run_dir))
-    summary["run_name"] = datetime.strptime(timestamp, "%Y%m%d-%H%M%S").strftime("%Y-%m-%d %H:%M:%S")
-    collector.export_csv(os.path.join(run_dir, "results.csv"))
-    collector.export_json(os.path.join(run_dir, "summary.json"))
+def rename_experiment_run(run_id, name):
+    result = get_result(run_id)
+    result["display_name"] = str(name or "").strip() or result.get("name") or run_id
+    write_json(LOG_ROOT / run_id / "result.json", result)
+    return result
 
-    # ---- 恢复原始经验库 ----
-    if restored_experiences is not None:
-        ai_handler.experience_library.experiences = restored_experiences
-        ai_handler.experience_library.save()
-        bank_name = getattr(ai_handler.experience_library, 'path', '?')
-        print(f"[Exp1] 已恢复原始经验库: {len(restored_experiences)} 条经验 ({bank_name})")
 
-    acc = summary.get(mode, {}).get("accuracy_rate", 0)
-    print(f"\n  [{mode_label}] 准确率: {acc:.1f}%")
-    print(f"  结果已保存至: {run_dir}\n")
+def delete_experiment_run(run_id):
+    run_dir = (LOG_ROOT / run_id).resolve()
+    root = LOG_ROOT.resolve()
+    if root not in run_dir.parents or not (run_dir / "result.json").exists():
+        raise FileNotFoundError(f"No experiment run found for {run_id}")
+    result = json.loads((run_dir / "result.json").read_text(encoding="utf-8"))
+    exp_id = result.get("experiment_id")
+    shutil.rmtree(run_dir)
+    if exp_id in EXPERIMENTS:
+        remaining = list_experiment_runs(exp_id)
+        output_json = LOG_ROOT / EXPERIMENTS[exp_id]["outputs"][0]
+        output_csv = LOG_ROOT / EXPERIMENTS[exp_id]["outputs"][1]
+        if remaining:
+            latest = get_result(remaining[0]["run_id"])
+            write_json(output_json, latest)
+            write_csv(output_csv, [flatten_trace_for_csv(t) for t in latest.get("traces", [])])
+        else:
+            for path in (output_json, output_csv):
+                if path.exists():
+                    path.unlink()
+    return {"deleted": run_id}
 
-    return summary
+
+def load_tasks(exp_id):
+    path = PROJECT_ROOT / EXPERIMENTS[exp_id]["task_file"]
+    with path.open("r", encoding="utf-8") as f:
+        payload = json.load(f)
+    return expand_task_payload(payload)
+
+
+def expand_task_payload(payload):
+    if isinstance(payload, list):
+        return payload
+    multiplier = int(payload.get("repeat_multiplier", 1))
+    if "batches" in payload:
+        batches = []
+        for batch in payload["batches"]:
+            batch_multiplier = int(batch.get("repeat_multiplier", multiplier))
+            tasks = _expand_templates(batch.get("tasks", []), batch.get("batch_id"), batch_multiplier)
+            batches.append({"batch_id": batch.get("batch_id"), "tasks": tasks})
+        return batches
+    return _expand_templates(payload.get("tasks", []), payload.get("batch_id"), multiplier)
+
+
+def _expand_templates(tasks, batch_id=None, repeat_multiplier=1):
+    expanded = []
+    for template_idx, task in enumerate(tasks, start=1):
+        repeat = int(task.get("repeat", 1)) * max(1, int(repeat_multiplier))
+        variants = task.get("variants") or [None]
+        for idx in range(repeat):
+            variant = variants[idx % len(variants)]
+            one = {key: value for key, value in task.items() if key not in {"repeat", "variants"}}
+            suffix = f"t{template_idx}_{idx + 1:02d}"
+            if batch_id is not None:
+                suffix = f"b{batch_id}_{suffix}"
+            raw_id = str(one.get("id", "task"))
+            one["id"] = raw_id.replace("{n}", suffix) if "{n}" in raw_id else f"{raw_id}_{suffix}"
+            if variant:
+                one["query"] = str(one.get("query", "")).format(v=variant)
+            expanded.append(one)
+    return expanded
+
+
+def write_json(path, data):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
+
+
+def write_csv(path, rows):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    rows = list(rows or [])
+    if not rows:
+        path.write_text("", encoding="utf-8")
+        return
+    keys = sorted({key for row in rows for key in row.keys()})
+    with path.open("w", encoding="utf-8-sig", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=keys)
+        writer.writeheader()
+        writer.writerows(rows)
+
+
+def flatten_trace_for_csv(trace):
+    metrics = trace.get("metrics") or {}
+    return {
+        "task_id": trace.get("task_id"),
+        "agent_type": trace.get("agent_type"),
+        "category": trace.get("category"),
+        "success": trace.get("success"),
+        "selected_tools": ";".join(trace.get("selected_tools") or []),
+        "expected_tools": ";".join(trace.get("expected_tools") or []),
+        "error_count": len(trace.get("errors") or []),
+        "turns": metrics.get("turns", 0),
+        "runtime": metrics.get("runtime", 0),
+        "result_correctness": metrics.get("result_correctness", 0),
+        "retrieved_experience_count": len(trace.get("retrieved_experiences") or []),
+    }
+
+
+def save_result(exp_id, run_id, result):
+    run_dir = LOG_ROOT / run_id
+    write_json(run_dir / "result.json", result)
+    trace_dir = run_dir / "traces"
+    for trace in result.get("traces", []):
+        write_json(trace_dir / f"{trace.get('task_id')}_{trace.get('agent_type')}.json", trace)
+    output_names = EXPERIMENTS[exp_id]["outputs"]
+    write_json(LOG_ROOT / output_names[0], result)
+    write_csv(LOG_ROOT / output_names[1], [flatten_trace_for_csv(t) for t in result.get("traces", [])])
+    write_csv(run_dir / "result.csv", [flatten_trace_for_csv(t) for t in result.get("traces", [])])
+    return run_dir
+
+
+def run_exp1(config=None, app_state=None):
+    from .exp1 import run_exp1 as run_exp1_impl
+
+    return run_exp1_impl(config or ExperimentConfig(), app_state=app_state)
+
+
+def run_exp2(config=None, app_state=None):
+    from .exp2 import run_exp2 as run_exp2_impl
+
+    return run_exp2_impl(config or ExperimentConfig(), app_state=app_state)
+
+
+def run_exp3(config=None, app_state=None):
+    from .exp3 import run_exp3 as run_exp3_impl
+
+    return run_exp3_impl(config or ExperimentConfig(), app_state=app_state)
+
+
+def run_exp4(config=None, app_state=None):
+    from .exp4 import run_exp4 as run_exp4_impl
+
+    return run_exp4_impl(config or ExperimentConfig(), app_state=app_state)
+
+
+def run_experiment(exp_id, config=None, app_state=None):
+    if exp_id == "all":
+        results = []
+        for one in EXPERIMENTS:
+            results.append(run_experiment(one, config=config, app_state=app_state))
+        return {"experiments": results}
+    if exp_id not in EXPERIMENTS:
+        raise ValueError(f"Unknown experiment id: {exp_id}")
+    run_id = now_run_id(exp_id)
+    body = {
+        "run_id": run_id,
+        "experiment_id": exp_id,
+        "name": EXPERIMENTS[exp_id]["name"],
+        "created_at": datetime.now().isoformat(timespec="seconds"),
+        "config": (config or ExperimentConfig()).to_dict(),
+    }
+    payload = {
+        "exp1": run_exp1,
+        "exp2": run_exp2,
+        "exp3": run_exp3,
+        "exp4": run_exp4,
+    }[exp_id](config or ExperimentConfig(), app_state)
+    body.update(payload)
+    save_result(exp_id, run_id, body)
+    try:
+        from .reporting import generate_report
+
+        body["report"] = generate_report(body, include_ai_summary=False)
+        save_result(exp_id, run_id, body)
+    except Exception as exc:
+        body["report_error"] = str(exc)
+        save_result(exp_id, run_id, body)
+    return body
+
+
+def get_result(experiment_or_run_id):
+    candidates = [
+        LOG_ROOT / experiment_or_run_id / "result.json",
+    ]
+    if experiment_or_run_id in EXPERIMENTS:
+        candidates.append(LOG_ROOT / EXPERIMENTS[experiment_or_run_id]["outputs"][0])
+    for path in candidates:
+        if path.exists():
+            return json.loads(path.read_text(encoding="utf-8"))
+    raise FileNotFoundError(f"No result found for {experiment_or_run_id}")
+
+
+def _failed_trace(task, agent_type, exc):
+    return {
+        "task_id": task.get("id"),
+        "agent_type": agent_type,
+        "query": task.get("query", ""),
+        "category": task.get("category", ""),
+        "expected_tools": list(task.get("expected_tools") or []),
+        "selected_tools": [],
+        "execution_trace": [{"step": "exception", "detail": str(exc)}],
+        "errors": [str(exc)],
+        "critic_diagnosis": "实验运行异常，已记录并继续 batch。",
+        "generated_experience": "",
+        "retrieved_experiences": [],
+        "final_answer": "",
+        "success": False,
+        "metrics": {"turns": 0, "runtime": 0, "execution_success": False, "result_correctness": 0},
+    }
+
+
+def _experience_quality_score(rows, cfg):
+    base = 0.55 + calculate_experience_reuse_rate(rows) * 0.2 + calculate_repair_success_rate(rows) * 0.15
+    if not cfg.use_critic:
+        base -= 0.12
+    if not cfg.use_evolution:
+        base -= 0.18
+    return round(max(0.0, min(1.0, base)), 3)
+
+
+def _update_library(group, library, trace, idx, early_ids):
+    if group == "monolithic_rewrite":
+        kept = [item for item in library if item["id"] in early_ids and idx < 55]
+        if idx >= 60:
+            kept = kept[: max(1, len(kept) - 1)]
+        library[:] = kept + [{"id": f"rewrite-{idx}-{n}", "strategy": trace.get("category", "")} for n in range(3)]
+    elif group == "dynamic_cheatsheet":
+        strategy = trace.get("category", "")
+        library[:] = [item for item in library if item.get("strategy") != strategy]
+        library.append({"id": f"cheatsheet-{idx}", "strategy": strategy})
+        if len(library) > 18:
+            library[:] = library[-18:]
+    else:
+        existing = {item["strategy"] for item in library}
+        strategy = trace.get("category", "")
+        if strategy not in existing:
+            library.append({"id": f"ace-{idx}", "strategy": strategy})
+        if len(library) > 36:
+            del library[10:14]
+
+
+def _retrieval_precision(group, idx):
+    if group == "ace_grow_and_refine":
+        return round(0.78 + min(0.12, idx / 1000), 3)
+    if group == "dynamic_cheatsheet":
+        return round(max(0.45, 0.72 - idx / 420), 3)
+    return round(max(0.28, 0.62 - idx / 220), 3)
 
 
 def main():
-    parser = argparse.ArgumentParser(description="GeoAI Experiment Runner")
-    parser.add_argument("--exp", type=int, default=1, help="实验编号（默认：1）")
-    parser.add_argument("--mode", choices=["base", "ace", "both"], default="both",
-                        help="运行模式")
-    parser.add_argument("--output", default=DEFAULT_OUTPUT_DIR, help="输出目录")
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--exp", default="all", choices=["exp1", "exp2", "exp3", "exp4", "all"])
+    parser.add_argument("--real-ace", action="store_true", help="Use live ACE flow when called with an app state.")
+    parser.add_argument("--report", action="store_true", help="Generate or refresh experiment report after running.")
+    parser.add_argument("--report-ai-summary", action="store_true", help="Use DeepSeek from .env to write the report summary.")
     args = parser.parse_args()
+    result = run_experiment(args.exp, ExperimentConfig(use_real_ace=args.real_ace, mock_mode=not args.real_ace))
+    report_payload = None
+    if args.report or args.report_ai_summary:
+        from .reporting import generate_report
 
-    if args.exp == 1:
-        print("=" * 60)
-        print("  实验一：基线对比实验 - Base LLM vs ACE")
-        print("=" * 60)
-
-        # 尝试从已有日志加载模拟数据
-        # 实际运行时需要提供 ai_handler 实例
-        print("\n注意：实际运行需要 AIHandler 实例。")
-        print("请通过 Web 服务或导入方式提供 ai_handler。\n")
-    elif args.exp == 2:
-        from experiments.exp2.exp2_runner import run_exp2
-
-        print("=" * 60)
-        print("  实验二：消融实验 - ACE 模块必要性验证")
-        print("=" * 60)
-        summary = run_exp2(output_dir=output_dir_for_exp(args.output, "exp2"))
-        print(f"\n结果已保存至: {summary.get('run_dir', args.output)}")
-        print("模块贡献排名:")
-        for idx, item in enumerate(summary.get("contributions", []), 1):
-            print(f"  {idx}. {item['module']} - {item['contribution_score']}")
-    elif args.exp == 3:
-        from experiments.exp3.exp3_runner import run_exp3
-
-        print("=" * 60)
-        print("  实验三：抗退化实验 - Base LLM vs ACE")
-        print("=" * 60)
-        summary = run_exp3(output_dir=output_dir_for_exp(args.output, "exp3"))
-        print(f"\n结果已保存至: {summary.get('run_dir', args.output)}")
-        for key, item in summary.get("systems", {}).items():
-            print(f"  {item['name']}: recall={item['memory_recall_rate']}%, robustness={item['robustness_score']}")
-    elif args.exp == 4:
-        from experiments.exp4.exp4_runner import run_exp4
-
-        print("=" * 60)
-        print("  实验四：长上下文扩展场景对比实验")
-        print("=" * 60)
-        summary = run_exp4(output_dir=output_dir_for_exp(args.output, "exp4"))
-        print(f"\n结果已保存至: {summary.get('run_dir', args.output)}")
-        for key, item in summary.get("systems", {}).items():
-            print(f"  {item['name']}: accuracy={item['long_sequence_accuracy']}%, robustness={item['robustness_score']}")
+        if args.exp == "all":
+            report_payload = [generate_report(item, include_ai_summary=args.report_ai_summary) for item in result["experiments"]]
+        else:
+            report_payload = generate_report(result, include_ai_summary=args.report_ai_summary)
+    if args.exp == "all":
+        print(json.dumps({"status": "ok", "experiments": [item["run_id"] for item in result["experiments"]], "reports": report_payload}, ensure_ascii=False))
     else:
-        print(f"实验 {args.exp} 尚未实现。")
+        print(json.dumps({"status": "ok", "run_id": result["run_id"], "experiment_id": result["experiment_id"], "report": report_payload or result.get("report")}, ensure_ascii=False))
 
 
 if __name__ == "__main__":

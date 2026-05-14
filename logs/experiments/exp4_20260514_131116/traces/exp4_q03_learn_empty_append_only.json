@@ -1,0 +1,125 @@
+{
+  "task_id": "exp4_q03_learn_empty",
+  "agent_type": "append_only",
+  "strategy": "append_only",
+  "query": "学习空结果恢复经验：精确搜索“24小时儿童急诊药房”，若为空则逐步放宽关键词并写入经验库。",
+  "category": "poi_search",
+  "stage": "early_learn",
+  "expected_tools": [
+    "search_poi"
+  ],
+  "selected_tools": [
+    "search_poi"
+  ],
+  "execution_trace": [
+    {
+      "step": "strategy",
+      "detail": "append_only"
+    },
+    {
+      "step": "tool_selection",
+      "detail": [
+        "search_poi"
+      ]
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": []
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "exp4-empty-result-relax"
+      ]
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "experience_stability_update",
+  "generated_experience": "exp4-empty-result-relax",
+  "retrieved_experiences": [],
+  "final_answer": "学习空结果恢复经验：精确搜索“24小时儿童急诊药房”，若为空则逐步放宽关键词并写入经验库。 append_only exp4-empty-result-relax 儿童急诊 药房 空结果 关键词 诊断 经验库 放宽 重试",
+  "structured_response": {
+    "answer": "学习空结果恢复经验：精确搜索“24小时儿童急诊药房”，若为空则逐步放宽关键词并写入经验库。 append_only exp4-empty-result-relax 儿童急诊 药房 空结果 关键词 诊断 经验库 放宽 重试",
+    "selected_tools": [
+      "search_poi"
+    ],
+    "output_types": [
+      "map_layer",
+      "table",
+      "diagnosis",
+      "explanation"
+    ],
+    "entities": [
+      "儿童急诊",
+      "药房",
+      "空结果",
+      "关键词"
+    ],
+    "keywords": [
+      "诊断",
+      "经验库",
+      "放宽",
+      "重试"
+    ],
+    "result_count": 1,
+    "retrieved_experience_ids": [],
+    "generated_experience_ids": [
+      "exp4-empty-result-relax"
+    ],
+    "experience_retrieved": false,
+    "experience_added": true,
+    "code_executed": false,
+    "diagnosis": "experience_stability_update",
+    "trace_events": [
+      {
+        "step": "strategy",
+        "detail": "append_only"
+      },
+      {
+        "step": "tool_selection",
+        "detail": [
+          "search_poi"
+        ]
+      },
+      {
+        "step": "experience_retrieval",
+        "detail": []
+      },
+      {
+        "step": "experience_update",
+        "detail": [
+          "exp4-empty-result-relax"
+        ]
+      }
+    ]
+  },
+  "validation": {
+    "score": 1.0,
+    "success": true,
+    "threshold": 0.84,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "outputs": 1.0,
+      "entities": 1.0,
+      "keywords": 1.0,
+      "result_count": 1.0,
+      "experience_added": 1.0
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 3.25,
+    "runtime": 0.125,
+    "execution_success": true,
+    "result_correctness": 1.0,
+    "has_map_layer": true,
+    "has_table": true,
+    "result_count": 1,
+    "experience_retrieved": false,
+    "experience_added": true,
+    "code_executed": false,
+    "library_size": 3
+  }
+}

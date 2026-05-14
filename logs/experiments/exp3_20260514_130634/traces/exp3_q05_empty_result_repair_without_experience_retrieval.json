@@ -1,0 +1,135 @@
+{
+  "task_id": "exp3_q05_empty_result_repair",
+  "agent_type": "without_experience_retrieval",
+  "agent_name": "ACE w/o Experience Retrieval",
+  "missing_modules": [
+    "experience_retrieval"
+  ],
+  "query": "精确搜索“24小时儿童急诊药房”；如果结果为空，应用空结果恢复经验逐步放宽关键词，并由 Critic 记录失败原因。",
+  "category": "poi_search",
+  "expected_tools": [
+    "search_poi"
+  ],
+  "selected_tools": [
+    "search_poi"
+  ],
+  "execution_trace": [
+    {
+      "step": "ablation_agent",
+      "detail": "missing_modules=experience_retrieval"
+    },
+    {
+      "step": "tool_selection",
+      "detail": [
+        "search_poi"
+      ]
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": []
+    },
+    {
+      "step": "critic_diagnosis",
+      "detail": "Critic 诊断：exp3_q05_empty_result_repair 触发可修复错误，需保留失败原因并交给 Evolution。"
+    },
+    {
+      "step": "experience_update",
+      "detail": []
+    }
+  ],
+  "errors": [
+    "missing_module_effect:outputs,result_count,experience_retrieved"
+  ],
+  "critic_diagnosis": "Critic 诊断：exp3_q05_empty_result_repair 触发可修复错误，需保留失败原因并交给 Evolution。",
+  "generated_experience": "",
+  "retrieved_experiences": [],
+  "final_answer": "精确搜索“24小时儿童急诊药房”；如果结果为空，应用空结果恢复经验逐步放宽关键词，并由 Critic 记录失败原因。 missing_modules=experience_retrieval Critic 诊断：exp3_q05_empty_result_repair 触发可修复错误，需保留失败原因并交给 Evolution。 儿童急诊 药房 空结果 关键词 Critic 诊断",
+  "structured_response": {
+    "answer": "精确搜索“24小时儿童急诊药房”；如果结果为空，应用空结果恢复经验逐步放宽关键词，并由 Critic 记录失败原因。 missing_modules=experience_retrieval Critic 诊断：exp3_q05_empty_result_repair 触发可修复错误，需保留失败原因并交给 Evolution。 儿童急诊 药房 空结果 关键词 Critic 诊断",
+    "selected_tools": [
+      "search_poi"
+    ],
+    "output_types": [
+      "map_layer",
+      "table",
+      "diagnosis"
+    ],
+    "entities": [
+      "儿童急诊",
+      "药房",
+      "空结果",
+      "关键词"
+    ],
+    "keywords": [
+      "经验",
+      "放宽",
+      "Critic",
+      "诊断"
+    ],
+    "result_count": 0,
+    "retrieved_experience_ids": [],
+    "generated_experience_ids": [],
+    "experience_retrieved": false,
+    "experience_added": false,
+    "memory_used": false,
+    "code_executed": false,
+    "trace_events": [
+      {
+        "step": "ablation_agent",
+        "detail": "missing_modules=experience_retrieval"
+      },
+      {
+        "step": "tool_selection",
+        "detail": [
+          "search_poi"
+        ]
+      },
+      {
+        "step": "experience_retrieval",
+        "detail": []
+      },
+      {
+        "step": "critic_diagnosis",
+        "detail": "Critic 诊断：exp3_q05_empty_result_repair 触发可修复错误，需保留失败原因并交给 Evolution。"
+      },
+      {
+        "step": "experience_update",
+        "detail": []
+      }
+    ]
+  },
+  "validation": {
+    "score": 0.656,
+    "success": false,
+    "threshold": 0.86,
+    "missing": [
+      "outputs",
+      "result_count",
+      "experience_retrieved"
+    ],
+    "details": {
+      "tools": 1.0,
+      "outputs": 0.75,
+      "entities": 1.0,
+      "keywords": 1.0,
+      "result_count": 0.0,
+      "experience_retrieved": 0.0
+    }
+  },
+  "success": false,
+  "metrics": {
+    "turns": 3.95,
+    "runtime": 0.15,
+    "execution_success": false,
+    "result_correctness": 0.656,
+    "has_map_layer": true,
+    "has_table": true,
+    "result_count": 0,
+    "experience_retrieved": false,
+    "experience_added": false,
+    "memory_used": false,
+    "code_executed": false,
+    "critic_used": true,
+    "missing_module_count": 1
+  }
+}

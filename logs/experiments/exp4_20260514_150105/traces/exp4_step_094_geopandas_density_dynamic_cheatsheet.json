@@ -1,0 +1,88 @@
+{
+  "task_id": "exp4_step_094_geopandas_density",
+  "agent_type": "dynamic_cheatsheet",
+  "strategy": "dynamic_cheatsheet",
+  "adaptation_step": 94,
+  "query": "Step 94: 使用 GeoPandas 计算各行政区 医疗 POI 密度，输出 count、area_km2、density 和 Top 5。",
+  "category": "code_required",
+  "expected_skill": "code_execution",
+  "novelty": "retention_retest",
+  "expected_tools": [
+    "execute_spatial_code",
+    "validation_report"
+  ],
+  "selected_tools": [
+    "execute_spatial_code",
+    "validation_report"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 94
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "code_execution-084",
+        "code_execution-084-shortcut"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "code_execution-094"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 11728
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "code_execution-094",
+  "retrieved_experiences": [
+    "code_execution-084",
+    "code_execution-084-shortcut"
+  ],
+  "final_answer": "dynamic_cheatsheet step=94 skill=code_execution accuracy=0.92 context_tokens=11728 retrieved=2 generated=1",
+  "structured_response": {
+    "accuracy": 0.92,
+    "context_token_count": 11728,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "code_execution-084",
+      "code_execution-084-shortcut"
+    ],
+    "generated_experience_ids": [
+      "code_execution-094"
+    ]
+  },
+  "validation": {
+    "score": 0.92,
+    "success": true,
+    "threshold": 0.72,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "accuracy": 0.92
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 3.35,
+    "runtime": 0.12,
+    "execution_success": true,
+    "result_correctness": 0.92,
+    "context_token_count": 11728,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 10,
+    "compression_event": ""
+  }
+}

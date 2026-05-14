@@ -1,0 +1,91 @@
+{
+  "task_id": "exp4_step_043_empty_result_recovery",
+  "agent_type": "monolithic_rewrite",
+  "strategy": "monolithic_rewrite",
+  "adaptation_step": 43,
+  "query": "Step 43: 精确搜索“天府广场地铁站A口公交换乘点”；若结果为空，逐级放宽关键词并说明回退策略。",
+  "category": "poi_search",
+  "expected_skill": "empty_result_recovery",
+  "novelty": "transfer",
+  "expected_tools": [
+    "search_poi",
+    "fallback_search"
+  ],
+  "selected_tools": [
+    "search_poi",
+    "fallback_search"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 43
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "empty_result_recovery-003",
+        "empty_result_recovery-013",
+        "empty_result_recovery-023"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "empty_result_recovery-043"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 13628
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "empty_result_recovery-043",
+  "retrieved_experiences": [
+    "empty_result_recovery-003",
+    "empty_result_recovery-013",
+    "empty_result_recovery-023"
+  ],
+  "final_answer": "monolithic_rewrite step=43 skill=empty_result_recovery accuracy=0.723 context_tokens=13628 retrieved=3 generated=1",
+  "structured_response": {
+    "accuracy": 0.723,
+    "context_token_count": 13628,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "empty_result_recovery-003",
+      "empty_result_recovery-013",
+      "empty_result_recovery-023"
+    ],
+    "generated_experience_ids": [
+      "empty_result_recovery-043"
+    ]
+  },
+  "validation": {
+    "score": 0.723,
+    "success": true,
+    "threshold": 0.72,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "accuracy": 0.723
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 3.4,
+    "runtime": 0.12,
+    "execution_success": true,
+    "result_correctness": 0.723,
+    "context_token_count": 13628,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 43,
+    "compression_event": ""
+  }
+}

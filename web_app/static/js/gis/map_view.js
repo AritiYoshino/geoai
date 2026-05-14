@@ -1,153 +1,194 @@
 import { emptyFeatureCollection, escapeHtml } from "./api.js";
 
+const olRoot = window.ol;
+
 function createUnavailableMap() {
   const mapEl = document.getElementById("map");
   if (mapEl) {
     mapEl.innerHTML = `
       <div class="map-runtime-error">
         <strong>地图引擎加载失败</strong>
-        <span>请检查网络，或确认 MapLibre 静态资源可以访问。</span>
+        <span>请检查网络，或确认 OpenLayers 静态资源可以访问。</span>
       </div>
     `;
   }
-  const emptyBounds = { toArray: () => [[0, 0], [0, 0]] };
   return {
     on(eventName, handler) {
       if (eventName === "load") window.setTimeout(handler, 0);
     },
-    addControl() {},
-    addSource() {},
     addLayer() {},
-    getSource() { return null; },
-    getLayer() { return null; },
-    getBounds() { return emptyBounds; },
-    getZoom() { return 0; },
-    fitBounds() {},
+    removeLayer() {},
+    getLayers() { return { getArray: () => [] }; },
+    getView() { return { getZoom: () => 0, calculateExtent: () => [0, 0, 0, 0], fit() {} }; },
     resize() {},
-    getCanvas() { return { style: {} }; },
+    updateSize() {},
   };
 }
 
 function createMap() {
-  if (!window.maplibregl) return createUnavailableMap();
-  const instance = new maplibregl.Map({
-    container: "map",
-    style: {
-      version: 8,
-      sources: {
-        osm: {
-          type: "raster",
-          tiles: [
-            "https://a.tile.openstreetmap.org/{z}/{x}/{y}.png",
-            "https://b.tile.openstreetmap.org/{z}/{x}/{y}.png",
-            "https://c.tile.openstreetmap.org/{z}/{x}/{y}.png",
-          ],
-          tileSize: 256,
-          attribution: "© OpenStreetMap contributors",
-        },
-      },
-      layers: [{ id: "osm", type: "raster", source: "osm" }],
-    },
-    center: [104.0668, 30.5728],
-    zoom: 11,
+  if (!olRoot) return createUnavailableMap();
+  const defaultControls = olRoot.control.defaults?.defaults
+    ? olRoot.control.defaults.defaults()
+    : olRoot.control.defaults();
+  const instance = new olRoot.Map({
+    target: "map",
+    layers: [
+      new olRoot.layer.Tile({
+        source: new olRoot.source.OSM(),
+      }),
+    ],
+    view: new olRoot.View({
+      center: olRoot.proj.fromLonLat([104.0668, 30.5728]),
+      zoom: 11,
+    }),
+    controls: defaultControls.extend([
+      new olRoot.control.ScaleLine({ units: "metric" }),
+    ]),
   });
 
-  instance.addControl(new maplibregl.NavigationControl({ visualizePitch: true }), "top-right");
-  instance.addControl(new maplibregl.ScaleControl({ maxWidth: 120, unit: "metric" }), "bottom-left");
+  const originalOn = instance.on.bind(instance);
+  instance.on = (eventName, handler) => {
+    if (eventName === "load") {
+      window.setTimeout(handler, 0);
+      return undefined;
+    }
+    return originalOn(eventName, handler);
+  };
+  instance.resize = () => instance.updateSize();
+  instance.getZoom = () => instance.getView().getZoom() || 0;
+  instance.getBounds = () => {
+    const extent = instance.getView().calculateExtent(instance.getSize());
+    const lonLatExtent = olRoot.proj.transformExtent(extent, "EPSG:3857", "EPSG:4326");
+    return {
+      getWest: () => lonLatExtent[0],
+      getSouth: () => lonLatExtent[1],
+      getEast: () => lonLatExtent[2],
+      getNorth: () => lonLatExtent[3],
+    };
+  };
   return instance;
 }
 
 export const map = createMap();
+
+const popupEl = document.createElement("div");
+popupEl.className = "ol-popup";
+popupEl.style.cssText = "background:#fff;border:1px solid #cbd5e1;border-radius:6px;box-shadow:0 8px 24px rgba(15,23,42,.18);padding:8px 10px;max-width:320px;font-size:12px;";
+const popupOverlay = olRoot ? new olRoot.Overlay({ element: popupEl, offset: [0, -10], positioning: "bottom-center" }) : null;
+if (popupOverlay && map.addOverlay) map.addOverlay(popupOverlay);
+
+const popupLayers = new Set();
 
 export function sourceId(name) { return `src-${name}`; }
 export function pointLayerId(name) { return `poi-${name}`; }
 export function lineLayerId(name) { return `line-${name}`; }
 export function fillLayerId(name) { return `fill-${name}`; }
 
-export function addPopup(layerId) {
-  if (map.__popupBoundLayers?.has(layerId)) return;
-  map.__popupBoundLayers = map.__popupBoundLayers || new Set();
-  map.__popupBoundLayers.add(layerId);
+export function addPopup(layer) {
+  if (!layer || popupLayers.has(layer)) return;
+  popupLayers.add(layer);
+}
 
-  map.on("click", layerId, (event) => {
-    const feature = event.features && event.features[0];
-    if (!feature) return;
-    new maplibregl.Popup()
-      .setLngLat(event.lngLat)
-      .setHTML(popupHtml(feature.properties))
-      .addTo(map);
+if (map.on && olRoot) {
+  map.on("singleclick", (event) => {
+    let picked = null;
+    map.forEachFeatureAtPixel(event.pixel, (feature, layer) => {
+      if (!popupLayers.has(layer)) return undefined;
+      picked = feature;
+      return true;
+    });
+    if (!picked || !popupOverlay) {
+      if (popupOverlay) popupOverlay.setPosition(undefined);
+      return;
+    }
+    popupEl.innerHTML = popupHtml(picked.getProperties());
+    popupOverlay.setPosition(event.coordinate);
   });
-  map.on("mouseenter", layerId, () => { map.getCanvas().style.cursor = "pointer"; });
-  map.on("mouseleave", layerId, () => { map.getCanvas().style.cursor = ""; });
 }
 
 function popupHtml(props) {
   return Object.entries(props || {})
-    .filter(([key]) => key !== "__feature_index")
+    .filter(([key, value]) => key !== "geometry" && key !== "__feature_index" && value !== undefined)
     .slice(0, 12)
     .map(([key, value]) => `<div><b>${escapeHtml(key)}</b>: ${escapeHtml(String(value))}</div>`)
     .join("") || "<div>无属性</div>";
 }
 
+const geoJsonFormat = olRoot ? new olRoot.format.GeoJSON() : null;
+let highlightSource = null;
+let highlightLayer = null;
+
 export function setHighlights(geojson) {
-  if (map.getSource("highlight-src")) {
-    map.getSource("highlight-src").setData(geojson);
-  } else {
-    map.addSource("highlight-src", { type: "geojson", data: geojson });
-    map.addLayer({
-      id: "highlight-fill",
-      type: "fill",
-      source: "highlight-src",
-      filter: ["==", ["geometry-type"], "Polygon"],
-      paint: { "fill-color": "#facc15", "fill-opacity": 0.5 },
+  if (!olRoot || !geoJsonFormat) return;
+  if (!highlightSource) {
+    highlightSource = new olRoot.source.Vector();
+    highlightLayer = new olRoot.layer.Vector({
+      source: highlightSource,
+      style: highlightStyle,
+      zIndex: 900,
     });
-    map.addLayer({
-      id: "highlight-line",
-      type: "line",
-      source: "highlight-src",
-      paint: { "line-color": "#f59e0b", "line-width": 4, "line-opacity": 0.95 },
-    });
-    map.addLayer({
-      id: "highlight-point",
-      type: "circle",
-      source: "highlight-src",
-      filter: ["==", ["geometry-type"], "Point"],
-      paint: {
-        "circle-radius": ["interpolate", ["linear"], ["zoom"], 10, 8, 15, 14],
-        "circle-color": "#facc15",
-        "circle-opacity": 0.95,
-        "circle-stroke-color": "#7c2d12",
-        "circle-stroke-width": 2,
-      },
-    });
-    addPopup("highlight-point");
+    map.addLayer(highlightLayer);
+    addPopup(highlightLayer);
   }
+  const features = geoJsonFormat.readFeatures(geojson || emptyFeatureCollection(), {
+    dataProjection: "EPSG:4326",
+    featureProjection: "EPSG:3857",
+  });
+  highlightSource.clear();
+  highlightSource.addFeatures(features);
   fitGeoJson(geojson, 60);
 }
 
+function highlightStyle(feature) {
+  const geomType = feature.getGeometry()?.getType();
+  return new olRoot.style.Style({
+    image: new olRoot.style.Circle({
+      radius: 8,
+      fill: new olRoot.style.Fill({ color: "rgba(250, 204, 21, 0.95)" }),
+      stroke: new olRoot.style.Stroke({ color: "#7c2d12", width: 2 }),
+    }),
+    fill: geomType?.includes("Polygon") ? new olRoot.style.Fill({ color: "rgba(250, 204, 21, 0.45)" }) : undefined,
+    stroke: new olRoot.style.Stroke({ color: "#f59e0b", width: 4 }),
+  });
+}
+
 export function fitGeoJson(geojson, padding) {
-  const bounds = new maplibregl.LngLatBounds();
-  (geojson.features || []).forEach((feature) => extendBounds(bounds, feature.geometry));
-  if (!bounds.isEmpty()) map.fitBounds(bounds, { padding, maxZoom: 16, duration: 600 });
+  if (!olRoot || !geoJsonFormat || !geojson?.features?.length) return;
+  const features = geoJsonFormat.readFeatures(geojson, {
+    dataProjection: "EPSG:4326",
+    featureProjection: "EPSG:3857",
+  });
+  const extent = olRoot.extent.createEmpty();
+  features.forEach((feature) => olRoot.extent.extend(extent, feature.getGeometry().getExtent()));
+  if (!olRoot.extent.isEmpty(extent)) {
+    map.getView().fit(extent, { padding: [padding, padding, padding, padding], maxZoom: 16, duration: 600 });
+  }
 }
 
 export function fitLayerBBoxes(layerPayload) {
-  const bounds = new maplibregl.LngLatBounds();
+  if (!olRoot) return;
+  const extent = olRoot.extent.createEmpty();
   for (const item of layerPayload) {
     if (!item.bbox || item.bbox.length !== 4) continue;
-    bounds.extend([item.bbox[0], item.bbox[1]]);
-    bounds.extend([item.bbox[2], item.bbox[3]]);
+    const transformed = olRoot.proj.transformExtent(item.bbox, "EPSG:4326", "EPSG:3857");
+    olRoot.extent.extend(extent, transformed);
   }
-  if (!bounds.isEmpty()) map.fitBounds(bounds, { padding: 40, maxZoom: 12, duration: 600 });
+  if (!olRoot.extent.isEmpty(extent)) {
+    map.getView().fit(extent, { padding: [40, 40, 40, 40], maxZoom: 12, duration: 600 });
+  }
 }
 
-function extendBounds(bounds, geometry) {
-  if (!geometry) return;
-  const c = geometry.coordinates;
-  if (geometry.type === "Point") bounds.extend(c);
-  else if (geometry.type === "LineString" || geometry.type === "MultiPoint") c.forEach((x) => bounds.extend(x));
-  else if (geometry.type === "Polygon" || geometry.type === "MultiLineString") c.flat(1).forEach((x) => bounds.extend(x));
-  else if (geometry.type === "MultiPolygon") c.flat(2).forEach((x) => bounds.extend(x));
+export function bboxToExtent(bbox) {
+  if (!olRoot || !bbox || bbox.length !== 4) return null;
+  return olRoot.proj.transformExtent(bbox, "EPSG:4326", "EPSG:3857");
 }
 
-export { emptyFeatureCollection };
+export function createGeoJsonFeatures(geojson) {
+  if (!geoJsonFormat) return [];
+  return geoJsonFormat.readFeatures(geojson || emptyFeatureCollection(), {
+    dataProjection: "EPSG:4326",
+    featureProjection: "EPSG:3857",
+  });
+}
+
+export { emptyFeatureCollection, olRoot as ol };

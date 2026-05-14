@@ -1,0 +1,85 @@
+{
+  "task_id": "exp4_step_084_geopandas_density",
+  "agent_type": "dynamic_cheatsheet",
+  "strategy": "dynamic_cheatsheet",
+  "adaptation_step": 84,
+  "query": "Step 84: 使用 GeoPandas 计算各行政区 生活服务 POI 密度，输出 count、area_km2、density 和 Top 5。",
+  "category": "code_required",
+  "expected_skill": "code_execution",
+  "novelty": "retention_retest",
+  "expected_tools": [
+    "execute_spatial_code",
+    "validation_report"
+  ],
+  "selected_tools": [
+    "execute_spatial_code",
+    "validation_report"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 84
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "code_execution-074"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "code_execution-084"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 9927
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "code_execution-084",
+  "retrieved_experiences": [
+    "code_execution-074"
+  ],
+  "final_answer": "dynamic_cheatsheet step=84 skill=code_execution accuracy=0.92 context_tokens=9927 retrieved=1 generated=1",
+  "structured_response": {
+    "accuracy": 0.92,
+    "context_token_count": 9927,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "code_execution-074"
+    ],
+    "generated_experience_ids": [
+      "code_execution-084"
+    ]
+  },
+  "validation": {
+    "score": 0.92,
+    "success": true,
+    "threshold": 0.72,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "accuracy": 0.92
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 3.35,
+    "runtime": 0.12,
+    "execution_success": true,
+    "result_correctness": 0.92,
+    "context_token_count": 9927,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 11,
+    "compression_event": ""
+  }
+}

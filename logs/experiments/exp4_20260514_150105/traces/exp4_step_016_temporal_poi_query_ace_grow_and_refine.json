@@ -1,0 +1,85 @@
+{
+  "task_id": "exp4_step_016_temporal_poi_query",
+  "agent_type": "ace_grow_and_refine",
+  "strategy": "ace_grow_and_refine",
+  "adaptation_step": 16,
+  "query": "Step 16: 查询近半年新增 POI，说明日期字段解析和范围过滤过程。",
+  "category": "temporal_query",
+  "expected_skill": "temporal_query",
+  "novelty": "warmup",
+  "expected_tools": [
+    "query_poi_by_conditions",
+    "date_parse"
+  ],
+  "selected_tools": [
+    "query_poi_by_conditions",
+    "date_parse"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 16
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "temporal_query-006"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "temporal_query-016"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 3243
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "temporal_query-016",
+  "retrieved_experiences": [
+    "temporal_query-006"
+  ],
+  "final_answer": "ace_grow_and_refine step=16 skill=temporal_query accuracy=0.888 context_tokens=3243 retrieved=1 generated=1",
+  "structured_response": {
+    "accuracy": 0.888,
+    "context_token_count": 3243,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "temporal_query-006"
+    ],
+    "generated_experience_ids": [
+      "temporal_query-016"
+    ]
+  },
+  "validation": {
+    "score": 0.888,
+    "success": true,
+    "threshold": 0.72,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "accuracy": 0.888
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 2.7,
+    "runtime": 0.12,
+    "execution_success": true,
+    "result_correctness": 0.888,
+    "context_token_count": 3243,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 10,
+    "compression_event": ""
+  }
+}

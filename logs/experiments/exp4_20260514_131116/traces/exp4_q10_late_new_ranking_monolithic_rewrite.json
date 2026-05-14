@@ -1,0 +1,125 @@
+{
+  "task_id": "exp4_q10_late_new_ranking",
+  "agent_type": "monolithic_rewrite",
+  "strategy": "monolithic_rewrite",
+  "query": "学习多指标排名经验：综合医疗、餐饮和面积归一化得分，输出行政区 Top 5 并写入排名策略。",
+  "category": "code_required",
+  "stage": "late_new",
+  "expected_tools": [
+    "execute_spatial_code"
+  ],
+  "selected_tools": [
+    "execute_spatial_code"
+  ],
+  "execution_trace": [
+    {
+      "step": "strategy",
+      "detail": "monolithic_rewrite"
+    },
+    {
+      "step": "tool_selection",
+      "detail": [
+        "execute_spatial_code"
+      ]
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": []
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "exp4-ranking-normalize"
+      ]
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "experience_stability_update",
+  "generated_experience": "exp4-ranking-normalize",
+  "retrieved_experiences": [],
+  "final_answer": "学习多指标排名经验：综合医疗、餐饮和面积归一化得分，输出行政区 Top 5 并写入排名策略。 monolithic_rewrite exp4-ranking-normalize 医疗 餐饮 归一化 Top 5 诊断 经验库 排名 GeoPandas",
+  "structured_response": {
+    "answer": "学习多指标排名经验：综合医疗、餐饮和面积归一化得分，输出行政区 Top 5 并写入排名策略。 monolithic_rewrite exp4-ranking-normalize 医疗 餐饮 归一化 Top 5 诊断 经验库 排名 GeoPandas",
+    "selected_tools": [
+      "execute_spatial_code"
+    ],
+    "output_types": [
+      "table",
+      "diagnosis",
+      "explanation"
+    ],
+    "entities": [
+      "医疗",
+      "餐饮",
+      "归一化",
+      "Top 5"
+    ],
+    "keywords": [
+      "诊断",
+      "经验库",
+      "排名",
+      "GeoPandas"
+    ],
+    "result_count": 1,
+    "retrieved_experience_ids": [],
+    "generated_experience_ids": [
+      "exp4-ranking-normalize"
+    ],
+    "experience_retrieved": false,
+    "experience_added": true,
+    "code_executed": true,
+    "diagnosis": "experience_stability_update",
+    "trace_events": [
+      {
+        "step": "strategy",
+        "detail": "monolithic_rewrite"
+      },
+      {
+        "step": "tool_selection",
+        "detail": [
+          "execute_spatial_code"
+        ]
+      },
+      {
+        "step": "experience_retrieval",
+        "detail": []
+      },
+      {
+        "step": "experience_update",
+        "detail": [
+          "exp4-ranking-normalize"
+        ]
+      }
+    ]
+  },
+  "validation": {
+    "score": 1.0,
+    "success": true,
+    "threshold": 0.84,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "outputs": 1.0,
+      "entities": 1.0,
+      "keywords": 1.0,
+      "result_count": 1.0,
+      "experience_added": 1.0,
+      "code_executed": 1.0
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 4.1,
+    "runtime": 0.125,
+    "execution_success": true,
+    "result_correctness": 1.0,
+    "has_map_layer": false,
+    "has_table": true,
+    "result_count": 1,
+    "experience_retrieved": false,
+    "experience_added": true,
+    "code_executed": true,
+    "library_size": 1
+  }
+}

@@ -1,0 +1,130 @@
+{
+  "task_id": "exp4_q11_retest_crs_schema",
+  "agent_type": "ace_grow_and_refine",
+  "strategy": "ace_grow_and_refine",
+  "query": "早期经验回测：统计学校 700 米内餐饮 POI 数量，必须同时复用 CRS 经验和 schema 经验。",
+  "category": "nearby_analysis",
+  "stage": "final_retest",
+  "expected_tools": [
+    "find_nearby"
+  ],
+  "selected_tools": [
+    "find_nearby"
+  ],
+  "execution_trace": [
+    {
+      "step": "strategy",
+      "detail": "ace_grow_and_refine"
+    },
+    {
+      "step": "tool_selection",
+      "detail": [
+        "find_nearby"
+      ]
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "exp4-crs-distance",
+        "exp4-schema-check"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": []
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "",
+  "retrieved_experiences": [
+    "exp4-crs-distance",
+    "exp4-schema-check"
+  ],
+  "final_answer": "早期经验回测：统计学校 700 米内餐饮 POI 数量，必须同时复用 CRS 经验和 schema 经验。 ace_grow_and_refine exp4-crs-distance exp4-schema-check 学校 餐饮 CRS schema 经验 投影 字段 统计",
+  "structured_response": {
+    "answer": "早期经验回测：统计学校 700 米内餐饮 POI 数量，必须同时复用 CRS 经验和 schema 经验。 ace_grow_and_refine exp4-crs-distance exp4-schema-check 学校 餐饮 CRS schema 经验 投影 字段 统计",
+    "selected_tools": [
+      "find_nearby"
+    ],
+    "output_types": [
+      "map_layer",
+      "table",
+      "explanation"
+    ],
+    "entities": [
+      "学校",
+      "餐饮",
+      "CRS",
+      "schema"
+    ],
+    "keywords": [
+      "经验",
+      "投影",
+      "字段",
+      "统计"
+    ],
+    "result_count": 1,
+    "retrieved_experience_ids": [
+      "exp4-crs-distance",
+      "exp4-schema-check"
+    ],
+    "generated_experience_ids": [],
+    "experience_retrieved": true,
+    "experience_added": false,
+    "code_executed": false,
+    "diagnosis": "",
+    "trace_events": [
+      {
+        "step": "strategy",
+        "detail": "ace_grow_and_refine"
+      },
+      {
+        "step": "tool_selection",
+        "detail": [
+          "find_nearby"
+        ]
+      },
+      {
+        "step": "experience_retrieval",
+        "detail": [
+          "exp4-crs-distance",
+          "exp4-schema-check"
+        ]
+      },
+      {
+        "step": "experience_update",
+        "detail": []
+      }
+    ]
+  },
+  "validation": {
+    "score": 1.0,
+    "success": true,
+    "threshold": 0.84,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "outputs": 1.0,
+      "entities": 1.0,
+      "keywords": 1.0,
+      "result_count": 1.0,
+      "experience_retrieved": 1.0
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 3.15,
+    "runtime": 0.125,
+    "execution_success": true,
+    "result_correctness": 1.0,
+    "has_map_layer": true,
+    "has_table": true,
+    "result_count": 1,
+    "experience_retrieved": true,
+    "experience_added": false,
+    "code_executed": false,
+    "library_size": 6
+  }
+}

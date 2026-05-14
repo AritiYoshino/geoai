@@ -1,0 +1,55 @@
+{
+  "task_id": "cs_02",
+  "agent_type": "append_only",
+  "query": "第 80 个任务后的早期经验回测：空结果时放宽条件并检查 CRS",
+  "category": "nearby_analysis",
+  "expected_tools": [
+    "find_nearby"
+  ],
+  "selected_tools": [
+    "find_nearby"
+  ],
+  "execution_trace": [
+    {
+      "step": "intent",
+      "detail": "nearby_analysis"
+    },
+    {
+      "step": "tool_selection",
+      "detail": [
+        "find_nearby"
+      ]
+    },
+    {
+      "step": "evaluation",
+      "detail": "failed"
+    }
+  ],
+  "errors": [
+    "rule_eval_failed:early_experience_retest"
+  ],
+  "error_signature": [
+    "early_experience_retest"
+  ],
+  "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+  "generated_experience": "exp:nearby_analysis:check schema/CRS/result before final answer",
+  "retrieved_experiences": [
+    "crs-check",
+    "field-name-check",
+    "empty-result-relax"
+  ],
+  "final_answer": "任务未完全满足预期，已记录失败原因。",
+  "success": false,
+  "metrics": {
+    "turns": 3.0,
+    "runtime": 1.166,
+    "execution_success": false,
+    "result_correctness": 0.5286,
+    "has_map_layer": true,
+    "has_table": true,
+    "result_count": 0,
+    "repair_attempted": true,
+    "repair_success": false,
+    "user_intervention_count": 0
+  }
+}

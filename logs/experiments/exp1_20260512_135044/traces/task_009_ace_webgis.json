@@ -1,0 +1,51 @@
+{
+  "task_id": "task_009",
+  "agent_type": "ace_webgis",
+  "query": "按 district 字段汇总生活服务 POI 数量",
+  "category": "statistics",
+  "expected_tools": [
+    "summarize_layer_statistics"
+  ],
+  "selected_tools": [
+    "summarize_layer_statistics"
+  ],
+  "execution_trace": [
+    {
+      "step": "intent",
+      "detail": "statistics"
+    },
+    {
+      "step": "tool_selection",
+      "detail": [
+        "summarize_layer_statistics"
+      ]
+    },
+    {
+      "step": "evaluation",
+      "detail": "success"
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "",
+  "retrieved_experiences": [
+    "exp:attribute_query:check schema/CRS/result before final answer",
+    "exp:attribute_query:check schema/CRS/result before final answer",
+    "exp:attribute_query:check schema/CRS/result before final answer"
+  ],
+  "final_answer": "任务完成，已生成可评估结果。",
+  "success": true,
+  "metrics": {
+    "turns": 2.43,
+    "runtime": 1.024,
+    "execution_success": true,
+    "result_correctness": 1.0,
+    "has_map_layer": false,
+    "has_table": true,
+    "result_count": 1,
+    "repair_attempted": false,
+    "repair_success": false,
+    "user_intervention_count": 0
+  }
+}

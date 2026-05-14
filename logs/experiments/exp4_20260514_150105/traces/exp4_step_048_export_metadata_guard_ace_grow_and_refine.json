@@ -1,0 +1,85 @@
+{
+  "task_id": "exp4_step_048_export_metadata_guard",
+  "agent_type": "ace_grow_and_refine",
+  "strategy": "ace_grow_and_refine",
+  "adaptation_step": 48,
+  "query": "Step 48: 将 邻近分析结果 导出为 GeoJSON 和 CSV，校验 geometry、字段命名、空几何和 CRS 元数据。",
+  "category": "export_highlight",
+  "expected_skill": "export_validation",
+  "novelty": "transfer",
+  "expected_tools": [
+    "execute_spatial_code",
+    "format_validator"
+  ],
+  "selected_tools": [
+    "execute_spatial_code",
+    "format_validator"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 48
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "export_validation-008"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "export_validation-048"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 7300
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "export_validation-048",
+  "retrieved_experiences": [
+    "export_validation-008"
+  ],
+  "final_answer": "ace_grow_and_refine step=48 skill=export_validation accuracy=0.97 context_tokens=7300 retrieved=1 generated=1",
+  "structured_response": {
+    "accuracy": 0.97,
+    "context_token_count": 7300,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "export_validation-008"
+    ],
+    "generated_experience_ids": [
+      "export_validation-048"
+    ]
+  },
+  "validation": {
+    "score": 0.97,
+    "success": true,
+    "threshold": 0.72,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "accuracy": 0.97
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 2.7,
+    "runtime": 0.12,
+    "execution_success": true,
+    "result_correctness": 0.97,
+    "context_token_count": 7300,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 10,
+    "compression_event": ""
+  }
+}

@@ -13,6 +13,7 @@ class BrowserMapHandler:
 
     def __init__(self):
         self.layer_records = []
+        self.raster_records = []
         self.current_highlights = []
 
     @property
@@ -74,6 +75,26 @@ class BrowserMapHandler:
                     "visualization_style": dict(record.get("visualization_style") or {}),
                 }
             )
+        for idx, record in enumerate(self.raster_records, start=len(payload)):
+            payload.append(
+                {
+                    "layer_index": idx,
+                    "name": record["name"],
+                    "feature_count": 1,
+                    "fields": [],
+                    "geometry_types": ["Raster"],
+                    "bbox": list(record["bbox"]) if record["bbox"] else [],
+                    "crs": record.get("crs", "EPSG:4326"),
+                    "auto_load_recommended": True,
+                    "is_large_layer": False,
+                    "min_zoom": 0,
+                    "is_generated": True,
+                    "auto_visible": bool(record.get("auto_visible")),
+                    "visualization_style": dict(record.get("visualization_style") or {}),
+                    "layer_type": "raster",
+                    "raster_url": record["url"],
+                }
+            )
         return payload
 
     def add_generated_layer(self, name, gdf, visualization_style=None, auto_visible=True):
@@ -96,6 +117,22 @@ class BrowserMapHandler:
         existing = self._get_record(name)
         if existing is None:
             self.layer_records.append(record)
+        else:
+            existing.update(record)
+
+    def add_generated_raster_layer(self, name, url, bbox, visualization_style=None, auto_visible=True):
+        record = {
+            "name": name,
+            "url": url,
+            "bbox": list(bbox) if bbox else [],
+            "crs": "EPSG:4326",
+            "is_generated": True,
+            "auto_visible": auto_visible,
+            "visualization_style": visualization_style or {"kind": "raster"},
+        }
+        existing = self._get_raster_record(name)
+        if existing is None:
+            self.raster_records.append(record)
         else:
             existing.update(record)
 
@@ -176,6 +213,12 @@ class BrowserMapHandler:
 
     def _get_record(self, layer_name):
         for record in self.layer_records:
+            if record["name"] == layer_name:
+                return record
+        return None
+
+    def _get_raster_record(self, layer_name):
+        for record in self.raster_records:
             if record["name"] == layer_name:
                 return record
         return None

@@ -1,0 +1,79 @@
+{
+  "task_id": "exp4_step_008_export_metadata_guard",
+  "agent_type": "ace_grow_and_refine",
+  "strategy": "ace_grow_and_refine",
+  "adaptation_step": 8,
+  "query": "Step 8: 将 邻近分析结果 导出为 GeoJSON 和 CSV，校验 geometry、字段命名、空几何和 CRS 元数据。",
+  "category": "export_highlight",
+  "expected_skill": "export_validation",
+  "novelty": "warmup",
+  "expected_tools": [
+    "execute_spatial_code",
+    "format_validator"
+  ],
+  "selected_tools": [
+    "execute_spatial_code",
+    "format_validator"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 8
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": []
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "export_validation-008"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 1990
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "export_validation-008",
+  "retrieved_experiences": [],
+  "final_answer": "ace_grow_and_refine step=8 skill=export_validation accuracy=0.788 context_tokens=1990 retrieved=0 generated=1",
+  "structured_response": {
+    "accuracy": 0.788,
+    "context_token_count": 1990,
+    "compression_event": "",
+    "retrieved_experience_ids": [],
+    "generated_experience_ids": [
+      "export_validation-008"
+    ]
+  },
+  "validation": {
+    "score": 0.788,
+    "success": true,
+    "threshold": 0.72,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "accuracy": 0.788
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 2.7,
+    "runtime": 0.12,
+    "execution_success": true,
+    "result_correctness": 0.788,
+    "context_token_count": 1990,
+    "experience_retrieved": false,
+    "experience_added": true,
+    "library_size": 8,
+    "compression_event": ""
+  }
+}

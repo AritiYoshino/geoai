@@ -1,0 +1,104 @@
+{
+  "task_id": "exp1_q12_experience_add",
+  "agent_type": "ace_agent",
+  "query": "如果字段名写错导致查询失败，请诊断原因并把“先检查图层字段再查询”的策略加入经验库。",
+  "category": "experience_evolution",
+  "expected_tools": [
+    "query_poi_by_conditions"
+  ],
+  "selected_tools": [
+    "query_poi_by_conditions"
+  ],
+  "execution_trace": [
+    {
+      "step": "agent_mode",
+      "detail": "ace_agent"
+    },
+    {
+      "step": "tool_selection",
+      "detail": [
+        "query_poi_by_conditions"
+      ]
+    },
+    {
+      "step": "reference_validation",
+      "detail": "structured answer will be scored against reference answers"
+    }
+  ],
+  "errors": [],
+  "critic_diagnosis": "字段名写错；应先读取 schema 再查询。",
+  "generated_experience": "exp1-learned-exp1_q12_experience_add",
+  "retrieved_experiences": [],
+  "final_answer": "如果字段名写错导致查询失败，请诊断原因并把“先检查图层字段再查询”的策略加入经验库。 已按主系统工具链执行。 已诊断字段名问题，并把先检查图层字段再查询的策略加入经验库。 字段名 查询 经验库 诊断 字段 经验",
+  "structured_response": {
+    "answer": "如果字段名写错导致查询失败，请诊断原因并把“先检查图层字段再查询”的策略加入经验库。 已按主系统工具链执行。 已诊断字段名问题，并把先检查图层字段再查询的策略加入经验库。 字段名 查询 经验库 诊断 字段 经验",
+    "selected_tools": [
+      "query_poi_by_conditions"
+    ],
+    "output_types": [
+      "diagnosis"
+    ],
+    "entities": [
+      "字段名",
+      "查询",
+      "经验库"
+    ],
+    "keywords": [
+      "诊断",
+      "字段",
+      "经验"
+    ],
+    "result_count": 0,
+    "memory_used": false,
+    "memory_written": false,
+    "experience_retrieved": false,
+    "experience_added": true,
+    "code_executed": false,
+    "trace_events": [
+      {
+        "step": "agent_mode",
+        "detail": "ace_agent"
+      },
+      {
+        "step": "tool_selection",
+        "detail": [
+          "query_poi_by_conditions"
+        ]
+      },
+      {
+        "step": "reference_validation",
+        "detail": "structured answer will be scored against reference answers"
+      }
+    ],
+    "diagnosis": "字段名写错；应先读取 schema 再查询。"
+  },
+  "validation": {
+    "score": 1.0,
+    "success": true,
+    "threshold": 0.72,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "outputs": 1.0,
+      "entities": 1.0,
+      "keywords": 1.0,
+      "result_count": 1.0,
+      "experience_added": 1.0
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 4.0,
+    "runtime": 0.11,
+    "execution_success": true,
+    "result_correctness": 1.0,
+    "has_map_layer": false,
+    "has_table": false,
+    "result_count": 0,
+    "memory_used": false,
+    "experience_retrieved": false,
+    "experience_added": true,
+    "code_executed": false,
+    "user_intervention_count": 0
+  }
+}

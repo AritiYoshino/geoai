@@ -1,0 +1,79 @@
+{
+  "task_id": "exp4_step_009_context_anchor_tracking",
+  "agent_type": "dynamic_cheatsheet",
+  "strategy": "dynamic_cheatsheet",
+  "adaptation_step": 9,
+  "query": "Step 9: 使用当前上下文中的 spring_hotel 作为中心点，查找 1 公里范围内指定 POI，并解释锚点来源。",
+  "category": "memory_followup",
+  "expected_skill": "context_reference",
+  "novelty": "warmup",
+  "expected_tools": [
+    "find_nearby_point",
+    "context_check"
+  ],
+  "selected_tools": [
+    "find_nearby_point",
+    "context_check"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 9
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": []
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "context_reference-009"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 2043
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "context_reference-009",
+  "retrieved_experiences": [],
+  "final_answer": "dynamic_cheatsheet step=9 skill=context_reference accuracy=0.728 context_tokens=2043 retrieved=0 generated=1",
+  "structured_response": {
+    "accuracy": 0.728,
+    "context_token_count": 2043,
+    "compression_event": "",
+    "retrieved_experience_ids": [],
+    "generated_experience_ids": [
+      "context_reference-009"
+    ]
+  },
+  "validation": {
+    "score": 0.728,
+    "success": true,
+    "threshold": 0.72,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "accuracy": 0.728
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 3.0,
+    "runtime": 0.12,
+    "execution_success": true,
+    "result_correctness": 0.728,
+    "context_token_count": 2043,
+    "experience_retrieved": false,
+    "experience_added": true,
+    "library_size": 9,
+    "compression_event": ""
+  }
+}

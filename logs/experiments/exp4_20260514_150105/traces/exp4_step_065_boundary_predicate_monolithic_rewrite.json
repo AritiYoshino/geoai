@@ -1,0 +1,88 @@
+{
+  "task_id": "exp4_step_065_boundary_predicate",
+  "agent_type": "monolithic_rewrite",
+  "strategy": "monolithic_rewrite",
+  "adaptation_step": 65,
+  "query": "Step 65: 比较 contains 与 intersects 统计 行政区 边界 POI 的差异，输出校验表。",
+  "category": "validation",
+  "expected_skill": "spatial_predicate_choice",
+  "novelty": "new_pattern",
+  "expected_tools": [
+    "execute_spatial_code",
+    "predicate_check"
+  ],
+  "selected_tools": [
+    "execute_spatial_code",
+    "predicate_check"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 65
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "spatial_predicate_choice-045",
+        "spatial_predicate_choice-055"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "spatial_predicate_choice-065"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 7720
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "spatial_predicate_choice-065",
+  "retrieved_experiences": [
+    "spatial_predicate_choice-045",
+    "spatial_predicate_choice-055"
+  ],
+  "final_answer": "monolithic_rewrite step=65 skill=spatial_predicate_choice accuracy=0.776 context_tokens=7720 retrieved=2 generated=1",
+  "structured_response": {
+    "accuracy": 0.776,
+    "context_token_count": 7720,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "spatial_predicate_choice-045",
+      "spatial_predicate_choice-055"
+    ],
+    "generated_experience_ids": [
+      "spatial_predicate_choice-065"
+    ]
+  },
+  "validation": {
+    "score": 0.776,
+    "success": true,
+    "threshold": 0.72,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "accuracy": 0.776
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 3.75,
+    "runtime": 0.12,
+    "execution_success": true,
+    "result_correctness": 0.776,
+    "context_token_count": 7720,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 29,
+    "compression_event": ""
+  }
+}

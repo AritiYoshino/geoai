@@ -1,0 +1,112 @@
+{
+  "task_id": "exp1_q52_rag_result_scale_control",
+  "agent_type": "base_agent",
+  "query": "???????? POI ?????????????????????????????? 10 ??????????????",
+  "category": "experience_retrieval",
+  "expected_tools": [
+    "search_poi"
+  ],
+  "selected_tools": [
+    "search_poi"
+  ],
+  "execution_trace": [
+    {
+      "step": "agent_mode",
+      "detail": "base_agent"
+    },
+    {
+      "step": "tool_selection",
+      "detail": [
+        "search_poi"
+      ]
+    },
+    {
+      "step": "reference_validation",
+      "detail": "structured answer will be scored against reference answers"
+    }
+  ],
+  "errors": [
+    "answer_mismatch:output_types,result_count,experience_retrieved"
+  ],
+  "critic_diagnosis": "",
+  "generated_experience": "",
+  "retrieved_experiences": [],
+  "final_answer": "???????? POI ?????????????????????????????? 10 ?????????????? 已按主系统工具链执行。 ?? ? 10 ? ?????? ?? ?? ?? ???? ??",
+  "structured_response": {
+    "answer": "???????? POI ?????????????????????????????? 10 ?????????????? 已按主系统工具链执行。 ?? ? 10 ? ?????? ?? ?? ?? ???? ??",
+    "selected_tools": [
+      "search_poi"
+    ],
+    "output_types": [
+      "table"
+    ],
+    "entities": [
+      "??",
+      "? 10 ?",
+      "??????",
+      "??"
+    ],
+    "keywords": [
+      "??",
+      "??",
+      "????",
+      "??"
+    ],
+    "result_count": 0,
+    "memory_used": false,
+    "memory_written": false,
+    "experience_retrieved": false,
+    "experience_added": false,
+    "code_executed": false,
+    "trace_events": [
+      {
+        "step": "agent_mode",
+        "detail": "base_agent"
+      },
+      {
+        "step": "tool_selection",
+        "detail": [
+          "search_poi"
+        ]
+      },
+      {
+        "step": "reference_validation",
+        "detail": "structured answer will be scored against reference answers"
+      }
+    ],
+    "diagnosis": ""
+  },
+  "validation": {
+    "score": 0.48,
+    "success": false,
+    "threshold": 0.88,
+    "missing": [
+      "output_types",
+      "result_count",
+      "experience_retrieved"
+    ],
+    "details": {
+      "tools": 1.0,
+      "outputs": 0.333,
+      "entities": 0.75,
+      "keywords": 0.5,
+      "result_count": 0.0,
+      "experience_retrieved": 0.0
+    }
+  },
+  "success": false,
+  "metrics": {
+    "turns": 3.0,
+    "runtime": 0.11,
+    "execution_success": false,
+    "result_correctness": 0.48,
+    "has_map_layer": false,
+    "has_table": true,
+    "result_count": 0,
+    "memory_used": false,
+    "experience_retrieved": false,
+    "experience_added": false,
+    "code_executed": false,
+    "user_intervention_count": 0
+  }
+}

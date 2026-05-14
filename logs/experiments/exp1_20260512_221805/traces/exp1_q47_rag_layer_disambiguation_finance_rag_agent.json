@@ -1,0 +1,110 @@
+{
+  "task_id": "exp1_q47_rag_layer_disambiguation_finance",
+  "agent_type": "rag_agent",
+  "query": "“银行”可能属于金融服务而不是公司名称。请先应用图层选择经验，再在金融服务图层搜索 name 或 type 包含“银行”的 POI，并返回表格和高亮结果。",
+  "category": "experience_retrieval",
+  "expected_tools": [
+    "search_poi"
+  ],
+  "selected_tools": [
+    "search_poi"
+  ],
+  "execution_trace": [
+    {
+      "step": "agent_mode",
+      "detail": "rag_agent"
+    },
+    {
+      "step": "tool_selection",
+      "detail": [
+        "search_poi"
+      ]
+    },
+    {
+      "step": "reference_validation",
+      "detail": "structured answer will be scored against reference answers"
+    }
+  ],
+  "errors": [],
+  "critic_diagnosis": "",
+  "generated_experience": "",
+  "retrieved_experiences": [
+    "gis-result-001"
+  ],
+  "final_answer": "“银行”可能属于金融服务而不是公司名称。请先应用图层选择经验，再在金融服务图层搜索 name 或 type 包含“银行”的 POI，并返回表格和高亮结果。 已按主系统工具链执行。 银行 金融服务 图层选择 POI 经验 图层 name type",
+  "structured_response": {
+    "answer": "“银行”可能属于金融服务而不是公司名称。请先应用图层选择经验，再在金融服务图层搜索 name 或 type 包含“银行”的 POI，并返回表格和高亮结果。 已按主系统工具链执行。 银行 金融服务 图层选择 POI 经验 图层 name type",
+    "selected_tools": [
+      "search_poi"
+    ],
+    "output_types": [
+      "explanation",
+      "table",
+      "map_layer"
+    ],
+    "entities": [
+      "银行",
+      "金融服务",
+      "图层选择",
+      "POI"
+    ],
+    "keywords": [
+      "经验",
+      "图层",
+      "name",
+      "type"
+    ],
+    "result_count": 1,
+    "memory_used": false,
+    "memory_written": false,
+    "experience_retrieved": true,
+    "experience_added": false,
+    "code_executed": false,
+    "trace_events": [
+      {
+        "step": "agent_mode",
+        "detail": "rag_agent"
+      },
+      {
+        "step": "tool_selection",
+        "detail": [
+          "search_poi"
+        ]
+      },
+      {
+        "step": "reference_validation",
+        "detail": "structured answer will be scored against reference answers"
+      }
+    ],
+    "diagnosis": ""
+  },
+  "validation": {
+    "score": 1.0,
+    "success": true,
+    "threshold": 0.88,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "outputs": 1.0,
+      "entities": 1.0,
+      "keywords": 1.0,
+      "result_count": 1.0,
+      "experience_retrieved": 1.0
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 3.6,
+    "runtime": 0.11,
+    "execution_success": true,
+    "result_correctness": 1.0,
+    "has_map_layer": true,
+    "has_table": true,
+    "result_count": 1,
+    "memory_used": false,
+    "experience_retrieved": true,
+    "experience_added": false,
+    "code_executed": false,
+    "user_intervention_count": 0
+  }
+}

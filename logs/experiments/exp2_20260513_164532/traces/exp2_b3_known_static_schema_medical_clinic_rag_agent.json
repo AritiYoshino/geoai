@@ -1,0 +1,125 @@
+{
+  "task_id": "exp2_b3_known_static_schema_medical_clinic",
+  "batch_id": 3,
+  "agent_type": "rag_agent",
+  "query": "复用静态字段核对经验，在医疗图层中查询“诊所”相关 POI。",
+  "category": "attribute_query",
+  "expected_tools": [
+    "query_poi_by_conditions"
+  ],
+  "selected_tools": [
+    "query_poi_by_conditions"
+  ],
+  "execution_trace": [
+    {
+      "step": "agent_mode",
+      "detail": "rag_agent"
+    },
+    {
+      "step": "tool_selection",
+      "detail": [
+        "query_poi_by_conditions"
+      ]
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "exp2-schema-check"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": []
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "",
+  "retrieved_experiences": [
+    "exp2-schema-check"
+  ],
+  "final_answer": "复用静态字段核对经验，在医疗图层中查询“诊所”相关 POI。 tool_flow_completed reuse exp2-schema-check POI schema field reuse schema",
+  "structured_response": {
+    "answer": "复用静态字段核对经验，在医疗图层中查询“诊所”相关 POI。 tool_flow_completed reuse exp2-schema-check POI schema field reuse schema",
+    "selected_tools": [
+      "query_poi_by_conditions"
+    ],
+    "output_types": [
+      "map_layer",
+      "table"
+    ],
+    "entities": [
+      "POI",
+      "schema",
+      "field"
+    ],
+    "keywords": [
+      "reuse",
+      "schema"
+    ],
+    "result_count": 1,
+    "retrieved_experience_ids": [
+      "exp2-schema-check"
+    ],
+    "generated_experience_ids": [],
+    "experience_retrieved": true,
+    "experience_added": false,
+    "memory_used": false,
+    "code_executed": false,
+    "trace_events": [
+      {
+        "step": "agent_mode",
+        "detail": "rag_agent"
+      },
+      {
+        "step": "tool_selection",
+        "detail": [
+          "query_poi_by_conditions"
+        ]
+      },
+      {
+        "step": "experience_retrieval",
+        "detail": [
+          "exp2-schema-check"
+        ]
+      },
+      {
+        "step": "experience_update",
+        "detail": []
+      }
+    ],
+    "diagnosis": ""
+  },
+  "validation": {
+    "score": 1.0,
+    "success": true,
+    "threshold": 0.86,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "outputs": 1.0,
+      "entities": 1.0,
+      "keywords": 1.0,
+      "result_count": 1.0,
+      "experience_retrieved": 1.0
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 2.87,
+    "runtime": 0.16,
+    "execution_success": true,
+    "result_correctness": 1.0,
+    "has_map_layer": true,
+    "has_table": true,
+    "result_count": 1,
+    "experience_retrieved": true,
+    "experience_added": false,
+    "memory_used": false,
+    "code_executed": false,
+    "repair_attempted": false,
+    "repair_success": false,
+    "user_intervention_count": 0
+  }
+}

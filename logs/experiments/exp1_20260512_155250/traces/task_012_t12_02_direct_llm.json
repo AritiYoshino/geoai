@@ -1,0 +1,48 @@
+{
+  "task_id": "task_012_t12_02",
+  "agent_type": "direct_llm",
+  "query": "找出地铁站 1 公里范围内的住宿服务点，并统计数量",
+  "category": "nearby_analysis",
+  "expected_tools": [
+    "find_nearby",
+    "summarize_layer_statistics"
+  ],
+  "selected_tools": [],
+  "execution_trace": [
+    {
+      "step": "intent",
+      "detail": "nearby_analysis"
+    },
+    {
+      "step": "tool_selection",
+      "detail": []
+    },
+    {
+      "step": "evaluation",
+      "detail": "failed"
+    }
+  ],
+  "errors": [
+    "rule_eval_failed:multi_tool_chain"
+  ],
+  "error_signature": [
+    "multi_tool_chain"
+  ],
+  "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+  "generated_experience": "",
+  "retrieved_experiences": [],
+  "final_answer": "任务未完全满足预期，已记录失败原因。",
+  "success": false,
+  "metrics": {
+    "turns": 1.34,
+    "runtime": 0.562,
+    "execution_success": false,
+    "result_correctness": 0.0,
+    "has_map_layer": true,
+    "has_table": true,
+    "result_count": 0,
+    "repair_attempted": false,
+    "repair_success": false,
+    "user_intervention_count": 1
+  }
+}

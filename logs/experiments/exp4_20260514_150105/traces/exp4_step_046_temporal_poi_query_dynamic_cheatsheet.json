@@ -1,0 +1,88 @@
+{
+  "task_id": "exp4_step_046_temporal_poi_query",
+  "agent_type": "dynamic_cheatsheet",
+  "strategy": "dynamic_cheatsheet",
+  "adaptation_step": 46,
+  "query": "Step 46: 查询近 30 天新增 POI，说明日期字段解析和范围过滤过程。",
+  "category": "temporal_query",
+  "expected_skill": "temporal_query",
+  "novelty": "transfer",
+  "expected_tools": [
+    "query_poi_by_conditions",
+    "date_parse"
+  ],
+  "selected_tools": [
+    "query_poi_by_conditions",
+    "date_parse"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 46
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "temporal_query-036",
+        "temporal_query-036-shortcut"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "temporal_query-046"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 6317
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "temporal_query-046",
+  "retrieved_experiences": [
+    "temporal_query-036",
+    "temporal_query-036-shortcut"
+  ],
+  "final_answer": "dynamic_cheatsheet step=46 skill=temporal_query accuracy=0.861 context_tokens=6317 retrieved=2 generated=1",
+  "structured_response": {
+    "accuracy": 0.861,
+    "context_token_count": 6317,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "temporal_query-036",
+      "temporal_query-036-shortcut"
+    ],
+    "generated_experience_ids": [
+      "temporal_query-046"
+    ]
+  },
+  "validation": {
+    "score": 0.861,
+    "success": true,
+    "threshold": 0.72,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "accuracy": 0.861
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 3.0,
+    "runtime": 0.12,
+    "execution_success": true,
+    "result_correctness": 0.861,
+    "context_token_count": 6317,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 10,
+    "compression_event": ""
+  }
+}

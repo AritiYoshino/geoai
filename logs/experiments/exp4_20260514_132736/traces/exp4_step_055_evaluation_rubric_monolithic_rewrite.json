@@ -1,0 +1,81 @@
+{
+  "task_id": "exp4_step_055_evaluation_rubric",
+  "agent_type": "monolithic_rewrite",
+  "strategy": "monolithic_rewrite",
+  "adaptation_step": 55,
+  "query": "Step 55: 按历史评分标准评估 分类 答案，保持判分口径一致。",
+  "category": "evaluation",
+  "expected_skill": "evaluation_rubric",
+  "novelty": "transfer",
+  "expected_tools": [
+    "reasoning",
+    "rubric_check"
+  ],
+  "selected_tools": [
+    "reasoning",
+    "rubric_check"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 55
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "evaluation_rubric-045"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "evaluation_rubric-055"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 4760
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "evaluation_rubric-055",
+  "retrieved_experiences": [
+    "evaluation_rubric-045"
+  ],
+  "final_answer": "monolithic_rewrite step=55 skill=evaluation_rubric accuracy=0.752 context_tokens=4760 retrieved=1 generated=1",
+  "structured_response": {
+    "accuracy": 0.752,
+    "context_token_count": 4760,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "evaluation_rubric-045"
+    ],
+    "generated_experience_ids": [
+      "evaluation_rubric-055"
+    ]
+  },
+  "validation": {
+    "score": 0.752,
+    "success": true,
+    "threshold": 0.72,
+    "missing": []
+  },
+  "success": true,
+  "metrics": {
+    "turns": 3.4,
+    "runtime": 0.12,
+    "execution_success": true,
+    "result_correctness": 0.752,
+    "context_token_count": 4760,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 19,
+    "compression_event": ""
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "task_id": "task_010_t10_03",
+  "agent_type": "ace_webgis",
+  "query": "导出最近一次分析结果为 GeoJSON，并返回下载链接",
+  "category": "export_highlight",
+  "expected_tools": [
+    "export_analysis_result"
+  ],
+  "selected_tools": [
+    "export_analysis_result"
+  ],
+  "execution_trace": [
+    {
+      "step": "intent",
+      "detail": "export_highlight"
+    },
+    {
+      "step": "tool_selection",
+      "detail": [
+        "export_analysis_result"
+      ]
+    },
+    {
+      "step": "evaluation",
+      "detail": "success"
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "",
+  "retrieved_experiences": [
+    "exp:attribute_query:check schema/CRS/result before final answer",
+    "exp:attribute_query:check schema/CRS/result before final answer",
+    "exp:attribute_query:check schema/CRS/result before final answer"
+  ],
+  "final_answer": "任务完成，已生成可评估结果。",
+  "success": true,
+  "metrics": {
+    "turns": 3.17,
+    "runtime": 1.195,
+    "execution_success": true,
+    "result_correctness": 1.0,
+    "has_map_layer": false,
+    "has_table": true,
+    "result_count": 1,
+    "repair_attempted": false,
+    "repair_success": false,
+    "user_intervention_count": 0
+  }
+}

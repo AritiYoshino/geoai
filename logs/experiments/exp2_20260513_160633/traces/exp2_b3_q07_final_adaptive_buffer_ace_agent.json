@@ -1,0 +1,139 @@
+{
+  "task_id": "exp2_b3_q07_final_adaptive_buffer",
+  "batch_id": 3,
+  "agent_type": "ace_agent",
+  "query": "复用动态缓冲经验，计算不同类型 POI 的覆盖统计。",
+  "category": "buffer_analysis",
+  "expected_tools": [
+    "find_nearby"
+  ],
+  "selected_tools": [
+    "find_nearby"
+  ],
+  "execution_trace": [
+    {
+      "step": "agent_mode",
+      "detail": "ace_agent"
+    },
+    {
+      "step": "tool_selection",
+      "detail": [
+        "find_nearby"
+      ]
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "exp2-adaptive-buffer"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": []
+    },
+    {
+      "step": "realistic_limitation",
+      "detail": "exp2_b3_q07_final_adaptive_buffer"
+    }
+  ],
+  "errors": [
+    "answer_mismatch:result_count"
+  ],
+  "error_signature": [
+    "adaptive_buffer"
+  ],
+  "critic_diagnosis": "",
+  "generated_experience": "",
+  "retrieved_experiences": [
+    "exp2-adaptive-buffer"
+  ],
+  "final_answer": "复用动态缓冲经验，计算不同类型 POI 的覆盖统计。 tool_flow_completed reuse exp2-adaptive-buffer buffer POI coverage reuse dynamic_buffer coverage partial_transfer_failure",
+  "structured_response": {
+    "answer": "复用动态缓冲经验，计算不同类型 POI 的覆盖统计。 tool_flow_completed reuse exp2-adaptive-buffer buffer POI coverage reuse dynamic_buffer coverage partial_transfer_failure",
+    "selected_tools": [
+      "find_nearby"
+    ],
+    "output_types": [
+      "map_layer",
+      "table"
+    ],
+    "entities": [
+      "buffer",
+      "POI",
+      "coverage"
+    ],
+    "keywords": [
+      "reuse",
+      "dynamic_buffer"
+    ],
+    "result_count": 0,
+    "retrieved_experience_ids": [
+      "exp2-adaptive-buffer"
+    ],
+    "generated_experience_ids": [],
+    "experience_retrieved": true,
+    "experience_added": false,
+    "memory_used": false,
+    "code_executed": false,
+    "trace_events": [
+      {
+        "step": "agent_mode",
+        "detail": "ace_agent"
+      },
+      {
+        "step": "tool_selection",
+        "detail": [
+          "find_nearby"
+        ]
+      },
+      {
+        "step": "experience_retrieval",
+        "detail": [
+          "exp2-adaptive-buffer"
+        ]
+      },
+      {
+        "step": "experience_update",
+        "detail": []
+      },
+      {
+        "step": "realistic_limitation",
+        "detail": "exp2_b3_q07_final_adaptive_buffer"
+      }
+    ],
+    "diagnosis": ""
+  },
+  "validation": {
+    "score": 0.858,
+    "success": false,
+    "threshold": 0.86,
+    "missing": [
+      "result_count"
+    ],
+    "details": {
+      "tools": 1.0,
+      "outputs": 1.0,
+      "entities": 1.0,
+      "keywords": 0.667,
+      "result_count": 0.0,
+      "experience_retrieved": 1.0
+    }
+  },
+  "success": false,
+  "metrics": {
+    "turns": 3.28,
+    "runtime": 0.16,
+    "execution_success": false,
+    "result_correctness": 0.858,
+    "has_map_layer": true,
+    "has_table": true,
+    "result_count": 0,
+    "experience_retrieved": true,
+    "experience_added": false,
+    "memory_used": false,
+    "code_executed": false,
+    "repair_attempted": true,
+    "repair_success": true,
+    "user_intervention_count": 0
+  }
+}

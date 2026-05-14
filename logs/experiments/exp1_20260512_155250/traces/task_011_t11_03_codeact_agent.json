@@ -1,0 +1,51 @@
+{
+  "task_id": "task_011_t11_03",
+  "agent_type": "codeact_agent",
+  "query": "计算各行政区餐饮 POI 密度并输出排名前 5 的行政区",
+  "category": "code_required",
+  "expected_tools": [
+    "execute_spatial_code"
+  ],
+  "selected_tools": [
+    "execute_spatial_code"
+  ],
+  "execution_trace": [
+    {
+      "step": "intent",
+      "detail": "code_required"
+    },
+    {
+      "step": "tool_selection",
+      "detail": [
+        "execute_spatial_code"
+      ]
+    },
+    {
+      "step": "evaluation",
+      "detail": "failed"
+    }
+  ],
+  "errors": [
+    "rule_eval_failed:code_required"
+  ],
+  "error_signature": [
+    "code_required"
+  ],
+  "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+  "generated_experience": "",
+  "retrieved_experiences": [],
+  "final_answer": "任务未完全满足预期，已记录失败原因。",
+  "success": false,
+  "metrics": {
+    "turns": 4.07,
+    "runtime": 1.129,
+    "execution_success": false,
+    "result_correctness": 0.20559999999999995,
+    "has_map_layer": true,
+    "has_table": true,
+    "result_count": 0,
+    "repair_attempted": true,
+    "repair_success": false,
+    "user_intervention_count": 0
+  }
+}

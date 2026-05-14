@@ -1,0 +1,131 @@
+{
+  "task_id": "exp3_q27_stress_context_conflict",
+  "agent_type": "full_ace",
+  "agent_name": "Full ACE",
+  "missing_modules": [],
+  "query": "同时出现 spring_hotel 和 medical_anchor 时，要求拒绝错误锚点、选择 medical_anchor，并解释冲突消解依据，再写入上下文冲突防御经验。",
+  "category": "adversarial_validation",
+  "expected_tools": [
+    "find_nearby_point"
+  ],
+  "selected_tools": [
+    "find_nearby_point"
+  ],
+  "execution_trace": [
+    {
+      "step": "ablation_agent",
+      "detail": "missing_modules="
+    },
+    {
+      "step": "tool_selection",
+      "detail": [
+        "find_nearby_point"
+      ]
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": []
+    },
+    {
+      "step": "critic_diagnosis",
+      "detail": "Critic 诊断：exp3_q27_stress_context_conflict 触发可修复错误，需保留失败原因并交给 Evolution。"
+    },
+    {
+      "step": "experience_update",
+      "detail": []
+    }
+  ],
+  "errors": [
+    "missing_module_effect:result_count,experience_added"
+  ],
+  "critic_diagnosis": "Critic 诊断：exp3_q27_stress_context_conflict 触发可修复错误，需保留失败原因并交给 Evolution。",
+  "generated_experience": "",
+  "retrieved_experiences": [],
+  "final_answer": "同时出现 spring_hotel 和 medical_anchor 时，要求拒绝错误锚点、选择 medical_anchor，并解释冲突消解依据，再写入上下文冲突防御经验。 missing_modules= Critic 诊断：exp3_q27_stress_context_conflict 触发可修复错误，需保留失败原因并交给 Evolution。 spring_hotel medical_anchor 冲突 上下文 记忆 Critic 冲突消解",
+  "structured_response": {
+    "answer": "同时出现 spring_hotel 和 medical_anchor 时，要求拒绝错误锚点、选择 medical_anchor，并解释冲突消解依据，再写入上下文冲突防御经验。 missing_modules= Critic 诊断：exp3_q27_stress_context_conflict 触发可修复错误，需保留失败原因并交给 Evolution。 spring_hotel medical_anchor 冲突 上下文 记忆 Critic 冲突消解",
+    "selected_tools": [
+      "find_nearby_point"
+    ],
+    "output_types": [
+      "diagnosis",
+      "explanation"
+    ],
+    "entities": [
+      "spring_hotel",
+      "medical_anchor",
+      "冲突",
+      "上下文"
+    ],
+    "keywords": [
+      "记忆",
+      "Critic",
+      "冲突消解"
+    ],
+    "result_count": 0,
+    "retrieved_experience_ids": [],
+    "generated_experience_ids": [],
+    "experience_retrieved": false,
+    "experience_added": false,
+    "memory_used": true,
+    "code_executed": false,
+    "trace_events": [
+      {
+        "step": "ablation_agent",
+        "detail": "missing_modules="
+      },
+      {
+        "step": "tool_selection",
+        "detail": [
+          "find_nearby_point"
+        ]
+      },
+      {
+        "step": "experience_retrieval",
+        "detail": []
+      },
+      {
+        "step": "critic_diagnosis",
+        "detail": "Critic 诊断：exp3_q27_stress_context_conflict 触发可修复错误，需保留失败原因并交给 Evolution。"
+      },
+      {
+        "step": "experience_update",
+        "detail": []
+      }
+    ]
+  },
+  "validation": {
+    "score": 0.728,
+    "success": false,
+    "threshold": 0.86,
+    "missing": [
+      "result_count",
+      "experience_added"
+    ],
+    "details": {
+      "tools": 1.0,
+      "outputs": 1.0,
+      "entities": 1.0,
+      "keywords": 0.75,
+      "result_count": 0.0,
+      "experience_added": 0.0,
+      "memory_used": 1.0
+    }
+  },
+  "success": false,
+  "metrics": {
+    "turns": 3.6,
+    "runtime": 0.15,
+    "execution_success": false,
+    "result_correctness": 0.728,
+    "has_map_layer": false,
+    "has_table": false,
+    "result_count": 0,
+    "experience_retrieved": false,
+    "experience_added": false,
+    "memory_used": true,
+    "code_executed": false,
+    "critic_used": true,
+    "missing_module_count": 0
+  }
+}

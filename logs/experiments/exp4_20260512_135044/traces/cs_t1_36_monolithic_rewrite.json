@@ -1,0 +1,51 @@
+{
+  "task_id": "cs_t1_36",
+  "agent_type": "monolithic_rewrite",
+  "query": "稳定性任务：距离分析前检查 CRS，完成 商场-交通 邻近分析",
+  "category": "nearby_analysis",
+  "expected_tools": [
+    "find_nearby"
+  ],
+  "selected_tools": [
+    "find_nearby"
+  ],
+  "execution_trace": [
+    {
+      "step": "intent",
+      "detail": "nearby_analysis"
+    },
+    {
+      "step": "tool_selection",
+      "detail": [
+        "find_nearby"
+      ]
+    },
+    {
+      "step": "evaluation",
+      "detail": "success"
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "exp:nearby_analysis:check schema/CRS/result before final answer",
+  "retrieved_experiences": [
+    "crs-check",
+    "field-name-check",
+    "empty-result-relax"
+  ],
+  "final_answer": "任务完成，已生成可评估结果。",
+  "success": true,
+  "metrics": {
+    "turns": 2.8,
+    "runtime": 1.029,
+    "execution_success": true,
+    "result_correctness": 1.0,
+    "has_map_layer": true,
+    "has_table": true,
+    "result_count": 1,
+    "repair_attempted": false,
+    "repair_success": false,
+    "user_intervention_count": 0
+  }
+}

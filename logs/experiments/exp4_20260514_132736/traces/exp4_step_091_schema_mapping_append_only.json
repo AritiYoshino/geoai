@@ -1,0 +1,81 @@
+{
+  "task_id": "exp4_step_091_schema_mapping",
+  "agent_type": "append_only",
+  "strategy": "append_only",
+  "adaptation_step": 91,
+  "query": "Step 91: 根据不同表格字段别名完成 schema 对齐任务，领域变体为 订单表。",
+  "category": "structured_reasoning",
+  "expected_skill": "schema_mapping",
+  "novelty": "retention_retest",
+  "expected_tools": [
+    "reasoning",
+    "schema_check"
+  ],
+  "selected_tools": [
+    "reasoning",
+    "schema_check"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 91
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "schema_mapping-001"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "schema_mapping-091"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 10166
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "schema_mapping-091",
+  "retrieved_experiences": [
+    "schema_mapping-001"
+  ],
+  "final_answer": "append_only step=91 skill=schema_mapping accuracy=0.77 context_tokens=10166 retrieved=1 generated=1",
+  "structured_response": {
+    "accuracy": 0.77,
+    "context_token_count": 10166,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "schema_mapping-001"
+    ],
+    "generated_experience_ids": [
+      "schema_mapping-091"
+    ]
+  },
+  "validation": {
+    "score": 0.77,
+    "success": true,
+    "threshold": 0.72,
+    "missing": []
+  },
+  "success": true,
+  "metrics": {
+    "turns": 3.55,
+    "runtime": 0.12,
+    "execution_success": true,
+    "result_correctness": 0.77,
+    "context_token_count": 10166,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 104,
+    "compression_event": ""
+  }
+}

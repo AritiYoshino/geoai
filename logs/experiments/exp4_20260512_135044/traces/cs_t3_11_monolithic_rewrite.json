@@ -1,0 +1,51 @@
+{
+  "task_id": "cs_t3_11",
+  "agent_type": "monolithic_rewrite",
+  "query": "稳定性任务：叠加前检查几何类型，处理 医疗 与行政区",
+  "category": "overlay_analysis",
+  "expected_tools": [
+    "overlay_layers"
+  ],
+  "selected_tools": [
+    "overlay_layers"
+  ],
+  "execution_trace": [
+    {
+      "step": "intent",
+      "detail": "overlay_analysis"
+    },
+    {
+      "step": "tool_selection",
+      "detail": [
+        "overlay_layers"
+      ]
+    },
+    {
+      "step": "evaluation",
+      "detail": "success"
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "exp:overlay_analysis:check schema/CRS/result before final answer",
+  "retrieved_experiences": [
+    "rewrite-100-0",
+    "rewrite-100-1",
+    "rewrite-100-2"
+  ],
+  "final_answer": "任务完成，已生成可评估结果。",
+  "success": true,
+  "metrics": {
+    "turns": 2.61,
+    "runtime": 1.135,
+    "execution_success": true,
+    "result_correctness": 1.0,
+    "has_map_layer": true,
+    "has_table": true,
+    "result_count": 1,
+    "repair_attempted": false,
+    "repair_success": false,
+    "user_intervention_count": 0
+  }
+}

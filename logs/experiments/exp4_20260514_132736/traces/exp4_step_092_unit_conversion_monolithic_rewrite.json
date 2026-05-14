@@ -1,0 +1,87 @@
+{
+  "task_id": "exp4_step_092_unit_conversion",
+  "agent_type": "monolithic_rewrite",
+  "strategy": "monolithic_rewrite",
+  "adaptation_step": 92,
+  "query": "Step 92: 处理 容量 中的单位换算和阈值判断，保留前序换算规则。",
+  "category": "quantitative_reasoning",
+  "expected_skill": "unit_conversion",
+  "novelty": "retention_retest",
+  "expected_tools": [
+    "reasoning",
+    "calculator"
+  ],
+  "selected_tools": [
+    "reasoning",
+    "calculator"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 92
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "unit_conversion-062",
+        "unit_conversion-072",
+        "unit_conversion-082"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "unit_conversion-092"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 8594
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "unit_conversion-092",
+  "retrieved_experiences": [
+    "unit_conversion-062",
+    "unit_conversion-072",
+    "unit_conversion-082"
+  ],
+  "final_answer": "monolithic_rewrite step=92 skill=unit_conversion accuracy=0.78 context_tokens=8594 retrieved=3 generated=1",
+  "structured_response": {
+    "accuracy": 0.78,
+    "context_token_count": 8594,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "unit_conversion-062",
+      "unit_conversion-072",
+      "unit_conversion-082"
+    ],
+    "generated_experience_ids": [
+      "unit_conversion-092"
+    ]
+  },
+  "validation": {
+    "score": 0.78,
+    "success": true,
+    "threshold": 0.72,
+    "missing": []
+  },
+  "success": true,
+  "metrics": {
+    "turns": 3.75,
+    "runtime": 0.12,
+    "execution_success": true,
+    "result_correctness": 0.78,
+    "context_token_count": 8594,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 31,
+    "compression_event": ""
+  }
+}

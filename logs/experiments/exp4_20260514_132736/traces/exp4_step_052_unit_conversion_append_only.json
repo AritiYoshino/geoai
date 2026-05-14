@@ -1,0 +1,86 @@
+{
+  "task_id": "exp4_step_052_unit_conversion",
+  "agent_type": "append_only",
+  "strategy": "append_only",
+  "adaptation_step": 52,
+  "query": "Step 52: 处理 容量 中的单位换算和阈值判断，保留前序换算规则。",
+  "category": "quantitative_reasoning",
+  "expected_skill": "unit_conversion",
+  "novelty": "transfer",
+  "expected_tools": [
+    "reasoning",
+    "calculator"
+  ],
+  "selected_tools": [
+    "reasoning"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 52
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "unit_conversion-002"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "unit_conversion-052"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 16739
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [
+    "context_stability_miss:unit_conversion"
+  ],
+  "error_signature": [
+    "unit_conversion"
+  ],
+  "critic_diagnosis": "unit_conversion evidence missing after context update",
+  "generated_experience": "unit_conversion-052",
+  "retrieved_experiences": [
+    "unit_conversion-002"
+  ],
+  "final_answer": "append_only step=52 skill=unit_conversion accuracy=0.609 context_tokens=16739 retrieved=1 generated=1",
+  "structured_response": {
+    "accuracy": 0.609,
+    "context_token_count": 16739,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "unit_conversion-002"
+    ],
+    "generated_experience_ids": [
+      "unit_conversion-052"
+    ]
+  },
+  "validation": {
+    "score": 0.609,
+    "success": false,
+    "threshold": 0.72,
+    "missing": [
+      "unit_conversion"
+    ]
+  },
+  "success": false,
+  "metrics": {
+    "turns": 3.2,
+    "runtime": 0.12,
+    "execution_success": false,
+    "result_correctness": 0.609,
+    "context_token_count": 16739,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 59,
+    "compression_event": ""
+  }
+}

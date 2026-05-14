@@ -1,0 +1,85 @@
+{
+  "task_id": "exp4_step_093_empty_result_recovery",
+  "agent_type": "dynamic_cheatsheet",
+  "strategy": "dynamic_cheatsheet",
+  "adaptation_step": 93,
+  "query": "Step 93: 精确搜索“24小时儿童急诊药房”；若结果为空，逐级放宽关键词并说明回退策略。",
+  "category": "poi_search",
+  "expected_skill": "empty_result_recovery",
+  "novelty": "retention_retest",
+  "expected_tools": [
+    "search_poi",
+    "fallback_search"
+  ],
+  "selected_tools": [
+    "search_poi",
+    "fallback_search"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 93
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "empty_result_recovery-083"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "empty_result_recovery-093"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 11556
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "empty_result_recovery-093",
+  "retrieved_experiences": [
+    "empty_result_recovery-083"
+  ],
+  "final_answer": "dynamic_cheatsheet step=93 skill=empty_result_recovery accuracy=0.92 context_tokens=11556 retrieved=1 generated=1",
+  "structured_response": {
+    "accuracy": 0.92,
+    "context_token_count": 11556,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "empty_result_recovery-083"
+    ],
+    "generated_experience_ids": [
+      "empty_result_recovery-093"
+    ]
+  },
+  "validation": {
+    "score": 0.92,
+    "success": true,
+    "threshold": 0.72,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "accuracy": 0.92
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 3.35,
+    "runtime": 0.12,
+    "execution_success": true,
+    "result_correctness": 0.92,
+    "context_token_count": 11556,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 11,
+    "compression_event": ""
+  }
+}

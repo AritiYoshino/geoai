@@ -1,0 +1,85 @@
+{
+  "task_id": "exp4_step_094_code_debugging",
+  "agent_type": "append_only",
+  "strategy": "append_only",
+  "adaptation_step": 94,
+  "query": "Step 94: 修复 SQL 代码中的运行错误，并把错误模式沉淀为可复用经验。",
+  "category": "code_reasoning",
+  "expected_skill": "code_debugging",
+  "novelty": "retention_retest",
+  "expected_tools": [
+    "code_execution",
+    "critic"
+  ],
+  "selected_tools": [
+    "code_execution",
+    "critic"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 94
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "code_debugging-004"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "code_debugging-094"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 11765
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "code_debugging-094",
+  "retrieved_experiences": [
+    "code_debugging-004"
+  ],
+  "final_answer": "append_only step=94 skill=code_debugging accuracy=0.77 context_tokens=11765 retrieved=1 generated=1",
+  "structured_response": {
+    "accuracy": 0.77,
+    "context_token_count": 11765,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "code_debugging-004"
+    ],
+    "generated_experience_ids": [
+      "code_debugging-094"
+    ]
+  },
+  "validation": {
+    "score": 0.77,
+    "success": true,
+    "threshold": 0.72,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "accuracy": 0.77
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 3.55,
+    "runtime": 0.12,
+    "execution_success": true,
+    "result_correctness": 0.77,
+    "context_token_count": 11765,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 107,
+    "compression_event": ""
+  }
+}

@@ -1,0 +1,84 @@
+{
+  "task_id": "exp4_step_083_empty_result_recovery",
+  "agent_type": "monolithic_rewrite",
+  "strategy": "monolithic_rewrite",
+  "adaptation_step": 83,
+  "query": "Step 83: 检索 政策条款 时若精确匹配为空，逐步放宽条件并解释回退策略。",
+  "category": "retrieval_reasoning",
+  "expected_skill": "empty_result_recovery",
+  "novelty": "retention_retest",
+  "expected_tools": [
+    "retrieval",
+    "reasoning"
+  ],
+  "selected_tools": [
+    "retrieval",
+    "reasoning"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 83
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "empty_result_recovery-063",
+        "empty_result_recovery-073"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "empty_result_recovery-083"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 5948
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "empty_result_recovery-083",
+  "retrieved_experiences": [
+    "empty_result_recovery-063",
+    "empty_result_recovery-073"
+  ],
+  "final_answer": "monolithic_rewrite step=83 skill=empty_result_recovery accuracy=0.78 context_tokens=5948 retrieved=2 generated=1",
+  "structured_response": {
+    "accuracy": 0.78,
+    "context_token_count": 5948,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "empty_result_recovery-063",
+      "empty_result_recovery-073"
+    ],
+    "generated_experience_ids": [
+      "empty_result_recovery-083"
+    ]
+  },
+  "validation": {
+    "score": 0.78,
+    "success": true,
+    "threshold": 0.72,
+    "missing": []
+  },
+  "success": true,
+  "metrics": {
+    "turns": 3.75,
+    "runtime": 0.12,
+    "execution_success": true,
+    "result_correctness": 0.78,
+    "context_token_count": 5948,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 22,
+    "compression_event": ""
+  }
+}

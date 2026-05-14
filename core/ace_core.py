@@ -19,11 +19,12 @@ TASK_KEYWORDS = {
         "聚类分析可以怎么用",
     ],
     "nearby": ["附近", "周边", "距离", "km", "公里", "米", "缓冲", "near"],
-    "query": ["筛选", "查询", "属于", "类型", "行政区", "district", "type", "where"],
+    "query": ["筛选", "查询", "属于", "类型", "行政区", "district", "type", "where", "统计", "排序"],
     "search": ["搜索", "查找", "找", "包含", "名字", "名称", "search"],
     "mapping": ["地图", "高亮", "显示", "制图", "可视化"],
     "overlay": ["叠加", "相交", "覆盖", "裁剪", "overlay", "intersect"],
     "clustering": ["聚类", "dbscan", "热点", "hotspot", "密度", "高密度"],
+    "export": ["导出", "下载", "保存", "geojson", "shp", "csv", "export", "download"],
 }
 
 

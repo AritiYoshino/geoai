@@ -1,0 +1,85 @@
+{
+  "task_id": "exp4_step_071_geo_schema_alignment",
+  "agent_type": "ace_grow_and_refine",
+  "strategy": "ace_grow_and_refine",
+  "adaptation_step": 71,
+  "query": "Step 71: 在 生活服务 图层中查询目标关键词，先核对可用字段，再返回结果表和高亮图层。",
+  "category": "attribute_query",
+  "expected_skill": "schema_following",
+  "novelty": "new_pattern",
+  "expected_tools": [
+    "query_poi_by_conditions",
+    "schema_check"
+  ],
+  "selected_tools": [
+    "query_poi_by_conditions",
+    "schema_check"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 71
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "schema_following-001"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "schema_following-071"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 9411
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "schema_following-071",
+  "retrieved_experiences": [
+    "schema_following-001"
+  ],
+  "final_answer": "ace_grow_and_refine step=71 skill=schema_following accuracy=0.97 context_tokens=9411 retrieved=1 generated=1",
+  "structured_response": {
+    "accuracy": 0.97,
+    "context_token_count": 9411,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "schema_following-001"
+    ],
+    "generated_experience_ids": [
+      "schema_following-071"
+    ]
+  },
+  "validation": {
+    "score": 0.97,
+    "success": true,
+    "threshold": 0.72,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "accuracy": 0.97
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 3.05,
+    "runtime": 0.12,
+    "execution_success": true,
+    "result_correctness": 0.97,
+    "context_token_count": 9411,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 10,
+    "compression_event": ""
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "task_id": "cs_t3_19",
+  "agent_type": "ace_grow_and_refine",
+  "query": "稳定性任务：叠加前检查几何类型，处理 医疗 与行政区",
+  "category": "overlay_analysis",
+  "expected_tools": [
+    "overlay_layers"
+  ],
+  "selected_tools": [
+    "overlay_layers"
+  ],
+  "execution_trace": [
+    {
+      "step": "intent",
+      "detail": "overlay_analysis"
+    },
+    {
+      "step": "tool_selection",
+      "detail": [
+        "overlay_layers"
+      ]
+    },
+    {
+      "step": "evaluation",
+      "detail": "failed"
+    }
+  ],
+  "errors": [
+    "rule_eval_failed:geometry_type"
+  ],
+  "error_signature": [
+    "geometry_type"
+  ],
+  "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+  "generated_experience": "exp:overlay_analysis:check schema/CRS/result before final answer",
+  "retrieved_experiences": [
+    "crs-check",
+    "field-name-check",
+    "empty-result-relax"
+  ],
+  "final_answer": "任务未完全满足预期，已记录失败原因。",
+  "success": false,
+  "metrics": {
+    "turns": 2.87,
+    "runtime": 1.218,
+    "execution_success": false,
+    "result_correctness": 0.5286,
+    "has_map_layer": true,
+    "has_table": true,
+    "result_count": 0,
+    "repair_attempted": true,
+    "repair_success": false,
+    "user_intervention_count": 0
+  }
+}

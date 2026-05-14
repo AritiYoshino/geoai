@@ -1,0 +1,81 @@
+{
+  "task_id": "exp4_step_038_format_control",
+  "agent_type": "ace_grow_and_refine",
+  "strategy": "ace_grow_and_refine",
+  "adaptation_step": 38,
+  "query": "Step 38: 将 用户画像 输出为指定 JSON/表格格式，避免字段遗漏。",
+  "category": "output_control",
+  "expected_skill": "format_control",
+  "novelty": "transfer",
+  "expected_tools": [
+    "reasoning",
+    "format_validator"
+  ],
+  "selected_tools": [
+    "reasoning",
+    "format_validator"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 38
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "format_control-008"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "format_control-038"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 5730
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "format_control-038",
+  "retrieved_experiences": [
+    "format_control-008"
+  ],
+  "final_answer": "ace_grow_and_refine step=38 skill=format_control accuracy=0.97 context_tokens=5730 retrieved=1 generated=1",
+  "structured_response": {
+    "accuracy": 0.97,
+    "context_token_count": 5730,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "format_control-008"
+    ],
+    "generated_experience_ids": [
+      "format_control-038"
+    ]
+  },
+  "validation": {
+    "score": 0.97,
+    "success": true,
+    "threshold": 0.72,
+    "missing": []
+  },
+  "success": true,
+  "metrics": {
+    "turns": 2.7,
+    "runtime": 0.12,
+    "execution_success": true,
+    "result_correctness": 0.97,
+    "context_token_count": 5730,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 10,
+    "compression_event": ""
+  }
+}

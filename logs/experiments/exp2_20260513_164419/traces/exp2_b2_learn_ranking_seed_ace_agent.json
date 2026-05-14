@@ -1,0 +1,126 @@
+{
+  "task_id": "exp2_b2_learn_ranking_seed",
+  "batch_id": 2,
+  "agent_type": "ace_agent",
+  "query": "学习多指标排名经验：综合医疗 POI 数量和面积归一化得分，输出 Top 5 行政区。",
+  "category": "ranking",
+  "expected_tools": [
+    "execute_spatial_code"
+  ],
+  "selected_tools": [
+    "execute_spatial_code"
+  ],
+  "execution_trace": [
+    {
+      "step": "agent_mode",
+      "detail": "ace_agent"
+    },
+    {
+      "step": "tool_selection",
+      "detail": [
+        "execute_spatial_code"
+      ]
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": []
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "exp2-multi-criteria"
+      ]
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "critic_to_evolution",
+  "generated_experience": "exp2-multi-criteria",
+  "retrieved_experiences": [],
+  "final_answer": "学习多指标排名经验：综合医疗 POI 数量和面积归一化得分，输出 Top 5 行政区。 tool_flow_completed learn exp2-multi-criteria rank score weight learn ranking normalize",
+  "structured_response": {
+    "answer": "学习多指标排名经验：综合医疗 POI 数量和面积归一化得分，输出 Top 5 行政区。 tool_flow_completed learn exp2-multi-criteria rank score weight learn ranking normalize",
+    "selected_tools": [
+      "execute_spatial_code"
+    ],
+    "output_types": [
+      "table",
+      "map_layer",
+      "diagnosis"
+    ],
+    "entities": [
+      "rank",
+      "score",
+      "weight"
+    ],
+    "keywords": [
+      "learn",
+      "ranking",
+      "normalize"
+    ],
+    "result_count": 1,
+    "retrieved_experience_ids": [],
+    "generated_experience_ids": [
+      "exp2-multi-criteria"
+    ],
+    "experience_retrieved": false,
+    "experience_added": true,
+    "memory_used": false,
+    "code_executed": true,
+    "trace_events": [
+      {
+        "step": "agent_mode",
+        "detail": "ace_agent"
+      },
+      {
+        "step": "tool_selection",
+        "detail": [
+          "execute_spatial_code"
+        ]
+      },
+      {
+        "step": "experience_retrieval",
+        "detail": []
+      },
+      {
+        "step": "experience_update",
+        "detail": [
+          "exp2-multi-criteria"
+        ]
+      }
+    ],
+    "diagnosis": "critic_to_evolution"
+  },
+  "validation": {
+    "score": 1.0,
+    "success": true,
+    "threshold": 0.86,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "outputs": 1.0,
+      "entities": 1.0,
+      "keywords": 1.0,
+      "result_count": 1.0,
+      "experience_added": 1.0,
+      "code_executed": 1.0
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 3.76,
+    "runtime": 0.16,
+    "execution_success": true,
+    "result_correctness": 1.0,
+    "has_map_layer": true,
+    "has_table": true,
+    "result_count": 1,
+    "experience_retrieved": false,
+    "experience_added": true,
+    "memory_used": false,
+    "code_executed": true,
+    "repair_attempted": false,
+    "repair_success": false,
+    "user_intervention_count": 0
+  }
+}

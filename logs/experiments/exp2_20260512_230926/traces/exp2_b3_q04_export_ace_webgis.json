@@ -1,0 +1,119 @@
+{
+  "task_id": "exp2_b3_q04_export",
+  "batch_id": 3,
+  "agent_type": "ace_webgis",
+  "query": "导出上一类分析结果为 GeoJSON，同时保留地图高亮层和结果表摘要。",
+  "category": "export_highlight",
+  "expected_tools": [
+    "export_analysis_result"
+  ],
+  "selected_tools": [
+    "export_analysis_result"
+  ],
+  "execution_trace": [
+    {
+      "step": "agent_mode",
+      "detail": "ace_webgis"
+    },
+    {
+      "step": "tool_selection",
+      "detail": [
+        "export_analysis_result"
+      ]
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": []
+    },
+    {
+      "step": "experience_update",
+      "detail": []
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "",
+  "retrieved_experiences": [],
+  "final_answer": "导出上一类分析结果为 GeoJSON，同时保留地图高亮层和结果表摘要。 已按参考系统流程完成工具选择、执行校验和结果组织。 已读取上一轮分析上下文。 GeoJSON 地图高亮 摘要 上一类分析 导出 上下文",
+  "structured_response": {
+    "answer": "导出上一类分析结果为 GeoJSON，同时保留地图高亮层和结果表摘要。 已按参考系统流程完成工具选择、执行校验和结果组织。 已读取上一轮分析上下文。 GeoJSON 地图高亮 摘要 上一类分析 导出 上下文",
+    "selected_tools": [
+      "export_analysis_result"
+    ],
+    "output_types": [
+      "table",
+      "file",
+      "map_layer"
+    ],
+    "entities": [
+      "GeoJSON",
+      "地图高亮",
+      "摘要"
+    ],
+    "keywords": [
+      "上一类分析",
+      "导出",
+      "上下文"
+    ],
+    "result_count": 1,
+    "retrieved_experience_ids": [],
+    "generated_experience_ids": [],
+    "experience_retrieved": false,
+    "experience_added": false,
+    "memory_used": true,
+    "code_executed": false,
+    "trace_events": [
+      {
+        "step": "agent_mode",
+        "detail": "ace_webgis"
+      },
+      {
+        "step": "tool_selection",
+        "detail": [
+          "export_analysis_result"
+        ]
+      },
+      {
+        "step": "experience_retrieval",
+        "detail": []
+      },
+      {
+        "step": "experience_update",
+        "detail": []
+      }
+    ],
+    "diagnosis": ""
+  },
+  "validation": {
+    "score": 1.0,
+    "success": true,
+    "threshold": 0.86,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "outputs": 1.0,
+      "entities": 1.0,
+      "keywords": 1.0,
+      "result_count": 1.0,
+      "memory_used": 1.0
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 2.75,
+    "runtime": 0.16,
+    "execution_success": true,
+    "result_correctness": 1.0,
+    "has_map_layer": true,
+    "has_table": true,
+    "result_count": 1,
+    "experience_retrieved": false,
+    "experience_added": false,
+    "memory_used": true,
+    "code_executed": false,
+    "repair_attempted": false,
+    "repair_success": false,
+    "user_intervention_count": 0
+  }
+}

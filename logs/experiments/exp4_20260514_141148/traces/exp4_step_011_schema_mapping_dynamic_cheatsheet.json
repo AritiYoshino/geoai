@@ -1,0 +1,85 @@
+{
+  "task_id": "exp4_step_011_schema_mapping",
+  "agent_type": "dynamic_cheatsheet",
+  "strategy": "dynamic_cheatsheet",
+  "adaptation_step": 11,
+  "query": "Step 11: 根据不同表格字段别名完成 schema 对齐任务，领域变体为 订单表。",
+  "category": "structured_reasoning",
+  "expected_skill": "schema_mapping",
+  "novelty": "warmup",
+  "expected_tools": [
+    "reasoning",
+    "schema_check"
+  ],
+  "selected_tools": [
+    "reasoning",
+    "schema_check"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 11
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "schema_mapping-001"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "schema_mapping-011"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 2387
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "schema_mapping-011",
+  "retrieved_experiences": [
+    "schema_mapping-001"
+  ],
+  "final_answer": "dynamic_cheatsheet step=11 skill=schema_mapping accuracy=0.784 context_tokens=2387 retrieved=1 generated=1",
+  "structured_response": {
+    "accuracy": 0.784,
+    "context_token_count": 2387,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "schema_mapping-001"
+    ],
+    "generated_experience_ids": [
+      "schema_mapping-011"
+    ]
+  },
+  "validation": {
+    "score": 0.784,
+    "success": true,
+    "threshold": 0.72,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "accuracy": 0.784
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 3.0,
+    "runtime": 0.12,
+    "execution_success": true,
+    "result_correctness": 0.784,
+    "context_token_count": 2387,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 10,
+    "compression_event": ""
+  }
+}

@@ -119,6 +119,12 @@ class AIHandler:
     def _store_generated_result(self, name, gdf):
         self._last_generated_result = {"name": name, "gdf": gdf}
 
+    def consume_last_export(self):
+        export = getattr(self, "_last_export", None)
+        if hasattr(self, "_last_export"):
+            delattr(self, "_last_export")
+        return export
+
     def process_message(self, user_input, highlight_callback):
         preference_note, should_continue = self._apply_preference_message(user_input)
         feedback_note, task_input = self._handle_inline_feedback(user_input)

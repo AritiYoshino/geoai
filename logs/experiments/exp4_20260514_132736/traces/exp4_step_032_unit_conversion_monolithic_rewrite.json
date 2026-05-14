@@ -1,0 +1,92 @@
+{
+  "task_id": "exp4_step_032_unit_conversion",
+  "agent_type": "monolithic_rewrite",
+  "strategy": "monolithic_rewrite",
+  "adaptation_step": 32,
+  "query": "Step 32: 处理 容量 中的单位换算和阈值判断，保留前序换算规则。",
+  "category": "quantitative_reasoning",
+  "expected_skill": "unit_conversion",
+  "novelty": "transfer",
+  "expected_tools": [
+    "reasoning",
+    "calculator"
+  ],
+  "selected_tools": [
+    "reasoning"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 32
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "unit_conversion-002",
+        "unit_conversion-012",
+        "unit_conversion-022"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "unit_conversion-032"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 10354
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [
+    "context_stability_miss:unit_conversion"
+  ],
+  "error_signature": [
+    "unit_conversion"
+  ],
+  "critic_diagnosis": "unit_conversion evidence missing after context update",
+  "generated_experience": "unit_conversion-032",
+  "retrieved_experiences": [
+    "unit_conversion-002",
+    "unit_conversion-012",
+    "unit_conversion-022"
+  ],
+  "final_answer": "monolithic_rewrite step=32 skill=unit_conversion accuracy=0.697 context_tokens=10354 retrieved=3 generated=1",
+  "structured_response": {
+    "accuracy": 0.697,
+    "context_token_count": 10354,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "unit_conversion-002",
+      "unit_conversion-012",
+      "unit_conversion-022"
+    ],
+    "generated_experience_ids": [
+      "unit_conversion-032"
+    ]
+  },
+  "validation": {
+    "score": 0.697,
+    "success": false,
+    "threshold": 0.72,
+    "missing": [
+      "unit_conversion"
+    ]
+  },
+  "success": false,
+  "metrics": {
+    "turns": 3.4,
+    "runtime": 0.12,
+    "execution_success": false,
+    "result_correctness": 0.697,
+    "context_token_count": 10354,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 32,
+    "compression_event": ""
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "task_id": "ab_008_t8_03",
+  "agent_type": "without_experience_retrieval",
+  "query": "为公司 POI 生成热点分析，要求完整覆盖成都行政区",
+  "category": "hotspot",
+  "expected_tools": [
+    "hotspot_analysis"
+  ],
+  "selected_tools": [
+    "hotspot_analysis"
+  ],
+  "execution_trace": [
+    {
+      "step": "intent",
+      "detail": "hotspot"
+    },
+    {
+      "step": "tool_selection",
+      "detail": [
+        "hotspot_analysis"
+      ]
+    },
+    {
+      "step": "evaluation",
+      "detail": "success"
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "",
+  "retrieved_experiences": [],
+  "final_answer": "任务完成，已生成可评估结果。",
+  "success": true,
+  "metrics": {
+    "turns": 3.57,
+    "runtime": 0.959,
+    "execution_success": true,
+    "result_correctness": 1.0,
+    "has_map_layer": true,
+    "has_table": true,
+    "result_count": 1,
+    "repair_attempted": false,
+    "repair_success": false,
+    "user_intervention_count": 0
+  }
+}

@@ -1,0 +1,126 @@
+{
+  "task_id": "exp4_q07_transfer_empty",
+  "agent_type": "monolithic_rewrite",
+  "strategy": "monolithic_rewrite",
+  "query": "复用空结果恢复经验：搜索“成都第七中学高新校区正门”，为空时放宽为“七中”“学校”。",
+  "category": "poi_search",
+  "stage": "mid_transfer",
+  "expected_tools": [
+    "search_poi"
+  ],
+  "selected_tools": [
+    "search_poi"
+  ],
+  "execution_trace": [
+    {
+      "step": "strategy",
+      "detail": "monolithic_rewrite"
+    },
+    {
+      "step": "tool_selection",
+      "detail": [
+        "search_poi"
+      ]
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "exp4-empty-result-relax"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": []
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "",
+  "retrieved_experiences": [
+    "exp4-empty-result-relax"
+  ],
+  "final_answer": "复用空结果恢复经验：搜索“成都第七中学高新校区正门”，为空时放宽为“七中”“学校”。 monolithic_rewrite exp4-empty-result-relax 七中 学校 空结果 关键词 经验 放宽 重试 搜索",
+  "structured_response": {
+    "answer": "复用空结果恢复经验：搜索“成都第七中学高新校区正门”，为空时放宽为“七中”“学校”。 monolithic_rewrite exp4-empty-result-relax 七中 学校 空结果 关键词 经验 放宽 重试 搜索",
+    "selected_tools": [
+      "search_poi"
+    ],
+    "output_types": [
+      "map_layer",
+      "table",
+      "explanation"
+    ],
+    "entities": [
+      "七中",
+      "学校",
+      "空结果",
+      "关键词"
+    ],
+    "keywords": [
+      "经验",
+      "放宽",
+      "重试",
+      "搜索"
+    ],
+    "result_count": 1,
+    "retrieved_experience_ids": [
+      "exp4-empty-result-relax"
+    ],
+    "generated_experience_ids": [],
+    "experience_retrieved": true,
+    "experience_added": false,
+    "code_executed": false,
+    "diagnosis": "",
+    "trace_events": [
+      {
+        "step": "strategy",
+        "detail": "monolithic_rewrite"
+      },
+      {
+        "step": "tool_selection",
+        "detail": [
+          "search_poi"
+        ]
+      },
+      {
+        "step": "experience_retrieval",
+        "detail": [
+          "exp4-empty-result-relax"
+        ]
+      },
+      {
+        "step": "experience_update",
+        "detail": []
+      }
+    ]
+  },
+  "validation": {
+    "score": 1.0,
+    "success": true,
+    "threshold": 0.84,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "outputs": 1.0,
+      "entities": 1.0,
+      "keywords": 1.0,
+      "result_count": 1.0,
+      "experience_retrieved": 1.0
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 3.75,
+    "runtime": 0.125,
+    "execution_success": true,
+    "result_correctness": 1.0,
+    "has_map_layer": true,
+    "has_table": true,
+    "result_count": 1,
+    "experience_retrieved": true,
+    "experience_added": false,
+    "code_executed": false,
+    "library_size": 4
+  }
+}

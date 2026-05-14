@@ -1,0 +1,88 @@
+{
+  "task_id": "exp4_step_090_visualization_spec",
+  "agent_type": "monolithic_rewrite",
+  "strategy": "monolithic_rewrite",
+  "adaptation_step": 90,
+  "query": "Step 90: 为 成本趋势 选择合适图表并保持坐标轴、图例和单位说明一致。",
+  "category": "visualization",
+  "expected_skill": "visualization_spec",
+  "novelty": "retention_retest",
+  "expected_tools": [
+    "reasoning",
+    "chart_spec"
+  ],
+  "selected_tools": [
+    "reasoning",
+    "chart_spec"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 90
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "visualization_spec-070",
+        "visualization_spec-080"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "visualization_spec-090"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 8020
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "visualization_spec-090",
+  "retrieved_experiences": [
+    "visualization_spec-070",
+    "visualization_spec-080"
+  ],
+  "final_answer": "monolithic_rewrite step=90 skill=visualization_spec accuracy=0.78 context_tokens=8020 retrieved=2 generated=1",
+  "structured_response": {
+    "accuracy": 0.78,
+    "context_token_count": 8020,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "visualization_spec-070",
+      "visualization_spec-080"
+    ],
+    "generated_experience_ids": [
+      "visualization_spec-090"
+    ]
+  },
+  "validation": {
+    "score": 0.78,
+    "success": true,
+    "threshold": 0.72,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "accuracy": 0.78
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 3.75,
+    "runtime": 0.12,
+    "execution_success": true,
+    "result_correctness": 0.78,
+    "context_token_count": 8020,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 29,
+    "compression_event": ""
+  }
+}

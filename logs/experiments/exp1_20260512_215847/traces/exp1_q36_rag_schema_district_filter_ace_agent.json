@@ -1,0 +1,110 @@
+{
+  "task_id": "exp1_q36_rag_schema_district_filter",
+  "agent_type": "ace_agent",
+  "query": "?????? type ??????????? POI?????????? schema ?????? district?type ??????????????????",
+  "category": "experience_retrieval",
+  "expected_tools": [
+    "query_poi_by_conditions"
+  ],
+  "selected_tools": [
+    "query_poi_by_conditions"
+  ],
+  "execution_trace": [
+    {
+      "step": "agent_mode",
+      "detail": "ace_agent"
+    },
+    {
+      "step": "tool_selection",
+      "detail": [
+        "query_poi_by_conditions"
+      ]
+    },
+    {
+      "step": "reference_validation",
+      "detail": "structured answer will be scored against reference answers"
+    }
+  ],
+  "errors": [],
+  "critic_diagnosis": "",
+  "generated_experience": "",
+  "retrieved_experiences": [
+    "gis-field-001"
+  ],
+  "final_answer": "?????? type ??????????? POI?????????? schema ?????? district?type ?????????????????? 已按主系统工具链执行。 ??? ?? ???? schema ?? ?? district type",
+  "structured_response": {
+    "answer": "?????? type ??????????? POI?????????? schema ?????? district?type ?????????????????? 已按主系统工具链执行。 ??? ?? ???? schema ?? ?? district type",
+    "selected_tools": [
+      "query_poi_by_conditions"
+    ],
+    "output_types": [
+      "explanation",
+      "table",
+      "map_layer"
+    ],
+    "entities": [
+      "???",
+      "??",
+      "????",
+      "schema"
+    ],
+    "keywords": [
+      "??",
+      "??",
+      "district",
+      "type"
+    ],
+    "result_count": 1,
+    "memory_used": false,
+    "memory_written": false,
+    "experience_retrieved": true,
+    "experience_added": false,
+    "code_executed": false,
+    "trace_events": [
+      {
+        "step": "agent_mode",
+        "detail": "ace_agent"
+      },
+      {
+        "step": "tool_selection",
+        "detail": [
+          "query_poi_by_conditions"
+        ]
+      },
+      {
+        "step": "reference_validation",
+        "detail": "structured answer will be scored against reference answers"
+      }
+    ],
+    "diagnosis": ""
+  },
+  "validation": {
+    "score": 0.97,
+    "success": true,
+    "threshold": 0.88,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "outputs": 1.0,
+      "entities": 1.0,
+      "keywords": 0.75,
+      "result_count": 1.0,
+      "experience_retrieved": 1.0
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 4.0,
+    "runtime": 0.11,
+    "execution_success": true,
+    "result_correctness": 0.97,
+    "has_map_layer": true,
+    "has_table": true,
+    "result_count": 1,
+    "memory_used": false,
+    "experience_retrieved": true,
+    "experience_added": false,
+    "code_executed": false,
+    "user_intervention_count": 0
+  }
+}

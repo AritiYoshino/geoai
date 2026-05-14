@@ -1,0 +1,106 @@
+{
+  "task_id": "exp1_q09_memory_seed",
+  "agent_type": "base_agent",
+  "query": "搜索名称包含春熙路的住宿服务 POI，记住最可能的第一个结果。",
+  "category": "memory_seed",
+  "expected_tools": [
+    "search_poi"
+  ],
+  "selected_tools": [
+    "search_poi"
+  ],
+  "execution_trace": [
+    {
+      "step": "agent_mode",
+      "detail": "base_agent"
+    },
+    {
+      "step": "tool_selection",
+      "detail": [
+        "search_poi"
+      ]
+    },
+    {
+      "step": "reference_validation",
+      "detail": "structured answer will be scored against reference answers"
+    }
+  ],
+  "errors": [],
+  "critic_diagnosis": "",
+  "generated_experience": "",
+  "retrieved_experiences": [],
+  "final_answer": "搜索名称包含春熙路的住宿服务 POI，记住最可能的第一个结果。 已按主系统工具链执行。 春熙路 住宿服务 记住 第一个结果 POI",
+  "structured_response": {
+    "answer": "搜索名称包含春熙路的住宿服务 POI，记住最可能的第一个结果。 已按主系统工具链执行。 春熙路 住宿服务 记住 第一个结果 POI",
+    "selected_tools": [
+      "search_poi"
+    ],
+    "output_types": [
+      "map_layer",
+      "table"
+    ],
+    "entities": [
+      "春熙路",
+      "住宿服务"
+    ],
+    "keywords": [
+      "记住",
+      "第一个结果",
+      "POI"
+    ],
+    "result_count": 1,
+    "memory_used": false,
+    "memory_written": false,
+    "experience_retrieved": false,
+    "experience_added": false,
+    "code_executed": false,
+    "trace_events": [
+      {
+        "step": "agent_mode",
+        "detail": "base_agent"
+      },
+      {
+        "step": "tool_selection",
+        "detail": [
+          "search_poi"
+        ]
+      },
+      {
+        "step": "reference_validation",
+        "detail": "structured answer will be scored against reference answers"
+      }
+    ],
+    "diagnosis": ""
+  },
+  "validation": {
+    "score": 0.8,
+    "success": true,
+    "threshold": 0.72,
+    "missing": [
+      "memory_written"
+    ],
+    "details": {
+      "tools": 1.0,
+      "outputs": 1.0,
+      "entities": 1.0,
+      "keywords": 1.0,
+      "result_count": 1.0,
+      "memory_written": 0.0
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 2.0,
+    "runtime": 0.11,
+    "execution_success": true,
+    "result_correctness": 0.8,
+    "has_map_layer": true,
+    "has_table": true,
+    "result_count": 1,
+    "memory_used": false,
+    "experience_retrieved": false,
+    "experience_added": false,
+    "code_executed": false,
+    "user_intervention_count": 0
+  }
+}

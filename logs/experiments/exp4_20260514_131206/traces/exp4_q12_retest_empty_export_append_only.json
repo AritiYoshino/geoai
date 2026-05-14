@@ -1,0 +1,131 @@
+{
+  "task_id": "exp4_q12_retest_empty_export",
+  "agent_type": "append_only",
+  "strategy": "append_only",
+  "query": "早期经验回测：搜索精确名称为空时放宽关键词，并导出结果前检查 CRS、geometry 和字段命名。",
+  "category": "export_highlight",
+  "stage": "final_retest",
+  "expected_tools": [
+    "search_poi",
+    "export_analysis_result"
+  ],
+  "selected_tools": [
+    "search_poi",
+    "export_analysis_result"
+  ],
+  "execution_trace": [
+    {
+      "step": "strategy",
+      "detail": "append_only"
+    },
+    {
+      "step": "tool_selection",
+      "detail": [
+        "search_poi",
+        "export_analysis_result"
+      ]
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "exp4-export-metadata"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": []
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "",
+  "retrieved_experiences": [
+    "exp4-export-metadata"
+  ],
+  "final_answer": "早期经验回测：搜索精确名称为空时放宽关键词，并导出结果前检查 CRS、geometry 和字段命名。 append_only exp4-export-metadata 空结果 关键词 CRS geometry 经验 放宽 导出 元数据",
+  "structured_response": {
+    "answer": "早期经验回测：搜索精确名称为空时放宽关键词，并导出结果前检查 CRS、geometry 和字段命名。 append_only exp4-export-metadata 空结果 关键词 CRS geometry 经验 放宽 导出 元数据",
+    "selected_tools": [
+      "search_poi",
+      "export_analysis_result"
+    ],
+    "output_types": [
+      "map_layer",
+      "table",
+      "explanation"
+    ],
+    "entities": [
+      "空结果",
+      "关键词",
+      "CRS",
+      "geometry"
+    ],
+    "keywords": [
+      "经验",
+      "放宽",
+      "导出",
+      "元数据"
+    ],
+    "result_count": 1,
+    "retrieved_experience_ids": [
+      "exp4-export-metadata"
+    ],
+    "generated_experience_ids": [],
+    "experience_retrieved": true,
+    "experience_added": false,
+    "code_executed": false,
+    "diagnosis": "",
+    "trace_events": [
+      {
+        "step": "strategy",
+        "detail": "append_only"
+      },
+      {
+        "step": "tool_selection",
+        "detail": [
+          "search_poi",
+          "export_analysis_result"
+        ]
+      },
+      {
+        "step": "experience_retrieval",
+        "detail": [
+          "exp4-export-metadata"
+        ]
+      },
+      {
+        "step": "experience_update",
+        "detail": []
+      }
+    ]
+  },
+  "validation": {
+    "score": 0.89,
+    "success": true,
+    "threshold": 0.84,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "outputs": 1.0,
+      "entities": 1.0,
+      "keywords": 1.0,
+      "result_count": 1.0,
+      "experience_retrieved": 0.5
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 3.45,
+    "runtime": 0.16,
+    "execution_success": true,
+    "result_correctness": 0.89,
+    "has_map_layer": true,
+    "has_table": true,
+    "result_count": 1,
+    "experience_retrieved": true,
+    "experience_added": false,
+    "code_executed": false,
+    "library_size": 8
+  }
+}

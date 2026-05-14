@@ -1,0 +1,88 @@
+{
+  "task_id": "exp4_step_089_context_anchor_tracking",
+  "agent_type": "monolithic_rewrite",
+  "strategy": "monolithic_rewrite",
+  "adaptation_step": 89,
+  "query": "Step 89: 使用当前上下文中的 spring_hotel 作为中心点，查找 1 公里范围内指定 POI，并解释锚点来源。",
+  "category": "memory_followup",
+  "expected_skill": "context_reference",
+  "novelty": "retention_retest",
+  "expected_tools": [
+    "find_nearby_point",
+    "context_check"
+  ],
+  "selected_tools": [
+    "find_nearby_point",
+    "context_check"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 89
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "context_reference-069",
+        "context_reference-079"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "context_reference-089"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 7760
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "context_reference-089",
+  "retrieved_experiences": [
+    "context_reference-069",
+    "context_reference-079"
+  ],
+  "final_answer": "monolithic_rewrite step=89 skill=context_reference accuracy=0.78 context_tokens=7760 retrieved=2 generated=1",
+  "structured_response": {
+    "accuracy": 0.78,
+    "context_token_count": 7760,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "context_reference-069",
+      "context_reference-079"
+    ],
+    "generated_experience_ids": [
+      "context_reference-089"
+    ]
+  },
+  "validation": {
+    "score": 0.78,
+    "success": true,
+    "threshold": 0.72,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "accuracy": 0.78
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 3.75,
+    "runtime": 0.12,
+    "execution_success": true,
+    "result_correctness": 0.78,
+    "context_token_count": 7760,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 28,
+    "compression_event": ""
+  }
+}

@@ -1,0 +1,85 @@
+{
+  "task_id": "exp4_step_074_code_debugging",
+  "agent_type": "dynamic_cheatsheet",
+  "strategy": "dynamic_cheatsheet",
+  "adaptation_step": 74,
+  "query": "Step 74: 修复 SQL 代码中的运行错误，并把错误模式沉淀为可复用经验。",
+  "category": "code_reasoning",
+  "expected_skill": "code_debugging",
+  "novelty": "new_pattern",
+  "expected_tools": [
+    "code_execution",
+    "critic"
+  ],
+  "selected_tools": [
+    "code_execution",
+    "critic"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 74
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "code_debugging-064"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "code_debugging-074"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 8135
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "code_debugging-074",
+  "retrieved_experiences": [
+    "code_debugging-064"
+  ],
+  "final_answer": "dynamic_cheatsheet step=74 skill=code_debugging accuracy=0.92 context_tokens=8135 retrieved=1 generated=1",
+  "structured_response": {
+    "accuracy": 0.92,
+    "context_token_count": 8135,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "code_debugging-064"
+    ],
+    "generated_experience_ids": [
+      "code_debugging-074"
+    ]
+  },
+  "validation": {
+    "score": 0.92,
+    "success": true,
+    "threshold": 0.72,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "accuracy": 0.92
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 3.35,
+    "runtime": 0.12,
+    "execution_success": true,
+    "result_correctness": 0.92,
+    "context_token_count": 8135,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 11,
+    "compression_event": ""
+  }
+}

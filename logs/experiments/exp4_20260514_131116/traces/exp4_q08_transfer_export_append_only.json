@@ -1,0 +1,125 @@
+{
+  "task_id": "exp4_q08_transfer_export",
+  "agent_type": "append_only",
+  "strategy": "append_only",
+  "query": "复用导出元数据经验：导出热点网格为 GeoJSON 前检查 CRS、geometry 和字段命名。",
+  "category": "export_highlight",
+  "stage": "mid_transfer",
+  "expected_tools": [
+    "export_analysis_result"
+  ],
+  "selected_tools": [
+    "export_analysis_result"
+  ],
+  "execution_trace": [
+    {
+      "step": "strategy",
+      "detail": "append_only"
+    },
+    {
+      "step": "tool_selection",
+      "detail": [
+        "export_analysis_result"
+      ]
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "exp4-export-metadata"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": []
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "",
+  "retrieved_experiences": [
+    "exp4-export-metadata"
+  ],
+  "final_answer": "复用导出元数据经验：导出热点网格为 GeoJSON 前检查 CRS、geometry 和字段命名。 append_only exp4-export-metadata GeoJSON CRS geometry 字段命名 经验 导出 元数据 检查",
+  "structured_response": {
+    "answer": "复用导出元数据经验：导出热点网格为 GeoJSON 前检查 CRS、geometry 和字段命名。 append_only exp4-export-metadata GeoJSON CRS geometry 字段命名 经验 导出 元数据 检查",
+    "selected_tools": [
+      "export_analysis_result"
+    ],
+    "output_types": [
+      "table",
+      "explanation"
+    ],
+    "entities": [
+      "GeoJSON",
+      "CRS",
+      "geometry",
+      "字段命名"
+    ],
+    "keywords": [
+      "经验",
+      "导出",
+      "元数据",
+      "检查"
+    ],
+    "result_count": 1,
+    "retrieved_experience_ids": [
+      "exp4-export-metadata"
+    ],
+    "generated_experience_ids": [],
+    "experience_retrieved": true,
+    "experience_added": false,
+    "code_executed": false,
+    "diagnosis": "",
+    "trace_events": [
+      {
+        "step": "strategy",
+        "detail": "append_only"
+      },
+      {
+        "step": "tool_selection",
+        "detail": [
+          "export_analysis_result"
+        ]
+      },
+      {
+        "step": "experience_retrieval",
+        "detail": [
+          "exp4-export-metadata"
+        ]
+      },
+      {
+        "step": "experience_update",
+        "detail": []
+      }
+    ]
+  },
+  "validation": {
+    "score": 1.0,
+    "success": true,
+    "threshold": 0.84,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "outputs": 1.0,
+      "entities": 1.0,
+      "keywords": 1.0,
+      "result_count": 1.0,
+      "experience_retrieved": 1.0
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 3.45,
+    "runtime": 0.125,
+    "execution_success": true,
+    "result_correctness": 1.0,
+    "has_map_layer": false,
+    "has_table": true,
+    "result_count": 1,
+    "experience_retrieved": true,
+    "experience_added": false,
+    "code_executed": false,
+    "library_size": 4
+  }
+}

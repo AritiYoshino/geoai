@@ -1,0 +1,88 @@
+{
+  "task_id": "exp4_step_061_geo_schema_alignment",
+  "agent_type": "monolithic_rewrite",
+  "strategy": "monolithic_rewrite",
+  "adaptation_step": 61,
+  "query": "Step 61: 在 餐饮 图层中查询目标关键词，先核对可用字段，再返回结果表和高亮图层。",
+  "category": "attribute_query",
+  "expected_skill": "schema_following",
+  "novelty": "new_pattern",
+  "expected_tools": [
+    "query_poi_by_conditions",
+    "schema_check"
+  ],
+  "selected_tools": [
+    "query_poi_by_conditions",
+    "schema_check"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 61
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "schema_following-041",
+        "schema_following-051"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "schema_following-061"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 6518
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "schema_following-061",
+  "retrieved_experiences": [
+    "schema_following-041",
+    "schema_following-051"
+  ],
+  "final_answer": "monolithic_rewrite step=61 skill=schema_following accuracy=0.766 context_tokens=6518 retrieved=2 generated=1",
+  "structured_response": {
+    "accuracy": 0.766,
+    "context_token_count": 6518,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "schema_following-041",
+      "schema_following-051"
+    ],
+    "generated_experience_ids": [
+      "schema_following-061"
+    ]
+  },
+  "validation": {
+    "score": 0.766,
+    "success": true,
+    "threshold": 0.72,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "accuracy": 0.766
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 3.75,
+    "runtime": 0.12,
+    "execution_success": true,
+    "result_correctness": 0.766,
+    "context_token_count": 6518,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 25,
+    "compression_event": ""
+  }
+}

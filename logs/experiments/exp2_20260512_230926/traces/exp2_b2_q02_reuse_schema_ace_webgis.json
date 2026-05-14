@@ -1,0 +1,125 @@
+{
+  "task_id": "exp2_b2_q02_reuse_schema",
+  "batch_id": 2,
+  "agent_type": "ace_webgis",
+  "query": "复用字段核对经验，按 district 汇总购物 POI 数量，若 district 字段缺失则先查找可替代区县字段。",
+  "category": "statistics",
+  "expected_tools": [
+    "summarize_layer_statistics"
+  ],
+  "selected_tools": [
+    "summarize_layer_statistics"
+  ],
+  "execution_trace": [
+    {
+      "step": "agent_mode",
+      "detail": "ace_webgis"
+    },
+    {
+      "step": "tool_selection",
+      "detail": [
+        "summarize_layer_statistics"
+      ]
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "exp2-schema-check"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": []
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "",
+  "retrieved_experiences": [
+    "exp2-schema-check"
+  ],
+  "final_answer": "复用字段核对经验，按 district 汇总购物 POI 数量，若 district 字段缺失则先查找可替代区县字段。 已按参考系统流程完成工具选择、执行校验和结果组织。 已复用经验：exp2-schema-check 购物 district 区县字段 字段核对 替代字段 复用",
+  "structured_response": {
+    "answer": "复用字段核对经验，按 district 汇总购物 POI 数量，若 district 字段缺失则先查找可替代区县字段。 已按参考系统流程完成工具选择、执行校验和结果组织。 已复用经验：exp2-schema-check 购物 district 区县字段 字段核对 替代字段 复用",
+    "selected_tools": [
+      "summarize_layer_statistics"
+    ],
+    "output_types": [
+      "table"
+    ],
+    "entities": [
+      "购物",
+      "district",
+      "区县字段"
+    ],
+    "keywords": [
+      "字段核对",
+      "替代字段",
+      "复用"
+    ],
+    "result_count": 1,
+    "retrieved_experience_ids": [
+      "exp2-schema-check"
+    ],
+    "generated_experience_ids": [],
+    "experience_retrieved": true,
+    "experience_added": false,
+    "memory_used": false,
+    "code_executed": false,
+    "trace_events": [
+      {
+        "step": "agent_mode",
+        "detail": "ace_webgis"
+      },
+      {
+        "step": "tool_selection",
+        "detail": [
+          "summarize_layer_statistics"
+        ]
+      },
+      {
+        "step": "experience_retrieval",
+        "detail": [
+          "exp2-schema-check"
+        ]
+      },
+      {
+        "step": "experience_update",
+        "detail": []
+      }
+    ],
+    "diagnosis": ""
+  },
+  "validation": {
+    "score": 1.0,
+    "success": true,
+    "threshold": 0.86,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "outputs": 1.0,
+      "entities": 1.0,
+      "keywords": 1.0,
+      "result_count": 1.0,
+      "experience_retrieved": 1.0
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 2.6,
+    "runtime": 0.16,
+    "execution_success": true,
+    "result_correctness": 1.0,
+    "has_map_layer": false,
+    "has_table": true,
+    "result_count": 1,
+    "experience_retrieved": true,
+    "experience_added": false,
+    "memory_used": false,
+    "code_executed": false,
+    "repair_attempted": false,
+    "repair_success": false,
+    "user_intervention_count": 0
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "repeat_multiplier": 3,
+  "tasks": [
+    {"id": "ab_001", "category": "nearby_analysis", "query": "距离分析前检查 CRS，找学校 500 米内餐饮点", "expected_tools": ["find_nearby"], "expected_outputs": {"has_map_layer": true, "has_table": true, "min_result_count": 1}, "difficulty": "hard", "failure_mode": "crs_distance"},
+    {"id": "ab_002", "category": "attribute_query", "query": "字段名不确定时先读取 schema，再查询 type/name/category 中包含火锅的餐饮点", "expected_tools": ["query_poi_by_conditions"], "expected_outputs": {"has_map_layer": true, "has_table": true, "min_result_count": 1}, "difficulty": "hard", "failure_mode": "field_name_mismatch"},
+    {"id": "ab_003", "category": "poi_search", "query": "图层选择有歧义时跨图层搜索名称包含银行的 POI", "expected_tools": ["search_poi"], "expected_outputs": {"has_map_layer": true, "has_table": true, "min_result_count": 1}, "difficulty": "medium", "failure_mode": "layer_ambiguity"},
+    {"id": "ab_004", "category": "overlay_analysis", "query": "叠加分析前检查几何类型，分析购物 POI 与行政区关系", "expected_tools": ["overlay_layers"], "expected_outputs": {"has_map_layer": true, "has_table": true, "min_result_count": 1}, "difficulty": "hard", "failure_mode": "geometry_type"},
+    {"id": "ab_005", "category": "spatial_join", "query": "空间连接前统一坐标系，统计每区医疗 POI 数量", "expected_tools": ["spatial_join_layers"], "expected_outputs": {"has_map_layer": true, "has_table": true, "min_result_count": 1}, "difficulty": "hard", "failure_mode": "sjoin_crs"},
+    {"id": "ab_006", "category": "code_required", "query": "用 GeoPandas 计算行政区餐饮密度，并按密度返回前 5 名", "expected_tools": ["execute_spatial_code"], "expected_outputs": {"has_map_layer": true, "has_table": true, "min_result_count": 1}, "difficulty": "hard", "failure_mode": "code_required"},
+    {"id": "ab_007", "category": "nearby_analysis", "query": "空结果时放宽条件，查询医院 300 米到 1000 米范围内住宿服务", "expected_tools": ["find_nearby"], "expected_outputs": {"has_map_layer": true, "has_table": true, "min_result_count": 1}, "difficulty": "hard", "failure_mode": "empty_result"},
+    {"id": "ab_008", "category": "hotspot", "query": "为公司 POI 生成热点分析，要求完整覆盖成都行政区", "expected_tools": ["hotspot_analysis"], "expected_outputs": {"has_map_layer": true, "has_table": true, "min_result_count": 1}, "difficulty": "hard"},
+    {"id": "ab_009", "category": "clustering", "query": "对餐饮 POI 做 DBSCAN 聚类，并解释聚类参数", "expected_tools": ["cluster_points_dbscan"], "expected_outputs": {"has_map_layer": true, "has_table": true, "min_result_count": 1}, "difficulty": "medium"},
+    {"id": "ab_010", "category": "export_highlight", "query": "导出空间连接结果，同时保持行政区面图层高亮", "expected_tools": ["export_analysis_result"], "expected_outputs": {"has_map_layer": true, "has_table": true, "min_result_count": 1}, "difficulty": "medium"}
+  ]
+}

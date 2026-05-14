@@ -1,0 +1,91 @@
+{
+  "task_id": "exp4_step_067_multi_layer_validation",
+  "agent_type": "monolithic_rewrite",
+  "strategy": "monolithic_rewrite",
+  "adaptation_step": 67,
+  "query": "Step 67: 检查 医疗 POI 是否落在成都行政区内，输出异常记录和空间一致性说明。",
+  "category": "validation",
+  "expected_skill": "cross_layer_validation",
+  "novelty": "new_pattern",
+  "expected_tools": [
+    "spatial_join_layers",
+    "execute_spatial_code"
+  ],
+  "selected_tools": [
+    "spatial_join_layers",
+    "execute_spatial_code"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 67
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "cross_layer_validation-037",
+        "cross_layer_validation-047",
+        "cross_layer_validation-057"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "cross_layer_validation-067"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 8294
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "cross_layer_validation-067",
+  "retrieved_experiences": [
+    "cross_layer_validation-037",
+    "cross_layer_validation-047",
+    "cross_layer_validation-057"
+  ],
+  "final_answer": "monolithic_rewrite step=67 skill=cross_layer_validation accuracy=0.78 context_tokens=8294 retrieved=3 generated=1",
+  "structured_response": {
+    "accuracy": 0.78,
+    "context_token_count": 8294,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "cross_layer_validation-037",
+      "cross_layer_validation-047",
+      "cross_layer_validation-057"
+    ],
+    "generated_experience_ids": [
+      "cross_layer_validation-067"
+    ]
+  },
+  "validation": {
+    "score": 0.78,
+    "success": true,
+    "threshold": 0.72,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "accuracy": 0.78
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 3.75,
+    "runtime": 0.12,
+    "execution_success": true,
+    "result_correctness": 0.78,
+    "context_token_count": 8294,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 31,
+    "compression_event": ""
+  }
+}

@@ -1,0 +1,85 @@
+{
+  "task_id": "exp4_step_085_boundary_predicate",
+  "agent_type": "dynamic_cheatsheet",
+  "strategy": "dynamic_cheatsheet",
+  "adaptation_step": 85,
+  "query": "Step 85: 比较 contains 与 intersects 统计 行政区 边界 POI 的差异，输出校验表。",
+  "category": "validation",
+  "expected_skill": "spatial_predicate_choice",
+  "novelty": "retention_retest",
+  "expected_tools": [
+    "execute_spatial_code",
+    "predicate_check"
+  ],
+  "selected_tools": [
+    "execute_spatial_code",
+    "predicate_check"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 85
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "spatial_predicate_choice-075"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "spatial_predicate_choice-085"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 10108
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "spatial_predicate_choice-085",
+  "retrieved_experiences": [
+    "spatial_predicate_choice-075"
+  ],
+  "final_answer": "dynamic_cheatsheet step=85 skill=spatial_predicate_choice accuracy=0.92 context_tokens=10108 retrieved=1 generated=1",
+  "structured_response": {
+    "accuracy": 0.92,
+    "context_token_count": 10108,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "spatial_predicate_choice-075"
+    ],
+    "generated_experience_ids": [
+      "spatial_predicate_choice-085"
+    ]
+  },
+  "validation": {
+    "score": 0.92,
+    "success": true,
+    "threshold": 0.72,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "accuracy": 0.92
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 3.35,
+    "runtime": 0.12,
+    "execution_success": true,
+    "result_correctness": 0.92,
+    "context_token_count": 10108,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 11,
+    "compression_event": ""
+  }
+}

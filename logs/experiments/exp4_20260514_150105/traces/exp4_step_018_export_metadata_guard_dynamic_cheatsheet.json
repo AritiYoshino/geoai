@@ -1,0 +1,85 @@
+{
+  "task_id": "exp4_step_018_export_metadata_guard",
+  "agent_type": "dynamic_cheatsheet",
+  "strategy": "dynamic_cheatsheet",
+  "adaptation_step": 18,
+  "query": "Step 18: 将 医疗缓冲区 导出为 GeoJSON 和 CSV，校验 geometry、字段命名、空几何和 CRS 元数据。",
+  "category": "export_highlight",
+  "expected_skill": "export_validation",
+  "novelty": "warmup",
+  "expected_tools": [
+    "execute_spatial_code",
+    "format_validator"
+  ],
+  "selected_tools": [
+    "execute_spatial_code",
+    "format_validator"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 18
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "export_validation-008"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "export_validation-018"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 3654
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "export_validation-018",
+  "retrieved_experiences": [
+    "export_validation-008"
+  ],
+  "final_answer": "dynamic_cheatsheet step=18 skill=export_validation accuracy=0.8 context_tokens=3654 retrieved=1 generated=1",
+  "structured_response": {
+    "accuracy": 0.8,
+    "context_token_count": 3654,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "export_validation-008"
+    ],
+    "generated_experience_ids": [
+      "export_validation-018"
+    ]
+  },
+  "validation": {
+    "score": 0.8,
+    "success": true,
+    "threshold": 0.72,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "accuracy": 0.8
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 3.0,
+    "runtime": 0.12,
+    "execution_success": true,
+    "result_correctness": 0.8,
+    "context_token_count": 3654,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 11,
+    "compression_event": ""
+  }
+}

@@ -1,0 +1,85 @@
+{
+  "task_id": "exp4_step_087_multi_hop_retrieval",
+  "agent_type": "ace_grow_and_refine",
+  "strategy": "ace_grow_and_refine",
+  "adaptation_step": 87,
+  "query": "Step 87: 对 城市-政策 做多跳检索，先定位实体再验证关系。",
+  "category": "retrieval_reasoning",
+  "expected_skill": "multi_hop_retrieval",
+  "novelty": "retention_retest",
+  "expected_tools": [
+    "retrieval",
+    "reasoning"
+  ],
+  "selected_tools": [
+    "retrieval",
+    "reasoning"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 87
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "multi_hop_retrieval-007"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "multi_hop_retrieval-087"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 9987
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "multi_hop_retrieval-087",
+  "retrieved_experiences": [
+    "multi_hop_retrieval-007"
+  ],
+  "final_answer": "ace_grow_and_refine step=87 skill=multi_hop_retrieval accuracy=0.97 context_tokens=9987 retrieved=1 generated=1",
+  "structured_response": {
+    "accuracy": 0.97,
+    "context_token_count": 9987,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "multi_hop_retrieval-007"
+    ],
+    "generated_experience_ids": [
+      "multi_hop_retrieval-087"
+    ]
+  },
+  "validation": {
+    "score": 0.97,
+    "success": true,
+    "threshold": 0.72,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "accuracy": 0.97
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 3.05,
+    "runtime": 0.12,
+    "execution_success": true,
+    "result_correctness": 0.97,
+    "context_token_count": 9987,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 10,
+    "compression_event": ""
+  }
+}

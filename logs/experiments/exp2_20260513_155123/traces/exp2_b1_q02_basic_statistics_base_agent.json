@@ -1,0 +1,115 @@
+{
+  "task_id": "exp2_b1_q02_basic_statistics",
+  "batch_id": 1,
+  "agent_type": "base_agent",
+  "query": "统计各行政区内公司 POI 数量，并按数量降序返回表格。",
+  "category": "statistics",
+  "expected_tools": [
+    "summarize_layer_statistics"
+  ],
+  "selected_tools": [
+    "summarize_layer_statistics"
+  ],
+  "execution_trace": [
+    {
+      "step": "agent_mode",
+      "detail": "base_agent"
+    },
+    {
+      "step": "tool_selection",
+      "detail": [
+        "summarize_layer_statistics"
+      ]
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": []
+    },
+    {
+      "step": "experience_update",
+      "detail": []
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "",
+  "retrieved_experiences": [],
+  "final_answer": "统计各行政区内公司 POI 数量，并按数量降序返回表格。 tool_flow_completed company district count statistics sort",
+  "structured_response": {
+    "answer": "统计各行政区内公司 POI 数量，并按数量降序返回表格。 tool_flow_completed company district count statistics sort",
+    "selected_tools": [
+      "summarize_layer_statistics"
+    ],
+    "output_types": [
+      "table"
+    ],
+    "entities": [
+      "company",
+      "district",
+      "count"
+    ],
+    "keywords": [
+      "statistics",
+      "sort"
+    ],
+    "result_count": 1,
+    "retrieved_experience_ids": [],
+    "generated_experience_ids": [],
+    "experience_retrieved": false,
+    "experience_added": false,
+    "memory_used": false,
+    "code_executed": false,
+    "trace_events": [
+      {
+        "step": "agent_mode",
+        "detail": "base_agent"
+      },
+      {
+        "step": "tool_selection",
+        "detail": [
+          "summarize_layer_statistics"
+        ]
+      },
+      {
+        "step": "experience_retrieval",
+        "detail": []
+      },
+      {
+        "step": "experience_update",
+        "detail": []
+      }
+    ],
+    "diagnosis": ""
+  },
+  "validation": {
+    "score": 1.0,
+    "success": true,
+    "threshold": 0.86,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "outputs": 1.0,
+      "entities": 1.0,
+      "keywords": 1.0,
+      "result_count": 1.0
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 3.53,
+    "runtime": 0.16,
+    "execution_success": true,
+    "result_correctness": 1.0,
+    "has_map_layer": false,
+    "has_table": true,
+    "result_count": 1,
+    "experience_retrieved": false,
+    "experience_added": false,
+    "memory_used": false,
+    "code_executed": false,
+    "repair_attempted": false,
+    "repair_success": false,
+    "user_intervention_count": 0
+  }
+}

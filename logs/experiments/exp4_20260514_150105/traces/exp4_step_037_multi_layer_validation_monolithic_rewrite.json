@@ -1,0 +1,96 @@
+{
+  "task_id": "exp4_step_037_multi_layer_validation",
+  "agent_type": "monolithic_rewrite",
+  "strategy": "monolithic_rewrite",
+  "adaptation_step": 37,
+  "query": "Step 37: 检查 住宿服务 POI 是否落在成都行政区内，输出异常记录和空间一致性说明。",
+  "category": "validation",
+  "expected_skill": "cross_layer_validation",
+  "novelty": "transfer",
+  "expected_tools": [
+    "spatial_join_layers",
+    "execute_spatial_code"
+  ],
+  "selected_tools": [
+    "spatial_join_layers"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 37
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "cross_layer_validation-007",
+        "cross_layer_validation-017",
+        "cross_layer_validation-027"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "cross_layer_validation-037"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 11834
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [
+    "context_stability_miss:cross_layer_validation"
+  ],
+  "error_signature": [
+    "cross_layer_validation"
+  ],
+  "critic_diagnosis": "cross_layer_validation evidence missing after context update",
+  "generated_experience": "cross_layer_validation-037",
+  "retrieved_experiences": [
+    "cross_layer_validation-007",
+    "cross_layer_validation-017",
+    "cross_layer_validation-027"
+  ],
+  "final_answer": "monolithic_rewrite step=37 skill=cross_layer_validation accuracy=0.709 context_tokens=11834 retrieved=3 generated=1",
+  "structured_response": {
+    "accuracy": 0.709,
+    "context_token_count": 11834,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "cross_layer_validation-007",
+      "cross_layer_validation-017",
+      "cross_layer_validation-027"
+    ],
+    "generated_experience_ids": [
+      "cross_layer_validation-037"
+    ]
+  },
+  "validation": {
+    "score": 0.709,
+    "success": false,
+    "threshold": 0.72,
+    "missing": [
+      "cross_layer_validation"
+    ],
+    "details": {
+      "tools": 1.0,
+      "accuracy": 0.709
+    }
+  },
+  "success": false,
+  "metrics": {
+    "turns": 3.4,
+    "runtime": 0.12,
+    "execution_success": false,
+    "result_correctness": 0.709,
+    "context_token_count": 11834,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 37,
+    "compression_event": ""
+  }
+}

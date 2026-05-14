@@ -1,0 +1,88 @@
+{
+  "task_id": "exp4_step_085_evaluation_rubric",
+  "agent_type": "monolithic_rewrite",
+  "strategy": "monolithic_rewrite",
+  "adaptation_step": 85,
+  "query": "Step 85: 按历史评分标准评估 摘要 答案，保持判分口径一致。",
+  "category": "evaluation",
+  "expected_skill": "evaluation_rubric",
+  "novelty": "retention_retest",
+  "expected_tools": [
+    "reasoning",
+    "rubric_check"
+  ],
+  "selected_tools": [
+    "reasoning",
+    "rubric_check"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 85
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "evaluation_rubric-065",
+        "evaluation_rubric-075"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "evaluation_rubric-085"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 6540
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "evaluation_rubric-085",
+  "retrieved_experiences": [
+    "evaluation_rubric-065",
+    "evaluation_rubric-075"
+  ],
+  "final_answer": "monolithic_rewrite step=85 skill=evaluation_rubric accuracy=0.78 context_tokens=6540 retrieved=2 generated=1",
+  "structured_response": {
+    "accuracy": 0.78,
+    "context_token_count": 6540,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "evaluation_rubric-065",
+      "evaluation_rubric-075"
+    ],
+    "generated_experience_ids": [
+      "evaluation_rubric-085"
+    ]
+  },
+  "validation": {
+    "score": 0.78,
+    "success": true,
+    "threshold": 0.72,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "accuracy": 0.78
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 3.75,
+    "runtime": 0.12,
+    "execution_success": true,
+    "result_correctness": 0.78,
+    "context_token_count": 6540,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 24,
+    "compression_event": ""
+  }
+}

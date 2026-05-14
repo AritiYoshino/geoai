@@ -4,18 +4,42 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>GeoAI 多智能体 WebGIS</title>
-  <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet" />
+  <meta name="description" content="GeoAI 多智能体地理分析系统 - 自然语言交互、地图可视化、ACE 自进化" />
+  <link href="https://cdn.jsdelivr.net/npm/ol@10.4.0/ol.css" rel="stylesheet" />
   <link rel="stylesheet" href="/static/styles.css" />
-  <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/ol@10.4.0/dist/ol.js"></script>
+  <script src="/static/theme.js"></script>
 </head>
 <body>
-  <main class="shell shell-expanded" id="appShell">
-    <aside class="sidebar" id="sidebar">
+  <!-- 主题切换按钮 -->
+  <button
+    class="theme-toggle"
+    type="button"
+    onclick="__theme?.toggleTheme()"
+    aria-label="切换主题"
+    style="position:fixed;top:16px;right:16px;z-index:1000;"
+  >&#x263E;</button>
+
+  <main
+    id="gisApp"
+    class="shell shell-expanded"
+    :class="{ 'sidebar-collapsed': sidebarCollapsed }"
+    v-cloak
+  >
+    <aside class="sidebar">
       <div class="sidebar-header">
         <div class="sidebar-brand">GeoAI</div>
         <a class="sidebar-home-link" href="/" title="返回首页" aria-label="返回首页">首页</a>
-        <button id="sidebarToggleBtn" class="icon-btn" type="button" title="收起侧栏" aria-label="收起侧栏">
-          <span class="toggle-icon">☰</span>
+        <button
+          id="sidebarToggleBtn"
+          class="icon-btn"
+          type="button"
+          :title="sidebarCollapsed ? '展开侧栏' : '收起侧栏'"
+          :aria-label="sidebarCollapsed ? '展开侧栏' : '收起侧栏'"
+          @click="toggleSidebar"
+        >
+          <span class="toggle-icon">{{ sidebarCollapsed ? ">" : "<" }}</span>
         </button>
       </div>
 
@@ -30,7 +54,7 @@
         <section class="sidebar-section card session-section">
           <div class="section-header">
             <h2>会话</h2>
-            <button id="newSessionBtn" class="text-btn" type="button">新建会话</button>
+            <button class="text-btn" type="button" @click="newSession">新建会话</button>
           </div>
           <div id="sessionList" class="session-list"></div>
         </section>
@@ -47,25 +71,40 @@
           <div class="agent-title">GeoAI Agent</div>
           <div class="agent-subtitle">多智能体地理分析助手</div>
         </div>
-        <button id="clearHighlightBtn" class="text-btn" type="button" title="清除地图高亮">清除高亮</button>
+        <button class="text-btn" type="button" title="清除地图高亮" @click="clearHighlights">
+          清除高亮
+        </button>
       </header>
 
       <nav class="tabs">
-        <button class="tab active" data-tab="chat" type="button">对话</button>
-        <button class="tab" data-tab="ace" type="button">ACE 面板</button>
-        <button class="tab" data-tab="trace" type="button">ACE 轨迹</button>
-        <button class="tab" data-tab="experience" type="button">经验库</button>
+        <button
+          v-for="tab in tabs"
+          :key="tab.id"
+          class="tab"
+          :class="{ active: activeTab === tab.id }"
+          type="button"
+          @click="activeTab = tab.id"
+        >
+          {{ tab.label }}
+        </button>
       </nav>
 
-      <section id="chatTab" class="tab-panel active">
+      <section id="chatTab" class="tab-panel" :class="{ active: activeTab === 'chat' }">
         <div id="chatLog" class="chat-log"></div>
-        <textarea id="chatInput" placeholder="输入地理分析任务，或直接反馈：例如“对”“不对，应该查所有名称包含武侯祠的店”"></textarea>
+        <textarea
+          id="chatInput"
+          v-model="chatInput"
+          placeholder="输入地理分析任务，或直接反馈：例如"对""不对，应该查所有名称包含武侯祠的店""
+          @keydown.ctrl.enter.prevent="sendMessage"
+        ></textarea>
         <div class="button-row">
-          <button id="sendBtn" class="primary" type="button">发送</button>
+          <button id="sendBtn" class="primary" type="button" :disabled="sending" @click="sendMessage">
+            {{ sending ? "分析中..." : "发送" }}
+          </button>
         </div>
       </section>
 
-      <section id="aceTab" class="tab-panel">
+      <section id="aceTab" class="tab-panel" :class="{ active: activeTab === 'ace' }">
         <div class="ace-grid">
           <div class="ace-card">
             <div class="ace-label">任务类型</div>
@@ -94,29 +133,29 @@
         </div>
       </section>
 
-      <section id="traceTab" class="tab-panel">
+      <section id="traceTab" class="tab-panel" :class="{ active: activeTab === 'trace' }">
         <pre id="traceBox"></pre>
       </section>
 
-      <section id="experienceTab" class="tab-panel">
+      <section id="experienceTab" class="tab-panel" :class="{ active: activeTab === 'experience' }">
         <div class="control-stack">
           <label for="bankSelect">当前经验库</label>
-          <select id="bankSelect"></select>
+          <select id="bankSelect" @change="switchExperienceBank"></select>
         </div>
         <div class="button-row">
-          <button id="renameBankBtn" type="button">重命名</button>
-          <button id="deleteBankBtn" type="button">删除</button>
+          <button id="renameBankBtn" type="button" @click="renameActiveBank">重命名</button>
+          <button id="deleteBankBtn" type="button" @click="deleteActiveBank">删除</button>
         </div>
         <div class="button-row wrap">
-          <button data-template="empty" class="bankCreateBtn" type="button">新建空库</button>
-          <button data-template="default" class="bankCreateBtn" type="button">默认模板</button>
-          <button data-template="copy_current" class="bankCreateBtn" type="button">复制当前</button>
-          <button id="refreshExperienceBtn" type="button">刷新</button>
+          <button type="button" @click="createExperienceBank('empty')">新建空库</button>
+          <button type="button" @click="createExperienceBank('default')">默认模板</button>
+          <button type="button" @click="createExperienceBank('copy_current')">复制当前</button>
+          <button type="button" @click="refreshExperience">刷新</button>
         </div>
         <pre id="experienceBox"></pre>
       </section>
     </aside>
   </main>
-  <script type="module" src="/static/app.js?v=20260508-gis-modules"></script>
+  <script type="module" src="/static/app.js?v=20260512-vue-gis"></script>
 </body>
 </html>

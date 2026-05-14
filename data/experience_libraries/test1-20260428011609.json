@@ -474,5 +474,56 @@
     "created_at": "2026-05-07T23:52:20",
     "updated_at": "2026-05-07T23:52:20",
     "last_used_at": "2026-05-07T23:52:20"
+  },
+  {
+    "id": "ace-20260508132759-29",
+    "category": "用户纠正",
+    "task_types": [
+      "search"
+    ],
+    "trigger": "用户反馈类型=correction; 用户任务=查找全季酒店",
+    "problem": "用户对结果给出纠正。任务: 查找全季酒店 原回答摘要: 搜索到了成都的多家全季酒店，主要分布在 **住宿服务** 图层中。以下是全季酒店门店汇总：\n\n### 🏨 成都全季酒店列表\n\n| 门店名称 | 地址 | 所在区域 |\n|---------|------|---------|\n| **全季酒店(盛大国际店)** | 蜀西路46号盛大国际7栋 | 金牛区 |\n| **全季",
+    "strategy": "遇到类似任务时优先遵循用户纠正: 我问找什么酒店的时候只能找住宿图层的 不能把交通设施那些也检索了",
+    "source": "user_feedback",
+    "success_count": 0,
+    "fail_count": 0,
+    "confidence": 0.5,
+    "created_at": "2026-05-08T13:27:59",
+    "updated_at": "2026-05-08T13:27:59",
+    "last_used_at": "2026-05-08T13:27:59"
+  },
+  {
+    "id": "ace-20260508132852-30",
+    "category": "用户纠正",
+    "task_types": [
+      "search"
+    ],
+    "trigger": "用户反馈类型=correction; 用户任务=查找全季酒店",
+    "problem": "用户对结果给出纠正。任务: 查找全季酒店 原回答摘要: 根据经验1（用户纠正过：找酒店只能找住宿图层，不能把交通设施那些也检索了），我筛选出住宿服务图层中的全季酒店结果。\n\n地图已高亮所有匹配的 **住宿服务** 图层中的全季酒店，共 **8家** 全季酒店（含汉庭全季酒店）：\n\n| 店名 | 区域 | 地址 |\n|------|------|------|\n| 🏨 **全",
+    "strategy": "遇到类似任务时优先遵循用户纠正: 啊 你还是把交通设施里面带全季酒店的高亮了",
+    "source": "user_feedback",
+    "success_count": 0,
+    "fail_count": 0,
+    "confidence": 0.5,
+    "created_at": "2026-05-08T13:28:52",
+    "updated_at": "2026-05-08T13:28:52",
+    "last_used_at": "2026-05-08T13:28:52"
+  },
+  {
+    "id": "ace-20260508141611-31",
+    "category": "DISTANCE_UNIT_ERROR",
+    "task_types": [
+      "export"
+    ],
+    "trigger": "tool=export_analysis_result; args={'source_type': 'last_result', 'layer_name': '', 'export_format': 'geojson', 'output_name': '', 'download': True}",
+    "problem": "任务中很可能混淆了米和公里，或传入了与预期不一致的距离单位。 原始错误信息: 错误：当前没有可导出的分析结果，请先执行缓冲区、叠加、空间连接、聚类或热点分析。",
+    "strategy": "先确认用户输入单位，内部统一换算为米，并在回答中明确说明单位假设。 代码提示: 先把 km 统一换算为 m，再在同一米制坐标系中做所有距离比较。",
+    "source": "critic",
+    "success_count": 0,
+    "fail_count": 1,
+    "confidence": 0.333,
+    "created_at": "2026-05-08T14:16:11",
+    "updated_at": "2026-05-08T14:16:11",
+    "last_used_at": "2026-05-08T14:16:11"
   }
 ]

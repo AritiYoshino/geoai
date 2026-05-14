@@ -73,11 +73,12 @@ geoai/
 │               ├── logic.js
 │               ├── main.js
 │               └── state.js
-├── experiments/            # 四组对比实验与论文证据接口
+├── experiments/            # 对比实验后端模块
 │   ├── __init__.py
 │   ├── runner.py
-│   ├── export_utils.py
-│   ├── thesis_evidence.py
+│   ├── baselines.py
+│   ├── config.py
+│   ├── metrics.py
 │   ├── exp1/
 │   ├── exp2/
 │   ├── exp3/
@@ -91,7 +92,6 @@ geoai/
 │   └── sessions.json
 ├── logs/                   # JSONL 运行日志
 ├── plans/                  # 方案、分析和论文草稿
-├── experiment_outputs/     # 实验输出（符号链接或实际目录）
 ├── .env.example
 ├── ai_handler.py
 ├── main.py
@@ -100,7 +100,6 @@ geoai/
 ├── README.md
 ├── SYSTEM_ARCHITECTURE.md
 ├── ACE_UPGRADE.md
-└── EXPERIMENT_GUIDE.md
 ```
 
 ## 核心流程
@@ -170,32 +169,15 @@ geoai/
 
 ### 实验系统
 
-四组实验均支持数据读取、任务集读取、历史结果、运行、重命名、删除和导出：
+四组实验均支持任务集读取、历史结果、运行、重命名、删除和导出。统一入口为 `/experiment`，命令行入口为 `python -m experiments.runner --exp exp1`，也可以将 `exp1` 替换为 `exp2`、`exp3`、`exp4` 或 `all`。
 
-- `GET /api/experiment/exp1/data`
-- `GET /api/experiment/exp1/tasks`
-- `GET /api/experiment/exp1/results`
-- `GET /api/experiment/exp1/export`
-- `POST /api/experiment/exp1/run`
-- `POST /api/experiment/exp1/rename`
-- `POST /api/experiment/exp1/delete`
-
-`exp2`、`exp3`、`exp4` 使用同样的路径结构。
-
-论文辅助接口：
-
-- `GET /api/thesis/evidence`：汇总实验、经验库和论文证据数据
-
-## 实验系统
-
-| 实验 | 目录 | 目标 |
+| 实验 | 当前定位 | 主要配置 |
 |---|---|---|
-| 实验一 | `experiments/exp1/` | Base LLM 与 ACE 增强系统对比 |
-| 实验二 | `experiments/exp2/` | Critic、Evolution、经验库、上下文记忆消融 |
-| 实验三 | `experiments/exp3/` | 多轮对话中的记忆抗退化能力 |
-| 实验四 | `experiments/exp4/` | 长上下文扩展、压缩和污染控制 |
+| `exp1` | GeoAI 主系统能力评测，对比 Base/RAG/ACE 在 GIS 工具调用、空间分析、记忆、经验检索、经验新增、代码执行和结果校验上的差异 | `data/experiments/exp1_workbook.json` + `data/experiments/exp1_reference_answers.json` |
+| `exp2` | Online Adaptation 在线适应实验，三批连续任务验证静态经验、在线新经验写入和最终迁移效果 | `data/experiments/exp2_workbook.json` + `data/experiments/exp2_reference_answers.json` |
+| `exp3` | ACE 机制消融实验，对比完整 ACE、移除单模块、无 Reflector 精炼、append-only memory 和 monolithic rewrite 等机制差异 | `data/experiments/exp3_workbook.json` + `data/experiments/exp3_reference_answers.json` |
+| `exp4` | GeoAI Context Collapse 稳定性实验，100 步连续 online adaptation 中比较上下文增长、精炼、整体重写和 collapse 事件 | `data/experiments/exp4_workbook.json` + `data/experiments/exp4_evaluation_config.json` |
 
-实验输出保存在 `experiments/experiment_outputs/{expX}/`。`experiments/export_utils.py` 可把 `summary.json` 和 `results.csv` 导出为论文可用图表与 zip 包。
 
 ## 运行方式
 
@@ -234,11 +216,66 @@ http://127.0.0.1:8000
 - `logs/evolution_log.jsonl`：经验新增、更新和跳过记录
 - `logs/error_log.jsonl`：运行异常
 
+## 实验模块
+
+项目新增 ACE 对比实验模块，用于验证 ACE-WebGIS 在空间分析任务中的优势。实验二采用 `BASE / RAG / ACE` 三组 online adaptation 对比：BASE 表示无记忆基线，RAG 表示静态经验检索，ACE 表示带 Critic、Evolution、经验检索和上下文记忆的在线适应闭环。实验入口为：
+
+- 页面入口：`/experiment`
+- 命令行入口：`python -m experiments.runner --exp exp1`
+- API 入口：`GET /api/experiment/list`、`POST /api/experiment/run`、`GET /api/experiment/result/{experiment_id}`
+
+四组实验包括：
+
+| 实验 | 目标 | 任务集 |
+|---|---|---|
+| `exp1` | GeoAI 主系统能力评测 | `data/experiments/exp1_workbook.json` + `data/experiments/exp1_reference_answers.json` |
+| `exp2` | Online Adaptation 在线适应实验：验证 ACE 在线经验更新相对静态 RAG 的收益 | `data/experiments/exp2_workbook.json` + `data/experiments/exp2_reference_answers.json` |
+| `exp3` | ACE 机制消融：单模块移除、无 Reflector、append-only、整体重写 | `data/experiments/exp3_workbook.json` + `data/experiments/exp3_reference_answers.json` |
+| `exp4` | GeoAI Context Collapse 稳定性：100 步连续 online adaptation | `data/experiments/exp4_workbook.json` + `data/experiments/exp4_evaluation_config.json` |
+
+当前任务集通过 `repeat_multiplier`、`variants` 或 `total_steps` 模板扩容：Exp1 为 52 个任务，Exp2 为 3 个 batch / 90 个展开任务，Exp3 为 27 个消融任务，Exp4 为 100 个 adaptation step。
+
+实验四已经对齐 GeoAI 场景，任务覆盖字段核对、CRS 距离、空结果恢复、GeoPandas 密度计算、边界谓词、时间字段、跨图层校验、导出元数据、上下文锚点和多指标排名。若某一步 `context_token_count` 从高位骤降到低位，同时 rolling accuracy 明显下降，则记为 context collapse；ACE 的正常 grow-and-refine 去重若准确率基本稳定，则记为 refinement event。
+
+实验二中的三组对比含义：
+- `BASE Agent`：复用 GIS 工具和受控代码执行能力，但不使用经验检索、经验写入和上下文记忆；用于衡量无 RAG / 无 ACE 的基线表现。
+- `RAG Agent`：使用预置静态经验库进行检索，能解决已知错误模式，但不会把本轮失败诊断沉淀为新经验；用于衡量静态检索相对 BASE 的收益。
+- `ACE Agent`：完整启用 Critic 诊断、Evolution 经验沉淀、经验库检索、上下文记忆和工具/代码执行；数据集后半段包含 RAG 静态库外的新模式，用于体现 online adaptation 相对静态 RAG 的优势。
+
+实验一中的框架含义：
+
+- `Direct LLM`：只让大模型直接回答或给出 GIS 操作建议，不调用工具，不读取或写入经验库。
+- `ReAct Agent`：采用 Reason + Act 工具调用流程，可调用固定 GIS 工具，但不使用 ACE 经验库。
+- `CodeAct Agent`：允许生成并执行受控 GeoPandas / Python 代码，可基于报错做有限自修复，但不使用 ACE 经验检索和演化。
+- `ACE-WebGIS`：完整使用 CoordinatorAgent、SpatialAnalystAgent、CodeAgent、CriticAgent、EvolutionAgent、ContextManager 和 ExperienceLibrary，形成执行、诊断、经验沉淀与复用闭环。
+
+命令行运行：
+
+```bash
+python -m experiments.runner --exp exp1
+python -m experiments.runner --exp exp2
+python -m experiments.runner --exp exp3
+python -m experiments.runner --exp exp4
+python -m experiments.runner --exp all
+```
+
+默认使用 mock / 规则化评估模式，保证没有真实 LLM 服务时也能完整生成实验结果。后端 API 可通过 `use_real_ace=true` 调用真实 ACE 流程。
+
+实验输出位置：
+
+- 每次运行：`logs/experiments/{run_id}/`
+- Exp1 汇总：`logs/experiments/exp1_main_comparison.json`、`logs/experiments/exp1_main_comparison.csv`
+- Exp2 汇总：`logs/experiments/exp2_continual_learning.json`、`logs/experiments/exp2_continual_learning.csv`
+- Exp3 汇总：`logs/experiments/exp3_ablation.json`、`logs/experiments/exp3_ablation.csv`
+- Exp4 汇总：`logs/experiments/exp4_context_stability.json`、`logs/experiments/exp4_context_stability.csv`
+
+核心指标包括任务成功率、工具选择准确率、执行成功率、结果正确率、平均轮数、平均耗时、用户干预次数、错误数、重复错误率、修复成功率、经验复用率、知识保留率、冗余率、上下文 token 数、经验条目数、重复条目比例、经验命中率、适应延迟、token 成本估计和 collapse 事件数。
+
 ## 相关文档
 
 - [`ACE_UPGRADE.md`](ACE_UPGRADE.md)：ACE 自进化机制说明
 - [`SYSTEM_ARCHITECTURE.md`](SYSTEM_ARCHITECTURE.md)：系统架构与模块关系
-- [`EXPERIMENT_GUIDE.md`](EXPERIMENT_GUIDE.md)：实验系统运行指南
 - [`plans/project_analysis.md`](plans/project_analysis.md)：项目分析报告
+- [`plans/ACE_EXPERIMENT_DESIGN.md`](plans/ACE_EXPERIMENT_DESIGN.md)：ACE 对比实验设计
 - [`plans/thesis_initial_draft.md`](plans/thesis_initial_draft.md)：论文初稿
 - [`plans/upgrade_landing_page.md`](plans/upgrade_landing_page.md)：统一入口首页升级记录

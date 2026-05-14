@@ -1,0 +1,127 @@
+{
+  "task_id": "exp2_b4_q01_reuse_density",
+  "batch_id": 4,
+  "agent_type": "ace_webgis",
+  "query": "复用密度计算经验，计算各行政区医疗服务密度并输出排名、地图分级图层和校验说明。",
+  "category": "code_required",
+  "expected_tools": [
+    "execute_spatial_code"
+  ],
+  "selected_tools": [
+    "execute_spatial_code"
+  ],
+  "execution_trace": [
+    {
+      "step": "agent_mode",
+      "detail": "ace_webgis"
+    },
+    {
+      "step": "tool_selection",
+      "detail": [
+        "execute_spatial_code"
+      ]
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "exp2-density-area"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": []
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "",
+  "retrieved_experiences": [
+    "exp2-density-area"
+  ],
+  "final_answer": "复用密度计算经验，计算各行政区医疗服务密度并输出排名、地图分级图层和校验说明。 已按参考系统流程完成工具选择、执行校验和结果组织。 已复用经验：exp2-density-area 医疗 密度 行政区 复用 面积 校验",
+  "structured_response": {
+    "answer": "复用密度计算经验，计算各行政区医疗服务密度并输出排名、地图分级图层和校验说明。 已按参考系统流程完成工具选择、执行校验和结果组织。 已复用经验：exp2-density-area 医疗 密度 行政区 复用 面积 校验",
+    "selected_tools": [
+      "execute_spatial_code"
+    ],
+    "output_types": [
+      "table",
+      "map_layer"
+    ],
+    "entities": [
+      "医疗",
+      "密度",
+      "行政区"
+    ],
+    "keywords": [
+      "复用",
+      "面积",
+      "校验"
+    ],
+    "result_count": 1,
+    "retrieved_experience_ids": [
+      "exp2-density-area"
+    ],
+    "generated_experience_ids": [],
+    "experience_retrieved": true,
+    "experience_added": false,
+    "memory_used": false,
+    "code_executed": true,
+    "trace_events": [
+      {
+        "step": "agent_mode",
+        "detail": "ace_webgis"
+      },
+      {
+        "step": "tool_selection",
+        "detail": [
+          "execute_spatial_code"
+        ]
+      },
+      {
+        "step": "experience_retrieval",
+        "detail": [
+          "exp2-density-area"
+        ]
+      },
+      {
+        "step": "experience_update",
+        "detail": []
+      }
+    ],
+    "diagnosis": ""
+  },
+  "validation": {
+    "score": 1.0,
+    "success": true,
+    "threshold": 0.86,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "outputs": 1.0,
+      "entities": 1.0,
+      "keywords": 1.0,
+      "result_count": 1.0,
+      "experience_retrieved": 1.0,
+      "code_executed": 1.0
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 3.35,
+    "runtime": 0.16,
+    "execution_success": true,
+    "result_correctness": 1.0,
+    "has_map_layer": true,
+    "has_table": true,
+    "result_count": 1,
+    "experience_retrieved": true,
+    "experience_added": false,
+    "memory_used": false,
+    "code_executed": true,
+    "repair_attempted": false,
+    "repair_success": false,
+    "user_intervention_count": 0
+  }
+}

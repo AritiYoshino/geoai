@@ -1,0 +1,86 @@
+{
+  "task_id": "exp4_step_063_empty_result_recovery",
+  "agent_type": "append_only",
+  "strategy": "append_only",
+  "adaptation_step": 63,
+  "query": "Step 63: 检索 政策条款 时若精确匹配为空，逐步放宽条件并解释回退策略。",
+  "category": "retrieval_reasoning",
+  "expected_skill": "empty_result_recovery",
+  "novelty": "new_pattern",
+  "expected_tools": [
+    "retrieval",
+    "reasoning"
+  ],
+  "selected_tools": [
+    "retrieval"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 63
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "empty_result_recovery-003"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "empty_result_recovery-063"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 21276
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [
+    "context_stability_miss:empty_result_recovery"
+  ],
+  "error_signature": [
+    "empty_result_recovery"
+  ],
+  "critic_diagnosis": "empty_result_recovery evidence missing after context update",
+  "generated_experience": "empty_result_recovery-063",
+  "retrieved_experiences": [
+    "empty_result_recovery-003"
+  ],
+  "final_answer": "append_only step=63 skill=empty_result_recovery accuracy=0.425 context_tokens=21276 retrieved=1 generated=1",
+  "structured_response": {
+    "accuracy": 0.425,
+    "context_token_count": 21276,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "empty_result_recovery-003"
+    ],
+    "generated_experience_ids": [
+      "empty_result_recovery-063"
+    ]
+  },
+  "validation": {
+    "score": 0.425,
+    "success": false,
+    "threshold": 0.72,
+    "missing": [
+      "empty_result_recovery"
+    ]
+  },
+  "success": false,
+  "metrics": {
+    "turns": 3.55,
+    "runtime": 0.12,
+    "execution_success": false,
+    "result_correctness": 0.425,
+    "context_token_count": 21276,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 72,
+    "compression_event": ""
+  }
+}

@@ -1,0 +1,87 @@
+{
+  "task_id": "exp4_step_096_temporal_reasoning",
+  "agent_type": "monolithic_rewrite",
+  "strategy": "monolithic_rewrite",
+  "adaptation_step": 96,
+  "query": "Step 96: 解析 过去 90 天 中的相对时间表达，并复用日期标准化经验。",
+  "category": "temporal_reasoning",
+  "expected_skill": "temporal_reasoning",
+  "novelty": "retention_retest",
+  "expected_tools": [
+    "reasoning",
+    "date_parse"
+  ],
+  "selected_tools": [
+    "reasoning",
+    "date_parse"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 96
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "temporal_reasoning-066",
+        "temporal_reasoning-076",
+        "temporal_reasoning-086"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "temporal_reasoning-096"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 9778
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "temporal_reasoning-096",
+  "retrieved_experiences": [
+    "temporal_reasoning-066",
+    "temporal_reasoning-076",
+    "temporal_reasoning-086"
+  ],
+  "final_answer": "monolithic_rewrite step=96 skill=temporal_reasoning accuracy=0.78 context_tokens=9778 retrieved=3 generated=1",
+  "structured_response": {
+    "accuracy": 0.78,
+    "context_token_count": 9778,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "temporal_reasoning-066",
+      "temporal_reasoning-076",
+      "temporal_reasoning-086"
+    ],
+    "generated_experience_ids": [
+      "temporal_reasoning-096"
+    ]
+  },
+  "validation": {
+    "score": 0.78,
+    "success": true,
+    "threshold": 0.72,
+    "missing": []
+  },
+  "success": true,
+  "metrics": {
+    "turns": 3.75,
+    "runtime": 0.12,
+    "execution_success": true,
+    "result_correctness": 0.78,
+    "context_token_count": 9778,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 35,
+    "compression_event": ""
+  }
+}

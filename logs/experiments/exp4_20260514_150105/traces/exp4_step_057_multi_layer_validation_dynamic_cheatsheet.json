@@ -1,0 +1,85 @@
+{
+  "task_id": "exp4_step_057_multi_layer_validation",
+  "agent_type": "dynamic_cheatsheet",
+  "strategy": "dynamic_cheatsheet",
+  "adaptation_step": 57,
+  "query": "Step 57: 检查 住宿服务 POI 是否落在成都行政区内，输出异常记录和空间一致性说明。",
+  "category": "validation",
+  "expected_skill": "cross_layer_validation",
+  "novelty": "transfer",
+  "expected_tools": [
+    "spatial_join_layers",
+    "execute_spatial_code"
+  ],
+  "selected_tools": [
+    "spatial_join_layers",
+    "execute_spatial_code"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 57
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "cross_layer_validation-047"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "cross_layer_validation-057"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 8299
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "cross_layer_validation-057",
+  "retrieved_experiences": [
+    "cross_layer_validation-047"
+  ],
+  "final_answer": "dynamic_cheatsheet step=57 skill=cross_layer_validation accuracy=0.885 context_tokens=8299 retrieved=1 generated=1",
+  "structured_response": {
+    "accuracy": 0.885,
+    "context_token_count": 8299,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "cross_layer_validation-047"
+    ],
+    "generated_experience_ids": [
+      "cross_layer_validation-057"
+    ]
+  },
+  "validation": {
+    "score": 0.885,
+    "success": true,
+    "threshold": 0.72,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "accuracy": 0.885
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 3.0,
+    "runtime": 0.12,
+    "execution_success": true,
+    "result_correctness": 0.885,
+    "context_token_count": 8299,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 11,
+    "compression_event": ""
+  }
+}

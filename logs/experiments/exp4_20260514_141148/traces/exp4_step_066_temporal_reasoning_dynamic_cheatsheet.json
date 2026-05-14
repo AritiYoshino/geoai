@@ -1,0 +1,85 @@
+{
+  "task_id": "exp4_step_066_temporal_reasoning",
+  "agent_type": "dynamic_cheatsheet",
+  "strategy": "dynamic_cheatsheet",
+  "adaptation_step": 66,
+  "query": "Step 66: 解析 上季度 中的相对时间表达，并复用日期标准化经验。",
+  "category": "temporal_reasoning",
+  "expected_skill": "temporal_reasoning",
+  "novelty": "new_pattern",
+  "expected_tools": [
+    "reasoning",
+    "date_parse"
+  ],
+  "selected_tools": [
+    "reasoning",
+    "date_parse"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 66
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "temporal_reasoning-056"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "temporal_reasoning-066"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 9910
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "temporal_reasoning-066",
+  "retrieved_experiences": [
+    "temporal_reasoning-056"
+  ],
+  "final_answer": "dynamic_cheatsheet step=66 skill=temporal_reasoning accuracy=0.905 context_tokens=9910 retrieved=1 generated=1",
+  "structured_response": {
+    "accuracy": 0.905,
+    "context_token_count": 9910,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "temporal_reasoning-056"
+    ],
+    "generated_experience_ids": [
+      "temporal_reasoning-066"
+    ]
+  },
+  "validation": {
+    "score": 0.905,
+    "success": true,
+    "threshold": 0.72,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "accuracy": 0.905
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 3.35,
+    "runtime": 0.12,
+    "execution_success": true,
+    "result_correctness": 0.905,
+    "context_token_count": 9910,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 11,
+    "compression_event": ""
+  }
+}

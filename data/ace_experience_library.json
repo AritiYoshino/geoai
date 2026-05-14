@@ -275,5 +275,39 @@
     "updated_at": "2026-04-28T01:14:17",
     "last_used_at": "",
     "confidence": 0.667
+  },
+  {
+    "id": "ace-20260508203003-17",
+    "category": "EMPTY_RESULT",
+    "task_types": [
+      "query"
+    ],
+    "trigger": "tool=search_poi; args={'keyword': '统计各个行政区的住宿服务，并排序', 'layer_name': '住宿服务'}",
+    "problem": "当前条件可能过严，目标图层选择有误，或者参考 POI 指代解析不正确。 原始错误信息: 未找到任何包含 '统计各个行政区的住宿服务，并排序' 的 POI（仅搜索图层：住宿服务）。",
+    "strategy": "先放宽搜索范围，确认参考 POI 和目标图层，再逐步收紧过滤条件或距离限制。 代码提示: 建议先用 search_poi 或更简单的查询定位，再执行精确筛选。",
+    "source": "critic",
+    "success_count": 0,
+    "fail_count": 1,
+    "confidence": 0.333,
+    "created_at": "2026-05-08T20:30:03",
+    "updated_at": "2026-05-08T20:30:03",
+    "last_used_at": "2026-05-08T20:30:03"
+  },
+  {
+    "id": "ace-20260508203638-18",
+    "category": "EMPTY_RESULT",
+    "task_types": [
+      "nearby"
+    ],
+    "trigger": "tool=search_poi; args={'keyword': '全季酒店 成都春熙路店'}",
+    "problem": "当前条件可能过严，目标图层选择有误，或者参考 POI 指代解析不正确。 原始错误信息: 未找到任何包含 '全季酒店 成都春熙路店' 的 POI。",
+    "strategy": "先放宽搜索范围，确认参考 POI 和目标图层，再逐步收紧过滤条件或距离限制。 代码提示: 建议先用 search_poi 或更简单的查询定位，再执行精确筛选。",
+    "source": "critic",
+    "success_count": 0,
+    "fail_count": 1,
+    "confidence": 0.333,
+    "created_at": "2026-05-08T20:36:38",
+    "updated_at": "2026-05-08T20:36:38",
+    "last_used_at": "2026-05-08T20:36:38"
   }
 ]

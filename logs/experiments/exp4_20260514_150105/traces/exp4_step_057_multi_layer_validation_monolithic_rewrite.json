@@ -1,0 +1,88 @@
+{
+  "task_id": "exp4_step_057_multi_layer_validation",
+  "agent_type": "monolithic_rewrite",
+  "strategy": "monolithic_rewrite",
+  "adaptation_step": 57,
+  "query": "Step 57: 检查 住宿服务 POI 是否落在成都行政区内，输出异常记录和空间一致性说明。",
+  "category": "validation",
+  "expected_skill": "cross_layer_validation",
+  "novelty": "transfer",
+  "expected_tools": [
+    "spatial_join_layers",
+    "execute_spatial_code"
+  ],
+  "selected_tools": [
+    "spatial_join_layers",
+    "execute_spatial_code"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 57
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "cross_layer_validation-037",
+        "cross_layer_validation-047"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "cross_layer_validation-057"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 5334
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "cross_layer_validation-057",
+  "retrieved_experiences": [
+    "cross_layer_validation-037",
+    "cross_layer_validation-047"
+  ],
+  "final_answer": "monolithic_rewrite step=57 skill=cross_layer_validation accuracy=0.757 context_tokens=5334 retrieved=2 generated=1",
+  "structured_response": {
+    "accuracy": 0.757,
+    "context_token_count": 5334,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "cross_layer_validation-037",
+      "cross_layer_validation-047"
+    ],
+    "generated_experience_ids": [
+      "cross_layer_validation-057"
+    ]
+  },
+  "validation": {
+    "score": 0.757,
+    "success": true,
+    "threshold": 0.72,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "accuracy": 0.757
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 3.4,
+    "runtime": 0.12,
+    "execution_success": true,
+    "result_correctness": 0.757,
+    "context_token_count": 5334,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 21,
+    "compression_event": ""
+  }
+}

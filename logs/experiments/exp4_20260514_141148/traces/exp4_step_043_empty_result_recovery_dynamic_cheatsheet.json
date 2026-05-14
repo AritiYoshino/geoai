@@ -1,0 +1,85 @@
+{
+  "task_id": "exp4_step_043_empty_result_recovery",
+  "agent_type": "dynamic_cheatsheet",
+  "strategy": "dynamic_cheatsheet",
+  "adaptation_step": 43,
+  "query": "Step 43: 检索 政策条款 时若精确匹配为空，逐步放宽条件并解释回退策略。",
+  "category": "retrieval_reasoning",
+  "expected_skill": "empty_result_recovery",
+  "novelty": "transfer",
+  "expected_tools": [
+    "retrieval",
+    "reasoning"
+  ],
+  "selected_tools": [
+    "retrieval",
+    "reasoning"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 43
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "empty_result_recovery-033"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "empty_result_recovery-043"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 5783
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "empty_result_recovery-043",
+  "retrieved_experiences": [
+    "empty_result_recovery-033"
+  ],
+  "final_answer": "dynamic_cheatsheet step=43 skill=empty_result_recovery accuracy=0.855 context_tokens=5783 retrieved=1 generated=1",
+  "structured_response": {
+    "accuracy": 0.855,
+    "context_token_count": 5783,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "empty_result_recovery-033"
+    ],
+    "generated_experience_ids": [
+      "empty_result_recovery-043"
+    ]
+  },
+  "validation": {
+    "score": 0.855,
+    "success": true,
+    "threshold": 0.72,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "accuracy": 0.855
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 3.0,
+    "runtime": 0.12,
+    "execution_success": true,
+    "result_correctness": 0.855,
+    "context_token_count": 5783,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 11,
+    "compression_event": ""
+  }
+}

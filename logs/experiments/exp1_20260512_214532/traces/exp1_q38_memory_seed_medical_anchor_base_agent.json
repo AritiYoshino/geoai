@@ -1,0 +1,109 @@
+{
+  "task_id": "exp1_q38_memory_seed_medical_anchor",
+  "agent_type": "base_agent",
+  "query": "????????????? POI?????????????? medical_anchor?????????????",
+  "category": "memory_seed",
+  "expected_tools": [
+    "search_poi"
+  ],
+  "selected_tools": [
+    "search_poi"
+  ],
+  "execution_trace": [
+    {
+      "step": "agent_mode",
+      "detail": "base_agent"
+    },
+    {
+      "step": "tool_selection",
+      "detail": [
+        "search_poi"
+      ]
+    },
+    {
+      "step": "reference_validation",
+      "detail": "structured answer will be scored against reference answers"
+    }
+  ],
+  "errors": [
+    "answer_mismatch:memory_written"
+  ],
+  "critic_diagnosis": "",
+  "generated_experience": "",
+  "retrieved_experiences": [],
+  "final_answer": "????????????? POI?????????????? medical_anchor????????????? 已按主系统工具链执行。 ?? ?? medical_anchor ?? ????? ??",
+  "structured_response": {
+    "answer": "????????????? POI?????????????? medical_anchor????????????? 已按主系统工具链执行。 ?? ?? medical_anchor ?? ????? ??",
+    "selected_tools": [
+      "search_poi"
+    ],
+    "output_types": [
+      "map_layer",
+      "table"
+    ],
+    "entities": [
+      "??",
+      "??",
+      "medical_anchor"
+    ],
+    "keywords": [
+      "??",
+      "?????",
+      "??"
+    ],
+    "result_count": 1,
+    "memory_used": false,
+    "memory_written": false,
+    "experience_retrieved": false,
+    "experience_added": false,
+    "code_executed": false,
+    "trace_events": [
+      {
+        "step": "agent_mode",
+        "detail": "base_agent"
+      },
+      {
+        "step": "tool_selection",
+        "detail": [
+          "search_poi"
+        ]
+      },
+      {
+        "step": "reference_validation",
+        "detail": "structured answer will be scored against reference answers"
+      }
+    ],
+    "diagnosis": ""
+  },
+  "validation": {
+    "score": 0.707,
+    "success": false,
+    "threshold": 0.88,
+    "missing": [
+      "memory_written"
+    ],
+    "details": {
+      "tools": 1.0,
+      "outputs": 1.0,
+      "entities": 0.667,
+      "keywords": 0.667,
+      "result_count": 1.0,
+      "memory_written": 0.0
+    }
+  },
+  "success": false,
+  "metrics": {
+    "turns": 2.0,
+    "runtime": 0.11,
+    "execution_success": false,
+    "result_correctness": 0.707,
+    "has_map_layer": true,
+    "has_table": true,
+    "result_count": 1,
+    "memory_used": false,
+    "experience_retrieved": false,
+    "experience_added": false,
+    "code_executed": false,
+    "user_intervention_count": 0
+  }
+}

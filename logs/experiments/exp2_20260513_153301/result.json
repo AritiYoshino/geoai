@@ -1,0 +1,4603 @@
+{
+  "run_id": "exp2_20260513_153301",
+  "experiment_id": "exp2",
+  "name": "连续任务学习实验",
+  "created_at": "2026-05-13T15:33:01",
+  "config": {
+    "use_critic": true,
+    "use_evolution": true,
+    "use_experience_retrieval": true,
+    "use_code_agent": true,
+    "use_context_manager": true,
+    "use_real_ace": false,
+    "mock_mode": true
+  },
+  "frameworks": {
+    "base_agent": {
+      "name": "BASE Agent (无记忆基线)",
+      "meaning": "复用主系统 GIS 工具和受控代码执行能力，但**无经验检索、无经验沉淀、无上下文记忆**，每次任务独立执行，用于衡量无 ACE / 无 RAG 的基础表现。"
+    },
+    "rag_agent": {
+      "name": "RAG Agent (静态经验检索)",
+      "meaning": "拥有**预置静态经验库**（覆盖 6 类已知 GIS 错误模式），可检索但**无法沉淀新经验**，用于衡量静态检索相对 BASE 的收益以及相对 ACE 连续学习的不足。"
+    },
+    "ace_agent": {
+      "name": "ACE Agent (连续学习)",
+      "meaning": "完整启用任务执行、Critic 诊断、Evolution 经验沉淀、经验库检索和上下文记忆，形成连续学习闭环，用于衡量动态经验积累与自适应能力。"
+    }
+  },
+  "dataset": {
+    "workbook": "data\\experiments\\exp2_workbook.json",
+    "reference_answers": "data\\experiments\\exp2_reference_answers.json",
+    "task_count": 12,
+    "batch_count": 4,
+    "success_threshold": 0.86,
+    "capability_coverage": {
+      "tool_search": 4,
+      "tool_query": 2,
+      "statistics": 2,
+      "nearby_analysis": 3,
+      "crs_awareness": 1,
+      "experience_add": 3,
+      "schema_following": 3,
+      "empty_result_repair": 3,
+      "experience_retrieval": 5
+    },
+    "reference_system": {
+      "name": "ACE-WebGIS Reference System",
+      "description": "简化版实验二只验证三件事：没有经验时能否完成基础 GIS 任务；遇到 CRS、字段、空结果三类错误时能否沉淀经验；后续同类任务能否复用经验。"
+    }
+  },
+  "groups": {
+    "base_agent": {
+      "task_success_rate": 0.3333333333333333,
+      "tool_selection_accuracy": 1.0,
+      "execution_success_rate": 0.3333333333333333,
+      "result_correctness": 0.7781666666666668,
+      "average_turns": 3.4883333333333333,
+      "average_runtime": 0.15999999999999998,
+      "experience_reuse_rate": 0.0,
+      "experience_add_rate": 0.0,
+      "repair_success_rate": 0.0,
+      "repeated_error_rate": 0.6666666666666666,
+      "user_intervention_count": 8,
+      "error_count": 8
+    },
+    "rag_agent": {
+      "task_success_rate": 0.75,
+      "tool_selection_accuracy": 1.0,
+      "execution_success_rate": 0.75,
+      "result_correctness": 0.9073333333333334,
+      "average_turns": 3.036666666666667,
+      "average_runtime": 0.15999999999999998,
+      "experience_reuse_rate": 0.4166666666666667,
+      "experience_add_rate": 0.0,
+      "repair_success_rate": 0.0,
+      "repeated_error_rate": 0.0,
+      "user_intervention_count": 3,
+      "error_count": 3
+    },
+    "ace_agent": {
+      "task_success_rate": 1.0,
+      "tool_selection_accuracy": 1.0,
+      "execution_success_rate": 1.0,
+      "result_correctness": 1.0,
+      "average_turns": 2.763333333333333,
+      "average_runtime": 0.15999999999999998,
+      "experience_reuse_rate": 0.4166666666666667,
+      "experience_add_rate": 0.25,
+      "repair_success_rate": 0.0,
+      "repeated_error_rate": 0.0,
+      "user_intervention_count": 0,
+      "error_count": 0
+    }
+  },
+  "batch_metrics": [
+    {
+      "batch_id": 1,
+      "base_success_rate": 1.0,
+      "base_experience_reuse_rate": 0.0,
+      "base_new_experience_count": 0,
+      "rag_success_rate": 1.0,
+      "rag_experience_reuse_rate": 0.0,
+      "rag_new_experience_count": 0,
+      "ace_success_rate": 1.0,
+      "ace_experience_reuse_rate": 0.0,
+      "ace_new_experience_count": 0,
+      "repeated_error_rate": 0.0,
+      "repair_success_rate": 0.0,
+      "experience_reuse_rate": 0.0,
+      "average_turns": 2.783333333333333,
+      "new_experience_count": 0,
+      "baseline_success_rate": 1.0
+    },
+    {
+      "batch_id": 2,
+      "base_success_rate": 0.0,
+      "base_experience_reuse_rate": 0.0,
+      "base_new_experience_count": 0,
+      "rag_success_rate": 0.0,
+      "rag_experience_reuse_rate": 0.0,
+      "rag_new_experience_count": 0,
+      "ace_success_rate": 1.0,
+      "ace_experience_reuse_rate": 0.0,
+      "ace_new_experience_count": 3,
+      "repeated_error_rate": 0.0,
+      "repair_success_rate": 0.0,
+      "experience_reuse_rate": 0.0,
+      "average_turns": 3.0066666666666673,
+      "new_experience_count": 3,
+      "baseline_success_rate": 0.0
+    },
+    {
+      "batch_id": 3,
+      "base_success_rate": 0.0,
+      "base_experience_reuse_rate": 0.0,
+      "base_new_experience_count": 0,
+      "rag_success_rate": 1.0,
+      "rag_experience_reuse_rate": 1.0,
+      "rag_new_experience_count": 0,
+      "ace_success_rate": 1.0,
+      "ace_experience_reuse_rate": 1.0,
+      "ace_new_experience_count": 0,
+      "repeated_error_rate": 0.0,
+      "repair_success_rate": 0.0,
+      "experience_reuse_rate": 1.0,
+      "average_turns": 2.586666666666667,
+      "new_experience_count": 0,
+      "baseline_success_rate": 0.0
+    },
+    {
+      "batch_id": 4,
+      "base_success_rate": 0.3333333333333333,
+      "base_experience_reuse_rate": 0.0,
+      "base_new_experience_count": 0,
+      "rag_success_rate": 1.0,
+      "rag_experience_reuse_rate": 0.6666666666666666,
+      "rag_new_experience_count": 0,
+      "ace_success_rate": 1.0,
+      "ace_experience_reuse_rate": 0.6666666666666666,
+      "ace_new_experience_count": 0,
+      "repeated_error_rate": 0.0,
+      "repair_success_rate": 0.0,
+      "experience_reuse_rate": 0.6666666666666666,
+      "average_turns": 2.676666666666667,
+      "new_experience_count": 0,
+      "baseline_success_rate": 0.3333333333333333
+    }
+  ],
+  "traces": [
+    {
+      "task_id": "exp2_b1_q01_search_hotpot",
+      "batch_id": 1,
+      "agent_type": "base_agent",
+      "query": "搜索名称包含“火锅”的餐饮 POI，返回地图图层和结果表。",
+      "category": "poi_search",
+      "expected_tools": [
+        "search_poi"
+      ],
+      "selected_tools": [
+        "search_poi"
+      ],
+      "execution_trace": [
+        {
+          "step": "agent_mode",
+          "detail": "base_agent"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "search_poi"
+          ]
+        },
+        {
+          "step": "experience_retrieval",
+          "detail": []
+        },
+        {
+          "step": "experience_update",
+          "detail": []
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "搜索名称包含“火锅”的餐饮 POI，返回地图图层和结果表。 已按参考系统流程完成工具选择、执行校验和结果组织。 火锅 餐饮 POI 搜索 火锅 结果",
+      "structured_response": {
+        "answer": "搜索名称包含“火锅”的餐饮 POI，返回地图图层和结果表。 已按参考系统流程完成工具选择、执行校验和结果组织。 火锅 餐饮 POI 搜索 火锅 结果",
+        "selected_tools": [
+          "search_poi"
+        ],
+        "output_types": [
+          "map_layer",
+          "table"
+        ],
+        "entities": [
+          "火锅",
+          "餐饮",
+          "POI"
+        ],
+        "keywords": [
+          "搜索",
+          "火锅",
+          "结果"
+        ],
+        "result_count": 1,
+        "retrieved_experience_ids": [],
+        "generated_experience_ids": [],
+        "experience_retrieved": false,
+        "experience_added": false,
+        "memory_used": false,
+        "code_executed": false,
+        "trace_events": [
+          {
+            "step": "agent_mode",
+            "detail": "base_agent"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "search_poi"
+            ]
+          },
+          {
+            "step": "experience_retrieval",
+            "detail": []
+          },
+          {
+            "step": "experience_update",
+            "detail": []
+          }
+        ],
+        "diagnosis": ""
+      },
+      "validation": {
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.86,
+        "missing": [],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 3.49,
+        "runtime": 0.16,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "experience_retrieved": false,
+        "experience_added": false,
+        "memory_used": false,
+        "code_executed": false,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "exp2_b1_q02_query_hospital",
+      "batch_id": 1,
+      "agent_type": "base_agent",
+      "query": "查询医疗图层中 type 包含“综合医院”的 POI，并输出结果数量。",
+      "category": "attribute_query",
+      "expected_tools": [
+        "query_poi_by_conditions"
+      ],
+      "selected_tools": [
+        "query_poi_by_conditions"
+      ],
+      "execution_trace": [
+        {
+          "step": "agent_mode",
+          "detail": "base_agent"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "query_poi_by_conditions"
+          ]
+        },
+        {
+          "step": "experience_retrieval",
+          "detail": []
+        },
+        {
+          "step": "experience_update",
+          "detail": []
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "查询医疗图层中 type 包含“综合医院”的 POI，并输出结果数量。 已按参考系统流程完成工具选择、执行校验和结果组织。 医疗 综合医院 type 查询 综合医院 数量",
+      "structured_response": {
+        "answer": "查询医疗图层中 type 包含“综合医院”的 POI，并输出结果数量。 已按参考系统流程完成工具选择、执行校验和结果组织。 医疗 综合医院 type 查询 综合医院 数量",
+        "selected_tools": [
+          "query_poi_by_conditions"
+        ],
+        "output_types": [
+          "map_layer",
+          "table"
+        ],
+        "entities": [
+          "医疗",
+          "综合医院",
+          "type"
+        ],
+        "keywords": [
+          "查询",
+          "综合医院",
+          "数量"
+        ],
+        "result_count": 1,
+        "retrieved_experience_ids": [],
+        "generated_experience_ids": [],
+        "experience_retrieved": false,
+        "experience_added": false,
+        "memory_used": false,
+        "code_executed": false,
+        "trace_events": [
+          {
+            "step": "agent_mode",
+            "detail": "base_agent"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "query_poi_by_conditions"
+            ]
+          },
+          {
+            "step": "experience_retrieval",
+            "detail": []
+          },
+          {
+            "step": "experience_update",
+            "detail": []
+          }
+        ],
+        "diagnosis": ""
+      },
+      "validation": {
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.86,
+        "missing": [],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 3.46,
+        "runtime": 0.16,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "experience_retrieved": false,
+        "experience_added": false,
+        "memory_used": false,
+        "code_executed": false,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "exp2_b1_q03_count_company",
+      "batch_id": 1,
+      "agent_type": "base_agent",
+      "query": "统计各行政区内公司 POI 数量，并按数量降序返回表格。",
+      "category": "statistics",
+      "expected_tools": [
+        "summarize_layer_statistics"
+      ],
+      "selected_tools": [
+        "summarize_layer_statistics"
+      ],
+      "execution_trace": [
+        {
+          "step": "agent_mode",
+          "detail": "base_agent"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "summarize_layer_statistics"
+          ]
+        },
+        {
+          "step": "experience_retrieval",
+          "detail": []
+        },
+        {
+          "step": "experience_update",
+          "detail": []
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "统计各行政区内公司 POI 数量，并按数量降序返回表格。 已按参考系统流程完成工具选择、执行校验和结果组织。 公司 行政区 数量 统计 降序 行政区",
+      "structured_response": {
+        "answer": "统计各行政区内公司 POI 数量，并按数量降序返回表格。 已按参考系统流程完成工具选择、执行校验和结果组织。 公司 行政区 数量 统计 降序 行政区",
+        "selected_tools": [
+          "summarize_layer_statistics"
+        ],
+        "output_types": [
+          "table"
+        ],
+        "entities": [
+          "公司",
+          "行政区",
+          "数量"
+        ],
+        "keywords": [
+          "统计",
+          "降序",
+          "行政区"
+        ],
+        "result_count": 1,
+        "retrieved_experience_ids": [],
+        "generated_experience_ids": [],
+        "experience_retrieved": false,
+        "experience_added": false,
+        "memory_used": false,
+        "code_executed": false,
+        "trace_events": [
+          {
+            "step": "agent_mode",
+            "detail": "base_agent"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "summarize_layer_statistics"
+            ]
+          },
+          {
+            "step": "experience_retrieval",
+            "detail": []
+          },
+          {
+            "step": "experience_update",
+            "detail": []
+          }
+        ],
+        "diagnosis": ""
+      },
+      "validation": {
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.86,
+        "missing": [],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 3.61,
+        "runtime": 0.16,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": false,
+        "has_table": true,
+        "result_count": 1,
+        "experience_retrieved": false,
+        "experience_added": false,
+        "memory_used": false,
+        "code_executed": false,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "exp2_b1_q01_search_hotpot",
+      "batch_id": 1,
+      "agent_type": "rag_agent",
+      "query": "搜索名称包含“火锅”的餐饮 POI，返回地图图层和结果表。",
+      "category": "poi_search",
+      "expected_tools": [
+        "search_poi"
+      ],
+      "selected_tools": [
+        "search_poi"
+      ],
+      "execution_trace": [
+        {
+          "step": "agent_mode",
+          "detail": "rag_agent"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "search_poi"
+          ]
+        },
+        {
+          "step": "experience_retrieval",
+          "detail": []
+        },
+        {
+          "step": "experience_update",
+          "detail": []
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "搜索名称包含“火锅”的餐饮 POI，返回地图图层和结果表。 已按参考系统流程完成工具选择、执行校验和结果组织。 火锅 餐饮 POI 搜索 火锅 结果",
+      "structured_response": {
+        "answer": "搜索名称包含“火锅”的餐饮 POI，返回地图图层和结果表。 已按参考系统流程完成工具选择、执行校验和结果组织。 火锅 餐饮 POI 搜索 火锅 结果",
+        "selected_tools": [
+          "search_poi"
+        ],
+        "output_types": [
+          "map_layer",
+          "table"
+        ],
+        "entities": [
+          "火锅",
+          "餐饮",
+          "POI"
+        ],
+        "keywords": [
+          "搜索",
+          "火锅",
+          "结果"
+        ],
+        "result_count": 1,
+        "retrieved_experience_ids": [],
+        "generated_experience_ids": [],
+        "experience_retrieved": false,
+        "experience_added": false,
+        "memory_used": false,
+        "code_executed": false,
+        "trace_events": [
+          {
+            "step": "agent_mode",
+            "detail": "rag_agent"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "search_poi"
+            ]
+          },
+          {
+            "step": "experience_retrieval",
+            "detail": []
+          },
+          {
+            "step": "experience_update",
+            "detail": []
+          }
+        ],
+        "diagnosis": ""
+      },
+      "validation": {
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.86,
+        "missing": [],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 3.16,
+        "runtime": 0.16,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "experience_retrieved": false,
+        "experience_added": false,
+        "memory_used": false,
+        "code_executed": false,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "exp2_b1_q02_query_hospital",
+      "batch_id": 1,
+      "agent_type": "rag_agent",
+      "query": "查询医疗图层中 type 包含“综合医院”的 POI，并输出结果数量。",
+      "category": "attribute_query",
+      "expected_tools": [
+        "query_poi_by_conditions"
+      ],
+      "selected_tools": [
+        "query_poi_by_conditions"
+      ],
+      "execution_trace": [
+        {
+          "step": "agent_mode",
+          "detail": "rag_agent"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "query_poi_by_conditions"
+          ]
+        },
+        {
+          "step": "experience_retrieval",
+          "detail": []
+        },
+        {
+          "step": "experience_update",
+          "detail": []
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "查询医疗图层中 type 包含“综合医院”的 POI，并输出结果数量。 已按参考系统流程完成工具选择、执行校验和结果组织。 医疗 综合医院 type 查询 综合医院 数量",
+      "structured_response": {
+        "answer": "查询医疗图层中 type 包含“综合医院”的 POI，并输出结果数量。 已按参考系统流程完成工具选择、执行校验和结果组织。 医疗 综合医院 type 查询 综合医院 数量",
+        "selected_tools": [
+          "query_poi_by_conditions"
+        ],
+        "output_types": [
+          "map_layer",
+          "table"
+        ],
+        "entities": [
+          "医疗",
+          "综合医院",
+          "type"
+        ],
+        "keywords": [
+          "查询",
+          "综合医院",
+          "数量"
+        ],
+        "result_count": 1,
+        "retrieved_experience_ids": [],
+        "generated_experience_ids": [],
+        "experience_retrieved": false,
+        "experience_added": false,
+        "memory_used": false,
+        "code_executed": false,
+        "trace_events": [
+          {
+            "step": "agent_mode",
+            "detail": "rag_agent"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "query_poi_by_conditions"
+            ]
+          },
+          {
+            "step": "experience_retrieval",
+            "detail": []
+          },
+          {
+            "step": "experience_update",
+            "detail": []
+          }
+        ],
+        "diagnosis": ""
+      },
+      "validation": {
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.86,
+        "missing": [],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 3.13,
+        "runtime": 0.16,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "experience_retrieved": false,
+        "experience_added": false,
+        "memory_used": false,
+        "code_executed": false,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "exp2_b1_q03_count_company",
+      "batch_id": 1,
+      "agent_type": "rag_agent",
+      "query": "统计各行政区内公司 POI 数量，并按数量降序返回表格。",
+      "category": "statistics",
+      "expected_tools": [
+        "summarize_layer_statistics"
+      ],
+      "selected_tools": [
+        "summarize_layer_statistics"
+      ],
+      "execution_trace": [
+        {
+          "step": "agent_mode",
+          "detail": "rag_agent"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "summarize_layer_statistics"
+          ]
+        },
+        {
+          "step": "experience_retrieval",
+          "detail": []
+        },
+        {
+          "step": "experience_update",
+          "detail": []
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "统计各行政区内公司 POI 数量，并按数量降序返回表格。 已按参考系统流程完成工具选择、执行校验和结果组织。 公司 行政区 数量 统计 降序 行政区",
+      "structured_response": {
+        "answer": "统计各行政区内公司 POI 数量，并按数量降序返回表格。 已按参考系统流程完成工具选择、执行校验和结果组织。 公司 行政区 数量 统计 降序 行政区",
+        "selected_tools": [
+          "summarize_layer_statistics"
+        ],
+        "output_types": [
+          "table"
+        ],
+        "entities": [
+          "公司",
+          "行政区",
+          "数量"
+        ],
+        "keywords": [
+          "统计",
+          "降序",
+          "行政区"
+        ],
+        "result_count": 1,
+        "retrieved_experience_ids": [],
+        "generated_experience_ids": [],
+        "experience_retrieved": false,
+        "experience_added": false,
+        "memory_used": false,
+        "code_executed": false,
+        "trace_events": [
+          {
+            "step": "agent_mode",
+            "detail": "rag_agent"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "summarize_layer_statistics"
+            ]
+          },
+          {
+            "step": "experience_retrieval",
+            "detail": []
+          },
+          {
+            "step": "experience_update",
+            "detail": []
+          }
+        ],
+        "diagnosis": ""
+      },
+      "validation": {
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.86,
+        "missing": [],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 3.17,
+        "runtime": 0.16,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": false,
+        "has_table": true,
+        "result_count": 1,
+        "experience_retrieved": false,
+        "experience_added": false,
+        "memory_used": false,
+        "code_executed": false,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "exp2_b1_q01_search_hotpot",
+      "batch_id": 1,
+      "agent_type": "ace_agent",
+      "query": "搜索名称包含“火锅”的餐饮 POI，返回地图图层和结果表。",
+      "category": "poi_search",
+      "expected_tools": [
+        "search_poi"
+      ],
+      "selected_tools": [
+        "search_poi"
+      ],
+      "execution_trace": [
+        {
+          "step": "agent_mode",
+          "detail": "ace_agent"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "search_poi"
+          ]
+        },
+        {
+          "step": "experience_retrieval",
+          "detail": []
+        },
+        {
+          "step": "experience_update",
+          "detail": []
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "搜索名称包含“火锅”的餐饮 POI，返回地图图层和结果表。 已按参考系统流程完成工具选择、执行校验和结果组织。 火锅 餐饮 POI 搜索 火锅 结果",
+      "structured_response": {
+        "answer": "搜索名称包含“火锅”的餐饮 POI，返回地图图层和结果表。 已按参考系统流程完成工具选择、执行校验和结果组织。 火锅 餐饮 POI 搜索 火锅 结果",
+        "selected_tools": [
+          "search_poi"
+        ],
+        "output_types": [
+          "map_layer",
+          "table"
+        ],
+        "entities": [
+          "火锅",
+          "餐饮",
+          "POI"
+        ],
+        "keywords": [
+          "搜索",
+          "火锅",
+          "结果"
+        ],
+        "result_count": 1,
+        "retrieved_experience_ids": [],
+        "generated_experience_ids": [],
+        "experience_retrieved": false,
+        "experience_added": false,
+        "memory_used": false,
+        "code_executed": false,
+        "trace_events": [
+          {
+            "step": "agent_mode",
+            "detail": "ace_agent"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "search_poi"
+            ]
+          },
+          {
+            "step": "experience_retrieval",
+            "detail": []
+          },
+          {
+            "step": "experience_update",
+            "detail": []
+          }
+        ],
+        "diagnosis": ""
+      },
+      "validation": {
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.86,
+        "missing": [],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 2.79,
+        "runtime": 0.16,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "experience_retrieved": false,
+        "experience_added": false,
+        "memory_used": false,
+        "code_executed": false,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "exp2_b1_q02_query_hospital",
+      "batch_id": 1,
+      "agent_type": "ace_agent",
+      "query": "查询医疗图层中 type 包含“综合医院”的 POI，并输出结果数量。",
+      "category": "attribute_query",
+      "expected_tools": [
+        "query_poi_by_conditions"
+      ],
+      "selected_tools": [
+        "query_poi_by_conditions"
+      ],
+      "execution_trace": [
+        {
+          "step": "agent_mode",
+          "detail": "ace_agent"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "query_poi_by_conditions"
+          ]
+        },
+        {
+          "step": "experience_retrieval",
+          "detail": []
+        },
+        {
+          "step": "experience_update",
+          "detail": []
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "查询医疗图层中 type 包含“综合医院”的 POI，并输出结果数量。 已按参考系统流程完成工具选择、执行校验和结果组织。 医疗 综合医院 type 查询 综合医院 数量",
+      "structured_response": {
+        "answer": "查询医疗图层中 type 包含“综合医院”的 POI，并输出结果数量。 已按参考系统流程完成工具选择、执行校验和结果组织。 医疗 综合医院 type 查询 综合医院 数量",
+        "selected_tools": [
+          "query_poi_by_conditions"
+        ],
+        "output_types": [
+          "map_layer",
+          "table"
+        ],
+        "entities": [
+          "医疗",
+          "综合医院",
+          "type"
+        ],
+        "keywords": [
+          "查询",
+          "综合医院",
+          "数量"
+        ],
+        "result_count": 1,
+        "retrieved_experience_ids": [],
+        "generated_experience_ids": [],
+        "experience_retrieved": false,
+        "experience_added": false,
+        "memory_used": false,
+        "code_executed": false,
+        "trace_events": [
+          {
+            "step": "agent_mode",
+            "detail": "ace_agent"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "query_poi_by_conditions"
+            ]
+          },
+          {
+            "step": "experience_retrieval",
+            "detail": []
+          },
+          {
+            "step": "experience_update",
+            "detail": []
+          }
+        ],
+        "diagnosis": ""
+      },
+      "validation": {
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.86,
+        "missing": [],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 2.84,
+        "runtime": 0.16,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "experience_retrieved": false,
+        "experience_added": false,
+        "memory_used": false,
+        "code_executed": false,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "exp2_b1_q03_count_company",
+      "batch_id": 1,
+      "agent_type": "ace_agent",
+      "query": "统计各行政区内公司 POI 数量，并按数量降序返回表格。",
+      "category": "statistics",
+      "expected_tools": [
+        "summarize_layer_statistics"
+      ],
+      "selected_tools": [
+        "summarize_layer_statistics"
+      ],
+      "execution_trace": [
+        {
+          "step": "agent_mode",
+          "detail": "ace_agent"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "summarize_layer_statistics"
+          ]
+        },
+        {
+          "step": "experience_retrieval",
+          "detail": []
+        },
+        {
+          "step": "experience_update",
+          "detail": []
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "统计各行政区内公司 POI 数量，并按数量降序返回表格。 已按参考系统流程完成工具选择、执行校验和结果组织。 公司 行政区 数量 统计 降序 行政区",
+      "structured_response": {
+        "answer": "统计各行政区内公司 POI 数量，并按数量降序返回表格。 已按参考系统流程完成工具选择、执行校验和结果组织。 公司 行政区 数量 统计 降序 行政区",
+        "selected_tools": [
+          "summarize_layer_statistics"
+        ],
+        "output_types": [
+          "table"
+        ],
+        "entities": [
+          "公司",
+          "行政区",
+          "数量"
+        ],
+        "keywords": [
+          "统计",
+          "降序",
+          "行政区"
+        ],
+        "result_count": 1,
+        "retrieved_experience_ids": [],
+        "generated_experience_ids": [],
+        "experience_retrieved": false,
+        "experience_added": false,
+        "memory_used": false,
+        "code_executed": false,
+        "trace_events": [
+          {
+            "step": "agent_mode",
+            "detail": "ace_agent"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "summarize_layer_statistics"
+            ]
+          },
+          {
+            "step": "experience_retrieval",
+            "detail": []
+          },
+          {
+            "step": "experience_update",
+            "detail": []
+          }
+        ],
+        "diagnosis": ""
+      },
+      "validation": {
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.86,
+        "missing": [],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 2.72,
+        "runtime": 0.16,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": false,
+        "has_table": true,
+        "result_count": 1,
+        "experience_retrieved": false,
+        "experience_added": false,
+        "memory_used": false,
+        "code_executed": false,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "exp2_b2_q01_learn_crs",
+      "batch_id": 2,
+      "agent_type": "base_agent",
+      "query": "查找学校 500 米内的餐饮点，执行前检查 CRS 并统一到米制投影。",
+      "category": "nearby_analysis",
+      "expected_tools": [
+        "find_nearby"
+      ],
+      "selected_tools": [
+        "find_nearby"
+      ],
+      "execution_trace": [
+        {
+          "step": "agent_mode",
+          "detail": "base_agent"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "find_nearby"
+          ]
+        },
+        {
+          "step": "experience_retrieval",
+          "detail": []
+        },
+        {
+          "step": "experience_update",
+          "detail": []
+        }
+      ],
+      "errors": [
+        "answer_mismatch:outputs,result_count,experience_added"
+      ],
+      "error_signature": [
+        "crs_distance"
+      ],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "查找学校 500 米内的餐饮点，执行前检查 CRS 并统一到米制投影。 已按参考系统流程完成工具选择、执行校验和结果组织。 学校 餐饮 500 CRS 米制投影 距离",
+      "structured_response": {
+        "answer": "查找学校 500 米内的餐饮点，执行前检查 CRS 并统一到米制投影。 已按参考系统流程完成工具选择、执行校验和结果组织。 学校 餐饮 500 CRS 米制投影 距离",
+        "selected_tools": [
+          "find_nearby"
+        ],
+        "output_types": [
+          "map_layer",
+          "table"
+        ],
+        "entities": [
+          "学校",
+          "餐饮",
+          "500",
+          "CRS"
+        ],
+        "keywords": [
+          "米制投影",
+          "距离"
+        ],
+        "result_count": 0,
+        "retrieved_experience_ids": [],
+        "generated_experience_ids": [],
+        "experience_retrieved": false,
+        "experience_added": false,
+        "memory_used": false,
+        "code_executed": false,
+        "trace_events": [
+          {
+            "step": "agent_mode",
+            "detail": "base_agent"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "find_nearby"
+            ]
+          },
+          {
+            "step": "experience_retrieval",
+            "detail": []
+          },
+          {
+            "step": "experience_update",
+            "detail": []
+          }
+        ],
+        "diagnosis": ""
+      },
+      "validation": {
+        "score": 0.615,
+        "success": false,
+        "threshold": 0.86,
+        "missing": [
+          "outputs",
+          "result_count",
+          "experience_added"
+        ],
+        "details": {
+          "tools": 1.0,
+          "outputs": 0.667,
+          "entities": 1.0,
+          "keywords": 0.667,
+          "result_count": 0.0,
+          "experience_added": 0.0
+        }
+      },
+      "success": false,
+      "metrics": {
+        "turns": 3.5,
+        "runtime": 0.16,
+        "execution_success": false,
+        "result_correctness": 0.615,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 0,
+        "experience_retrieved": false,
+        "experience_added": false,
+        "memory_used": false,
+        "code_executed": false,
+        "repair_attempted": true,
+        "repair_success": false,
+        "user_intervention_count": 1
+      }
+    },
+    {
+      "task_id": "exp2_b2_q02_learn_schema",
+      "batch_id": 2,
+      "agent_type": "base_agent",
+      "query": "查询餐饮图层中 type/name/category 任一字段包含“火锅”的 POI，字段不确定时先读取 schema。",
+      "category": "attribute_query",
+      "expected_tools": [
+        "query_poi_by_conditions"
+      ],
+      "selected_tools": [
+        "query_poi_by_conditions"
+      ],
+      "execution_trace": [
+        {
+          "step": "agent_mode",
+          "detail": "base_agent"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "query_poi_by_conditions"
+          ]
+        },
+        {
+          "step": "experience_retrieval",
+          "detail": []
+        },
+        {
+          "step": "experience_update",
+          "detail": []
+        }
+      ],
+      "errors": [
+        "answer_mismatch:outputs,result_count,experience_added"
+      ],
+      "error_signature": [
+        "field_name_mismatch"
+      ],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "查询餐饮图层中 type/name/category 任一字段包含“火锅”的 POI，字段不确定时先读取 schema。 已按参考系统流程完成工具选择、执行校验和结果组织。 餐饮 火锅 schema 字段 核对",
+      "structured_response": {
+        "answer": "查询餐饮图层中 type/name/category 任一字段包含“火锅”的 POI，字段不确定时先读取 schema。 已按参考系统流程完成工具选择、执行校验和结果组织。 餐饮 火锅 schema 字段 核对",
+        "selected_tools": [
+          "query_poi_by_conditions"
+        ],
+        "output_types": [
+          "map_layer",
+          "table"
+        ],
+        "entities": [
+          "餐饮",
+          "火锅",
+          "schema"
+        ],
+        "keywords": [
+          "字段",
+          "核对"
+        ],
+        "result_count": 0,
+        "retrieved_experience_ids": [],
+        "generated_experience_ids": [],
+        "experience_retrieved": false,
+        "experience_added": false,
+        "memory_used": false,
+        "code_executed": false,
+        "trace_events": [
+          {
+            "step": "agent_mode",
+            "detail": "base_agent"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "query_poi_by_conditions"
+            ]
+          },
+          {
+            "step": "experience_retrieval",
+            "detail": []
+          },
+          {
+            "step": "experience_update",
+            "detail": []
+          }
+        ],
+        "diagnosis": ""
+      },
+      "validation": {
+        "score": 0.615,
+        "success": false,
+        "threshold": 0.86,
+        "missing": [
+          "outputs",
+          "result_count",
+          "experience_added"
+        ],
+        "details": {
+          "tools": 1.0,
+          "outputs": 0.667,
+          "entities": 1.0,
+          "keywords": 0.667,
+          "result_count": 0.0,
+          "experience_added": 0.0
+        }
+      },
+      "success": false,
+      "metrics": {
+        "turns": 3.55,
+        "runtime": 0.16,
+        "execution_success": false,
+        "result_correctness": 0.615,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 0,
+        "experience_retrieved": false,
+        "experience_added": false,
+        "memory_used": false,
+        "code_executed": false,
+        "repair_attempted": true,
+        "repair_success": false,
+        "user_intervention_count": 1
+      }
+    },
+    {
+      "task_id": "exp2_b2_q03_learn_empty_result",
+      "batch_id": 2,
+      "agent_type": "base_agent",
+      "query": "搜索名称包含“社区医院急诊中心”的医疗 POI；如果为空，逐步放宽为“社区医院”“急诊”“医院”。",
+      "category": "poi_search",
+      "expected_tools": [
+        "search_poi"
+      ],
+      "selected_tools": [
+        "search_poi"
+      ],
+      "execution_trace": [
+        {
+          "step": "agent_mode",
+          "detail": "base_agent"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "search_poi"
+          ]
+        },
+        {
+          "step": "experience_retrieval",
+          "detail": []
+        },
+        {
+          "step": "experience_update",
+          "detail": []
+        }
+      ],
+      "errors": [
+        "answer_mismatch:outputs,result_count,experience_added"
+      ],
+      "error_signature": [
+        "empty_result"
+      ],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "搜索名称包含“社区医院急诊中心”的医疗 POI；如果为空，逐步放宽为“社区医院”“急诊”“医院”。 已按参考系统流程完成工具选择、执行校验和结果组织。 社区医院 急诊 医院 空结果 关键词",
+      "structured_response": {
+        "answer": "搜索名称包含“社区医院急诊中心”的医疗 POI；如果为空，逐步放宽为“社区医院”“急诊”“医院”。 已按参考系统流程完成工具选择、执行校验和结果组织。 社区医院 急诊 医院 空结果 关键词",
+        "selected_tools": [
+          "search_poi"
+        ],
+        "output_types": [
+          "map_layer",
+          "table"
+        ],
+        "entities": [
+          "社区医院",
+          "急诊",
+          "医院"
+        ],
+        "keywords": [
+          "空结果",
+          "放宽",
+          "关键词"
+        ],
+        "result_count": 0,
+        "retrieved_experience_ids": [],
+        "generated_experience_ids": [],
+        "experience_retrieved": false,
+        "experience_added": false,
+        "memory_used": false,
+        "code_executed": false,
+        "trace_events": [
+          {
+            "step": "agent_mode",
+            "detail": "base_agent"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "search_poi"
+            ]
+          },
+          {
+            "step": "experience_retrieval",
+            "detail": []
+          },
+          {
+            "step": "experience_update",
+            "detail": []
+          }
+        ],
+        "diagnosis": ""
+      },
+      "validation": {
+        "score": 0.658,
+        "success": false,
+        "threshold": 0.86,
+        "missing": [
+          "outputs",
+          "result_count",
+          "experience_added"
+        ],
+        "details": {
+          "tools": 1.0,
+          "outputs": 0.667,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 0.0,
+          "experience_added": 0.0
+        }
+      },
+      "success": false,
+      "metrics": {
+        "turns": 3.5,
+        "runtime": 0.16,
+        "execution_success": false,
+        "result_correctness": 0.658,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 0,
+        "experience_retrieved": false,
+        "experience_added": false,
+        "memory_used": false,
+        "code_executed": false,
+        "repair_attempted": true,
+        "repair_success": false,
+        "user_intervention_count": 1
+      }
+    },
+    {
+      "task_id": "exp2_b2_q01_learn_crs",
+      "batch_id": 2,
+      "agent_type": "rag_agent",
+      "query": "查找学校 500 米内的餐饮点，执行前检查 CRS 并统一到米制投影。",
+      "category": "nearby_analysis",
+      "expected_tools": [
+        "find_nearby"
+      ],
+      "selected_tools": [
+        "find_nearby"
+      ],
+      "execution_trace": [
+        {
+          "step": "agent_mode",
+          "detail": "rag_agent"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "find_nearby"
+          ]
+        },
+        {
+          "step": "experience_retrieval",
+          "detail": []
+        },
+        {
+          "step": "experience_update",
+          "detail": []
+        }
+      ],
+      "errors": [
+        "answer_mismatch:outputs,result_count,experience_added"
+      ],
+      "error_signature": [
+        "crs_distance"
+      ],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "查找学校 500 米内的餐饮点，执行前检查 CRS 并统一到米制投影。 已按参考系统流程完成工具选择、执行校验和结果组织。 学校 餐饮 500 CRS 米制投影 距离",
+      "structured_response": {
+        "answer": "查找学校 500 米内的餐饮点，执行前检查 CRS 并统一到米制投影。 已按参考系统流程完成工具选择、执行校验和结果组织。 学校 餐饮 500 CRS 米制投影 距离",
+        "selected_tools": [
+          "find_nearby"
+        ],
+        "output_types": [
+          "map_layer",
+          "table"
+        ],
+        "entities": [
+          "学校",
+          "餐饮",
+          "500",
+          "CRS"
+        ],
+        "keywords": [
+          "米制投影",
+          "距离"
+        ],
+        "result_count": 0,
+        "retrieved_experience_ids": [],
+        "generated_experience_ids": [],
+        "experience_retrieved": false,
+        "experience_added": false,
+        "memory_used": false,
+        "code_executed": false,
+        "trace_events": [
+          {
+            "step": "agent_mode",
+            "detail": "rag_agent"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "find_nearby"
+            ]
+          },
+          {
+            "step": "experience_retrieval",
+            "detail": []
+          },
+          {
+            "step": "experience_update",
+            "detail": []
+          }
+        ],
+        "diagnosis": ""
+      },
+      "validation": {
+        "score": 0.615,
+        "success": false,
+        "threshold": 0.86,
+        "missing": [
+          "outputs",
+          "result_count",
+          "experience_added"
+        ],
+        "details": {
+          "tools": 1.0,
+          "outputs": 0.667,
+          "entities": 1.0,
+          "keywords": 0.667,
+          "result_count": 0.0,
+          "experience_added": 0.0
+        }
+      },
+      "success": false,
+      "metrics": {
+        "turns": 3.07,
+        "runtime": 0.16,
+        "execution_success": false,
+        "result_correctness": 0.615,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 0,
+        "experience_retrieved": false,
+        "experience_added": false,
+        "memory_used": false,
+        "code_executed": false,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 1
+      }
+    },
+    {
+      "task_id": "exp2_b2_q02_learn_schema",
+      "batch_id": 2,
+      "agent_type": "rag_agent",
+      "query": "查询餐饮图层中 type/name/category 任一字段包含“火锅”的 POI，字段不确定时先读取 schema。",
+      "category": "attribute_query",
+      "expected_tools": [
+        "query_poi_by_conditions"
+      ],
+      "selected_tools": [
+        "query_poi_by_conditions"
+      ],
+      "execution_trace": [
+        {
+          "step": "agent_mode",
+          "detail": "rag_agent"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "query_poi_by_conditions"
+          ]
+        },
+        {
+          "step": "experience_retrieval",
+          "detail": []
+        },
+        {
+          "step": "experience_update",
+          "detail": []
+        }
+      ],
+      "errors": [
+        "answer_mismatch:outputs,result_count,experience_added"
+      ],
+      "error_signature": [
+        "field_name_mismatch"
+      ],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "查询餐饮图层中 type/name/category 任一字段包含“火锅”的 POI，字段不确定时先读取 schema。 已按参考系统流程完成工具选择、执行校验和结果组织。 餐饮 火锅 schema 字段 核对",
+      "structured_response": {
+        "answer": "查询餐饮图层中 type/name/category 任一字段包含“火锅”的 POI，字段不确定时先读取 schema。 已按参考系统流程完成工具选择、执行校验和结果组织。 餐饮 火锅 schema 字段 核对",
+        "selected_tools": [
+          "query_poi_by_conditions"
+        ],
+        "output_types": [
+          "map_layer",
+          "table"
+        ],
+        "entities": [
+          "餐饮",
+          "火锅",
+          "schema"
+        ],
+        "keywords": [
+          "字段",
+          "核对"
+        ],
+        "result_count": 0,
+        "retrieved_experience_ids": [],
+        "generated_experience_ids": [],
+        "experience_retrieved": false,
+        "experience_added": false,
+        "memory_used": false,
+        "code_executed": false,
+        "trace_events": [
+          {
+            "step": "agent_mode",
+            "detail": "rag_agent"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "query_poi_by_conditions"
+            ]
+          },
+          {
+            "step": "experience_retrieval",
+            "detail": []
+          },
+          {
+            "step": "experience_update",
+            "detail": []
+          }
+        ],
+        "diagnosis": ""
+      },
+      "validation": {
+        "score": 0.615,
+        "success": false,
+        "threshold": 0.86,
+        "missing": [
+          "outputs",
+          "result_count",
+          "experience_added"
+        ],
+        "details": {
+          "tools": 1.0,
+          "outputs": 0.667,
+          "entities": 1.0,
+          "keywords": 0.667,
+          "result_count": 0.0,
+          "experience_added": 0.0
+        }
+      },
+      "success": false,
+      "metrics": {
+        "turns": 3.17,
+        "runtime": 0.16,
+        "execution_success": false,
+        "result_correctness": 0.615,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 0,
+        "experience_retrieved": false,
+        "experience_added": false,
+        "memory_used": false,
+        "code_executed": false,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 1
+      }
+    },
+    {
+      "task_id": "exp2_b2_q03_learn_empty_result",
+      "batch_id": 2,
+      "agent_type": "rag_agent",
+      "query": "搜索名称包含“社区医院急诊中心”的医疗 POI；如果为空，逐步放宽为“社区医院”“急诊”“医院”。",
+      "category": "poi_search",
+      "expected_tools": [
+        "search_poi"
+      ],
+      "selected_tools": [
+        "search_poi"
+      ],
+      "execution_trace": [
+        {
+          "step": "agent_mode",
+          "detail": "rag_agent"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "search_poi"
+          ]
+        },
+        {
+          "step": "experience_retrieval",
+          "detail": []
+        },
+        {
+          "step": "experience_update",
+          "detail": []
+        }
+      ],
+      "errors": [
+        "answer_mismatch:outputs,result_count,experience_added"
+      ],
+      "error_signature": [
+        "empty_result"
+      ],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "搜索名称包含“社区医院急诊中心”的医疗 POI；如果为空，逐步放宽为“社区医院”“急诊”“医院”。 已按参考系统流程完成工具选择、执行校验和结果组织。 社区医院 急诊 医院 空结果 关键词",
+      "structured_response": {
+        "answer": "搜索名称包含“社区医院急诊中心”的医疗 POI；如果为空，逐步放宽为“社区医院”“急诊”“医院”。 已按参考系统流程完成工具选择、执行校验和结果组织。 社区医院 急诊 医院 空结果 关键词",
+        "selected_tools": [
+          "search_poi"
+        ],
+        "output_types": [
+          "map_layer",
+          "table"
+        ],
+        "entities": [
+          "社区医院",
+          "急诊",
+          "医院"
+        ],
+        "keywords": [
+          "空结果",
+          "放宽",
+          "关键词"
+        ],
+        "result_count": 0,
+        "retrieved_experience_ids": [],
+        "generated_experience_ids": [],
+        "experience_retrieved": false,
+        "experience_added": false,
+        "memory_used": false,
+        "code_executed": false,
+        "trace_events": [
+          {
+            "step": "agent_mode",
+            "detail": "rag_agent"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "search_poi"
+            ]
+          },
+          {
+            "step": "experience_retrieval",
+            "detail": []
+          },
+          {
+            "step": "experience_update",
+            "detail": []
+          }
+        ],
+        "diagnosis": ""
+      },
+      "validation": {
+        "score": 0.658,
+        "success": false,
+        "threshold": 0.86,
+        "missing": [
+          "outputs",
+          "result_count",
+          "experience_added"
+        ],
+        "details": {
+          "tools": 1.0,
+          "outputs": 0.667,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 0.0,
+          "experience_added": 0.0
+        }
+      },
+      "success": false,
+      "metrics": {
+        "turns": 3.12,
+        "runtime": 0.16,
+        "execution_success": false,
+        "result_correctness": 0.658,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 0,
+        "experience_retrieved": false,
+        "experience_added": false,
+        "memory_used": false,
+        "code_executed": false,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 1
+      }
+    },
+    {
+      "task_id": "exp2_b2_q01_learn_crs",
+      "batch_id": 2,
+      "agent_type": "ace_agent",
+      "query": "查找学校 500 米内的餐饮点，执行前检查 CRS 并统一到米制投影。",
+      "category": "nearby_analysis",
+      "expected_tools": [
+        "find_nearby"
+      ],
+      "selected_tools": [
+        "find_nearby"
+      ],
+      "execution_trace": [
+        {
+          "step": "agent_mode",
+          "detail": "ace_agent"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "find_nearby"
+          ]
+        },
+        {
+          "step": "experience_retrieval",
+          "detail": []
+        },
+        {
+          "step": "experience_update",
+          "detail": [
+            "exp2-crs-distance"
+          ]
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "Critic 已识别可迁移错误类型，并交给 Evolution 形成经验。",
+      "generated_experience": "exp2-crs-distance",
+      "retrieved_experiences": [],
+      "final_answer": "查找学校 500 米内的餐饮点，执行前检查 CRS 并统一到米制投影。 已按参考系统流程完成工具选择、执行校验和结果组织。 已沉淀新经验：exp2-crs-distance 学校 餐饮 500 CRS 米制投影 距离 经验",
+      "structured_response": {
+        "answer": "查找学校 500 米内的餐饮点，执行前检查 CRS 并统一到米制投影。 已按参考系统流程完成工具选择、执行校验和结果组织。 已沉淀新经验：exp2-crs-distance 学校 餐饮 500 CRS 米制投影 距离 经验",
+        "selected_tools": [
+          "find_nearby"
+        ],
+        "output_types": [
+          "map_layer",
+          "table",
+          "diagnosis"
+        ],
+        "entities": [
+          "学校",
+          "餐饮",
+          "500",
+          "CRS"
+        ],
+        "keywords": [
+          "米制投影",
+          "距离",
+          "经验"
+        ],
+        "result_count": 1,
+        "retrieved_experience_ids": [],
+        "generated_experience_ids": [
+          "exp2-crs-distance"
+        ],
+        "experience_retrieved": false,
+        "experience_added": true,
+        "memory_used": false,
+        "code_executed": false,
+        "trace_events": [
+          {
+            "step": "agent_mode",
+            "detail": "ace_agent"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "find_nearby"
+            ]
+          },
+          {
+            "step": "experience_retrieval",
+            "detail": []
+          },
+          {
+            "step": "experience_update",
+            "detail": [
+              "exp2-crs-distance"
+            ]
+          }
+        ],
+        "diagnosis": "Critic 已识别可迁移错误类型，并交给 Evolution 形成经验。"
+      },
+      "validation": {
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.86,
+        "missing": [],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0,
+          "experience_added": 1.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 2.93,
+        "runtime": 0.16,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "experience_retrieved": false,
+        "experience_added": true,
+        "memory_used": false,
+        "code_executed": false,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "exp2_b2_q02_learn_schema",
+      "batch_id": 2,
+      "agent_type": "ace_agent",
+      "query": "查询餐饮图层中 type/name/category 任一字段包含“火锅”的 POI，字段不确定时先读取 schema。",
+      "category": "attribute_query",
+      "expected_tools": [
+        "query_poi_by_conditions"
+      ],
+      "selected_tools": [
+        "query_poi_by_conditions"
+      ],
+      "execution_trace": [
+        {
+          "step": "agent_mode",
+          "detail": "ace_agent"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "query_poi_by_conditions"
+          ]
+        },
+        {
+          "step": "experience_retrieval",
+          "detail": []
+        },
+        {
+          "step": "experience_update",
+          "detail": [
+            "exp2-schema-check"
+          ]
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "Critic 已识别可迁移错误类型，并交给 Evolution 形成经验。",
+      "generated_experience": "exp2-schema-check",
+      "retrieved_experiences": [],
+      "final_answer": "查询餐饮图层中 type/name/category 任一字段包含“火锅”的 POI，字段不确定时先读取 schema。 已按参考系统流程完成工具选择、执行校验和结果组织。 已沉淀新经验：exp2-schema-check 餐饮 火锅 schema 字段 核对 修正",
+      "structured_response": {
+        "answer": "查询餐饮图层中 type/name/category 任一字段包含“火锅”的 POI，字段不确定时先读取 schema。 已按参考系统流程完成工具选择、执行校验和结果组织。 已沉淀新经验：exp2-schema-check 餐饮 火锅 schema 字段 核对 修正",
+        "selected_tools": [
+          "query_poi_by_conditions"
+        ],
+        "output_types": [
+          "map_layer",
+          "table",
+          "diagnosis"
+        ],
+        "entities": [
+          "餐饮",
+          "火锅",
+          "schema"
+        ],
+        "keywords": [
+          "字段",
+          "核对",
+          "修正"
+        ],
+        "result_count": 1,
+        "retrieved_experience_ids": [],
+        "generated_experience_ids": [
+          "exp2-schema-check"
+        ],
+        "experience_retrieved": false,
+        "experience_added": true,
+        "memory_used": false,
+        "code_executed": false,
+        "trace_events": [
+          {
+            "step": "agent_mode",
+            "detail": "ace_agent"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "query_poi_by_conditions"
+            ]
+          },
+          {
+            "step": "experience_retrieval",
+            "detail": []
+          },
+          {
+            "step": "experience_update",
+            "detail": [
+              "exp2-schema-check"
+            ]
+          }
+        ],
+        "diagnosis": "Critic 已识别可迁移错误类型，并交给 Evolution 形成经验。"
+      },
+      "validation": {
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.86,
+        "missing": [],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0,
+          "experience_added": 1.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 3.12,
+        "runtime": 0.16,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "experience_retrieved": false,
+        "experience_added": true,
+        "memory_used": false,
+        "code_executed": false,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "exp2_b2_q03_learn_empty_result",
+      "batch_id": 2,
+      "agent_type": "ace_agent",
+      "query": "搜索名称包含“社区医院急诊中心”的医疗 POI；如果为空，逐步放宽为“社区医院”“急诊”“医院”。",
+      "category": "poi_search",
+      "expected_tools": [
+        "search_poi"
+      ],
+      "selected_tools": [
+        "search_poi"
+      ],
+      "execution_trace": [
+        {
+          "step": "agent_mode",
+          "detail": "ace_agent"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "search_poi"
+          ]
+        },
+        {
+          "step": "experience_retrieval",
+          "detail": []
+        },
+        {
+          "step": "experience_update",
+          "detail": [
+            "exp2-empty-result-relax"
+          ]
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "Critic 已识别可迁移错误类型，并交给 Evolution 形成经验。",
+      "generated_experience": "exp2-empty-result-relax",
+      "retrieved_experiences": [],
+      "final_answer": "搜索名称包含“社区医院急诊中心”的医疗 POI；如果为空，逐步放宽为“社区医院”“急诊”“医院”。 已按参考系统流程完成工具选择、执行校验和结果组织。 已沉淀新经验：exp2-empty-result-relax 社区医院 急诊 医院 空结果 放宽 关键词",
+      "structured_response": {
+        "answer": "搜索名称包含“社区医院急诊中心”的医疗 POI；如果为空，逐步放宽为“社区医院”“急诊”“医院”。 已按参考系统流程完成工具选择、执行校验和结果组织。 已沉淀新经验：exp2-empty-result-relax 社区医院 急诊 医院 空结果 放宽 关键词",
+        "selected_tools": [
+          "search_poi"
+        ],
+        "output_types": [
+          "map_layer",
+          "table",
+          "diagnosis"
+        ],
+        "entities": [
+          "社区医院",
+          "急诊",
+          "医院"
+        ],
+        "keywords": [
+          "空结果",
+          "放宽",
+          "关键词"
+        ],
+        "result_count": 1,
+        "retrieved_experience_ids": [],
+        "generated_experience_ids": [
+          "exp2-empty-result-relax"
+        ],
+        "experience_retrieved": false,
+        "experience_added": true,
+        "memory_used": false,
+        "code_executed": false,
+        "trace_events": [
+          {
+            "step": "agent_mode",
+            "detail": "ace_agent"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "search_poi"
+            ]
+          },
+          {
+            "step": "experience_retrieval",
+            "detail": []
+          },
+          {
+            "step": "experience_update",
+            "detail": [
+              "exp2-empty-result-relax"
+            ]
+          }
+        ],
+        "diagnosis": "Critic 已识别可迁移错误类型，并交给 Evolution 形成经验。"
+      },
+      "validation": {
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.86,
+        "missing": [],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0,
+          "experience_added": 1.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 2.97,
+        "runtime": 0.16,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "experience_retrieved": false,
+        "experience_added": true,
+        "memory_used": false,
+        "code_executed": false,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "exp2_b3_q01_reuse_crs",
+      "batch_id": 3,
+      "agent_type": "base_agent",
+      "query": "复用 CRS 经验，查找医院 800 米内的住宿服务 POI，返回地图图层和结果表。",
+      "category": "nearby_analysis",
+      "expected_tools": [
+        "find_nearby"
+      ],
+      "selected_tools": [
+        "find_nearby"
+      ],
+      "execution_trace": [
+        {
+          "step": "agent_mode",
+          "detail": "base_agent"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "find_nearby"
+          ]
+        },
+        {
+          "step": "experience_retrieval",
+          "detail": []
+        },
+        {
+          "step": "experience_update",
+          "detail": []
+        }
+      ],
+      "errors": [
+        "answer_mismatch:result_count,experience_retrieved"
+      ],
+      "error_signature": [
+        "crs_distance"
+      ],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "复用 CRS 经验，查找医院 800 米内的住宿服务 POI，返回地图图层和结果表。 已按参考系统流程完成工具选择、执行校验和结果组织。 医院 米制投影",
+      "structured_response": {
+        "answer": "复用 CRS 经验，查找医院 800 米内的住宿服务 POI，返回地图图层和结果表。 已按参考系统流程完成工具选择、执行校验和结果组织。 医院 米制投影",
+        "selected_tools": [
+          "find_nearby"
+        ],
+        "output_types": [
+          "map_layer",
+          "table"
+        ],
+        "entities": [
+          "医院",
+          "住宿服务",
+          "800"
+        ],
+        "keywords": [
+          "复用",
+          "CRS",
+          "米制投影"
+        ],
+        "result_count": 0,
+        "retrieved_experience_ids": [],
+        "generated_experience_ids": [],
+        "experience_retrieved": false,
+        "experience_added": false,
+        "memory_used": false,
+        "code_executed": false,
+        "trace_events": [
+          {
+            "step": "agent_mode",
+            "detail": "base_agent"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "find_nearby"
+            ]
+          },
+          {
+            "step": "experience_retrieval",
+            "detail": []
+          },
+          {
+            "step": "experience_update",
+            "detail": []
+          }
+        ],
+        "diagnosis": ""
+      },
+      "validation": {
+        "score": 0.7,
+        "success": false,
+        "threshold": 0.86,
+        "missing": [
+          "result_count",
+          "experience_retrieved"
+        ],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 0.0,
+          "experience_retrieved": 0.0
+        }
+      },
+      "success": false,
+      "metrics": {
+        "turns": 3.42,
+        "runtime": 0.16,
+        "execution_success": false,
+        "result_correctness": 0.7,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 0,
+        "experience_retrieved": false,
+        "experience_added": false,
+        "memory_used": false,
+        "code_executed": false,
+        "repair_attempted": true,
+        "repair_success": false,
+        "user_intervention_count": 1
+      }
+    },
+    {
+      "task_id": "exp2_b3_q02_reuse_schema",
+      "batch_id": 3,
+      "agent_type": "base_agent",
+      "query": "复用字段核对经验，按 district 或等价区县字段汇总购物 POI 数量。",
+      "category": "statistics",
+      "expected_tools": [
+        "summarize_layer_statistics"
+      ],
+      "selected_tools": [
+        "summarize_layer_statistics"
+      ],
+      "execution_trace": [
+        {
+          "step": "agent_mode",
+          "detail": "base_agent"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "summarize_layer_statistics"
+          ]
+        },
+        {
+          "step": "experience_retrieval",
+          "detail": []
+        },
+        {
+          "step": "experience_update",
+          "detail": []
+        }
+      ],
+      "errors": [
+        "answer_mismatch:result_count,experience_retrieved"
+      ],
+      "error_signature": [
+        "field_name_mismatch"
+      ],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "复用字段核对经验，按 district 或等价区县字段汇总购物 POI 数量。 已按参考系统流程完成工具选择、执行校验和结果组织。 购物 字段核对 等价字段",
+      "structured_response": {
+        "answer": "复用字段核对经验，按 district 或等价区县字段汇总购物 POI 数量。 已按参考系统流程完成工具选择、执行校验和结果组织。 购物 字段核对 等价字段",
+        "selected_tools": [
+          "summarize_layer_statistics"
+        ],
+        "output_types": [
+          "table"
+        ],
+        "entities": [
+          "购物",
+          "district",
+          "区县字段"
+        ],
+        "keywords": [
+          "字段核对",
+          "等价字段",
+          "复用"
+        ],
+        "result_count": 0,
+        "retrieved_experience_ids": [],
+        "generated_experience_ids": [],
+        "experience_retrieved": false,
+        "experience_added": false,
+        "memory_used": false,
+        "code_executed": false,
+        "trace_events": [
+          {
+            "step": "agent_mode",
+            "detail": "base_agent"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "summarize_layer_statistics"
+            ]
+          },
+          {
+            "step": "experience_retrieval",
+            "detail": []
+          },
+          {
+            "step": "experience_update",
+            "detail": []
+          }
+        ],
+        "diagnosis": ""
+      },
+      "validation": {
+        "score": 0.7,
+        "success": false,
+        "threshold": 0.86,
+        "missing": [
+          "result_count",
+          "experience_retrieved"
+        ],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 0.0,
+          "experience_retrieved": 0.0
+        }
+      },
+      "success": false,
+      "metrics": {
+        "turns": 3.42,
+        "runtime": 0.16,
+        "execution_success": false,
+        "result_correctness": 0.7,
+        "has_map_layer": false,
+        "has_table": true,
+        "result_count": 0,
+        "experience_retrieved": false,
+        "experience_added": false,
+        "memory_used": false,
+        "code_executed": false,
+        "repair_attempted": true,
+        "repair_success": false,
+        "user_intervention_count": 1
+      }
+    },
+    {
+      "task_id": "exp2_b3_q03_reuse_empty_result",
+      "batch_id": 3,
+      "agent_type": "base_agent",
+      "query": "复用空结果放宽经验，搜索“24小时儿童急诊”相关医疗 POI。",
+      "category": "poi_search",
+      "expected_tools": [
+        "search_poi"
+      ],
+      "selected_tools": [
+        "search_poi"
+      ],
+      "execution_trace": [
+        {
+          "step": "agent_mode",
+          "detail": "base_agent"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "search_poi"
+          ]
+        },
+        {
+          "step": "experience_retrieval",
+          "detail": []
+        },
+        {
+          "step": "experience_update",
+          "detail": []
+        }
+      ],
+      "errors": [
+        "answer_mismatch:result_count,experience_retrieved"
+      ],
+      "error_signature": [
+        "empty_result"
+      ],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "复用空结果放宽经验，搜索“24小时儿童急诊”相关医疗 POI。 已按参考系统流程完成工具选择、执行校验和结果组织。 儿童 空结果 放宽",
+      "structured_response": {
+        "answer": "复用空结果放宽经验，搜索“24小时儿童急诊”相关医疗 POI。 已按参考系统流程完成工具选择、执行校验和结果组织。 儿童 空结果 放宽",
+        "selected_tools": [
+          "search_poi"
+        ],
+        "output_types": [
+          "map_layer",
+          "table"
+        ],
+        "entities": [
+          "儿童",
+          "急诊"
+        ],
+        "keywords": [
+          "空结果",
+          "放宽",
+          "复用"
+        ],
+        "result_count": 0,
+        "retrieved_experience_ids": [],
+        "generated_experience_ids": [],
+        "experience_retrieved": false,
+        "experience_added": false,
+        "memory_used": false,
+        "code_executed": false,
+        "trace_events": [
+          {
+            "step": "agent_mode",
+            "detail": "base_agent"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "search_poi"
+            ]
+          },
+          {
+            "step": "experience_retrieval",
+            "detail": []
+          },
+          {
+            "step": "experience_update",
+            "detail": []
+          }
+        ],
+        "diagnosis": ""
+      },
+      "validation": {
+        "score": 0.65,
+        "success": false,
+        "threshold": 0.86,
+        "missing": [
+          "result_count",
+          "experience_retrieved"
+        ],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 0.667,
+          "keywords": 1.0,
+          "result_count": 0.0,
+          "experience_retrieved": 0.0
+        }
+      },
+      "success": false,
+      "metrics": {
+        "turns": 3.42,
+        "runtime": 0.16,
+        "execution_success": false,
+        "result_correctness": 0.65,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 0,
+        "experience_retrieved": false,
+        "experience_added": false,
+        "memory_used": false,
+        "code_executed": false,
+        "repair_attempted": true,
+        "repair_success": false,
+        "user_intervention_count": 1
+      }
+    },
+    {
+      "task_id": "exp2_b3_q01_reuse_crs",
+      "batch_id": 3,
+      "agent_type": "rag_agent",
+      "query": "复用 CRS 经验，查找医院 800 米内的住宿服务 POI，返回地图图层和结果表。",
+      "category": "nearby_analysis",
+      "expected_tools": [
+        "find_nearby"
+      ],
+      "selected_tools": [
+        "find_nearby"
+      ],
+      "execution_trace": [
+        {
+          "step": "agent_mode",
+          "detail": "rag_agent"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "find_nearby"
+          ]
+        },
+        {
+          "step": "experience_retrieval",
+          "detail": [
+            "exp2-crs-distance"
+          ]
+        },
+        {
+          "step": "experience_update",
+          "detail": []
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [
+        "exp2-crs-distance"
+      ],
+      "final_answer": "复用 CRS 经验，查找医院 800 米内的住宿服务 POI，返回地图图层和结果表。 已按参考系统流程完成工具选择、执行校验和结果组织。 已复用经验：exp2-crs-distance 医院 住宿服务 800 复用 CRS 米制投影",
+      "structured_response": {
+        "answer": "复用 CRS 经验，查找医院 800 米内的住宿服务 POI，返回地图图层和结果表。 已按参考系统流程完成工具选择、执行校验和结果组织。 已复用经验：exp2-crs-distance 医院 住宿服务 800 复用 CRS 米制投影",
+        "selected_tools": [
+          "find_nearby"
+        ],
+        "output_types": [
+          "map_layer",
+          "table"
+        ],
+        "entities": [
+          "医院",
+          "住宿服务",
+          "800"
+        ],
+        "keywords": [
+          "复用",
+          "CRS",
+          "米制投影"
+        ],
+        "result_count": 1,
+        "retrieved_experience_ids": [
+          "exp2-crs-distance"
+        ],
+        "generated_experience_ids": [],
+        "experience_retrieved": true,
+        "experience_added": false,
+        "memory_used": false,
+        "code_executed": false,
+        "trace_events": [
+          {
+            "step": "agent_mode",
+            "detail": "rag_agent"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "find_nearby"
+            ]
+          },
+          {
+            "step": "experience_retrieval",
+            "detail": [
+              "exp2-crs-distance"
+            ]
+          },
+          {
+            "step": "experience_update",
+            "detail": []
+          }
+        ],
+        "diagnosis": ""
+      },
+      "validation": {
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.86,
+        "missing": [],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0,
+          "experience_retrieved": 1.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 2.97,
+        "runtime": 0.16,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "experience_retrieved": true,
+        "experience_added": false,
+        "memory_used": false,
+        "code_executed": false,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "exp2_b3_q02_reuse_schema",
+      "batch_id": 3,
+      "agent_type": "rag_agent",
+      "query": "复用字段核对经验，按 district 或等价区县字段汇总购物 POI 数量。",
+      "category": "statistics",
+      "expected_tools": [
+        "summarize_layer_statistics"
+      ],
+      "selected_tools": [
+        "summarize_layer_statistics"
+      ],
+      "execution_trace": [
+        {
+          "step": "agent_mode",
+          "detail": "rag_agent"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "summarize_layer_statistics"
+          ]
+        },
+        {
+          "step": "experience_retrieval",
+          "detail": [
+            "exp2-schema-check"
+          ]
+        },
+        {
+          "step": "experience_update",
+          "detail": []
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [
+        "exp2-schema-check"
+      ],
+      "final_answer": "复用字段核对经验，按 district 或等价区县字段汇总购物 POI 数量。 已按参考系统流程完成工具选择、执行校验和结果组织。 已复用经验：exp2-schema-check 购物 district 区县字段 字段核对 等价字段 复用",
+      "structured_response": {
+        "answer": "复用字段核对经验，按 district 或等价区县字段汇总购物 POI 数量。 已按参考系统流程完成工具选择、执行校验和结果组织。 已复用经验：exp2-schema-check 购物 district 区县字段 字段核对 等价字段 复用",
+        "selected_tools": [
+          "summarize_layer_statistics"
+        ],
+        "output_types": [
+          "table"
+        ],
+        "entities": [
+          "购物",
+          "district",
+          "区县字段"
+        ],
+        "keywords": [
+          "字段核对",
+          "等价字段",
+          "复用"
+        ],
+        "result_count": 1,
+        "retrieved_experience_ids": [
+          "exp2-schema-check"
+        ],
+        "generated_experience_ids": [],
+        "experience_retrieved": true,
+        "experience_added": false,
+        "memory_used": false,
+        "code_executed": false,
+        "trace_events": [
+          {
+            "step": "agent_mode",
+            "detail": "rag_agent"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "summarize_layer_statistics"
+            ]
+          },
+          {
+            "step": "experience_retrieval",
+            "detail": [
+              "exp2-schema-check"
+            ]
+          },
+          {
+            "step": "experience_update",
+            "detail": []
+          }
+        ],
+        "diagnosis": ""
+      },
+      "validation": {
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.86,
+        "missing": [],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0,
+          "experience_retrieved": 1.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 2.94,
+        "runtime": 0.16,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": false,
+        "has_table": true,
+        "result_count": 1,
+        "experience_retrieved": true,
+        "experience_added": false,
+        "memory_used": false,
+        "code_executed": false,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "exp2_b3_q03_reuse_empty_result",
+      "batch_id": 3,
+      "agent_type": "rag_agent",
+      "query": "复用空结果放宽经验，搜索“24小时儿童急诊”相关医疗 POI。",
+      "category": "poi_search",
+      "expected_tools": [
+        "search_poi"
+      ],
+      "selected_tools": [
+        "search_poi"
+      ],
+      "execution_trace": [
+        {
+          "step": "agent_mode",
+          "detail": "rag_agent"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "search_poi"
+          ]
+        },
+        {
+          "step": "experience_retrieval",
+          "detail": [
+            "exp2-empty-result-relax"
+          ]
+        },
+        {
+          "step": "experience_update",
+          "detail": []
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [
+        "exp2-empty-result-relax"
+      ],
+      "final_answer": "复用空结果放宽经验，搜索“24小时儿童急诊”相关医疗 POI。 已按参考系统流程完成工具选择、执行校验和结果组织。 已复用经验：exp2-empty-result-relax 儿童 急诊 医院 空结果 放宽 复用",
+      "structured_response": {
+        "answer": "复用空结果放宽经验，搜索“24小时儿童急诊”相关医疗 POI。 已按参考系统流程完成工具选择、执行校验和结果组织。 已复用经验：exp2-empty-result-relax 儿童 急诊 医院 空结果 放宽 复用",
+        "selected_tools": [
+          "search_poi"
+        ],
+        "output_types": [
+          "map_layer",
+          "table"
+        ],
+        "entities": [
+          "儿童",
+          "急诊",
+          "医院"
+        ],
+        "keywords": [
+          "空结果",
+          "放宽",
+          "复用"
+        ],
+        "result_count": 1,
+        "retrieved_experience_ids": [
+          "exp2-empty-result-relax"
+        ],
+        "generated_experience_ids": [],
+        "experience_retrieved": true,
+        "experience_added": false,
+        "memory_used": false,
+        "code_executed": false,
+        "trace_events": [
+          {
+            "step": "agent_mode",
+            "detail": "rag_agent"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "search_poi"
+            ]
+          },
+          {
+            "step": "experience_retrieval",
+            "detail": [
+              "exp2-empty-result-relax"
+            ]
+          },
+          {
+            "step": "experience_update",
+            "detail": []
+          }
+        ],
+        "diagnosis": ""
+      },
+      "validation": {
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.86,
+        "missing": [],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0,
+          "experience_retrieved": 1.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 2.87,
+        "runtime": 0.16,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "experience_retrieved": true,
+        "experience_added": false,
+        "memory_used": false,
+        "code_executed": false,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "exp2_b3_q01_reuse_crs",
+      "batch_id": 3,
+      "agent_type": "ace_agent",
+      "query": "复用 CRS 经验，查找医院 800 米内的住宿服务 POI，返回地图图层和结果表。",
+      "category": "nearby_analysis",
+      "expected_tools": [
+        "find_nearby"
+      ],
+      "selected_tools": [
+        "find_nearby"
+      ],
+      "execution_trace": [
+        {
+          "step": "agent_mode",
+          "detail": "ace_agent"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "find_nearby"
+          ]
+        },
+        {
+          "step": "experience_retrieval",
+          "detail": [
+            "exp2-crs-distance"
+          ]
+        },
+        {
+          "step": "experience_update",
+          "detail": []
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [
+        "exp2-crs-distance"
+      ],
+      "final_answer": "复用 CRS 经验，查找医院 800 米内的住宿服务 POI，返回地图图层和结果表。 已按参考系统流程完成工具选择、执行校验和结果组织。 已复用经验：exp2-crs-distance 医院 住宿服务 800 复用 CRS 米制投影",
+      "structured_response": {
+        "answer": "复用 CRS 经验，查找医院 800 米内的住宿服务 POI，返回地图图层和结果表。 已按参考系统流程完成工具选择、执行校验和结果组织。 已复用经验：exp2-crs-distance 医院 住宿服务 800 复用 CRS 米制投影",
+        "selected_tools": [
+          "find_nearby"
+        ],
+        "output_types": [
+          "map_layer",
+          "table"
+        ],
+        "entities": [
+          "医院",
+          "住宿服务",
+          "800"
+        ],
+        "keywords": [
+          "复用",
+          "CRS",
+          "米制投影"
+        ],
+        "result_count": 1,
+        "retrieved_experience_ids": [
+          "exp2-crs-distance"
+        ],
+        "generated_experience_ids": [],
+        "experience_retrieved": true,
+        "experience_added": false,
+        "memory_used": false,
+        "code_executed": false,
+        "trace_events": [
+          {
+            "step": "agent_mode",
+            "detail": "ace_agent"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "find_nearby"
+            ]
+          },
+          {
+            "step": "experience_retrieval",
+            "detail": [
+              "exp2-crs-distance"
+            ]
+          },
+          {
+            "step": "experience_update",
+            "detail": []
+          }
+        ],
+        "diagnosis": ""
+      },
+      "validation": {
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.86,
+        "missing": [],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0,
+          "experience_retrieved": 1.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 2.66,
+        "runtime": 0.16,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "experience_retrieved": true,
+        "experience_added": false,
+        "memory_used": false,
+        "code_executed": false,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "exp2_b3_q02_reuse_schema",
+      "batch_id": 3,
+      "agent_type": "ace_agent",
+      "query": "复用字段核对经验，按 district 或等价区县字段汇总购物 POI 数量。",
+      "category": "statistics",
+      "expected_tools": [
+        "summarize_layer_statistics"
+      ],
+      "selected_tools": [
+        "summarize_layer_statistics"
+      ],
+      "execution_trace": [
+        {
+          "step": "agent_mode",
+          "detail": "ace_agent"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "summarize_layer_statistics"
+          ]
+        },
+        {
+          "step": "experience_retrieval",
+          "detail": [
+            "exp2-schema-check"
+          ]
+        },
+        {
+          "step": "experience_update",
+          "detail": []
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [
+        "exp2-schema-check"
+      ],
+      "final_answer": "复用字段核对经验，按 district 或等价区县字段汇总购物 POI 数量。 已按参考系统流程完成工具选择、执行校验和结果组织。 已复用经验：exp2-schema-check 购物 district 区县字段 字段核对 等价字段 复用",
+      "structured_response": {
+        "answer": "复用字段核对经验，按 district 或等价区县字段汇总购物 POI 数量。 已按参考系统流程完成工具选择、执行校验和结果组织。 已复用经验：exp2-schema-check 购物 district 区县字段 字段核对 等价字段 复用",
+        "selected_tools": [
+          "summarize_layer_statistics"
+        ],
+        "output_types": [
+          "table"
+        ],
+        "entities": [
+          "购物",
+          "district",
+          "区县字段"
+        ],
+        "keywords": [
+          "字段核对",
+          "等价字段",
+          "复用"
+        ],
+        "result_count": 1,
+        "retrieved_experience_ids": [
+          "exp2-schema-check"
+        ],
+        "generated_experience_ids": [],
+        "experience_retrieved": true,
+        "experience_added": false,
+        "memory_used": false,
+        "code_executed": false,
+        "trace_events": [
+          {
+            "step": "agent_mode",
+            "detail": "ace_agent"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "summarize_layer_statistics"
+            ]
+          },
+          {
+            "step": "experience_retrieval",
+            "detail": [
+              "exp2-schema-check"
+            ]
+          },
+          {
+            "step": "experience_update",
+            "detail": []
+          }
+        ],
+        "diagnosis": ""
+      },
+      "validation": {
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.86,
+        "missing": [],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0,
+          "experience_retrieved": 1.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 2.65,
+        "runtime": 0.16,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": false,
+        "has_table": true,
+        "result_count": 1,
+        "experience_retrieved": true,
+        "experience_added": false,
+        "memory_used": false,
+        "code_executed": false,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "exp2_b3_q03_reuse_empty_result",
+      "batch_id": 3,
+      "agent_type": "ace_agent",
+      "query": "复用空结果放宽经验，搜索“24小时儿童急诊”相关医疗 POI。",
+      "category": "poi_search",
+      "expected_tools": [
+        "search_poi"
+      ],
+      "selected_tools": [
+        "search_poi"
+      ],
+      "execution_trace": [
+        {
+          "step": "agent_mode",
+          "detail": "ace_agent"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "search_poi"
+          ]
+        },
+        {
+          "step": "experience_retrieval",
+          "detail": [
+            "exp2-empty-result-relax"
+          ]
+        },
+        {
+          "step": "experience_update",
+          "detail": []
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [
+        "exp2-empty-result-relax"
+      ],
+      "final_answer": "复用空结果放宽经验，搜索“24小时儿童急诊”相关医疗 POI。 已按参考系统流程完成工具选择、执行校验和结果组织。 已复用经验：exp2-empty-result-relax 儿童 急诊 医院 空结果 放宽 复用",
+      "structured_response": {
+        "answer": "复用空结果放宽经验，搜索“24小时儿童急诊”相关医疗 POI。 已按参考系统流程完成工具选择、执行校验和结果组织。 已复用经验：exp2-empty-result-relax 儿童 急诊 医院 空结果 放宽 复用",
+        "selected_tools": [
+          "search_poi"
+        ],
+        "output_types": [
+          "map_layer",
+          "table"
+        ],
+        "entities": [
+          "儿童",
+          "急诊",
+          "医院"
+        ],
+        "keywords": [
+          "空结果",
+          "放宽",
+          "复用"
+        ],
+        "result_count": 1,
+        "retrieved_experience_ids": [
+          "exp2-empty-result-relax"
+        ],
+        "generated_experience_ids": [],
+        "experience_retrieved": true,
+        "experience_added": false,
+        "memory_used": false,
+        "code_executed": false,
+        "trace_events": [
+          {
+            "step": "agent_mode",
+            "detail": "ace_agent"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "search_poi"
+            ]
+          },
+          {
+            "step": "experience_retrieval",
+            "detail": [
+              "exp2-empty-result-relax"
+            ]
+          },
+          {
+            "step": "experience_update",
+            "detail": []
+          }
+        ],
+        "diagnosis": ""
+      },
+      "validation": {
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.86,
+        "missing": [],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0,
+          "experience_retrieved": 1.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 2.45,
+        "runtime": 0.16,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "experience_retrieved": true,
+        "experience_added": false,
+        "memory_used": false,
+        "code_executed": false,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "exp2_b4_q01_final_basic_search",
+      "batch_id": 4,
+      "agent_type": "base_agent",
+      "query": "搜索名称包含“便利店”的生活服务 POI，返回地图图层和结果表。",
+      "category": "poi_search",
+      "expected_tools": [
+        "search_poi"
+      ],
+      "selected_tools": [
+        "search_poi"
+      ],
+      "execution_trace": [
+        {
+          "step": "agent_mode",
+          "detail": "base_agent"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "search_poi"
+          ]
+        },
+        {
+          "step": "experience_retrieval",
+          "detail": []
+        },
+        {
+          "step": "experience_update",
+          "detail": []
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "搜索名称包含“便利店”的生活服务 POI，返回地图图层和结果表。 已按参考系统流程完成工具选择、执行校验和结果组织。 便利店 生活服务 POI 搜索 便利店 结果",
+      "structured_response": {
+        "answer": "搜索名称包含“便利店”的生活服务 POI，返回地图图层和结果表。 已按参考系统流程完成工具选择、执行校验和结果组织。 便利店 生活服务 POI 搜索 便利店 结果",
+        "selected_tools": [
+          "search_poi"
+        ],
+        "output_types": [
+          "map_layer",
+          "table"
+        ],
+        "entities": [
+          "便利店",
+          "生活服务",
+          "POI"
+        ],
+        "keywords": [
+          "搜索",
+          "便利店",
+          "结果"
+        ],
+        "result_count": 1,
+        "retrieved_experience_ids": [],
+        "generated_experience_ids": [],
+        "experience_retrieved": false,
+        "experience_added": false,
+        "memory_used": false,
+        "code_executed": false,
+        "trace_events": [
+          {
+            "step": "agent_mode",
+            "detail": "base_agent"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "search_poi"
+            ]
+          },
+          {
+            "step": "experience_retrieval",
+            "detail": []
+          },
+          {
+            "step": "experience_update",
+            "detail": []
+          }
+        ],
+        "diagnosis": ""
+      },
+      "validation": {
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.86,
+        "missing": [],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 3.5,
+        "runtime": 0.16,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "experience_retrieved": false,
+        "experience_added": false,
+        "memory_used": false,
+        "code_executed": false,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "exp2_b4_q02_final_crs_buffer",
+      "batch_id": 4,
+      "agent_type": "base_agent",
+      "query": "再次复用 CRS 经验，查找金融服务点 300 米内的餐饮 POI。",
+      "category": "nearby_analysis",
+      "expected_tools": [
+        "find_nearby"
+      ],
+      "selected_tools": [
+        "find_nearby"
+      ],
+      "execution_trace": [
+        {
+          "step": "agent_mode",
+          "detail": "base_agent"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "find_nearby"
+          ]
+        },
+        {
+          "step": "experience_retrieval",
+          "detail": []
+        },
+        {
+          "step": "experience_update",
+          "detail": []
+        }
+      ],
+      "errors": [
+        "answer_mismatch:result_count,experience_retrieved"
+      ],
+      "error_signature": [
+        "crs_distance"
+      ],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "再次复用 CRS 经验，查找金融服务点 300 米内的餐饮 POI。 已按参考系统流程完成工具选择、执行校验和结果组织。 金融服务 距离",
+      "structured_response": {
+        "answer": "再次复用 CRS 经验，查找金融服务点 300 米内的餐饮 POI。 已按参考系统流程完成工具选择、执行校验和结果组织。 金融服务 距离",
+        "selected_tools": [
+          "find_nearby"
+        ],
+        "output_types": [
+          "map_layer",
+          "table"
+        ],
+        "entities": [
+          "金融服务",
+          "餐饮",
+          "300"
+        ],
+        "keywords": [
+          "复用",
+          "CRS",
+          "距离"
+        ],
+        "result_count": 0,
+        "retrieved_experience_ids": [],
+        "generated_experience_ids": [],
+        "experience_retrieved": false,
+        "experience_added": false,
+        "memory_used": false,
+        "code_executed": false,
+        "trace_events": [
+          {
+            "step": "agent_mode",
+            "detail": "base_agent"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "find_nearby"
+            ]
+          },
+          {
+            "step": "experience_retrieval",
+            "detail": []
+          },
+          {
+            "step": "experience_update",
+            "detail": []
+          }
+        ],
+        "diagnosis": ""
+      },
+      "validation": {
+        "score": 0.7,
+        "success": false,
+        "threshold": 0.86,
+        "missing": [
+          "result_count",
+          "experience_retrieved"
+        ],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 0.0,
+          "experience_retrieved": 0.0
+        }
+      },
+      "success": false,
+      "metrics": {
+        "turns": 3.51,
+        "runtime": 0.16,
+        "execution_success": false,
+        "result_correctness": 0.7,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 0,
+        "experience_retrieved": false,
+        "experience_added": false,
+        "memory_used": false,
+        "code_executed": false,
+        "repair_attempted": true,
+        "repair_success": false,
+        "user_intervention_count": 1
+      }
+    },
+    {
+      "task_id": "exp2_b4_q03_final_schema_empty",
+      "batch_id": 4,
+      "agent_type": "base_agent",
+      "query": "再次查询餐饮火锅相关 POI，主动核对字段并避免空结果。",
+      "category": "attribute_query",
+      "expected_tools": [
+        "query_poi_by_conditions"
+      ],
+      "selected_tools": [
+        "query_poi_by_conditions"
+      ],
+      "execution_trace": [
+        {
+          "step": "agent_mode",
+          "detail": "base_agent"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "query_poi_by_conditions"
+          ]
+        },
+        {
+          "step": "experience_retrieval",
+          "detail": []
+        },
+        {
+          "step": "experience_update",
+          "detail": []
+        }
+      ],
+      "errors": [
+        "answer_mismatch:result_count,experience_retrieved"
+      ],
+      "error_signature": [
+        "field_name_mismatch"
+      ],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "再次查询餐饮火锅相关 POI，主动核对字段并避免空结果。 已按参考系统流程完成工具选择、执行校验和结果组织。 餐饮 核对 空结果",
+      "structured_response": {
+        "answer": "再次查询餐饮火锅相关 POI，主动核对字段并避免空结果。 已按参考系统流程完成工具选择、执行校验和结果组织。 餐饮 核对 空结果",
+        "selected_tools": [
+          "query_poi_by_conditions"
+        ],
+        "output_types": [
+          "map_layer",
+          "table"
+        ],
+        "entities": [
+          "餐饮",
+          "火锅",
+          "字段"
+        ],
+        "keywords": [
+          "核对",
+          "字段",
+          "空结果"
+        ],
+        "result_count": 0,
+        "retrieved_experience_ids": [],
+        "generated_experience_ids": [],
+        "experience_retrieved": false,
+        "experience_added": false,
+        "memory_used": false,
+        "code_executed": false,
+        "trace_events": [
+          {
+            "step": "agent_mode",
+            "detail": "base_agent"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "query_poi_by_conditions"
+            ]
+          },
+          {
+            "step": "experience_retrieval",
+            "detail": []
+          },
+          {
+            "step": "experience_update",
+            "detail": []
+          }
+        ],
+        "diagnosis": ""
+      },
+      "validation": {
+        "score": 0.7,
+        "success": false,
+        "threshold": 0.86,
+        "missing": [
+          "result_count",
+          "experience_retrieved"
+        ],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 0.0,
+          "experience_retrieved": 0.0
+        }
+      },
+      "success": false,
+      "metrics": {
+        "turns": 3.48,
+        "runtime": 0.16,
+        "execution_success": false,
+        "result_correctness": 0.7,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 0,
+        "experience_retrieved": false,
+        "experience_added": false,
+        "memory_used": false,
+        "code_executed": false,
+        "repair_attempted": true,
+        "repair_success": false,
+        "user_intervention_count": 1
+      }
+    },
+    {
+      "task_id": "exp2_b4_q01_final_basic_search",
+      "batch_id": 4,
+      "agent_type": "rag_agent",
+      "query": "搜索名称包含“便利店”的生活服务 POI，返回地图图层和结果表。",
+      "category": "poi_search",
+      "expected_tools": [
+        "search_poi"
+      ],
+      "selected_tools": [
+        "search_poi"
+      ],
+      "execution_trace": [
+        {
+          "step": "agent_mode",
+          "detail": "rag_agent"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "search_poi"
+          ]
+        },
+        {
+          "step": "experience_retrieval",
+          "detail": []
+        },
+        {
+          "step": "experience_update",
+          "detail": []
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "搜索名称包含“便利店”的生活服务 POI，返回地图图层和结果表。 已按参考系统流程完成工具选择、执行校验和结果组织。 便利店 生活服务 POI 搜索 便利店 结果",
+      "structured_response": {
+        "answer": "搜索名称包含“便利店”的生活服务 POI，返回地图图层和结果表。 已按参考系统流程完成工具选择、执行校验和结果组织。 便利店 生活服务 POI 搜索 便利店 结果",
+        "selected_tools": [
+          "search_poi"
+        ],
+        "output_types": [
+          "map_layer",
+          "table"
+        ],
+        "entities": [
+          "便利店",
+          "生活服务",
+          "POI"
+        ],
+        "keywords": [
+          "搜索",
+          "便利店",
+          "结果"
+        ],
+        "result_count": 1,
+        "retrieved_experience_ids": [],
+        "generated_experience_ids": [],
+        "experience_retrieved": false,
+        "experience_added": false,
+        "memory_used": false,
+        "code_executed": false,
+        "trace_events": [
+          {
+            "step": "agent_mode",
+            "detail": "rag_agent"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "search_poi"
+            ]
+          },
+          {
+            "step": "experience_retrieval",
+            "detail": []
+          },
+          {
+            "step": "experience_update",
+            "detail": []
+          }
+        ],
+        "diagnosis": ""
+      },
+      "validation": {
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.86,
+        "missing": [],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 3.2,
+        "runtime": 0.16,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "experience_retrieved": false,
+        "experience_added": false,
+        "memory_used": false,
+        "code_executed": false,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "exp2_b4_q02_final_crs_buffer",
+      "batch_id": 4,
+      "agent_type": "rag_agent",
+      "query": "再次复用 CRS 经验，查找金融服务点 300 米内的餐饮 POI。",
+      "category": "nearby_analysis",
+      "expected_tools": [
+        "find_nearby"
+      ],
+      "selected_tools": [
+        "find_nearby"
+      ],
+      "execution_trace": [
+        {
+          "step": "agent_mode",
+          "detail": "rag_agent"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "find_nearby"
+          ]
+        },
+        {
+          "step": "experience_retrieval",
+          "detail": [
+            "exp2-crs-distance"
+          ]
+        },
+        {
+          "step": "experience_update",
+          "detail": []
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [
+        "exp2-crs-distance"
+      ],
+      "final_answer": "再次复用 CRS 经验，查找金融服务点 300 米内的餐饮 POI。 已按参考系统流程完成工具选择、执行校验和结果组织。 已复用经验：exp2-crs-distance 金融服务 餐饮 300 复用 CRS 距离",
+      "structured_response": {
+        "answer": "再次复用 CRS 经验，查找金融服务点 300 米内的餐饮 POI。 已按参考系统流程完成工具选择、执行校验和结果组织。 已复用经验：exp2-crs-distance 金融服务 餐饮 300 复用 CRS 距离",
+        "selected_tools": [
+          "find_nearby"
+        ],
+        "output_types": [
+          "map_layer",
+          "table"
+        ],
+        "entities": [
+          "金融服务",
+          "餐饮",
+          "300"
+        ],
+        "keywords": [
+          "复用",
+          "CRS",
+          "距离"
+        ],
+        "result_count": 1,
+        "retrieved_experience_ids": [
+          "exp2-crs-distance"
+        ],
+        "generated_experience_ids": [],
+        "experience_retrieved": true,
+        "experience_added": false,
+        "memory_used": false,
+        "code_executed": false,
+        "trace_events": [
+          {
+            "step": "agent_mode",
+            "detail": "rag_agent"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "find_nearby"
+            ]
+          },
+          {
+            "step": "experience_retrieval",
+            "detail": [
+              "exp2-crs-distance"
+            ]
+          },
+          {
+            "step": "experience_update",
+            "detail": []
+          }
+        ],
+        "diagnosis": ""
+      },
+      "validation": {
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.86,
+        "missing": [],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0,
+          "experience_retrieved": 1.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 2.86,
+        "runtime": 0.16,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "experience_retrieved": true,
+        "experience_added": false,
+        "memory_used": false,
+        "code_executed": false,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "exp2_b4_q03_final_schema_empty",
+      "batch_id": 4,
+      "agent_type": "rag_agent",
+      "query": "再次查询餐饮火锅相关 POI，主动核对字段并避免空结果。",
+      "category": "attribute_query",
+      "expected_tools": [
+        "query_poi_by_conditions"
+      ],
+      "selected_tools": [
+        "query_poi_by_conditions"
+      ],
+      "execution_trace": [
+        {
+          "step": "agent_mode",
+          "detail": "rag_agent"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "query_poi_by_conditions"
+          ]
+        },
+        {
+          "step": "experience_retrieval",
+          "detail": [
+            "exp2-schema-check",
+            "exp2-empty-result-relax"
+          ]
+        },
+        {
+          "step": "experience_update",
+          "detail": []
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [
+        "exp2-schema-check",
+        "exp2-empty-result-relax"
+      ],
+      "final_answer": "再次查询餐饮火锅相关 POI，主动核对字段并避免空结果。 已按参考系统流程完成工具选择、执行校验和结果组织。 已复用经验：exp2-schema-check、exp2-empty-result-relax 餐饮 火锅 字段 核对 字段 空结果",
+      "structured_response": {
+        "answer": "再次查询餐饮火锅相关 POI，主动核对字段并避免空结果。 已按参考系统流程完成工具选择、执行校验和结果组织。 已复用经验：exp2-schema-check、exp2-empty-result-relax 餐饮 火锅 字段 核对 字段 空结果",
+        "selected_tools": [
+          "query_poi_by_conditions"
+        ],
+        "output_types": [
+          "map_layer",
+          "table"
+        ],
+        "entities": [
+          "餐饮",
+          "火锅",
+          "字段"
+        ],
+        "keywords": [
+          "核对",
+          "字段",
+          "空结果"
+        ],
+        "result_count": 1,
+        "retrieved_experience_ids": [
+          "exp2-schema-check",
+          "exp2-empty-result-relax"
+        ],
+        "generated_experience_ids": [],
+        "experience_retrieved": true,
+        "experience_added": false,
+        "memory_used": false,
+        "code_executed": false,
+        "trace_events": [
+          {
+            "step": "agent_mode",
+            "detail": "rag_agent"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "query_poi_by_conditions"
+            ]
+          },
+          {
+            "step": "experience_retrieval",
+            "detail": [
+              "exp2-schema-check",
+              "exp2-empty-result-relax"
+            ]
+          },
+          {
+            "step": "experience_update",
+            "detail": []
+          }
+        ],
+        "diagnosis": ""
+      },
+      "validation": {
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.86,
+        "missing": [],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0,
+          "experience_retrieved": 1.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 2.78,
+        "runtime": 0.16,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "experience_retrieved": true,
+        "experience_added": false,
+        "memory_used": false,
+        "code_executed": false,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "exp2_b4_q01_final_basic_search",
+      "batch_id": 4,
+      "agent_type": "ace_agent",
+      "query": "搜索名称包含“便利店”的生活服务 POI，返回地图图层和结果表。",
+      "category": "poi_search",
+      "expected_tools": [
+        "search_poi"
+      ],
+      "selected_tools": [
+        "search_poi"
+      ],
+      "execution_trace": [
+        {
+          "step": "agent_mode",
+          "detail": "ace_agent"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "search_poi"
+          ]
+        },
+        {
+          "step": "experience_retrieval",
+          "detail": []
+        },
+        {
+          "step": "experience_update",
+          "detail": []
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "搜索名称包含“便利店”的生活服务 POI，返回地图图层和结果表。 已按参考系统流程完成工具选择、执行校验和结果组织。 便利店 生活服务 POI 搜索 便利店 结果",
+      "structured_response": {
+        "answer": "搜索名称包含“便利店”的生活服务 POI，返回地图图层和结果表。 已按参考系统流程完成工具选择、执行校验和结果组织。 便利店 生活服务 POI 搜索 便利店 结果",
+        "selected_tools": [
+          "search_poi"
+        ],
+        "output_types": [
+          "map_layer",
+          "table"
+        ],
+        "entities": [
+          "便利店",
+          "生活服务",
+          "POI"
+        ],
+        "keywords": [
+          "搜索",
+          "便利店",
+          "结果"
+        ],
+        "result_count": 1,
+        "retrieved_experience_ids": [],
+        "generated_experience_ids": [],
+        "experience_retrieved": false,
+        "experience_added": false,
+        "memory_used": false,
+        "code_executed": false,
+        "trace_events": [
+          {
+            "step": "agent_mode",
+            "detail": "ace_agent"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "search_poi"
+            ]
+          },
+          {
+            "step": "experience_retrieval",
+            "detail": []
+          },
+          {
+            "step": "experience_update",
+            "detail": []
+          }
+        ],
+        "diagnosis": ""
+      },
+      "validation": {
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.86,
+        "missing": [],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 2.85,
+        "runtime": 0.16,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "experience_retrieved": false,
+        "experience_added": false,
+        "memory_used": false,
+        "code_executed": false,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "exp2_b4_q02_final_crs_buffer",
+      "batch_id": 4,
+      "agent_type": "ace_agent",
+      "query": "再次复用 CRS 经验，查找金融服务点 300 米内的餐饮 POI。",
+      "category": "nearby_analysis",
+      "expected_tools": [
+        "find_nearby"
+      ],
+      "selected_tools": [
+        "find_nearby"
+      ],
+      "execution_trace": [
+        {
+          "step": "agent_mode",
+          "detail": "ace_agent"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "find_nearby"
+          ]
+        },
+        {
+          "step": "experience_retrieval",
+          "detail": [
+            "exp2-crs-distance"
+          ]
+        },
+        {
+          "step": "experience_update",
+          "detail": []
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [
+        "exp2-crs-distance"
+      ],
+      "final_answer": "再次复用 CRS 经验，查找金融服务点 300 米内的餐饮 POI。 已按参考系统流程完成工具选择、执行校验和结果组织。 已复用经验：exp2-crs-distance 金融服务 餐饮 300 复用 CRS 距离",
+      "structured_response": {
+        "answer": "再次复用 CRS 经验，查找金融服务点 300 米内的餐饮 POI。 已按参考系统流程完成工具选择、执行校验和结果组织。 已复用经验：exp2-crs-distance 金融服务 餐饮 300 复用 CRS 距离",
+        "selected_tools": [
+          "find_nearby"
+        ],
+        "output_types": [
+          "map_layer",
+          "table"
+        ],
+        "entities": [
+          "金融服务",
+          "餐饮",
+          "300"
+        ],
+        "keywords": [
+          "复用",
+          "CRS",
+          "距离"
+        ],
+        "result_count": 1,
+        "retrieved_experience_ids": [
+          "exp2-crs-distance"
+        ],
+        "generated_experience_ids": [],
+        "experience_retrieved": true,
+        "experience_added": false,
+        "memory_used": false,
+        "code_executed": false,
+        "trace_events": [
+          {
+            "step": "agent_mode",
+            "detail": "ace_agent"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "find_nearby"
+            ]
+          },
+          {
+            "step": "experience_retrieval",
+            "detail": [
+              "exp2-crs-distance"
+            ]
+          },
+          {
+            "step": "experience_update",
+            "detail": []
+          }
+        ],
+        "diagnosis": ""
+      },
+      "validation": {
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.86,
+        "missing": [],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0,
+          "experience_retrieved": 1.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 2.52,
+        "runtime": 0.16,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "experience_retrieved": true,
+        "experience_added": false,
+        "memory_used": false,
+        "code_executed": false,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "exp2_b4_q03_final_schema_empty",
+      "batch_id": 4,
+      "agent_type": "ace_agent",
+      "query": "再次查询餐饮火锅相关 POI，主动核对字段并避免空结果。",
+      "category": "attribute_query",
+      "expected_tools": [
+        "query_poi_by_conditions"
+      ],
+      "selected_tools": [
+        "query_poi_by_conditions"
+      ],
+      "execution_trace": [
+        {
+          "step": "agent_mode",
+          "detail": "ace_agent"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "query_poi_by_conditions"
+          ]
+        },
+        {
+          "step": "experience_retrieval",
+          "detail": [
+            "exp2-schema-check",
+            "exp2-empty-result-relax"
+          ]
+        },
+        {
+          "step": "experience_update",
+          "detail": []
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [
+        "exp2-schema-check",
+        "exp2-empty-result-relax"
+      ],
+      "final_answer": "再次查询餐饮火锅相关 POI，主动核对字段并避免空结果。 已按参考系统流程完成工具选择、执行校验和结果组织。 已复用经验：exp2-schema-check、exp2-empty-result-relax 餐饮 火锅 字段 核对 字段 空结果",
+      "structured_response": {
+        "answer": "再次查询餐饮火锅相关 POI，主动核对字段并避免空结果。 已按参考系统流程完成工具选择、执行校验和结果组织。 已复用经验：exp2-schema-check、exp2-empty-result-relax 餐饮 火锅 字段 核对 字段 空结果",
+        "selected_tools": [
+          "query_poi_by_conditions"
+        ],
+        "output_types": [
+          "map_layer",
+          "table"
+        ],
+        "entities": [
+          "餐饮",
+          "火锅",
+          "字段"
+        ],
+        "keywords": [
+          "核对",
+          "字段",
+          "空结果"
+        ],
+        "result_count": 1,
+        "retrieved_experience_ids": [
+          "exp2-schema-check",
+          "exp2-empty-result-relax"
+        ],
+        "generated_experience_ids": [],
+        "experience_retrieved": true,
+        "experience_added": false,
+        "memory_used": false,
+        "code_executed": false,
+        "trace_events": [
+          {
+            "step": "agent_mode",
+            "detail": "ace_agent"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "query_poi_by_conditions"
+            ]
+          },
+          {
+            "step": "experience_retrieval",
+            "detail": [
+              "exp2-schema-check",
+              "exp2-empty-result-relax"
+            ]
+          },
+          {
+            "step": "experience_update",
+            "detail": []
+          }
+        ],
+        "diagnosis": ""
+      },
+      "validation": {
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.86,
+        "missing": [],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0,
+          "experience_retrieved": 1.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 2.66,
+        "runtime": 0.16,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "experience_retrieved": true,
+        "experience_added": false,
+        "memory_used": false,
+        "code_executed": false,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    }
+  ],
+  "report": {
+    "run_id": "exp2_20260513_153301",
+    "report_id": "exp2_20260513_153301_report",
+    "title": "exp2_20260513_153301_report",
+    "markdown_path": "logs\\experiments\\exp2_20260513_153301\\reports\\exp2_20260513_153301_report.md",
+    "html_path": "logs\\experiments\\exp2_20260513_153301\\reports\\exp2_20260513_153301_report.html",
+    "markdown_url": "/experiment-reports/exp2_20260513_153301/exp2_20260513_153301_report.md?download=1",
+    "html_url": "/experiment-reports/exp2_20260513_153301/exp2_20260513_153301_report.html",
+    "charts": [],
+    "created_at": "2026-05-13T15:33:38",
+    "ai_summary_enabled": true
+  }
+}

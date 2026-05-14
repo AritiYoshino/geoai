@@ -191,7 +191,7 @@ class ContextManager:
 {schema_info}
 
 ## 可用工具
-1. search_poi(keyword): 跨图层全文搜索 POI。
+1. search_poi(keyword, layer_name, field_name): 跨图层全文搜索 POI；layer_name 可选，指定后只在该图层中搜索；field_name 可选，指定后只匹配该字段。
 2. query_poi_by_conditions(layer_name, conditions): 按真实字段名筛选指定图层。
 3. find_nearby(target_layer, reference_layer, distance, unit): 查找参考图层附近的目标 POI。
 4. find_nearby_point(reference_layer, reference_index, target_layer, distance, unit): 以单个要素为中心做邻近分析。
@@ -199,16 +199,17 @@ class ContextManager:
 6. get_poi_by_index(layer_name, feature_index): 按上下文解析出的图层和索引获取单个 POI 详情并高亮。
 7. buffer_analysis(layer_name, distance, unit, dissolve, feature_index, feature_indices): 缓冲区分析；若用户指定某个 POI、上文中的“这个点/该店/该 POI”，必须传 feature_index，只生成该单个 POI 的缓冲区；若用户指定“某类/这些/满足条件的 POI”，必须先查询命中要素，再传 feature_indices，只生成这些命中 POI 的缓冲区；不传 feature_index/feature_indices 才表示整层缓冲。
 8. overlay_layers(input_layer, overlay_layer, how): 空间叠加 overlay。
-9. spatial_join_layers(target_layer, join_layer, predicate, how): 空间连接 sjoin。
+9. spatial_join_layers(target_layer, join_layer, predicate, how): 空间连接 sjoin；点-面连接会输出面图层并按 poi_count 分级着色，不高亮全部 POI 点。
 10. nearest_neighbor_search(reference_layer, reference_index, target_layer, top_k, max_distance, unit): 最近邻分析。
 11. cluster_points_dbscan(layer_name, eps, min_samples, unit): DBSCAN 聚类分析。
 12. hotspot_analysis(layer_name, cell_size, unit, top_n): 以成都行政区边界为研究范围生成完整网格/栅格面热点分析，count 字段表示每个格子的 POI 数量。
 13. summarize_layer_statistics(layer_name, group_by, numeric_field): 结果统计汇总。
-14. export_analysis_result(source_type, layer_name, export_format, output_name): 导出 GeoJSON / CSV。
+14. export_analysis_result(source_type, layer_name, export_format, output_name, download): 导出 GeoJSON / CSV / Shapefile / GeoTIFF；download=True 时返回浏览器下载链接。
 15. execute_spatial_code(task_description, code): 当固定工具不足时，生成并执行受控 GeoPandas/Pandas 空间分析代码。
 
 ## 代码生成规则
-- 只有固定工具无法完成时才使用 execute_spatial_code。
+- 如果用户需求涉及空间计算（如计数、排序、排名、分组汇总、计算面积/长度/周长、哪个区最多/最少等），应优先用 execute_spatial_code 生成代码实现，而非尝试用固定工具组合实现。
+- 只有固定工具可以高效完成的简单查询（如按属性筛选、邻近分析、缓冲区）才优先使用固定工具。
 - 代码不能 import，不能读写文件，不能调用系统命令。
 - 可直接使用 layers、layer_names、pd、gpd、np、Point、reproject_to_meters。
 - layers 是 dict[str, GeoDataFrame]，键是图层名。

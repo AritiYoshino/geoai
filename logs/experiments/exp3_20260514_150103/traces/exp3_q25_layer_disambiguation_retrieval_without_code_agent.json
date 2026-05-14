@@ -1,0 +1,137 @@
+{
+  "task_id": "exp3_q25_layer_disambiguation_retrieval",
+  "agent_type": "without_code_agent",
+  "agent_name": "ACE w/o CodeAgent",
+  "missing_modules": [
+    "code_agent"
+  ],
+  "query": "“银行”可能属于金融服务而不是公司名称。请判断合适图层，并跨相关图层搜索 name 或 type 包含“银行”的 POI。",
+  "category": "poi_search",
+  "expected_tools": [
+    "search_poi"
+  ],
+  "selected_tools": [
+    "search_poi"
+  ],
+  "execution_trace": [
+    {
+      "step": "ablation_agent",
+      "detail": "missing_modules=code_agent"
+    },
+    {
+      "step": "tool_selection",
+      "detail": [
+        "search_poi"
+      ]
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "exp3-layer-disambiguation"
+      ]
+    },
+    {
+      "step": "critic_diagnosis",
+      "detail": ""
+    },
+    {
+      "step": "experience_update",
+      "detail": []
+    }
+  ],
+  "errors": [],
+  "critic_diagnosis": "",
+  "generated_experience": "",
+  "retrieved_experiences": [
+    "exp3-layer-disambiguation"
+  ],
+  "final_answer": "“银行”可能属于金融服务而不是公司名称。请判断合适图层，并跨相关图层搜索 name 或 type 包含“银行”的 POI。 missing_modules=code_agent  exp3-layer-disambiguation 银行 金融服务 公司 图层选择 经验 图层 name type",
+  "structured_response": {
+    "answer": "“银行”可能属于金融服务而不是公司名称。请判断合适图层，并跨相关图层搜索 name 或 type 包含“银行”的 POI。 missing_modules=code_agent  exp3-layer-disambiguation 银行 金融服务 公司 图层选择 经验 图层 name type",
+    "selected_tools": [
+      "search_poi"
+    ],
+    "output_types": [
+      "map_layer",
+      "table",
+      "explanation"
+    ],
+    "entities": [
+      "银行",
+      "金融服务",
+      "公司",
+      "图层选择"
+    ],
+    "keywords": [
+      "经验",
+      "图层",
+      "name",
+      "type"
+    ],
+    "result_count": 1,
+    "retrieved_experience_ids": [
+      "exp3-layer-disambiguation"
+    ],
+    "generated_experience_ids": [],
+    "experience_retrieved": true,
+    "experience_added": false,
+    "memory_used": false,
+    "code_executed": false,
+    "trace_events": [
+      {
+        "step": "ablation_agent",
+        "detail": "missing_modules=code_agent"
+      },
+      {
+        "step": "tool_selection",
+        "detail": [
+          "search_poi"
+        ]
+      },
+      {
+        "step": "experience_retrieval",
+        "detail": [
+          "exp3-layer-disambiguation"
+        ]
+      },
+      {
+        "step": "critic_diagnosis",
+        "detail": ""
+      },
+      {
+        "step": "experience_update",
+        "detail": []
+      }
+    ]
+  },
+  "validation": {
+    "score": 1.0,
+    "success": true,
+    "threshold": 0.86,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "outputs": 1.0,
+      "entities": 1.0,
+      "keywords": 1.0,
+      "result_count": 1.0,
+      "experience_retrieved": 1.0
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 3.75,
+    "runtime": 0.15,
+    "execution_success": true,
+    "result_correctness": 1.0,
+    "has_map_layer": true,
+    "has_table": true,
+    "result_count": 1,
+    "experience_retrieved": true,
+    "experience_added": false,
+    "memory_used": false,
+    "code_executed": false,
+    "critic_used": false,
+    "missing_module_count": 1
+  }
+}

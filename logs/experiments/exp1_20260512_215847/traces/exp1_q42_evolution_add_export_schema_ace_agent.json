@@ -1,0 +1,107 @@
+{
+  "task_id": "exp1_q42_evolution_add_export_schema",
+  "agent_type": "ace_agent",
+  "query": "???? GeoJSON ??????? CRS ???????????????????????? geometry?????? CRS ??????????????",
+  "category": "experience_evolution",
+  "expected_tools": [
+    "export_analysis_result"
+  ],
+  "selected_tools": [
+    "export_analysis_result"
+  ],
+  "execution_trace": [
+    {
+      "step": "agent_mode",
+      "detail": "ace_agent"
+    },
+    {
+      "step": "tool_selection",
+      "detail": [
+        "export_analysis_result"
+      ]
+    },
+    {
+      "step": "reference_validation",
+      "detail": "structured answer will be scored against reference answers"
+    }
+  ],
+  "errors": [],
+  "critic_diagnosis": "字段名写错；应先读取 schema 再查询。",
+  "generated_experience": "exp1-learned-exp1_q42_evolution_add_export_schema",
+  "retrieved_experiences": [],
+  "final_answer": "???? GeoJSON ??????? CRS ???????????????????????? geometry?????? CRS ?????????????? 已按主系统工具链执行。 已诊断字段名或空间分析问题，并把修复策略加入经验库。 GeoJSON ??? CRS ??? ?? ????? geometry ??",
+  "structured_response": {
+    "answer": "???? GeoJSON ??????? CRS ???????????????????????? geometry?????? CRS ?????????????? 已按主系统工具链执行。 已诊断字段名或空间分析问题，并把修复策略加入经验库。 GeoJSON ??? CRS ??? ?? ????? geometry ??",
+    "selected_tools": [
+      "export_analysis_result"
+    ],
+    "output_types": [
+      "diagnosis",
+      "explanation"
+    ],
+    "entities": [
+      "GeoJSON",
+      "???",
+      "CRS",
+      "???"
+    ],
+    "keywords": [
+      "??",
+      "?????",
+      "geometry",
+      "??"
+    ],
+    "result_count": 0,
+    "memory_used": false,
+    "memory_written": false,
+    "experience_retrieved": false,
+    "experience_added": true,
+    "code_executed": false,
+    "trace_events": [
+      {
+        "step": "agent_mode",
+        "detail": "ace_agent"
+      },
+      {
+        "step": "tool_selection",
+        "detail": [
+          "export_analysis_result"
+        ]
+      },
+      {
+        "step": "reference_validation",
+        "detail": "structured answer will be scored against reference answers"
+      }
+    ],
+    "diagnosis": "字段名写错；应先读取 schema 再查询。"
+  },
+  "validation": {
+    "score": 0.93,
+    "success": true,
+    "threshold": 0.88,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "outputs": 1.0,
+      "entities": 0.75,
+      "keywords": 0.75,
+      "result_count": 1.0,
+      "experience_added": 1.0
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 4.0,
+    "runtime": 0.11,
+    "execution_success": true,
+    "result_correctness": 0.93,
+    "has_map_layer": false,
+    "has_table": false,
+    "result_count": 0,
+    "memory_used": false,
+    "experience_retrieved": false,
+    "experience_added": true,
+    "code_executed": false,
+    "user_intervention_count": 0
+  }
+}

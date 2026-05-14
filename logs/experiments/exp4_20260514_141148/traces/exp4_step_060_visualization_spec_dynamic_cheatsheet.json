@@ -1,0 +1,85 @@
+{
+  "task_id": "exp4_step_060_visualization_spec",
+  "agent_type": "dynamic_cheatsheet",
+  "strategy": "dynamic_cheatsheet",
+  "adaptation_step": 60,
+  "query": "Step 60: 为 误差分析 选择合适图表并保持坐标轴、图例和单位说明一致。",
+  "category": "visualization",
+  "expected_skill": "visualization_spec",
+  "novelty": "transfer",
+  "expected_tools": [
+    "reasoning",
+    "chart_spec"
+  ],
+  "selected_tools": [
+    "reasoning",
+    "chart_spec"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 60
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "visualization_spec-050"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "visualization_spec-060"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 8824
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "visualization_spec-060",
+  "retrieved_experiences": [
+    "visualization_spec-050"
+  ],
+  "final_answer": "dynamic_cheatsheet step=60 skill=visualization_spec accuracy=0.892 context_tokens=8824 retrieved=1 generated=1",
+  "structured_response": {
+    "accuracy": 0.892,
+    "context_token_count": 8824,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "visualization_spec-050"
+    ],
+    "generated_experience_ids": [
+      "visualization_spec-060"
+    ]
+  },
+  "validation": {
+    "score": 0.892,
+    "success": true,
+    "threshold": 0.72,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "accuracy": 0.892
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 3.0,
+    "runtime": 0.12,
+    "execution_success": true,
+    "result_correctness": 0.892,
+    "context_token_count": 8824,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 11,
+    "compression_event": ""
+  }
+}

@@ -1,0 +1,137 @@
+{
+  "task_id": "exp3_q02_schema_critic_evolution",
+  "agent_type": "without_code_agent",
+  "agent_name": "ACE w/o CodeAgent",
+  "missing_modules": [
+    "code_agent"
+  ],
+  "query": "查询餐饮图层中 type 或 name 包含“火锅”的 POI；若字段名不匹配，说明失败原因并给出后续可复用的字段检查策略。",
+  "category": "attribute_query",
+  "expected_tools": [
+    "query_poi_by_conditions"
+  ],
+  "selected_tools": [
+    "query_poi_by_conditions"
+  ],
+  "execution_trace": [
+    {
+      "step": "ablation_agent",
+      "detail": "missing_modules=code_agent"
+    },
+    {
+      "step": "tool_selection",
+      "detail": [
+        "query_poi_by_conditions"
+      ]
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": []
+    },
+    {
+      "step": "critic_diagnosis",
+      "detail": "Critic 诊断：exp3_q02_schema_critic_evolution 触发可修复错误，需保留失败原因并交给 Evolution。"
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "exp3-schema-field-check"
+      ]
+    }
+  ],
+  "errors": [],
+  "critic_diagnosis": "Critic 诊断：exp3_q02_schema_critic_evolution 触发可修复错误，需保留失败原因并交给 Evolution。",
+  "generated_experience": "exp3-schema-field-check",
+  "retrieved_experiences": [],
+  "final_answer": "查询餐饮图层中 type 或 name 包含“火锅”的 POI；若字段名不匹配，说明失败原因并给出后续可复用的字段检查策略。 missing_modules=code_agent Critic 诊断：exp3_q02_schema_critic_evolution 触发可修复错误，需保留失败原因并交给 Evolution。 exp3-schema-field-check 餐饮 火锅 type name 字段 Critic 诊断 经验库 schema",
+  "structured_response": {
+    "answer": "查询餐饮图层中 type 或 name 包含“火锅”的 POI；若字段名不匹配，说明失败原因并给出后续可复用的字段检查策略。 missing_modules=code_agent Critic 诊断：exp3_q02_schema_critic_evolution 触发可修复错误，需保留失败原因并交给 Evolution。 exp3-schema-field-check 餐饮 火锅 type name 字段 Critic 诊断 经验库 schema",
+    "selected_tools": [
+      "query_poi_by_conditions"
+    ],
+    "output_types": [
+      "map_layer",
+      "table",
+      "diagnosis",
+      "explanation"
+    ],
+    "entities": [
+      "餐饮",
+      "火锅",
+      "type",
+      "name",
+      "字段"
+    ],
+    "keywords": [
+      "Critic",
+      "诊断",
+      "经验库",
+      "schema"
+    ],
+    "result_count": 1,
+    "retrieved_experience_ids": [],
+    "generated_experience_ids": [
+      "exp3-schema-field-check"
+    ],
+    "experience_retrieved": false,
+    "experience_added": true,
+    "memory_used": false,
+    "code_executed": false,
+    "trace_events": [
+      {
+        "step": "ablation_agent",
+        "detail": "missing_modules=code_agent"
+      },
+      {
+        "step": "tool_selection",
+        "detail": [
+          "query_poi_by_conditions"
+        ]
+      },
+      {
+        "step": "experience_retrieval",
+        "detail": []
+      },
+      {
+        "step": "critic_diagnosis",
+        "detail": "Critic 诊断：exp3_q02_schema_critic_evolution 触发可修复错误，需保留失败原因并交给 Evolution。"
+      },
+      {
+        "step": "experience_update",
+        "detail": [
+          "exp3-schema-field-check"
+        ]
+      }
+    ]
+  },
+  "validation": {
+    "score": 1.0,
+    "success": true,
+    "threshold": 0.86,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "outputs": 1.0,
+      "entities": 1.0,
+      "keywords": 1.0,
+      "result_count": 1.0,
+      "experience_added": 1.0
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 4.1,
+    "runtime": 0.15,
+    "execution_success": true,
+    "result_correctness": 1.0,
+    "has_map_layer": true,
+    "has_table": true,
+    "result_count": 1,
+    "experience_retrieved": false,
+    "experience_added": true,
+    "memory_used": false,
+    "code_executed": false,
+    "critic_used": true,
+    "missing_module_count": 1
+  }
+}

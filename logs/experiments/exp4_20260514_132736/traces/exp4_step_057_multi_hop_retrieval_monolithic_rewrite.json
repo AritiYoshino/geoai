@@ -1,0 +1,84 @@
+{
+  "task_id": "exp4_step_057_multi_hop_retrieval",
+  "agent_type": "monolithic_rewrite",
+  "strategy": "monolithic_rewrite",
+  "adaptation_step": 57,
+  "query": "Step 57: 对 公司-产品 做多跳检索，先定位实体再验证关系。",
+  "category": "retrieval_reasoning",
+  "expected_skill": "multi_hop_retrieval",
+  "novelty": "transfer",
+  "expected_tools": [
+    "retrieval",
+    "reasoning"
+  ],
+  "selected_tools": [
+    "retrieval",
+    "reasoning"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 57
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "multi_hop_retrieval-037",
+        "multi_hop_retrieval-047"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "multi_hop_retrieval-057"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 5334
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "multi_hop_retrieval-057",
+  "retrieved_experiences": [
+    "multi_hop_retrieval-037",
+    "multi_hop_retrieval-047"
+  ],
+  "final_answer": "monolithic_rewrite step=57 skill=multi_hop_retrieval accuracy=0.757 context_tokens=5334 retrieved=2 generated=1",
+  "structured_response": {
+    "accuracy": 0.757,
+    "context_token_count": 5334,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "multi_hop_retrieval-037",
+      "multi_hop_retrieval-047"
+    ],
+    "generated_experience_ids": [
+      "multi_hop_retrieval-057"
+    ]
+  },
+  "validation": {
+    "score": 0.757,
+    "success": true,
+    "threshold": 0.72,
+    "missing": []
+  },
+  "success": true,
+  "metrics": {
+    "turns": 3.4,
+    "runtime": 0.12,
+    "execution_success": true,
+    "result_correctness": 0.757,
+    "context_token_count": 5334,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 21,
+    "compression_event": ""
+  }
+}

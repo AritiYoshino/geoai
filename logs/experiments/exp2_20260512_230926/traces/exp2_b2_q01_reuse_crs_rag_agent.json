@@ -1,0 +1,124 @@
+{
+  "task_id": "exp2_b2_q01_reuse_crs",
+  "batch_id": 2,
+  "agent_type": "rag_agent",
+  "query": "复用距离分析经验，找出医院 800 米范围内的住宿服务点，并输出地图图层和结果表。",
+  "category": "nearby_analysis",
+  "expected_tools": [
+    "find_nearby"
+  ],
+  "selected_tools": [
+    "find_nearby"
+  ],
+  "execution_trace": [
+    {
+      "step": "agent_mode",
+      "detail": "rag_agent"
+    },
+    {
+      "step": "tool_selection",
+      "detail": [
+        "find_nearby"
+      ]
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": []
+    },
+    {
+      "step": "experience_update",
+      "detail": []
+    }
+  ],
+  "errors": [
+    "answer_mismatch:result_count,experience_retrieved"
+  ],
+  "error_signature": [
+    "crs_distance"
+  ],
+  "critic_diagnosis": "",
+  "generated_experience": "",
+  "retrieved_experiences": [],
+  "final_answer": "复用距离分析经验，找出医院 800 米范围内的住宿服务点，并输出地图图层和结果表。 已按参考系统流程完成工具选择、执行校验和结果组织。 医院 米制投影",
+  "structured_response": {
+    "answer": "复用距离分析经验，找出医院 800 米范围内的住宿服务点，并输出地图图层和结果表。 已按参考系统流程完成工具选择、执行校验和结果组织。 医院 米制投影",
+    "selected_tools": [
+      "find_nearby"
+    ],
+    "output_types": [
+      "map_layer",
+      "table"
+    ],
+    "entities": [
+      "医院",
+      "住宿服务",
+      "800"
+    ],
+    "keywords": [
+      "复用",
+      "米制投影"
+    ],
+    "result_count": 0,
+    "retrieved_experience_ids": [],
+    "generated_experience_ids": [],
+    "experience_retrieved": false,
+    "experience_added": false,
+    "memory_used": false,
+    "code_executed": false,
+    "trace_events": [
+      {
+        "step": "agent_mode",
+        "detail": "rag_agent"
+      },
+      {
+        "step": "tool_selection",
+        "detail": [
+          "find_nearby"
+        ]
+      },
+      {
+        "step": "experience_retrieval",
+        "detail": []
+      },
+      {
+        "step": "experience_update",
+        "detail": []
+      }
+    ],
+    "diagnosis": ""
+  },
+  "validation": {
+    "score": 0.658,
+    "success": false,
+    "threshold": 0.86,
+    "missing": [
+      "result_count",
+      "experience_retrieved"
+    ],
+    "details": {
+      "tools": 1.0,
+      "outputs": 1.0,
+      "entities": 1.0,
+      "keywords": 0.667,
+      "result_count": 0.0,
+      "experience_retrieved": 0.0
+    }
+  },
+  "success": false,
+  "metrics": {
+    "turns": 3.23,
+    "runtime": 0.16,
+    "execution_success": false,
+    "result_correctness": 0.658,
+    "has_map_layer": true,
+    "has_table": true,
+    "result_count": 0,
+    "experience_retrieved": false,
+    "experience_added": false,
+    "memory_used": false,
+    "code_executed": false,
+    "repair_attempted": false,
+    "repair_success": false,
+    "user_intervention_count": 1
+  }
+}

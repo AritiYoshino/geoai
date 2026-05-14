@@ -1,0 +1,91 @@
+{
+  "task_id": "exp4_step_100_multi_metric_ranking",
+  "agent_type": "monolithic_rewrite",
+  "strategy": "monolithic_rewrite",
+  "adaptation_step": 100,
+  "query": "Step 100: 综合 学校、医院覆盖数量 与行政区面积归一化得分，输出综合排名 Top 5 和校验表。",
+  "category": "code_required",
+  "expected_skill": "ranking_validation",
+  "novelty": "retention_retest",
+  "expected_tools": [
+    "execute_spatial_code",
+    "ranking_check"
+  ],
+  "selected_tools": [
+    "execute_spatial_code",
+    "ranking_check"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 100
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "ranking_validation-070",
+        "ranking_validation-080",
+        "ranking_validation-090"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "ranking_validation-100"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 10980
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "ranking_validation-100",
+  "retrieved_experiences": [
+    "ranking_validation-070",
+    "ranking_validation-080",
+    "ranking_validation-090"
+  ],
+  "final_answer": "monolithic_rewrite step=100 skill=ranking_validation accuracy=0.78 context_tokens=10980 retrieved=3 generated=1",
+  "structured_response": {
+    "accuracy": 0.78,
+    "context_token_count": 10980,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "ranking_validation-070",
+      "ranking_validation-080",
+      "ranking_validation-090"
+    ],
+    "generated_experience_ids": [
+      "ranking_validation-100"
+    ]
+  },
+  "validation": {
+    "score": 0.78,
+    "success": true,
+    "threshold": 0.72,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "accuracy": 0.78
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 3.75,
+    "runtime": 0.12,
+    "execution_success": true,
+    "result_correctness": 0.78,
+    "context_token_count": 10980,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 39,
+    "compression_event": ""
+  }
+}

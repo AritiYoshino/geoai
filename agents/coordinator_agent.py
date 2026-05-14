@@ -50,6 +50,26 @@ class CoordinatorAgent:
             self.context_manager.set_trace(trace)
             return deterministic_answer
 
+        deterministic_answer = self._maybe_run_deterministic_export(
+            user_input=user_input,
+            task_type=task_type,
+            trace=trace,
+        )
+        if deterministic_answer:
+            self.context_manager.set_trace(trace)
+            return deterministic_answer
+
+        deterministic_answer = self._maybe_run_deterministic_lodging_search(
+            user_input=user_input,
+            task_type=task_type,
+            experience_text=experience_text,
+            trace=trace,
+            highlight_callback=highlight_callback,
+        )
+        if deterministic_answer:
+            self.context_manager.set_trace(trace)
+            return deterministic_answer
+
         final_answer = self._dispatch_loop(
             user_input=user_input,
             task_type=task_type,
@@ -130,8 +150,9 @@ class CoordinatorAgent:
     def _make_plan(self, user_input, task_type, conversation_context):
         base = [
             "1. 解析用户意图、距离单位、目标类别和可能省略的参考 POI。",
-            "2. 读取会话上下文；若存在“最可能指代的上一轮 POI”，优先使用它。",
+            "2. 读取会话上下文；若存在「最可能指代的上一轮 POI」，优先使用它。",
             "3. 检索经验库，确定字段验证、CRS、防御性查询等约束。",
+            "3a. 判断用户需求是否为空间计算（如计数、排序、排名、分组汇总、哪个区最多/最少、计算面积/长度/周长等）。如果是，优先用 execute_spatial_code 生成 GeoPandas 代码实现，而非尝试用固定工具组合实现。",
             "4. 调度空间分析智能体调用工具，必要时先定位参考点，再执行空间分析。",
             "5. 将工具反馈交给 Critic 智能体诊断，发现可沉淀经验的问题则交由 Evolution 智能体更新经验库。",
             "6. 输出简洁结论，并同步地图高亮结果。",
@@ -153,6 +174,13 @@ class CoordinatorAgent:
                 )
         elif task_type in {"query", "search"}:
             base.insert(4, "4a. 属性查询前必须确认图层字段，避免猜测列名。")
+            # 检测是否包含空间计算关键词（面积、长度、统计等），若是则引导使用 execute_spatial_code
+            compute_keywords = ["计算", "面积", "长度", "周长", "统计", "空间分析"]
+            if any(kw in user_input for kw in compute_keywords):
+                base.insert(
+                    5,
+                    "4b. 用户输入包含空间计算关键词（如计算、面积、长度等），虽然被归类为查询任务，但你可能需要用 execute_spatial_code 生成 GeoPandas 代码来实现空间计算。例如计算行政区面积：先找到行政区面图层，用 reproject_to_meters 转米制投影后计算面积（平方公里），结果赋值给 RESULT。",
+                )
         return "\n".join(base)
 
     def _maybe_run_deterministic_clustering(self, user_input, task_type, trace, highlight_callback):
@@ -202,6 +230,154 @@ class CoordinatorAgent:
             trace=trace,
         )
         return self._format_single_tool_answer(user_input, execution, trace)
+
+    def _maybe_run_deterministic_export(self, user_input, task_type, trace):
+        text = str(user_input or "")
+        lowered = text.lower()
+        if task_type != "export" and not any(token in text for token in ("导出", "下载", "保存")):
+            return None
+
+        export_format = "geojson"
+        if any(token in lowered for token in ("shp", "shapefile")) or "矢量文件" in text:
+            export_format = "shp"
+        elif "csv" in lowered:
+            export_format = "csv"
+        elif any(token in lowered for token in ("tif", "tiff", "geotiff")) or any(token in text for token in ("栅格", "栅格图", "热点栅格")):
+            export_format = "geotiff"
+        elif "geojson" in lowered or "json" in lowered:
+            export_format = "geojson"
+
+        layer_name = self._extract_layer_name(text)
+        args = {
+            "source_type": "layer" if layer_name else "last_result",
+            "layer_name": layer_name or "",
+            "export_format": export_format,
+            "output_name": "",
+            "download": any(token in text for token in ("下载", "浏览器")) or "download" in lowered,
+        }
+        tool_call = {
+            "id": "deterministic_export_analysis_result",
+            "name": "export_analysis_result",
+            "args": args,
+        }
+        trace.add("Coordinator Agent", "识别为导出/下载请求，直接调用 export_analysis_result。")
+        execution = self.spatial_agent.execute_tool(tool_call, trace)
+        self._diagnose_and_evolve_tool_result(
+            user_input=user_input,
+            task_type=task_type,
+            tool_name=execution.name,
+            tool_args=execution.args,
+            result=execution.result,
+            trace=trace,
+        )
+        return self._format_single_tool_answer(user_input, execution, trace)
+
+    def _maybe_run_deterministic_lodging_search(self, user_input, task_type, experience_text, trace, highlight_callback):
+        text = str(user_input or "").strip()
+        lowered = text.lower()
+        if task_type not in {"search", "query"}:
+            return None
+        if not any(token in text for token in ("酒店", "宾馆", "住宿")):
+            return None
+
+        # --- 新增防卫：如果用户意图是统计/计算/分组汇总，不走住宿搜索，让 dispatch_loop 用 execute_spatial_code 处理 ---
+        statistical_markers = ["统计", "排序", "各个", "每个", "计数", "汇总", "分组", "多少个", "最多", "最少", "排名", "数量"]
+        if any(marker in text for marker in statistical_markers):
+            trace.add(
+                "Coordinator Agent",
+                "检测到统计类关键词（如统计、排序、各个等），跳过确定性住宿搜索，交由正常调度循环处理。",
+            )
+            return None
+        # -----------------------------------------------------------------------
+
+        if self._experience_requests_all_layer_name_search(experience_text):
+            keyword = self._extract_search_keyword(text)
+            if not keyword:
+                return None
+            tool_call = {
+                "id": "deterministic_all_layer_name_search",
+                "name": "search_poi",
+                "args": {
+                    "keyword": keyword,
+                    "field_name": "name",
+                },
+            }
+            trace.add(
+                "Coordinator Agent",
+                "根据经验库规则，改为在所有图层的 name 字段中搜索，不限定住宿服务图层。",
+            )
+            execution = self.spatial_agent.execute_tool(tool_call, trace)
+            self.context_manager.remember_pois(execution.pois)
+            if execution.highlights:
+                highlight_callback(execution.highlights)
+            self._diagnose_and_evolve_tool_result(
+                user_input=user_input,
+                task_type=task_type,
+                tool_name=execution.name,
+                tool_args=execution.args,
+                result=execution.result,
+                trace=trace,
+            )
+            return self._format_single_tool_answer(user_input, execution, trace)
+
+        if any(token in text for token in ("停车场", "停车位", "车场", "交通设施")):
+            return None
+        if any(token in text for token in ("所有图层", "全部图层", "全图层", "跨图层")):
+            return None
+        if "hotel" not in lowered and not any(token in text for token in ("酒店", "宾馆", "住宿")):
+            return None
+
+        lodging_layer = self._find_lodging_layer_name()
+        if not lodging_layer:
+            return None
+
+        keyword = self._extract_search_keyword(text)
+        if not keyword:
+            return None
+
+        tool_call = {
+            "id": "deterministic_lodging_search",
+            "name": "search_poi",
+            "args": {
+                "keyword": keyword,
+                "layer_name": lodging_layer,
+            },
+        }
+        trace.add(
+            "Coordinator Agent",
+            f"根据酒店/住宿查询规则，限定在图层 '{lodging_layer}' 中搜索，避免误检交通设施等图层。",
+        )
+        execution = self.spatial_agent.execute_tool(tool_call, trace)
+        self.context_manager.remember_pois(execution.pois)
+        if execution.highlights:
+            highlight_callback(execution.highlights)
+        self._diagnose_and_evolve_tool_result(
+            user_input=user_input,
+            task_type=task_type,
+            tool_name=execution.name,
+            tool_args=execution.args,
+            result=execution.result,
+            trace=trace,
+        )
+        return self._format_single_tool_answer(user_input, execution, trace)
+
+    def _experience_requests_all_layer_name_search(self, experience_text):
+        text = str(experience_text or "")
+        wants_all_layers = any(token in text for token in ("所有图层", "全部图层", "全图层", "跨图层"))
+        wants_name_field = any(token in text for token in ("名字", "名称", "name"))
+        return wants_all_layers and wants_name_field
+
+    def _find_lodging_layer_name(self):
+        names = getattr(self.context_manager.map_handler, "layer_names", [])
+        preferred = [name for name in names if str(name) == "住宿服务"]
+        preferred.extend(name for name in names if "住宿服务" in str(name) and name not in preferred)
+        preferred.extend(name for name in names if "住宿" in str(name) and name not in preferred)
+        return str(preferred[0]) if preferred else None
+
+    def _extract_search_keyword(self, text):
+        keyword = re.sub(r"^(帮我|请|麻烦)?\s*(查找|搜索|寻找|查询|找一下|找)\s*", "", text).strip()
+        keyword = re.sub(r"\s*(在哪|在哪里|的位置|位置)$", "", keyword).strip()
+        return keyword or text.strip()
 
     def _extract_layer_name(self, text):
         names = getattr(self.context_manager.map_handler, "layer_names", [])

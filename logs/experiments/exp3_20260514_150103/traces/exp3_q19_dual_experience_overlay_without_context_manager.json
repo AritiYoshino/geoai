@@ -1,0 +1,141 @@
+{
+  "task_id": "exp3_q19_dual_experience_overlay",
+  "agent_type": "without_context_manager",
+  "agent_name": "ACE w/o ContextManager",
+  "missing_modules": [
+    "context_manager"
+  ],
+  "query": "统计学校 700 米范围内餐饮 POI 数量，说明坐标处理和字段核对过程，并返回统计表。",
+  "category": "nearby_analysis",
+  "expected_tools": [
+    "find_nearby"
+  ],
+  "selected_tools": [
+    "find_nearby"
+  ],
+  "execution_trace": [
+    {
+      "step": "ablation_agent",
+      "detail": "missing_modules=context_manager"
+    },
+    {
+      "step": "tool_selection",
+      "detail": [
+        "find_nearby"
+      ]
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "exp3-crs-distance",
+        "exp3-schema-field-check"
+      ]
+    },
+    {
+      "step": "critic_diagnosis",
+      "detail": ""
+    },
+    {
+      "step": "experience_update",
+      "detail": []
+    }
+  ],
+  "errors": [],
+  "critic_diagnosis": "",
+  "generated_experience": "",
+  "retrieved_experiences": [
+    "exp3-crs-distance",
+    "exp3-schema-field-check"
+  ],
+  "final_answer": "统计学校 700 米范围内餐饮 POI 数量，说明坐标处理和字段核对过程，并返回统计表。 missing_modules=context_manager  exp3-crs-distance exp3-schema-field-check 学校 餐饮 CRS schema 经验 投影 字段 统计",
+  "structured_response": {
+    "answer": "统计学校 700 米范围内餐饮 POI 数量，说明坐标处理和字段核对过程，并返回统计表。 missing_modules=context_manager  exp3-crs-distance exp3-schema-field-check 学校 餐饮 CRS schema 经验 投影 字段 统计",
+    "selected_tools": [
+      "find_nearby"
+    ],
+    "output_types": [
+      "map_layer",
+      "table",
+      "explanation"
+    ],
+    "entities": [
+      "学校",
+      "餐饮",
+      "CRS",
+      "schema"
+    ],
+    "keywords": [
+      "经验",
+      "投影",
+      "字段",
+      "统计"
+    ],
+    "result_count": 1,
+    "retrieved_experience_ids": [
+      "exp3-crs-distance",
+      "exp3-schema-field-check"
+    ],
+    "generated_experience_ids": [],
+    "experience_retrieved": true,
+    "experience_added": false,
+    "memory_used": false,
+    "code_executed": false,
+    "trace_events": [
+      {
+        "step": "ablation_agent",
+        "detail": "missing_modules=context_manager"
+      },
+      {
+        "step": "tool_selection",
+        "detail": [
+          "find_nearby"
+        ]
+      },
+      {
+        "step": "experience_retrieval",
+        "detail": [
+          "exp3-crs-distance",
+          "exp3-schema-field-check"
+        ]
+      },
+      {
+        "step": "critic_diagnosis",
+        "detail": ""
+      },
+      {
+        "step": "experience_update",
+        "detail": []
+      }
+    ]
+  },
+  "validation": {
+    "score": 1.0,
+    "success": true,
+    "threshold": 0.86,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "outputs": 1.0,
+      "entities": 1.0,
+      "keywords": 1.0,
+      "result_count": 1.0,
+      "experience_retrieved": 1.0
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 3.75,
+    "runtime": 0.15,
+    "execution_success": true,
+    "result_correctness": 1.0,
+    "has_map_layer": true,
+    "has_table": true,
+    "result_count": 1,
+    "experience_retrieved": true,
+    "experience_added": false,
+    "memory_used": false,
+    "code_executed": false,
+    "critic_used": false,
+    "missing_module_count": 1
+  }
+}

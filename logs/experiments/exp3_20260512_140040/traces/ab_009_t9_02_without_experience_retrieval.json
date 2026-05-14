@@ -1,0 +1,51 @@
+{
+  "task_id": "ab_009_t9_02",
+  "agent_type": "without_experience_retrieval",
+  "query": "对餐饮 POI 做 DBSCAN 聚类，并解释聚类参数",
+  "category": "clustering",
+  "expected_tools": [
+    "cluster_points_dbscan"
+  ],
+  "selected_tools": [
+    "cluster_points_dbscan"
+  ],
+  "execution_trace": [
+    {
+      "step": "intent",
+      "detail": "clustering"
+    },
+    {
+      "step": "tool_selection",
+      "detail": [
+        "cluster_points_dbscan"
+      ]
+    },
+    {
+      "step": "evaluation",
+      "detail": "failed"
+    }
+  ],
+  "errors": [
+    "rule_eval_failed:clustering"
+  ],
+  "error_signature": [
+    "clustering"
+  ],
+  "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+  "generated_experience": "exp:clustering:check schema/CRS/result before final answer",
+  "retrieved_experiences": [],
+  "final_answer": "任务未完全满足预期，已记录失败原因。",
+  "success": false,
+  "metrics": {
+    "turns": 3.9,
+    "runtime": 1.102,
+    "execution_success": false,
+    "result_correctness": 0.15559999999999996,
+    "has_map_layer": true,
+    "has_table": true,
+    "result_count": 0,
+    "repair_attempted": false,
+    "repair_success": false,
+    "user_intervention_count": 0
+  }
+}

@@ -1,0 +1,84 @@
+{
+  "task_id": "exp4_step_003_empty_result_recovery",
+  "agent_type": "monolithic_rewrite",
+  "strategy": "monolithic_rewrite",
+  "adaptation_step": 3,
+  "query": "Step 3: 精确搜索“天府广场地铁站A口公交换乘点”；若结果为空，逐级放宽关键词并说明回退策略。",
+  "category": "poi_search",
+  "expected_skill": "empty_result_recovery",
+  "novelty": "warmup",
+  "expected_tools": [
+    "search_poi",
+    "fallback_search"
+  ],
+  "selected_tools": [
+    "search_poi"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 3
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": []
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "empty_result_recovery-003"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 1788
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [
+    "context_stability_miss:empty_result_recovery"
+  ],
+  "error_signature": [
+    "empty_result_recovery"
+  ],
+  "critic_diagnosis": "empty_result_recovery evidence missing after context update",
+  "generated_experience": "empty_result_recovery-003",
+  "retrieved_experiences": [],
+  "final_answer": "monolithic_rewrite step=3 skill=empty_result_recovery accuracy=0.587 context_tokens=1788 retrieved=0 generated=1",
+  "structured_response": {
+    "accuracy": 0.587,
+    "context_token_count": 1788,
+    "compression_event": "",
+    "retrieved_experience_ids": [],
+    "generated_experience_ids": [
+      "empty_result_recovery-003"
+    ]
+  },
+  "validation": {
+    "score": 0.587,
+    "success": false,
+    "threshold": 0.72,
+    "missing": [
+      "empty_result_recovery"
+    ],
+    "details": {
+      "tools": 1.0,
+      "accuracy": 0.587
+    }
+  },
+  "success": false,
+  "metrics": {
+    "turns": 3.4,
+    "runtime": 0.12,
+    "execution_success": false,
+    "result_correctness": 0.587,
+    "context_token_count": 1788,
+    "experience_retrieved": false,
+    "experience_added": true,
+    "library_size": 3,
+    "compression_event": ""
+  }
+}

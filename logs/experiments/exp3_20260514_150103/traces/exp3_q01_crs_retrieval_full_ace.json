@@ -1,0 +1,135 @@
+{
+  "task_id": "exp3_q01_crs_retrieval",
+  "agent_type": "full_ace",
+  "agent_name": "Full ACE",
+  "missing_modules": [],
+  "query": "查找学校 500 米范围内的餐饮 POI，说明距离计算所需的坐标处理，并返回表格和地图图层。",
+  "category": "nearby_analysis",
+  "expected_tools": [
+    "find_nearby"
+  ],
+  "selected_tools": [
+    "find_nearby"
+  ],
+  "execution_trace": [
+    {
+      "step": "ablation_agent",
+      "detail": "missing_modules="
+    },
+    {
+      "step": "tool_selection",
+      "detail": [
+        "find_nearby"
+      ]
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "exp3-crs-distance"
+      ]
+    },
+    {
+      "step": "critic_diagnosis",
+      "detail": ""
+    },
+    {
+      "step": "experience_update",
+      "detail": []
+    }
+  ],
+  "errors": [],
+  "critic_diagnosis": "",
+  "generated_experience": "",
+  "retrieved_experiences": [
+    "exp3-crs-distance"
+  ],
+  "final_answer": "查找学校 500 米范围内的餐饮 POI，说明距离计算所需的坐标处理，并返回表格和地图图层。 missing_modules=  exp3-crs-distance 学校 餐饮 500 CRS 经验 投影 米制 距离",
+  "structured_response": {
+    "answer": "查找学校 500 米范围内的餐饮 POI，说明距离计算所需的坐标处理，并返回表格和地图图层。 missing_modules=  exp3-crs-distance 学校 餐饮 500 CRS 经验 投影 米制 距离",
+    "selected_tools": [
+      "find_nearby"
+    ],
+    "output_types": [
+      "map_layer",
+      "table",
+      "explanation"
+    ],
+    "entities": [
+      "学校",
+      "餐饮",
+      "500",
+      "CRS"
+    ],
+    "keywords": [
+      "经验",
+      "投影",
+      "米制",
+      "距离"
+    ],
+    "result_count": 1,
+    "retrieved_experience_ids": [
+      "exp3-crs-distance"
+    ],
+    "generated_experience_ids": [],
+    "experience_retrieved": true,
+    "experience_added": false,
+    "memory_used": false,
+    "code_executed": false,
+    "trace_events": [
+      {
+        "step": "ablation_agent",
+        "detail": "missing_modules="
+      },
+      {
+        "step": "tool_selection",
+        "detail": [
+          "find_nearby"
+        ]
+      },
+      {
+        "step": "experience_retrieval",
+        "detail": [
+          "exp3-crs-distance"
+        ]
+      },
+      {
+        "step": "critic_diagnosis",
+        "detail": ""
+      },
+      {
+        "step": "experience_update",
+        "detail": []
+      }
+    ]
+  },
+  "validation": {
+    "score": 1.0,
+    "success": true,
+    "threshold": 0.86,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "outputs": 1.0,
+      "entities": 1.0,
+      "keywords": 1.0,
+      "result_count": 1.0,
+      "experience_retrieved": 1.0
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 3.4,
+    "runtime": 0.15,
+    "execution_success": true,
+    "result_correctness": 1.0,
+    "has_map_layer": true,
+    "has_table": true,
+    "result_count": 1,
+    "experience_retrieved": true,
+    "experience_added": false,
+    "memory_used": false,
+    "code_executed": false,
+    "critic_used": false,
+    "missing_module_count": 0
+  }
+}

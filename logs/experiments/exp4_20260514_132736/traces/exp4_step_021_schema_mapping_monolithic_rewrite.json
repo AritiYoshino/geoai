@@ -1,0 +1,89 @@
+{
+  "task_id": "exp4_step_021_schema_mapping",
+  "agent_type": "monolithic_rewrite",
+  "strategy": "monolithic_rewrite",
+  "adaptation_step": 21,
+  "query": "Step 21: 根据不同表格字段别名完成 schema 对齐任务，领域变体为 客户表。",
+  "category": "structured_reasoning",
+  "expected_skill": "schema_mapping",
+  "novelty": "transfer",
+  "expected_tools": [
+    "reasoning",
+    "schema_check"
+  ],
+  "selected_tools": [
+    "reasoning"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 21
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "schema_mapping-001",
+        "schema_mapping-011"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "schema_mapping-021"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 7098
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [
+    "context_stability_miss:schema_mapping"
+  ],
+  "error_signature": [
+    "schema_mapping"
+  ],
+  "critic_diagnosis": "schema_mapping evidence missing after context update",
+  "generated_experience": "schema_mapping-021",
+  "retrieved_experiences": [
+    "schema_mapping-001",
+    "schema_mapping-011"
+  ],
+  "final_answer": "monolithic_rewrite step=21 skill=schema_mapping accuracy=0.67 context_tokens=7098 retrieved=2 generated=1",
+  "structured_response": {
+    "accuracy": 0.67,
+    "context_token_count": 7098,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "schema_mapping-001",
+      "schema_mapping-011"
+    ],
+    "generated_experience_ids": [
+      "schema_mapping-021"
+    ]
+  },
+  "validation": {
+    "score": 0.67,
+    "success": false,
+    "threshold": 0.72,
+    "missing": [
+      "schema_mapping"
+    ]
+  },
+  "success": false,
+  "metrics": {
+    "turns": 3.4,
+    "runtime": 0.12,
+    "execution_success": false,
+    "result_correctness": 0.67,
+    "context_token_count": 7098,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 21,
+    "compression_event": ""
+  }
+}

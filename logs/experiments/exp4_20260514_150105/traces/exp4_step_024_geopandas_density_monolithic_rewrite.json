@@ -1,0 +1,93 @@
+{
+  "task_id": "exp4_step_024_geopandas_density",
+  "agent_type": "monolithic_rewrite",
+  "strategy": "monolithic_rewrite",
+  "adaptation_step": 24,
+  "query": "Step 24: 使用 GeoPandas 计算各行政区 生活服务 POI 密度，输出 count、area_km2、density 和 Top 5。",
+  "category": "code_required",
+  "expected_skill": "code_execution",
+  "novelty": "transfer",
+  "expected_tools": [
+    "execute_spatial_code",
+    "validation_report"
+  ],
+  "selected_tools": [
+    "execute_spatial_code"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 24
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "code_execution-004",
+        "code_execution-014"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "code_execution-024"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 8040
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [
+    "context_stability_miss:code_execution"
+  ],
+  "error_signature": [
+    "code_execution"
+  ],
+  "critic_diagnosis": "code_execution evidence missing after context update",
+  "generated_experience": "code_execution-024",
+  "retrieved_experiences": [
+    "code_execution-004",
+    "code_execution-014"
+  ],
+  "final_answer": "monolithic_rewrite step=24 skill=code_execution accuracy=0.678 context_tokens=8040 retrieved=2 generated=1",
+  "structured_response": {
+    "accuracy": 0.678,
+    "context_token_count": 8040,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "code_execution-004",
+      "code_execution-014"
+    ],
+    "generated_experience_ids": [
+      "code_execution-024"
+    ]
+  },
+  "validation": {
+    "score": 0.678,
+    "success": false,
+    "threshold": 0.72,
+    "missing": [
+      "code_execution"
+    ],
+    "details": {
+      "tools": 1.0,
+      "accuracy": 0.678
+    }
+  },
+  "success": false,
+  "metrics": {
+    "turns": 3.4,
+    "runtime": 0.12,
+    "execution_success": false,
+    "result_correctness": 0.678,
+    "context_token_count": 8040,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 24,
+    "compression_event": ""
+  }
+}

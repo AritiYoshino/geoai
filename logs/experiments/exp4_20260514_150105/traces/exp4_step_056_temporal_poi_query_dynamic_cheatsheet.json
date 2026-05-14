@@ -1,0 +1,85 @@
+{
+  "task_id": "exp4_step_056_temporal_poi_query",
+  "agent_type": "dynamic_cheatsheet",
+  "strategy": "dynamic_cheatsheet",
+  "adaptation_step": 56,
+  "query": "Step 56: 查询近半年新增 POI，说明日期字段解析和范围过滤过程。",
+  "category": "temporal_query",
+  "expected_skill": "temporal_query",
+  "novelty": "transfer",
+  "expected_tools": [
+    "query_poi_by_conditions",
+    "date_parse"
+  ],
+  "selected_tools": [
+    "query_poi_by_conditions",
+    "date_parse"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 56
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "temporal_query-046"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "temporal_query-056"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 8118
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "temporal_query-056",
+  "retrieved_experiences": [
+    "temporal_query-046"
+  ],
+  "final_answer": "dynamic_cheatsheet step=56 skill=temporal_query accuracy=0.883 context_tokens=8118 retrieved=1 generated=1",
+  "structured_response": {
+    "accuracy": 0.883,
+    "context_token_count": 8118,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "temporal_query-046"
+    ],
+    "generated_experience_ids": [
+      "temporal_query-056"
+    ]
+  },
+  "validation": {
+    "score": 0.883,
+    "success": true,
+    "threshold": 0.72,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "accuracy": 0.883
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 3.0,
+    "runtime": 0.12,
+    "execution_success": true,
+    "result_correctness": 0.883,
+    "context_token_count": 8118,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 11,
+    "compression_event": ""
+  }
+}

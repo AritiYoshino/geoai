@@ -42,7 +42,7 @@ flowchart TD
     CR --> EV[EvolutionAgent]
     EV --> EL
     API --> EXP[Experiments]
-    EXP --> OUT[experiment_outputs]
+    EXP --> OUT[logs/experiments]
     API --> LOG[JSONL Logs]
 ```
 
@@ -147,10 +147,10 @@ ACE 在本项目中体现为：
 
 | 实验 | 作用 |
 |---|---|
-| exp1 | 验证 ACE 相对 Base LLM 的整体提升 |
-| exp2 | 验证 Critic、Evolution、经验库、上下文记忆等模块贡献 |
-| exp3 | 验证多轮任务中的记忆抗退化 |
-| exp4 | 验证长上下文压缩与污染控制 |
+| exp1 | GeoAI 主系统能力评测，对比 Base/RAG/ACE 在空间任务上的整体差异 |
+| exp2 | Online Adaptation 在线适应实验，验证静态经验、新经验写入和最终迁移效果 |
+| exp3 | ACE 机制消融实验，比较单模块移除、无 Reflector、append-only 和整体重写 |
+| exp4 | GeoAI Context Collapse 稳定性实验，验证连续在线适应中的上下文坍塌与精炼稳定性 |
 
 `experiments/export_utils.py` 支持导出论文图表，`experiments/thesis_evidence.py` 支持汇总论文证据。
 

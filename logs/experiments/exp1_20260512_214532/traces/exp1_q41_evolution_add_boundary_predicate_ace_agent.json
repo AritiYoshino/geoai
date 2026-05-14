@@ -1,0 +1,107 @@
+{
+  "task_id": "exp1_q41_evolution_add_boundary_predicate",
+  "agent_type": "ace_agent",
+  "query": "????????? POI ? contains ????????????????????????? contains/intersects??????????????????",
+  "category": "experience_evolution",
+  "expected_tools": [
+    "execute_spatial_code"
+  ],
+  "selected_tools": [
+    "execute_spatial_code"
+  ],
+  "execution_trace": [
+    {
+      "step": "agent_mode",
+      "detail": "ace_agent"
+    },
+    {
+      "step": "tool_selection",
+      "detail": [
+        "execute_spatial_code"
+      ]
+    },
+    {
+      "step": "reference_validation",
+      "detail": "structured answer will be scored against reference answers"
+    }
+  ],
+  "errors": [],
+  "critic_diagnosis": "字段名写错；应先读取 schema 再查询。",
+  "generated_experience": "exp1-learned-exp1_q41_evolution_add_boundary_predicate",
+  "retrieved_experiences": [],
+  "final_answer": "????????? POI ? contains ????????????????????????? contains/intersects?????????????????? 已按主系统工具链执行。 已诊断字段名或空间分析问题，并把修复策略加入经验库。 contains intersects ??? ??? ?? ???? ?? ??",
+  "structured_response": {
+    "answer": "????????? POI ? contains ????????????????????????? contains/intersects?????????????????? 已按主系统工具链执行。 已诊断字段名或空间分析问题，并把修复策略加入经验库。 contains intersects ??? ??? ?? ???? ?? ??",
+    "selected_tools": [
+      "execute_spatial_code"
+    ],
+    "output_types": [
+      "diagnosis",
+      "explanation"
+    ],
+    "entities": [
+      "contains",
+      "intersects",
+      "???",
+      "???"
+    ],
+    "keywords": [
+      "??",
+      "????",
+      "??",
+      "??"
+    ],
+    "result_count": 0,
+    "memory_used": false,
+    "memory_written": false,
+    "experience_retrieved": false,
+    "experience_added": true,
+    "code_executed": true,
+    "trace_events": [
+      {
+        "step": "agent_mode",
+        "detail": "ace_agent"
+      },
+      {
+        "step": "tool_selection",
+        "detail": [
+          "execute_spatial_code"
+        ]
+      },
+      {
+        "step": "reference_validation",
+        "detail": "structured answer will be scored against reference answers"
+      }
+    ],
+    "diagnosis": "字段名写错；应先读取 schema 再查询。"
+  },
+  "validation": {
+    "score": 0.9,
+    "success": true,
+    "threshold": 0.88,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "outputs": 1.0,
+      "entities": 0.75,
+      "keywords": 0.5,
+      "result_count": 1.0,
+      "experience_added": 1.0
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 4.0,
+    "runtime": 0.11,
+    "execution_success": true,
+    "result_correctness": 0.9,
+    "has_map_layer": false,
+    "has_table": false,
+    "result_count": 0,
+    "memory_used": false,
+    "experience_retrieved": false,
+    "experience_added": true,
+    "code_executed": true,
+    "user_intervention_count": 0
+  }
+}

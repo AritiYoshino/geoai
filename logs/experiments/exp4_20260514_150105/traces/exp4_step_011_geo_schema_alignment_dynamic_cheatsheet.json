@@ -1,0 +1,85 @@
+{
+  "task_id": "exp4_step_011_geo_schema_alignment",
+  "agent_type": "dynamic_cheatsheet",
+  "strategy": "dynamic_cheatsheet",
+  "adaptation_step": 11,
+  "query": "Step 11: 在 生活服务 图层中查询目标关键词，先核对可用字段，再返回结果表和高亮图层。",
+  "category": "attribute_query",
+  "expected_skill": "schema_following",
+  "novelty": "warmup",
+  "expected_tools": [
+    "query_poi_by_conditions",
+    "schema_check"
+  ],
+  "selected_tools": [
+    "query_poi_by_conditions",
+    "schema_check"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 11
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "schema_following-001"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "schema_following-011"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 2387
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "schema_following-011",
+  "retrieved_experiences": [
+    "schema_following-001"
+  ],
+  "final_answer": "dynamic_cheatsheet step=11 skill=schema_following accuracy=0.784 context_tokens=2387 retrieved=1 generated=1",
+  "structured_response": {
+    "accuracy": 0.784,
+    "context_token_count": 2387,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "schema_following-001"
+    ],
+    "generated_experience_ids": [
+      "schema_following-011"
+    ]
+  },
+  "validation": {
+    "score": 0.784,
+    "success": true,
+    "threshold": 0.72,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "accuracy": 0.784
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 3.0,
+    "runtime": 0.12,
+    "execution_success": true,
+    "result_correctness": 0.784,
+    "context_token_count": 2387,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 10,
+    "compression_event": ""
+  }
+}

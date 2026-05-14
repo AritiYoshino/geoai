@@ -1,7 +1,6 @@
-"""实验三：长周期 GIS 对话中的记忆抗退化评估。"""
+from .data import load_reference as load_exp3_reference
+from .data import load_workbook as load_exp3_workbook
+from .runner import run_exp3
 
-from .exp3_runner import run_exp3
 
-__all__ = [
-    "run_exp3",
-]
+__all__ = ["load_exp3_reference", "load_exp3_workbook", "run_exp3"]

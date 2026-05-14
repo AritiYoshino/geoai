@@ -1,0 +1,96 @@
+{
+  "task_id": "exp4_step_032_crs_distance_analysis",
+  "agent_type": "monolithic_rewrite",
+  "strategy": "monolithic_rewrite",
+  "adaptation_step": 32,
+  "query": "Step 32: 查找 购物中心 500 米范围内的餐饮 POI，说明米制距离计算前的坐标处理。",
+  "category": "nearby_analysis",
+  "expected_skill": "crs_awareness",
+  "novelty": "transfer",
+  "expected_tools": [
+    "find_nearby",
+    "projection_check"
+  ],
+  "selected_tools": [
+    "find_nearby"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 32
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "crs_awareness-002",
+        "crs_awareness-012",
+        "crs_awareness-022"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "crs_awareness-032"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 10354
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [
+    "context_stability_miss:crs_awareness"
+  ],
+  "error_signature": [
+    "crs_awareness"
+  ],
+  "critic_diagnosis": "crs_awareness evidence missing after context update",
+  "generated_experience": "crs_awareness-032",
+  "retrieved_experiences": [
+    "crs_awareness-002",
+    "crs_awareness-012",
+    "crs_awareness-022"
+  ],
+  "final_answer": "monolithic_rewrite step=32 skill=crs_awareness accuracy=0.697 context_tokens=10354 retrieved=3 generated=1",
+  "structured_response": {
+    "accuracy": 0.697,
+    "context_token_count": 10354,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "crs_awareness-002",
+      "crs_awareness-012",
+      "crs_awareness-022"
+    ],
+    "generated_experience_ids": [
+      "crs_awareness-032"
+    ]
+  },
+  "validation": {
+    "score": 0.697,
+    "success": false,
+    "threshold": 0.72,
+    "missing": [
+      "crs_awareness"
+    ],
+    "details": {
+      "tools": 1.0,
+      "accuracy": 0.697
+    }
+  },
+  "success": false,
+  "metrics": {
+    "turns": 3.4,
+    "runtime": 0.12,
+    "execution_success": false,
+    "result_correctness": 0.697,
+    "context_token_count": 10354,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 32,
+    "compression_event": ""
+  }
+}

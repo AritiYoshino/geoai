@@ -1,0 +1,112 @@
+{
+  "task_id": "exp1_q36_rag_schema_district_filter",
+  "agent_type": "base_agent",
+  "query": "查询锦江区内 type 包含“银行”的金融服务 POI。执行前必须应用字段 schema 经验，先确认 district、type 或可替代字段，再返回表格和高亮结果。",
+  "category": "experience_retrieval",
+  "expected_tools": [
+    "query_poi_by_conditions"
+  ],
+  "selected_tools": [
+    "query_poi_by_conditions"
+  ],
+  "execution_trace": [
+    {
+      "step": "agent_mode",
+      "detail": "base_agent"
+    },
+    {
+      "step": "tool_selection",
+      "detail": [
+        "query_poi_by_conditions"
+      ]
+    },
+    {
+      "step": "reference_validation",
+      "detail": "structured answer will be scored against reference answers"
+    }
+  ],
+  "errors": [
+    "answer_mismatch:output_types,result_count,experience_retrieved"
+  ],
+  "critic_diagnosis": "",
+  "generated_experience": "",
+  "retrieved_experiences": [],
+  "final_answer": "查询锦江区内 type 包含“银行”的金融服务 POI。执行前必须应用字段 schema 经验，先确认 district、type 或可替代字段，再返回表格和高亮结果。 已按主系统工具链执行。 锦江区 银行 金融服务 字段 district type",
+  "structured_response": {
+    "answer": "查询锦江区内 type 包含“银行”的金融服务 POI。执行前必须应用字段 schema 经验，先确认 district、type 或可替代字段，再返回表格和高亮结果。 已按主系统工具链执行。 锦江区 银行 金融服务 字段 district type",
+    "selected_tools": [
+      "query_poi_by_conditions"
+    ],
+    "output_types": [
+      "table"
+    ],
+    "entities": [
+      "锦江区",
+      "银行",
+      "金融服务",
+      "schema"
+    ],
+    "keywords": [
+      "字段",
+      "经验",
+      "district",
+      "type"
+    ],
+    "result_count": 0,
+    "memory_used": false,
+    "memory_written": false,
+    "experience_retrieved": false,
+    "experience_added": false,
+    "code_executed": false,
+    "trace_events": [
+      {
+        "step": "agent_mode",
+        "detail": "base_agent"
+      },
+      {
+        "step": "tool_selection",
+        "detail": [
+          "query_poi_by_conditions"
+        ]
+      },
+      {
+        "step": "reference_validation",
+        "detail": "structured answer will be scored against reference answers"
+      }
+    ],
+    "diagnosis": ""
+  },
+  "validation": {
+    "score": 0.58,
+    "success": false,
+    "threshold": 0.88,
+    "missing": [
+      "output_types",
+      "result_count",
+      "experience_retrieved"
+    ],
+    "details": {
+      "tools": 1.0,
+      "outputs": 0.333,
+      "entities": 1.0,
+      "keywords": 1.0,
+      "result_count": 0.0,
+      "experience_retrieved": 0.0
+    }
+  },
+  "success": false,
+  "metrics": {
+    "turns": 3.0,
+    "runtime": 0.11,
+    "execution_success": false,
+    "result_correctness": 0.58,
+    "has_map_layer": false,
+    "has_table": true,
+    "result_count": 0,
+    "memory_used": false,
+    "experience_retrieved": false,
+    "experience_added": false,
+    "code_executed": false,
+    "user_intervention_count": 0
+  }
+}

@@ -1,0 +1,80 @@
+{
+  "task_id": "exp4_step_010_visualization_spec",
+  "agent_type": "monolithic_rewrite",
+  "strategy": "monolithic_rewrite",
+  "adaptation_step": 10,
+  "query": "Step 10: 为 成本趋势 选择合适图表并保持坐标轴、图例和单位说明一致。",
+  "category": "visualization",
+  "expected_skill": "visualization_spec",
+  "novelty": "warmup",
+  "expected_tools": [
+    "reasoning",
+    "chart_spec"
+  ],
+  "selected_tools": [
+    "reasoning"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 10
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": []
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "visualization_spec-010"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 3860
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [
+    "context_stability_miss:visualization_spec"
+  ],
+  "error_signature": [
+    "visualization_spec"
+  ],
+  "critic_diagnosis": "visualization_spec evidence missing after context update",
+  "generated_experience": "visualization_spec-010",
+  "retrieved_experiences": [],
+  "final_answer": "monolithic_rewrite step=10 skill=visualization_spec accuracy=0.604 context_tokens=3860 retrieved=0 generated=1",
+  "structured_response": {
+    "accuracy": 0.604,
+    "context_token_count": 3860,
+    "compression_event": "",
+    "retrieved_experience_ids": [],
+    "generated_experience_ids": [
+      "visualization_spec-010"
+    ]
+  },
+  "validation": {
+    "score": 0.604,
+    "success": false,
+    "threshold": 0.72,
+    "missing": [
+      "visualization_spec"
+    ]
+  },
+  "success": false,
+  "metrics": {
+    "turns": 3.4,
+    "runtime": 0.12,
+    "execution_success": false,
+    "result_correctness": 0.604,
+    "context_token_count": 3860,
+    "experience_retrieved": false,
+    "experience_added": true,
+    "library_size": 10,
+    "compression_event": ""
+  }
+}

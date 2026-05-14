@@ -1,0 +1,262 @@
+{
+  "id": "exp3_workbook_ablation_v1",
+  "name": "实验三习题册：ACE 机制消融实验",
+  "description": "按 GeoAI 任务组织消融评测。题干尽量保持自然，不直接暴露 ACE 模块名；评测侧通过 requires_modules 与 ablation_groups 比较完整 ACE、移除单模块、移除 Reflector/多轮精炼、仅追加不精炼与整体重写等机制差异。",
+  "repeat_multiplier": 1,
+  "ablation_groups": [
+    {
+      "id": "full_ace",
+      "description": "启用 ContextManager、Experience Retrieval、CodeAgent、Critic、Evolution、Reflector 与 grow-and-refine。"
+    },
+    {
+      "id": "without_context_manager",
+      "description": "关闭多轮上下文锚点与用户偏好管理。"
+    },
+    {
+      "id": "without_experience_retrieval",
+      "description": "关闭经验检索，仅依赖当前任务输入和基础工具。"
+    },
+    {
+      "id": "without_code_agent",
+      "description": "关闭 GeoPandas/代码执行路径，仅允许常规工具链。"
+    },
+    {
+      "id": "without_critic",
+      "description": "关闭失败诊断与反思信号。"
+    },
+    {
+      "id": "without_evolution",
+      "description": "关闭经验写入，不能把新错误模式沉淀到后续任务。"
+    },
+    {
+      "id": "without_reflector_refinement",
+      "description": "保留经验写入，但不进行独立 Reflector 反思和迭代精炼。"
+    },
+    {
+      "id": "append_only_memory",
+      "description": "只追加新经验，不做去重、合并、计数更新或 grow-and-refine。"
+    },
+    {
+      "id": "monolithic_rewrite",
+      "description": "每轮用 LLM 整体重写上下文，用于观察压缩偏置与上下文坍塌风险。"
+    }
+  ],
+  "tasks": [
+    {
+      "id": "exp3_q01_crs_retrieval",
+      "category": "nearby_analysis",
+      "query": "查找学校 500 米范围内的餐饮 POI，说明距离计算所需的坐标处理，并返回表格和地图图层。",
+      "difficulty": "hard",
+      "capabilities": ["experience_retrieval", "nearby_analysis", "crs_awareness"],
+      "requires_modules": ["experience_retrieval"]
+    },
+    {
+      "id": "exp3_q02_schema_critic_evolution",
+      "category": "attribute_query",
+      "query": "查询餐饮图层中 type 或 name 包含“火锅”的 POI；若字段名不匹配，说明失败原因并给出后续可复用的字段检查策略。",
+      "difficulty": "hard",
+      "capabilities": ["critic_diagnosis", "experience_evolution", "schema_following"],
+      "requires_modules": ["critic", "evolution"]
+    },
+    {
+      "id": "exp3_q03_density_code_agent",
+      "category": "code_required",
+      "query": "使用 GeoPandas 计算各行政区医疗 POI 密度，输出 count、area_km2、density 和排名前 5 的行政区。",
+      "difficulty": "hard",
+      "capabilities": ["execute_code", "spatial_join", "area_calculation", "ranking"],
+      "requires_modules": ["code_agent"]
+    },
+    {
+      "id": "exp3_q04_memory_followup",
+      "category": "memory_followup",
+      "query": "沿用上一轮确定的 spring_hotel 住宿点，查找 800 米范围内生活服务 POI，并说明中心点来源。",
+      "difficulty": "hard",
+      "capabilities": ["conversation_memory", "nearby_analysis", "context_reference"],
+      "requires_modules": ["context_manager"]
+    },
+    {
+      "id": "exp3_q05_empty_result_repair",
+      "category": "poi_search",
+      "query": "精确搜索“24小时儿童急诊药房”；如果结果为空，逐步放宽关键词，并说明空结果的可能原因。",
+      "difficulty": "hard",
+      "capabilities": ["experience_retrieval", "critic_diagnosis", "empty_result_repair", "tool_search"],
+      "requires_modules": ["experience_retrieval", "critic"]
+    },
+    {
+      "id": "exp3_q06_cross_layer_validation",
+      "category": "validation",
+      "query": "检查住宿服务 POI 是否全部落在成都行政区内，使用代码输出异常表，并总结可复用的跨图层校验策略。",
+      "difficulty": "hard",
+      "capabilities": ["execute_code", "data_validation", "critic_diagnosis", "experience_evolution"],
+      "requires_modules": ["code_agent", "critic", "evolution"]
+    },
+    {
+      "id": "exp3_q07_adaptive_buffer_transfer",
+      "category": "buffer_analysis",
+      "query": "按学校、医院、购物中心三类 POI 使用不同缓冲半径统计覆盖范围，并返回表格和地图图层。",
+      "difficulty": "hard",
+      "capabilities": ["experience_retrieval", "buffer_analysis", "nearby_analysis"],
+      "requires_modules": ["experience_retrieval"]
+    },
+    {
+      "id": "exp3_q08_full_chain",
+      "category": "ace_multi_step",
+      "query": "确定一个华西医疗 POI 作为 medical_anchor，用 GeoPandas 计算 1 公里内餐饮与金融服务 POI 数量比；若校验失败，说明原因并总结修正策略。",
+      "difficulty": "hard",
+      "capabilities": ["conversation_memory", "experience_retrieval", "execute_code", "critic_diagnosis", "experience_evolution", "exact_value_validation"],
+      "requires_modules": ["context_manager", "experience_retrieval", "code_agent", "critic", "evolution"]
+    },
+    {
+      "id": "exp3_q09_stress_ratio_boundary",
+      "category": "adversarial_validation",
+      "query": "计算各行政区“餐饮 POI / 住宿服务 POI”比值，排除住宿服务为 0 的行政区，并说明边界点 contains/intersects 差异。",
+      "difficulty": "hard",
+      "capabilities": ["execute_code", "spatial_predicate_choice", "defensive_statistics", "critic_diagnosis", "experience_evolution"],
+      "requires_modules": ["code_agent", "critic", "evolution"]
+    },
+    {
+      "id": "exp3_q10_crs_nearest_hotel",
+      "category": "nearby_analysis",
+      "query": "查找距离天府广场最近的 5 个住宿服务 POI，说明最近邻距离计算前的坐标处理。",
+      "difficulty": "hard",
+      "capabilities": ["experience_retrieval", "nearby_analysis", "crs_awareness"],
+      "requires_modules": ["experience_retrieval"]
+    },
+    {
+      "id": "exp3_q11_schema_life_service",
+      "category": "attribute_query",
+      "query": "查询生活服务图层中 type 或 name 包含“维修”的 POI；若字段缺失，说明原因并总结字段核对策略。",
+      "difficulty": "hard",
+      "capabilities": ["critic_diagnosis", "experience_evolution", "schema_following"],
+      "requires_modules": ["critic", "evolution"]
+    },
+    {
+      "id": "exp3_q12_shopping_density_code",
+      "category": "code_required",
+      "query": "使用 GeoPandas 计算各行政区购物 POI 密度，输出 count、area_km2、density 和 Top 5。",
+      "difficulty": "hard",
+      "capabilities": ["execute_code", "spatial_join", "area_calculation", "ranking"],
+      "requires_modules": ["code_agent"]
+    },
+    {
+      "id": "exp3_q13_context_switch_anchor",
+      "category": "memory_followup",
+      "query": "不要使用 medical_anchor，切换回上一轮确定的 spring_hotel，查找 600 米范围内购物 POI，并说明锚点切换依据。",
+      "difficulty": "hard",
+      "capabilities": ["conversation_memory", "context_switch", "nearby_analysis"],
+      "requires_modules": ["context_manager"]
+    },
+    {
+      "id": "exp3_q14_empty_school_repair",
+      "category": "poi_search",
+      "query": "精确搜索“成都第七中学高新校区正门”；如果为空，放宽为“七中”“学校”“科教文化”。",
+      "difficulty": "hard",
+      "capabilities": ["experience_retrieval", "empty_result_repair", "tool_search"],
+      "requires_modules": ["experience_retrieval"]
+    },
+    {
+      "id": "exp3_q15_boundary_validation_code",
+      "category": "validation",
+      "query": "比较 contains 与 intersects 统计行政区边界 POI 的差异，用代码输出校验表，并总结边界谓词选择策略。",
+      "difficulty": "hard",
+      "capabilities": ["execute_code", "spatial_predicate_choice", "critic_diagnosis", "experience_evolution"],
+      "requires_modules": ["code_agent", "critic", "evolution"]
+    },
+    {
+      "id": "exp3_q16_adaptive_buffer_transfer_2",
+      "category": "buffer_analysis",
+      "query": "按金融服务、餐饮、生活服务三类 POI 使用分级缓冲半径统计覆盖范围。",
+      "difficulty": "hard",
+      "capabilities": ["experience_retrieval", "buffer_analysis", "nearby_analysis"],
+      "requires_modules": ["experience_retrieval"]
+    },
+    {
+      "id": "exp3_q17_export_schema_evolution",
+      "category": "export_highlight",
+      "query": "导出餐饮热点网格为 GeoJSON 前检查 geometry、字段命名和 CRS 元数据；若冲突，说明原因并总结导出 schema 检查策略。",
+      "difficulty": "hard",
+      "capabilities": ["execute_code", "export_result", "schema_following", "critic_diagnosis", "experience_evolution"],
+      "requires_modules": ["code_agent", "critic", "evolution"]
+    },
+    {
+      "id": "exp3_q18_stress_export_metadata",
+      "category": "adversarial_validation",
+      "query": "把热点网格导出为 GeoJSON 和 CSV 双格式，要求同时校验 CRS 元数据、字段冲突和空几何。",
+      "difficulty": "hard",
+      "capabilities": ["execute_code", "export_result", "defensive_validation", "critic_diagnosis", "experience_evolution"],
+      "requires_modules": ["code_agent", "critic", "evolution"]
+    },
+    {
+      "id": "exp3_q19_dual_experience_overlay",
+      "category": "nearby_analysis",
+      "query": "统计学校 700 米范围内餐饮 POI 数量，说明坐标处理和字段核对过程，并返回统计表。",
+      "difficulty": "hard",
+      "capabilities": ["experience_retrieval", "crs_awareness", "schema_following", "nearby_analysis"],
+      "requires_modules": ["experience_retrieval"]
+    },
+    {
+      "id": "exp3_q20_multi_metric_rank",
+      "category": "code_required",
+      "query": "使用 GeoPandas 综合医疗、餐饮、生活服务 POI 数量和行政区面积归一化得分，输出综合排名 Top 5。",
+      "difficulty": "hard",
+      "capabilities": ["execute_code", "ranking", "area_calculation", "exact_value_validation"],
+      "requires_modules": ["code_agent"]
+    },
+    {
+      "id": "exp3_q21_preference_memory_export",
+      "category": "ace_multi_step",
+      "query": "沿用用户偏好：只高亮排名前 5。统计购物 POI 最多的行政区，返回表格摘要并导出 GeoJSON。",
+      "difficulty": "hard",
+      "capabilities": ["conversation_memory", "user_preference", "spatial_join", "export_result"],
+      "requires_modules": ["context_manager", "code_agent"]
+    },
+    {
+      "id": "exp3_q22_temporal_evolution",
+      "category": "temporal_query",
+      "query": "查询近 90 天新增医疗 POI；如果日期字段格式不一致，说明原因并总结时间字段解析策略。",
+      "difficulty": "hard",
+      "capabilities": ["critic_diagnosis", "experience_evolution", "temporal_query", "schema_following"],
+      "requires_modules": ["critic", "evolution"]
+    },
+    {
+      "id": "exp3_q23_temporal_transfer",
+      "category": "temporal_query",
+      "query": "查询近半年新增科教文化 POI，并说明日期解析与范围过滤过程。",
+      "difficulty": "hard",
+      "capabilities": ["experience_retrieval", "temporal_query", "schema_following"],
+      "requires_modules": ["experience_retrieval"]
+    },
+    {
+      "id": "exp3_q24_context_code_ratio",
+      "category": "ace_multi_step",
+      "query": "使用上下文中的 medical_anchor，计算 1 公里内住宿服务与金融服务 POI 数量比，输出代码校验表。",
+      "difficulty": "hard",
+      "capabilities": ["conversation_memory", "execute_code", "nearby_analysis", "exact_value_validation"],
+      "requires_modules": ["context_manager", "code_agent"]
+    },
+    {
+      "id": "exp3_q25_layer_disambiguation_retrieval",
+      "category": "poi_search",
+      "query": "“银行”可能属于金融服务而不是公司名称。请判断合适图层，并跨相关图层搜索 name 或 type 包含“银行”的 POI。",
+      "difficulty": "hard",
+      "capabilities": ["experience_retrieval", "layer_disambiguation", "tool_search"],
+      "requires_modules": ["experience_retrieval"]
+    },
+    {
+      "id": "exp3_q26_cross_validation_tool_code",
+      "category": "validation",
+      "query": "分别用工具链和 GeoPandas 统计医疗 POI 行政区分布，并交叉验证两个结果一致；若不一致，说明原因并总结交叉校验策略。",
+      "difficulty": "hard",
+      "capabilities": ["execute_code", "cross_validation", "critic_diagnosis", "experience_evolution"],
+      "requires_modules": ["code_agent", "critic", "evolution"]
+    },
+    {
+      "id": "exp3_q27_stress_context_conflict",
+      "category": "adversarial_validation",
+      "query": "同时出现 spring_hotel 和 medical_anchor 时，要求拒绝错误锚点、选择 medical_anchor，并解释冲突消解依据。",
+      "difficulty": "hard",
+      "capabilities": ["conversation_memory", "context_switch", "critic_diagnosis", "experience_evolution"],
+      "requires_modules": ["context_manager", "critic", "evolution"]
+    }
+  ]
+}

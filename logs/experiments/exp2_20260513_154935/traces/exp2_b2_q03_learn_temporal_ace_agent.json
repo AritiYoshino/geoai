@@ -1,0 +1,125 @@
+{
+  "task_id": "exp2_b2_q03_learn_temporal",
+  "batch_id": 2,
+  "agent_type": "ace_agent",
+  "query": "学习时间字段经验：筛选近 3 个月新增生活服务 POI，并说明字段格式校验。",
+  "category": "temporal_query",
+  "expected_tools": [
+    "query_poi_by_conditions"
+  ],
+  "selected_tools": [
+    "query_poi_by_conditions"
+  ],
+  "execution_trace": [
+    {
+      "step": "agent_mode",
+      "detail": "ace_agent"
+    },
+    {
+      "step": "tool_selection",
+      "detail": [
+        "query_poi_by_conditions"
+      ]
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": []
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "exp2-temporal-query"
+      ]
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "critic_to_evolution",
+  "generated_experience": "exp2-temporal-query",
+  "retrieved_experiences": [],
+  "final_answer": "学习时间字段经验：筛选近 3 个月新增生活服务 POI，并说明字段格式校验。 tool_flow_completed learn exp2-temporal-query life_service time format learn temporal validate",
+  "structured_response": {
+    "answer": "学习时间字段经验：筛选近 3 个月新增生活服务 POI，并说明字段格式校验。 tool_flow_completed learn exp2-temporal-query life_service time format learn temporal validate",
+    "selected_tools": [
+      "query_poi_by_conditions"
+    ],
+    "output_types": [
+      "map_layer",
+      "table",
+      "diagnosis"
+    ],
+    "entities": [
+      "life_service",
+      "time",
+      "format"
+    ],
+    "keywords": [
+      "learn",
+      "temporal",
+      "validate"
+    ],
+    "result_count": 1,
+    "retrieved_experience_ids": [],
+    "generated_experience_ids": [
+      "exp2-temporal-query"
+    ],
+    "experience_retrieved": false,
+    "experience_added": true,
+    "memory_used": false,
+    "code_executed": false,
+    "trace_events": [
+      {
+        "step": "agent_mode",
+        "detail": "ace_agent"
+      },
+      {
+        "step": "tool_selection",
+        "detail": [
+          "query_poi_by_conditions"
+        ]
+      },
+      {
+        "step": "experience_retrieval",
+        "detail": []
+      },
+      {
+        "step": "experience_update",
+        "detail": [
+          "exp2-temporal-query"
+        ]
+      }
+    ],
+    "diagnosis": "critic_to_evolution"
+  },
+  "validation": {
+    "score": 1.0,
+    "success": true,
+    "threshold": 0.86,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "outputs": 1.0,
+      "entities": 1.0,
+      "keywords": 1.0,
+      "result_count": 1.0,
+      "experience_added": 1.0
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 3.75,
+    "runtime": 0.16,
+    "execution_success": true,
+    "result_correctness": 1.0,
+    "has_map_layer": true,
+    "has_table": true,
+    "result_count": 1,
+    "experience_retrieved": false,
+    "experience_added": true,
+    "memory_used": false,
+    "code_executed": false,
+    "repair_attempted": false,
+    "repair_success": false,
+    "user_intervention_count": 0
+  }
+}

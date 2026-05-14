@@ -1,0 +1,106 @@
+{
+  "repeat_multiplier": 3,
+  "tasks": [
+    {
+      "id": "task_001",
+      "category": "poi_search",
+      "query": "搜索名称中包含医院的 POI，并在地图上高亮结果",
+      "expected_tools": ["search_poi"],
+      "expected_outputs": {"has_map_layer": true, "has_table": true, "min_result_count": 1},
+      "difficulty": "easy"
+    },
+    {
+      "id": "task_002",
+      "category": "attribute_query",
+      "query": "查询餐饮图层中 type 包含火锅的点位",
+      "expected_tools": ["query_poi_by_conditions"],
+      "expected_outputs": {"has_map_layer": true, "has_table": true, "min_result_count": 1},
+      "difficulty": "medium",
+      "failure_mode": "field_name_mismatch"
+    },
+    {
+      "id": "task_003",
+      "category": "nearby_analysis",
+      "query": "找出科教文化图层中学校 500 米范围内的餐饮点",
+      "expected_tools": ["find_nearby"],
+      "expected_outputs": {"has_map_layer": true, "has_table": true, "min_result_count": 1},
+      "difficulty": "medium",
+      "failure_mode": "crs_distance"
+    },
+    {
+      "id": "task_004",
+      "category": "buffer_analysis",
+      "query": "为医疗图层生成 800 米缓冲区，并显示缓冲区图层",
+      "expected_tools": ["buffer_analysis"],
+      "expected_outputs": {"has_map_layer": true, "has_table": true, "min_result_count": 1},
+      "difficulty": "medium"
+    },
+    {
+      "id": "task_005",
+      "category": "overlay_analysis",
+      "query": "叠加餐饮点和成都行政区，找出行政区内餐饮覆盖情况",
+      "expected_tools": ["overlay_layers"],
+      "expected_outputs": {"has_map_layer": true, "has_table": true, "min_result_count": 1},
+      "difficulty": "hard",
+      "failure_mode": "geometry_type"
+    },
+    {
+      "id": "task_006",
+      "category": "spatial_join",
+      "query": "统计每个行政区内购物 POI 数量，并按数量着色显示",
+      "expected_tools": ["spatial_join_layers"],
+      "expected_outputs": {"has_map_layer": true, "has_table": true, "min_result_count": 1},
+      "difficulty": "hard"
+    },
+    {
+      "id": "task_007",
+      "category": "clustering",
+      "query": "对公司点位执行 DBSCAN 聚类，eps 为 600 米，最小样本数为 5",
+      "expected_tools": ["cluster_points_dbscan"],
+      "expected_outputs": {"has_map_layer": true, "has_table": true, "min_result_count": 1},
+      "difficulty": "medium"
+    },
+    {
+      "id": "task_008",
+      "category": "hotspot",
+      "query": "生成医疗 POI 的 1000 米网格热点分析图层",
+      "expected_tools": ["hotspot_analysis"],
+      "expected_outputs": {"has_map_layer": true, "has_table": true, "min_result_count": 1},
+      "difficulty": "hard"
+    },
+    {
+      "id": "task_009",
+      "category": "statistics",
+      "query": "按 district 字段汇总生活服务 POI 数量",
+      "expected_tools": ["summarize_layer_statistics"],
+      "expected_outputs": {"has_map_layer": false, "has_table": true, "min_result_count": 1},
+      "difficulty": "medium",
+      "failure_mode": "field_name_mismatch"
+    },
+    {
+      "id": "task_010",
+      "category": "export_highlight",
+      "query": "导出最近一次分析结果为 GeoJSON，并返回下载链接",
+      "expected_tools": ["export_analysis_result"],
+      "expected_outputs": {"has_map_layer": false, "has_table": true, "min_result_count": 1},
+      "difficulty": "easy"
+    },
+    {
+      "id": "task_011",
+      "category": "code_required",
+      "query": "计算各行政区餐饮 POI 密度并输出排名前 5 的行政区",
+      "expected_tools": ["execute_spatial_code"],
+      "expected_outputs": {"has_map_layer": true, "has_table": true, "min_result_count": 1},
+      "difficulty": "hard"
+    },
+    {
+      "id": "task_012",
+      "category": "nearby_analysis",
+      "query": "找出地铁站 1 公里范围内的住宿服务点，并统计数量",
+      "expected_tools": ["find_nearby", "summarize_layer_statistics"],
+      "expected_outputs": {"has_map_layer": true, "has_table": true, "min_result_count": 1},
+      "difficulty": "hard",
+      "failure_mode": "multi_tool_chain"
+    }
+  ]
+}

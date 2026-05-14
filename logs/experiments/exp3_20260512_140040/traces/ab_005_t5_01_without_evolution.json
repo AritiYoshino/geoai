@@ -1,0 +1,55 @@
+{
+  "task_id": "ab_005_t5_01",
+  "agent_type": "without_evolution",
+  "query": "空间连接前统一坐标系，统计每区医疗 POI 数量",
+  "category": "spatial_join",
+  "expected_tools": [
+    "spatial_join_layers"
+  ],
+  "selected_tools": [
+    "spatial_join_layers"
+  ],
+  "execution_trace": [
+    {
+      "step": "intent",
+      "detail": "spatial_join"
+    },
+    {
+      "step": "tool_selection",
+      "detail": [
+        "spatial_join_layers"
+      ]
+    },
+    {
+      "step": "evaluation",
+      "detail": "failed"
+    }
+  ],
+  "errors": [
+    "rule_eval_failed:sjoin_crs"
+  ],
+  "error_signature": [
+    "sjoin_crs"
+  ],
+  "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+  "generated_experience": "",
+  "retrieved_experiences": [
+    "crs-check",
+    "field-check",
+    "empty-result-relaxation"
+  ],
+  "final_answer": "任务未完全满足预期，已记录失败原因。",
+  "success": false,
+  "metrics": {
+    "turns": 3.8,
+    "runtime": 0.911,
+    "execution_success": false,
+    "result_correctness": 0.21380000000000005,
+    "has_map_layer": true,
+    "has_table": true,
+    "result_count": 0,
+    "repair_attempted": false,
+    "repair_success": false,
+    "user_intervention_count": 0
+  }
+}

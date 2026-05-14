@@ -1,0 +1,88 @@
+{
+  "task_id": "exp4_step_063_empty_result_recovery",
+  "agent_type": "monolithic_rewrite",
+  "strategy": "monolithic_rewrite",
+  "adaptation_step": 63,
+  "query": "Step 63: 精确搜索“天府广场地铁站A口公交换乘点”；若结果为空，逐级放宽关键词并说明回退策略。",
+  "category": "poi_search",
+  "expected_skill": "empty_result_recovery",
+  "novelty": "new_pattern",
+  "expected_tools": [
+    "search_poi",
+    "fallback_search"
+  ],
+  "selected_tools": [
+    "search_poi",
+    "fallback_search"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 63
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "empty_result_recovery-043",
+        "empty_result_recovery-053"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "empty_result_recovery-063"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 7128
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "empty_result_recovery-063",
+  "retrieved_experiences": [
+    "empty_result_recovery-043",
+    "empty_result_recovery-053"
+  ],
+  "final_answer": "monolithic_rewrite step=63 skill=empty_result_recovery accuracy=0.771 context_tokens=7128 retrieved=2 generated=1",
+  "structured_response": {
+    "accuracy": 0.771,
+    "context_token_count": 7128,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "empty_result_recovery-043",
+      "empty_result_recovery-053"
+    ],
+    "generated_experience_ids": [
+      "empty_result_recovery-063"
+    ]
+  },
+  "validation": {
+    "score": 0.771,
+    "success": true,
+    "threshold": 0.72,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "accuracy": 0.771
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 3.75,
+    "runtime": 0.12,
+    "execution_success": true,
+    "result_correctness": 0.771,
+    "context_token_count": 7128,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 27,
+    "compression_event": ""
+  }
+}

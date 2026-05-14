@@ -1,0 +1,86 @@
+{
+  "task_id": "exp4_step_019_constraint_tracking",
+  "agent_type": "append_only",
+  "strategy": "append_only",
+  "adaptation_step": 19,
+  "query": "Step 19: 在 资源分配 规划中持续追踪硬约束和软约束，避免后续步骤遗忘。",
+  "category": "planning",
+  "expected_skill": "constraint_tracking",
+  "novelty": "warmup",
+  "expected_tools": [
+    "reasoning",
+    "constraint_check"
+  ],
+  "selected_tools": [
+    "reasoning"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 19
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "constraint_tracking-009"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "constraint_tracking-019"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 5612
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [
+    "context_stability_miss:constraint_tracking"
+  ],
+  "error_signature": [
+    "constraint_tracking"
+  ],
+  "critic_diagnosis": "constraint_tracking evidence missing after context update",
+  "generated_experience": "constraint_tracking-019",
+  "retrieved_experiences": [
+    "constraint_tracking-009"
+  ],
+  "final_answer": "append_only step=19 skill=constraint_tracking accuracy=0.668 context_tokens=5612 retrieved=1 generated=1",
+  "structured_response": {
+    "accuracy": 0.668,
+    "context_token_count": 5612,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "constraint_tracking-009"
+    ],
+    "generated_experience_ids": [
+      "constraint_tracking-019"
+    ]
+  },
+  "validation": {
+    "score": 0.668,
+    "success": false,
+    "threshold": 0.72,
+    "missing": [
+      "constraint_tracking"
+    ]
+  },
+  "success": false,
+  "metrics": {
+    "turns": 3.2,
+    "runtime": 0.12,
+    "execution_success": false,
+    "result_correctness": 0.668,
+    "context_token_count": 5612,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 21,
+    "compression_event": ""
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "task_id": "task_006_t6_01",
+  "agent_type": "direct_llm",
+  "query": "统计每个行政区内购物 POI 数量，并按数量着色显示",
+  "category": "spatial_join",
+  "expected_tools": [
+    "spatial_join_layers"
+  ],
+  "selected_tools": [],
+  "execution_trace": [
+    {
+      "step": "intent",
+      "detail": "spatial_join"
+    },
+    {
+      "step": "tool_selection",
+      "detail": []
+    },
+    {
+      "step": "evaluation",
+      "detail": "failed"
+    }
+  ],
+  "errors": [
+    "rule_eval_failed:spatial_join"
+  ],
+  "error_signature": [
+    "spatial_join"
+  ],
+  "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+  "generated_experience": "",
+  "retrieved_experiences": [],
+  "final_answer": "任务未完全满足预期，已记录失败原因。",
+  "success": false,
+  "metrics": {
+    "turns": 1.4,
+    "runtime": 0.393,
+    "execution_success": false,
+    "result_correctness": 0.0,
+    "has_map_layer": true,
+    "has_table": true,
+    "result_count": 0,
+    "repair_attempted": false,
+    "repair_success": false,
+    "user_intervention_count": 0
+  }
+}

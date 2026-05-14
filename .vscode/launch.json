@@ -6,7 +6,11 @@
       "type": "debugpy",
       "request": "launch",
       "program": "main.py",
-      "console": "integratedTerminal"
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "env": {
+        "GEOAI_IDLE_SHUTDOWN_SECONDS": "0"
+      }
     }
   ]
 }

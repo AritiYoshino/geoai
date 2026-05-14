@@ -1,0 +1,90 @@
+{
+  "repeat_multiplier": 2,
+  "batches": [
+    {
+      "batch_id": 1,
+      "tasks": [
+        {
+          "id": "cl_{n}",
+          "category": "nearby_analysis",
+          "query": "第1批：检查 CRS 后找出 {v} 500 米范围内的餐饮点",
+          "variants": ["学校", "医院", "地铁站", "商场"],
+          "repeat": 5,
+          "expected_tools": ["find_nearby"],
+          "expected_outputs": {"has_map_layer": true, "has_table": true, "min_result_count": 1},
+          "difficulty": "medium",
+          "failure_mode": "crs_distance"
+        },
+        {
+          "id": "cl_{n}",
+          "category": "attribute_query",
+          "query": "第1批：先核对字段，再查询 {v} 图层中的指定类型 POI",
+          "variants": ["餐饮", "购物", "生活服务", "住宿服务"],
+          "repeat": 5,
+          "expected_tools": ["query_poi_by_conditions"],
+          "expected_outputs": {"has_map_layer": true, "has_table": true, "min_result_count": 1},
+          "difficulty": "medium",
+          "failure_mode": "field_name_mismatch"
+        },
+        {
+          "id": "cl_{n}",
+          "category": "spatial_join",
+          "query": "第1批：统计各行政区 {v} POI 数量",
+          "variants": ["餐饮", "购物", "医疗", "公司"],
+          "repeat": 5,
+          "expected_tools": ["spatial_join_layers"],
+          "expected_outputs": {"has_map_layer": true, "has_table": true, "min_result_count": 1},
+          "difficulty": "hard",
+          "failure_mode": "geometry_type"
+        },
+        {
+          "id": "cl_{n}",
+          "category": "statistics",
+          "query": "第1批：按 district 汇总 {v} 图层数量",
+          "variants": ["餐饮", "购物", "医疗", "生活服务"],
+          "repeat": 5,
+          "expected_tools": ["summarize_layer_statistics"],
+          "expected_outputs": {"has_map_layer": false, "has_table": true, "min_result_count": 1},
+          "difficulty": "medium",
+          "failure_mode": "field_name_mismatch"
+        }
+      ]
+    },
+    {
+      "batch_id": 2,
+      "tasks": [
+        {"id": "cl_{n}", "category": "nearby_analysis", "query": "第2批：复用距离经验，找出 {v} 800 米范围内的购物点", "variants": ["学校", "医院", "地铁站", "商务住宅"], "repeat": 5, "expected_tools": ["find_nearby"], "expected_outputs": {"has_map_layer": true, "has_table": true, "min_result_count": 1}, "difficulty": "medium", "failure_mode": "crs_distance"},
+        {"id": "cl_{n}", "category": "buffer_analysis", "query": "第2批：为 {v} 图层生成 1 公里缓冲区", "variants": ["医疗", "科教文化", "交通设施", "公司"], "repeat": 5, "expected_tools": ["buffer_analysis"], "expected_outputs": {"has_map_layer": true, "has_table": true, "min_result_count": 1}, "difficulty": "medium"},
+        {"id": "cl_{n}", "category": "overlay_analysis", "query": "第2批：叠加 {v} 与成都行政区并返回结果表", "variants": ["餐饮", "购物", "医疗", "公司"], "repeat": 5, "expected_tools": ["overlay_layers"], "expected_outputs": {"has_map_layer": true, "has_table": true, "min_result_count": 1}, "difficulty": "hard", "failure_mode": "geometry_type"},
+        {"id": "cl_{n}", "category": "export_highlight", "query": "第2批：导出 {v} 的分析结果为 GeoJSON", "variants": ["缓冲区", "空间连接", "热点", "聚类"], "repeat": 5, "expected_tools": ["export_analysis_result"], "expected_outputs": {"has_map_layer": false, "has_table": true, "min_result_count": 1}, "difficulty": "easy"}
+      ]
+    },
+    {
+      "batch_id": 3,
+      "tasks": [
+        {"id": "cl_{n}", "category": "code_required", "query": "第3批：计算各行政区 {v} POI 密度并排序", "variants": ["餐饮", "购物", "医疗", "公司"], "repeat": 5, "expected_tools": ["execute_spatial_code"], "expected_outputs": {"has_map_layer": true, "has_table": true, "min_result_count": 1}, "difficulty": "hard"},
+        {"id": "cl_{n}", "category": "hotspot", "query": "第3批：生成 {v} POI 热点网格", "variants": ["餐饮", "购物", "医疗", "公司"], "repeat": 5, "expected_tools": ["hotspot_analysis"], "expected_outputs": {"has_map_layer": true, "has_table": true, "min_result_count": 1}, "difficulty": "hard"},
+        {"id": "cl_{n}", "category": "clustering", "query": "第3批：对 {v} POI 做 DBSCAN 聚类", "variants": ["餐饮", "购物", "医疗", "公司"], "repeat": 5, "expected_tools": ["cluster_points_dbscan"], "expected_outputs": {"has_map_layer": true, "has_table": true, "min_result_count": 1}, "difficulty": "medium"},
+        {"id": "cl_{n}", "category": "attribute_query", "query": "第3批：空结果时放宽条件，查询 {v} POI", "variants": ["火锅", "银行", "公园", "酒店"], "repeat": 5, "expected_tools": ["search_poi"], "expected_outputs": {"has_map_layer": true, "has_table": true, "min_result_count": 1}, "difficulty": "medium", "failure_mode": "empty_result"}
+      ]
+    },
+    {
+      "batch_id": 4,
+      "tasks": [
+        {"id": "cl_{n}", "category": "nearby_analysis", "query": "第4批：结合历史经验寻找 {v} 附近 1 公里服务设施", "variants": ["学校", "医院", "商场", "交通站点"], "repeat": 5, "expected_tools": ["find_nearby"], "expected_outputs": {"has_map_layer": true, "has_table": true, "min_result_count": 1}, "difficulty": "medium", "failure_mode": "crs_distance"},
+        {"id": "cl_{n}", "category": "spatial_join", "query": "第4批：用空间连接统计行政区内 {v} 数量", "variants": ["餐饮", "购物", "医疗", "生活服务"], "repeat": 5, "expected_tools": ["spatial_join_layers"], "expected_outputs": {"has_map_layer": true, "has_table": true, "min_result_count": 1}, "difficulty": "hard"},
+        {"id": "cl_{n}", "category": "statistics", "query": "第4批：输出 {v} 图层的分组统计摘要", "variants": ["餐饮", "购物", "医疗", "住宿服务"], "repeat": 5, "expected_tools": ["summarize_layer_statistics"], "expected_outputs": {"has_map_layer": false, "has_table": true, "min_result_count": 1}, "difficulty": "medium"},
+        {"id": "cl_{n}", "category": "export_highlight", "query": "第4批：把 {v} 结果导出并保留地图高亮", "variants": ["邻近分析", "空间连接", "聚类", "热点分析"], "repeat": 5, "expected_tools": ["export_analysis_result"], "expected_outputs": {"has_map_layer": true, "has_table": true, "min_result_count": 1}, "difficulty": "easy"}
+      ]
+    },
+    {
+      "batch_id": 5,
+      "tasks": [
+        {"id": "cl_{n}", "category": "code_required", "query": "第5批：综合计算 {v} 的行政区排名和地图图层", "variants": ["餐饮密度", "购物密度", "医疗服务密度", "公司密度"], "repeat": 5, "expected_tools": ["execute_spatial_code"], "expected_outputs": {"has_map_layer": true, "has_table": true, "min_result_count": 1}, "difficulty": "hard"},
+        {"id": "cl_{n}", "category": "overlay_analysis", "query": "第5批：检查几何类型后叠加 {v} 与行政区", "variants": ["餐饮", "购物", "医疗", "公司"], "repeat": 5, "expected_tools": ["overlay_layers"], "expected_outputs": {"has_map_layer": true, "has_table": true, "min_result_count": 1}, "difficulty": "hard", "failure_mode": "geometry_type"},
+        {"id": "cl_{n}", "category": "hotspot", "query": "第5批：输出 {v} 热点分析并导出", "variants": ["餐饮", "购物", "医疗", "公司"], "repeat": 5, "expected_tools": ["hotspot_analysis", "export_analysis_result"], "expected_outputs": {"has_map_layer": true, "has_table": true, "min_result_count": 1}, "difficulty": "hard"},
+        {"id": "cl_{n}", "category": "nearby_analysis", "query": "第5批：对 {v} 执行多步骤邻近分析和统计", "variants": ["学校周边餐饮", "医院周边住宿", "商场周边交通", "地铁周边生活服务"], "repeat": 5, "expected_tools": ["find_nearby", "summarize_layer_statistics"], "expected_outputs": {"has_map_layer": true, "has_table": true, "min_result_count": 1}, "difficulty": "hard", "failure_mode": "multi_tool_chain"}
+      ]
+    }
+  ]
+}

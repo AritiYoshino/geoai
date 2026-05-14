@@ -1,0 +1,90 @@
+{
+  "task_id": "exp4_step_019_context_anchor_tracking",
+  "agent_type": "monolithic_rewrite",
+  "strategy": "monolithic_rewrite",
+  "adaptation_step": 19,
+  "query": "Step 19: 使用当前上下文中的 school_anchor 作为中心点，查找 1 公里范围内指定 POI，并解释锚点来源。",
+  "category": "memory_followup",
+  "expected_skill": "context_reference",
+  "novelty": "warmup",
+  "expected_tools": [
+    "find_nearby_point",
+    "context_check"
+  ],
+  "selected_tools": [
+    "find_nearby_point"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 19
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "context_reference-009"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "context_reference-019"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 6560
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [
+    "context_stability_miss:context_reference"
+  ],
+  "error_signature": [
+    "context_reference"
+  ],
+  "critic_diagnosis": "context_reference evidence missing after context update",
+  "generated_experience": "context_reference-019",
+  "retrieved_experiences": [
+    "context_reference-009"
+  ],
+  "final_answer": "monolithic_rewrite step=19 skill=context_reference accuracy=0.666 context_tokens=6560 retrieved=1 generated=1",
+  "structured_response": {
+    "accuracy": 0.666,
+    "context_token_count": 6560,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "context_reference-009"
+    ],
+    "generated_experience_ids": [
+      "context_reference-019"
+    ]
+  },
+  "validation": {
+    "score": 0.666,
+    "success": false,
+    "threshold": 0.72,
+    "missing": [
+      "context_reference"
+    ],
+    "details": {
+      "tools": 1.0,
+      "accuracy": 0.666
+    }
+  },
+  "success": false,
+  "metrics": {
+    "turns": 3.4,
+    "runtime": 0.12,
+    "execution_success": false,
+    "result_correctness": 0.666,
+    "context_token_count": 6560,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 19,
+    "compression_event": ""
+  }
+}

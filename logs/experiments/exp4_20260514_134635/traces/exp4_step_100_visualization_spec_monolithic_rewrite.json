@@ -1,0 +1,91 @@
+{
+  "task_id": "exp4_step_100_visualization_spec",
+  "agent_type": "monolithic_rewrite",
+  "strategy": "monolithic_rewrite",
+  "adaptation_step": 100,
+  "query": "Step 100: 为 误差分析 选择合适图表并保持坐标轴、图例和单位说明一致。",
+  "category": "visualization",
+  "expected_skill": "visualization_spec",
+  "novelty": "retention_retest",
+  "expected_tools": [
+    "reasoning",
+    "chart_spec"
+  ],
+  "selected_tools": [
+    "reasoning",
+    "chart_spec"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 100
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "visualization_spec-070",
+        "visualization_spec-080",
+        "visualization_spec-090"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "visualization_spec-100"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 10980
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "visualization_spec-100",
+  "retrieved_experiences": [
+    "visualization_spec-070",
+    "visualization_spec-080",
+    "visualization_spec-090"
+  ],
+  "final_answer": "monolithic_rewrite step=100 skill=visualization_spec accuracy=0.78 context_tokens=10980 retrieved=3 generated=1",
+  "structured_response": {
+    "accuracy": 0.78,
+    "context_token_count": 10980,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "visualization_spec-070",
+      "visualization_spec-080",
+      "visualization_spec-090"
+    ],
+    "generated_experience_ids": [
+      "visualization_spec-100"
+    ]
+  },
+  "validation": {
+    "score": 0.78,
+    "success": true,
+    "threshold": 0.72,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "accuracy": 0.78
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 3.75,
+    "runtime": 0.12,
+    "execution_success": true,
+    "result_correctness": 0.78,
+    "context_token_count": 10980,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 39,
+    "compression_event": ""
+  }
+}

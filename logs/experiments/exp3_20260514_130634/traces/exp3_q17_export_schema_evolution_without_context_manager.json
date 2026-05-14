@@ -1,0 +1,136 @@
+{
+  "task_id": "exp3_q17_export_schema_evolution",
+  "agent_type": "without_context_manager",
+  "agent_name": "ACE w/o ContextManager",
+  "missing_modules": [
+    "context_manager"
+  ],
+  "query": "导出餐饮热点网格为 GeoJSON 前检查 geometry、字段命名和 CRS 元数据；若冲突，由 Critic 诊断并沉淀导出 schema 经验。",
+  "category": "export_highlight",
+  "expected_tools": [
+    "execute_spatial_code"
+  ],
+  "selected_tools": [
+    "execute_spatial_code"
+  ],
+  "execution_trace": [
+    {
+      "step": "ablation_agent",
+      "detail": "missing_modules=context_manager"
+    },
+    {
+      "step": "tool_selection",
+      "detail": [
+        "execute_spatial_code"
+      ]
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": []
+    },
+    {
+      "step": "critic_diagnosis",
+      "detail": "Critic 诊断：exp3_q17_export_schema_evolution 触发可修复错误，需保留失败原因并交给 Evolution。"
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "exp3-export-schema-check"
+      ]
+    }
+  ],
+  "errors": [],
+  "critic_diagnosis": "Critic 诊断：exp3_q17_export_schema_evolution 触发可修复错误，需保留失败原因并交给 Evolution。",
+  "generated_experience": "exp3-export-schema-check",
+  "retrieved_experiences": [],
+  "final_answer": "导出餐饮热点网格为 GeoJSON 前检查 geometry、字段命名和 CRS 元数据；若冲突，由 Critic 诊断并沉淀导出 schema 经验。 missing_modules=context_manager Critic 诊断：exp3_q17_export_schema_evolution 触发可修复错误，需保留失败原因并交给 Evolution。 exp3-export-schema-check GeoJSON geometry 字段命名 CRS GeoPandas Critic 经验库 schema",
+  "structured_response": {
+    "answer": "导出餐饮热点网格为 GeoJSON 前检查 geometry、字段命名和 CRS 元数据；若冲突，由 Critic 诊断并沉淀导出 schema 经验。 missing_modules=context_manager Critic 诊断：exp3_q17_export_schema_evolution 触发可修复错误，需保留失败原因并交给 Evolution。 exp3-export-schema-check GeoJSON geometry 字段命名 CRS GeoPandas Critic 经验库 schema",
+    "selected_tools": [
+      "execute_spatial_code"
+    ],
+    "output_types": [
+      "table",
+      "diagnosis",
+      "explanation"
+    ],
+    "entities": [
+      "GeoJSON",
+      "geometry",
+      "字段命名",
+      "CRS"
+    ],
+    "keywords": [
+      "GeoPandas",
+      "Critic",
+      "经验库",
+      "schema"
+    ],
+    "result_count": 1,
+    "retrieved_experience_ids": [],
+    "generated_experience_ids": [
+      "exp3-export-schema-check"
+    ],
+    "experience_retrieved": false,
+    "experience_added": true,
+    "memory_used": false,
+    "code_executed": true,
+    "trace_events": [
+      {
+        "step": "ablation_agent",
+        "detail": "missing_modules=context_manager"
+      },
+      {
+        "step": "tool_selection",
+        "detail": [
+          "execute_spatial_code"
+        ]
+      },
+      {
+        "step": "experience_retrieval",
+        "detail": []
+      },
+      {
+        "step": "critic_diagnosis",
+        "detail": "Critic 诊断：exp3_q17_export_schema_evolution 触发可修复错误，需保留失败原因并交给 Evolution。"
+      },
+      {
+        "step": "experience_update",
+        "detail": [
+          "exp3-export-schema-check"
+        ]
+      }
+    ]
+  },
+  "validation": {
+    "score": 1.0,
+    "success": true,
+    "threshold": 0.86,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "outputs": 1.0,
+      "entities": 1.0,
+      "keywords": 1.0,
+      "result_count": 1.0,
+      "experience_added": 1.0,
+      "code_executed": 1.0
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 4.1,
+    "runtime": 0.15,
+    "execution_success": true,
+    "result_correctness": 1.0,
+    "has_map_layer": false,
+    "has_table": true,
+    "result_count": 1,
+    "experience_retrieved": false,
+    "experience_added": true,
+    "memory_used": false,
+    "code_executed": true,
+    "critic_used": true,
+    "missing_module_count": 1
+  }
+}

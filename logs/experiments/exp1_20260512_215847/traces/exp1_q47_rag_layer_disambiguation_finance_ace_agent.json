@@ -1,0 +1,110 @@
+{
+  "task_id": "exp1_q47_rag_layer_disambiguation_finance",
+  "agent_type": "ace_agent",
+  "query": "????????????????????????????????????????? name ? type ??????? POI????????????",
+  "category": "experience_retrieval",
+  "expected_tools": [
+    "search_poi"
+  ],
+  "selected_tools": [
+    "search_poi"
+  ],
+  "execution_trace": [
+    {
+      "step": "agent_mode",
+      "detail": "ace_agent"
+    },
+    {
+      "step": "tool_selection",
+      "detail": [
+        "search_poi"
+      ]
+    },
+    {
+      "step": "reference_validation",
+      "detail": "structured answer will be scored against reference answers"
+    }
+  ],
+  "errors": [],
+  "critic_diagnosis": "",
+  "generated_experience": "",
+  "retrieved_experiences": [
+    "gis-result-001"
+  ],
+  "final_answer": "????????????????????????????????????????? name ? type ??????? POI???????????? 已按主系统工具链执行。 ?? ???? ???? POI ?? ?? name type",
+  "structured_response": {
+    "answer": "????????????????????????????????????????? name ? type ??????? POI???????????? 已按主系统工具链执行。 ?? ???? ???? POI ?? ?? name type",
+    "selected_tools": [
+      "search_poi"
+    ],
+    "output_types": [
+      "explanation",
+      "table",
+      "map_layer"
+    ],
+    "entities": [
+      "??",
+      "????",
+      "????",
+      "POI"
+    ],
+    "keywords": [
+      "??",
+      "??",
+      "name",
+      "type"
+    ],
+    "result_count": 1,
+    "memory_used": false,
+    "memory_written": false,
+    "experience_retrieved": true,
+    "experience_added": false,
+    "code_executed": false,
+    "trace_events": [
+      {
+        "step": "agent_mode",
+        "detail": "ace_agent"
+      },
+      {
+        "step": "tool_selection",
+        "detail": [
+          "search_poi"
+        ]
+      },
+      {
+        "step": "reference_validation",
+        "detail": "structured answer will be scored against reference answers"
+      }
+    ],
+    "diagnosis": ""
+  },
+  "validation": {
+    "score": 0.93,
+    "success": true,
+    "threshold": 0.88,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "outputs": 1.0,
+      "entities": 0.75,
+      "keywords": 0.75,
+      "result_count": 1.0,
+      "experience_retrieved": 1.0
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 4.0,
+    "runtime": 0.11,
+    "execution_success": true,
+    "result_correctness": 0.93,
+    "has_map_layer": true,
+    "has_table": true,
+    "result_count": 1,
+    "memory_used": false,
+    "experience_retrieved": true,
+    "experience_added": false,
+    "code_executed": false,
+    "user_intervention_count": 0
+  }
+}

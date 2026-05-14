@@ -1,5 +1,5 @@
 {
-  "active_id": "test1-20260428011609",
+  "active_id": "default",
   "banks": [
     {
       "id": "default",
@@ -15,6 +15,22 @@
       "template": "empty",
       "read_only": false,
       "created_at": "2026-04-28T01:16:09"
+    },
+    {
+      "id": "test2-20260508134112",
+      "name": "test2",
+      "path": "data\\experience_libraries\\test2-20260508134112.json",
+      "template": "empty",
+      "read_only": false,
+      "created_at": "2026-05-08T13:41:12"
+    },
+    {
+      "id": "test3-20260508155305",
+      "name": "test3",
+      "path": "data\\experience_libraries\\test3-20260508155305.json",
+      "template": "empty",
+      "read_only": false,
+      "created_at": "2026-05-08T15:53:05"
     }
   ]
 }

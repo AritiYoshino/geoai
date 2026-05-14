@@ -1,0 +1,85 @@
+{
+  "task_id": "exp4_step_049_context_anchor_tracking",
+  "agent_type": "ace_grow_and_refine",
+  "strategy": "ace_grow_and_refine",
+  "adaptation_step": 49,
+  "query": "Step 49: 使用当前上下文中的 spring_hotel 作为中心点，查找 1 公里范围内指定 POI，并解释锚点来源。",
+  "category": "memory_followup",
+  "expected_skill": "context_reference",
+  "novelty": "transfer",
+  "expected_tools": [
+    "find_nearby_point",
+    "context_check"
+  ],
+  "selected_tools": [
+    "find_nearby_point",
+    "context_check"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 49
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "context_reference-009"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "context_reference-049"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 7457
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "context_reference-049",
+  "retrieved_experiences": [
+    "context_reference-009"
+  ],
+  "final_answer": "ace_grow_and_refine step=49 skill=context_reference accuracy=0.97 context_tokens=7457 retrieved=1 generated=1",
+  "structured_response": {
+    "accuracy": 0.97,
+    "context_token_count": 7457,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "context_reference-009"
+    ],
+    "generated_experience_ids": [
+      "context_reference-049"
+    ]
+  },
+  "validation": {
+    "score": 0.97,
+    "success": true,
+    "threshold": 0.72,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "accuracy": 0.97
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 2.7,
+    "runtime": 0.12,
+    "execution_success": true,
+    "result_correctness": 0.97,
+    "context_token_count": 7457,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 10,
+    "compression_event": ""
+  }
+}

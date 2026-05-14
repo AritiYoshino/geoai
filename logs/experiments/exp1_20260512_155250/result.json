@@ -1,0 +1,7168 @@
+{
+  "run_id": "exp1_20260512_155250",
+  "experiment_id": "exp1",
+  "name": "总体任务成功率对比",
+  "created_at": "2026-05-12T15:52:50",
+  "config": {
+    "use_critic": true,
+    "use_evolution": true,
+    "use_experience_retrieval": true,
+    "use_code_agent": true,
+    "use_context_manager": true,
+    "use_real_ace": false,
+    "mock_mode": true
+  },
+  "frameworks": {
+    "direct_llm": {
+      "name": "Direct LLM",
+      "meaning": "只让大模型直接回答或给出 GIS 操作建议，不调用工具，不读取或写入经验库，也不进行 ACE 诊断和演化。"
+    },
+    "react_agent": {
+      "name": "ReAct Agent",
+      "meaning": "采用 Reason + Act 的工具调用流程，可调用固定 GIS 工具，但不读取 ACE 经验库，也不把错误沉淀为经验。"
+    },
+    "codeact_agent": {
+      "name": "CodeAct Agent",
+      "meaning": "允许生成并执行受控 GeoPandas / Python 代码，可根据报错做有限自修复，但不使用 ACE 经验检索与演化机制。"
+    },
+    "ace_webgis": {
+      "name": "ACE-WebGIS",
+      "meaning": "完整使用 CoordinatorAgent、SpatialAnalystAgent、CodeAgent、CriticAgent、EvolutionAgent、ContextManager 和 ExperienceLibrary，形成任务执行、诊断、经验沉淀与复用闭环。"
+    }
+  },
+  "groups": {
+    "direct_llm": {
+      "task_success_rate": 0.05555555555555555,
+      "tool_selection_accuracy": 0.0,
+      "execution_success_rate": 0.05555555555555555,
+      "result_correctness": 0.05555555555555555,
+      "average_turns": 1.4102777777777777,
+      "average_runtime": 0.4215,
+      "user_intervention_count": 12,
+      "error_count": 34
+    },
+    "react_agent": {
+      "task_success_rate": 0.5277777777777778,
+      "tool_selection_accuracy": 1.0,
+      "execution_success_rate": 0.5277777777777778,
+      "result_correctness": 0.6355777777777778,
+      "average_turns": 3.453888888888889,
+      "average_runtime": 0.9366944444444444,
+      "user_intervention_count": 4,
+      "error_count": 17
+    },
+    "codeact_agent": {
+      "task_success_rate": 0.5555555555555556,
+      "tool_selection_accuracy": 1.0,
+      "execution_success_rate": 0.5555555555555556,
+      "result_correctness": 0.6780444444444443,
+      "average_turns": 3.9324999999999997,
+      "average_runtime": 1.2858888888888889,
+      "user_intervention_count": 6,
+      "error_count": 16
+    },
+    "ace_webgis": {
+      "task_success_rate": 0.7777777777777778,
+      "tool_selection_accuracy": 1.0,
+      "execution_success_rate": 0.7777777777777778,
+      "result_correctness": 0.8904444444444444,
+      "average_turns": 2.966666666666667,
+      "average_runtime": 1.111888888888889,
+      "user_intervention_count": 0,
+      "error_count": 8
+    }
+  },
+  "traces": [
+    {
+      "task_id": "task_001_t1_01",
+      "agent_type": "direct_llm",
+      "query": "搜索名称中包含医院的 POI，并在地图上高亮结果",
+      "category": "poi_search",
+      "expected_tools": [
+        "search_poi"
+      ],
+      "selected_tools": [],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "poi_search"
+        },
+        {
+          "step": "tool_selection",
+          "detail": []
+        },
+        {
+          "step": "evaluation",
+          "detail": "success"
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务完成，已生成可评估结果。",
+      "success": true,
+      "metrics": {
+        "turns": 1.4,
+        "runtime": 0.529,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_001_t1_02",
+      "agent_type": "direct_llm",
+      "query": "搜索名称中包含医院的 POI，并在地图上高亮结果",
+      "category": "poi_search",
+      "expected_tools": [
+        "search_poi"
+      ],
+      "selected_tools": [],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "poi_search"
+        },
+        {
+          "step": "tool_selection",
+          "detail": []
+        },
+        {
+          "step": "evaluation",
+          "detail": "failed"
+        }
+      ],
+      "errors": [
+        "rule_eval_failed:poi_search"
+      ],
+      "error_signature": [
+        "poi_search"
+      ],
+      "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务未完全满足预期，已记录失败原因。",
+      "success": false,
+      "metrics": {
+        "turns": 1.61,
+        "runtime": 0.414,
+        "execution_success": false,
+        "result_correctness": 0.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 0,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 1
+      }
+    },
+    {
+      "task_id": "task_001_t1_03",
+      "agent_type": "direct_llm",
+      "query": "搜索名称中包含医院的 POI，并在地图上高亮结果",
+      "category": "poi_search",
+      "expected_tools": [
+        "search_poi"
+      ],
+      "selected_tools": [],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "poi_search"
+        },
+        {
+          "step": "tool_selection",
+          "detail": []
+        },
+        {
+          "step": "evaluation",
+          "detail": "failed"
+        }
+      ],
+      "errors": [
+        "rule_eval_failed:poi_search"
+      ],
+      "error_signature": [
+        "poi_search"
+      ],
+      "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务未完全满足预期，已记录失败原因。",
+      "success": false,
+      "metrics": {
+        "turns": 1.11,
+        "runtime": 0.318,
+        "execution_success": false,
+        "result_correctness": 0.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 0,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_002_t2_01",
+      "agent_type": "direct_llm",
+      "query": "查询餐饮图层中 type 包含火锅的点位",
+      "category": "attribute_query",
+      "expected_tools": [
+        "query_poi_by_conditions"
+      ],
+      "selected_tools": [],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "attribute_query"
+        },
+        {
+          "step": "tool_selection",
+          "detail": []
+        },
+        {
+          "step": "evaluation",
+          "detail": "failed"
+        }
+      ],
+      "errors": [
+        "rule_eval_failed:field_name_mismatch"
+      ],
+      "error_signature": [
+        "field_name_mismatch"
+      ],
+      "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务未完全满足预期，已记录失败原因。",
+      "success": false,
+      "metrics": {
+        "turns": 1.11,
+        "runtime": 0.458,
+        "execution_success": false,
+        "result_correctness": 0.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 0,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 1
+      }
+    },
+    {
+      "task_id": "task_002_t2_02",
+      "agent_type": "direct_llm",
+      "query": "查询餐饮图层中 type 包含火锅的点位",
+      "category": "attribute_query",
+      "expected_tools": [
+        "query_poi_by_conditions"
+      ],
+      "selected_tools": [],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "attribute_query"
+        },
+        {
+          "step": "tool_selection",
+          "detail": []
+        },
+        {
+          "step": "evaluation",
+          "detail": "failed"
+        }
+      ],
+      "errors": [
+        "rule_eval_failed:field_name_mismatch"
+      ],
+      "error_signature": [
+        "field_name_mismatch"
+      ],
+      "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务未完全满足预期，已记录失败原因。",
+      "success": false,
+      "metrics": {
+        "turns": 1.14,
+        "runtime": 0.505,
+        "execution_success": false,
+        "result_correctness": 0.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 0,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 1
+      }
+    },
+    {
+      "task_id": "task_002_t2_03",
+      "agent_type": "direct_llm",
+      "query": "查询餐饮图层中 type 包含火锅的点位",
+      "category": "attribute_query",
+      "expected_tools": [
+        "query_poi_by_conditions"
+      ],
+      "selected_tools": [],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "attribute_query"
+        },
+        {
+          "step": "tool_selection",
+          "detail": []
+        },
+        {
+          "step": "evaluation",
+          "detail": "failed"
+        }
+      ],
+      "errors": [
+        "rule_eval_failed:field_name_mismatch"
+      ],
+      "error_signature": [
+        "field_name_mismatch"
+      ],
+      "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务未完全满足预期，已记录失败原因。",
+      "success": false,
+      "metrics": {
+        "turns": 1.01,
+        "runtime": 0.425,
+        "execution_success": false,
+        "result_correctness": 0.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 0,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_003_t3_01",
+      "agent_type": "direct_llm",
+      "query": "找出科教文化图层中学校 500 米范围内的餐饮点",
+      "category": "nearby_analysis",
+      "expected_tools": [
+        "find_nearby"
+      ],
+      "selected_tools": [],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "nearby_analysis"
+        },
+        {
+          "step": "tool_selection",
+          "detail": []
+        },
+        {
+          "step": "evaluation",
+          "detail": "failed"
+        }
+      ],
+      "errors": [
+        "rule_eval_failed:crs_distance"
+      ],
+      "error_signature": [
+        "crs_distance"
+      ],
+      "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务未完全满足预期，已记录失败原因。",
+      "success": false,
+      "metrics": {
+        "turns": 1.11,
+        "runtime": 0.457,
+        "execution_success": false,
+        "result_correctness": 0.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 0,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_003_t3_02",
+      "agent_type": "direct_llm",
+      "query": "找出科教文化图层中学校 500 米范围内的餐饮点",
+      "category": "nearby_analysis",
+      "expected_tools": [
+        "find_nearby"
+      ],
+      "selected_tools": [],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "nearby_analysis"
+        },
+        {
+          "step": "tool_selection",
+          "detail": []
+        },
+        {
+          "step": "evaluation",
+          "detail": "failed"
+        }
+      ],
+      "errors": [
+        "rule_eval_failed:crs_distance"
+      ],
+      "error_signature": [
+        "crs_distance"
+      ],
+      "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务未完全满足预期，已记录失败原因。",
+      "success": false,
+      "metrics": {
+        "turns": 1.33,
+        "runtime": 0.569,
+        "execution_success": false,
+        "result_correctness": 0.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 0,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_003_t3_03",
+      "agent_type": "direct_llm",
+      "query": "找出科教文化图层中学校 500 米范围内的餐饮点",
+      "category": "nearby_analysis",
+      "expected_tools": [
+        "find_nearby"
+      ],
+      "selected_tools": [],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "nearby_analysis"
+        },
+        {
+          "step": "tool_selection",
+          "detail": []
+        },
+        {
+          "step": "evaluation",
+          "detail": "failed"
+        }
+      ],
+      "errors": [
+        "rule_eval_failed:crs_distance"
+      ],
+      "error_signature": [
+        "crs_distance"
+      ],
+      "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务未完全满足预期，已记录失败原因。",
+      "success": false,
+      "metrics": {
+        "turns": 1.23,
+        "runtime": 0.555,
+        "execution_success": false,
+        "result_correctness": 0.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 0,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_004_t4_01",
+      "agent_type": "direct_llm",
+      "query": "为医疗图层生成 800 米缓冲区，并显示缓冲区图层",
+      "category": "buffer_analysis",
+      "expected_tools": [
+        "buffer_analysis"
+      ],
+      "selected_tools": [],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "buffer_analysis"
+        },
+        {
+          "step": "tool_selection",
+          "detail": []
+        },
+        {
+          "step": "evaluation",
+          "detail": "failed"
+        }
+      ],
+      "errors": [
+        "rule_eval_failed:buffer_analysis"
+      ],
+      "error_signature": [
+        "buffer_analysis"
+      ],
+      "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务未完全满足预期，已记录失败原因。",
+      "success": false,
+      "metrics": {
+        "turns": 1.35,
+        "runtime": 0.281,
+        "execution_success": false,
+        "result_correctness": 0.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 0,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_004_t4_02",
+      "agent_type": "direct_llm",
+      "query": "为医疗图层生成 800 米缓冲区，并显示缓冲区图层",
+      "category": "buffer_analysis",
+      "expected_tools": [
+        "buffer_analysis"
+      ],
+      "selected_tools": [],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "buffer_analysis"
+        },
+        {
+          "step": "tool_selection",
+          "detail": []
+        },
+        {
+          "step": "evaluation",
+          "detail": "failed"
+        }
+      ],
+      "errors": [
+        "rule_eval_failed:buffer_analysis"
+      ],
+      "error_signature": [
+        "buffer_analysis"
+      ],
+      "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务未完全满足预期，已记录失败原因。",
+      "success": false,
+      "metrics": {
+        "turns": 1.9,
+        "runtime": 0.365,
+        "execution_success": false,
+        "result_correctness": 0.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 0,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 1
+      }
+    },
+    {
+      "task_id": "task_004_t4_03",
+      "agent_type": "direct_llm",
+      "query": "为医疗图层生成 800 米缓冲区，并显示缓冲区图层",
+      "category": "buffer_analysis",
+      "expected_tools": [
+        "buffer_analysis"
+      ],
+      "selected_tools": [],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "buffer_analysis"
+        },
+        {
+          "step": "tool_selection",
+          "detail": []
+        },
+        {
+          "step": "evaluation",
+          "detail": "failed"
+        }
+      ],
+      "errors": [
+        "rule_eval_failed:buffer_analysis"
+      ],
+      "error_signature": [
+        "buffer_analysis"
+      ],
+      "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务未完全满足预期，已记录失败原因。",
+      "success": false,
+      "metrics": {
+        "turns": 1.17,
+        "runtime": 0.499,
+        "execution_success": false,
+        "result_correctness": 0.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 0,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 1
+      }
+    },
+    {
+      "task_id": "task_005_t5_01",
+      "agent_type": "direct_llm",
+      "query": "叠加餐饮点和成都行政区，找出行政区内餐饮覆盖情况",
+      "category": "overlay_analysis",
+      "expected_tools": [
+        "overlay_layers"
+      ],
+      "selected_tools": [],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "overlay_analysis"
+        },
+        {
+          "step": "tool_selection",
+          "detail": []
+        },
+        {
+          "step": "evaluation",
+          "detail": "failed"
+        }
+      ],
+      "errors": [
+        "rule_eval_failed:geometry_type"
+      ],
+      "error_signature": [
+        "geometry_type"
+      ],
+      "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务未完全满足预期，已记录失败原因。",
+      "success": false,
+      "metrics": {
+        "turns": 1.22,
+        "runtime": 0.372,
+        "execution_success": false,
+        "result_correctness": 0.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 0,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_005_t5_02",
+      "agent_type": "direct_llm",
+      "query": "叠加餐饮点和成都行政区，找出行政区内餐饮覆盖情况",
+      "category": "overlay_analysis",
+      "expected_tools": [
+        "overlay_layers"
+      ],
+      "selected_tools": [],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "overlay_analysis"
+        },
+        {
+          "step": "tool_selection",
+          "detail": []
+        },
+        {
+          "step": "evaluation",
+          "detail": "failed"
+        }
+      ],
+      "errors": [
+        "rule_eval_failed:geometry_type"
+      ],
+      "error_signature": [
+        "geometry_type"
+      ],
+      "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务未完全满足预期，已记录失败原因。",
+      "success": false,
+      "metrics": {
+        "turns": 1.88,
+        "runtime": 0.365,
+        "execution_success": false,
+        "result_correctness": 0.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 0,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 1
+      }
+    },
+    {
+      "task_id": "task_005_t5_03",
+      "agent_type": "direct_llm",
+      "query": "叠加餐饮点和成都行政区，找出行政区内餐饮覆盖情况",
+      "category": "overlay_analysis",
+      "expected_tools": [
+        "overlay_layers"
+      ],
+      "selected_tools": [],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "overlay_analysis"
+        },
+        {
+          "step": "tool_selection",
+          "detail": []
+        },
+        {
+          "step": "evaluation",
+          "detail": "failed"
+        }
+      ],
+      "errors": [
+        "rule_eval_failed:geometry_type"
+      ],
+      "error_signature": [
+        "geometry_type"
+      ],
+      "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务未完全满足预期，已记录失败原因。",
+      "success": false,
+      "metrics": {
+        "turns": 1.47,
+        "runtime": 0.423,
+        "execution_success": false,
+        "result_correctness": 0.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 0,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_006_t6_01",
+      "agent_type": "direct_llm",
+      "query": "统计每个行政区内购物 POI 数量，并按数量着色显示",
+      "category": "spatial_join",
+      "expected_tools": [
+        "spatial_join_layers"
+      ],
+      "selected_tools": [],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "spatial_join"
+        },
+        {
+          "step": "tool_selection",
+          "detail": []
+        },
+        {
+          "step": "evaluation",
+          "detail": "failed"
+        }
+      ],
+      "errors": [
+        "rule_eval_failed:spatial_join"
+      ],
+      "error_signature": [
+        "spatial_join"
+      ],
+      "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务未完全满足预期，已记录失败原因。",
+      "success": false,
+      "metrics": {
+        "turns": 1.4,
+        "runtime": 0.393,
+        "execution_success": false,
+        "result_correctness": 0.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 0,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_006_t6_02",
+      "agent_type": "direct_llm",
+      "query": "统计每个行政区内购物 POI 数量，并按数量着色显示",
+      "category": "spatial_join",
+      "expected_tools": [
+        "spatial_join_layers"
+      ],
+      "selected_tools": [],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "spatial_join"
+        },
+        {
+          "step": "tool_selection",
+          "detail": []
+        },
+        {
+          "step": "evaluation",
+          "detail": "failed"
+        }
+      ],
+      "errors": [
+        "rule_eval_failed:spatial_join"
+      ],
+      "error_signature": [
+        "spatial_join"
+      ],
+      "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务未完全满足预期，已记录失败原因。",
+      "success": false,
+      "metrics": {
+        "turns": 1.15,
+        "runtime": 0.319,
+        "execution_success": false,
+        "result_correctness": 0.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 0,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_006_t6_03",
+      "agent_type": "direct_llm",
+      "query": "统计每个行政区内购物 POI 数量，并按数量着色显示",
+      "category": "spatial_join",
+      "expected_tools": [
+        "spatial_join_layers"
+      ],
+      "selected_tools": [],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "spatial_join"
+        },
+        {
+          "step": "tool_selection",
+          "detail": []
+        },
+        {
+          "step": "evaluation",
+          "detail": "failed"
+        }
+      ],
+      "errors": [
+        "rule_eval_failed:spatial_join"
+      ],
+      "error_signature": [
+        "spatial_join"
+      ],
+      "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务未完全满足预期，已记录失败原因。",
+      "success": false,
+      "metrics": {
+        "turns": 1.17,
+        "runtime": 0.394,
+        "execution_success": false,
+        "result_correctness": 0.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 0,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_007_t7_01",
+      "agent_type": "direct_llm",
+      "query": "对公司点位执行 DBSCAN 聚类，eps 为 600 米，最小样本数为 5",
+      "category": "clustering",
+      "expected_tools": [
+        "cluster_points_dbscan"
+      ],
+      "selected_tools": [],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "clustering"
+        },
+        {
+          "step": "tool_selection",
+          "detail": []
+        },
+        {
+          "step": "evaluation",
+          "detail": "failed"
+        }
+      ],
+      "errors": [
+        "rule_eval_failed:clustering"
+      ],
+      "error_signature": [
+        "clustering"
+      ],
+      "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务未完全满足预期，已记录失败原因。",
+      "success": false,
+      "metrics": {
+        "turns": 1.39,
+        "runtime": 0.283,
+        "execution_success": false,
+        "result_correctness": 0.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 0,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 1
+      }
+    },
+    {
+      "task_id": "task_007_t7_02",
+      "agent_type": "direct_llm",
+      "query": "对公司点位执行 DBSCAN 聚类，eps 为 600 米，最小样本数为 5",
+      "category": "clustering",
+      "expected_tools": [
+        "cluster_points_dbscan"
+      ],
+      "selected_tools": [],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "clustering"
+        },
+        {
+          "step": "tool_selection",
+          "detail": []
+        },
+        {
+          "step": "evaluation",
+          "detail": "success"
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务完成，已生成可评估结果。",
+      "success": true,
+      "metrics": {
+        "turns": 1.53,
+        "runtime": 0.561,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_007_t7_03",
+      "agent_type": "direct_llm",
+      "query": "对公司点位执行 DBSCAN 聚类，eps 为 600 米，最小样本数为 5",
+      "category": "clustering",
+      "expected_tools": [
+        "cluster_points_dbscan"
+      ],
+      "selected_tools": [],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "clustering"
+        },
+        {
+          "step": "tool_selection",
+          "detail": []
+        },
+        {
+          "step": "evaluation",
+          "detail": "failed"
+        }
+      ],
+      "errors": [
+        "rule_eval_failed:clustering"
+      ],
+      "error_signature": [
+        "clustering"
+      ],
+      "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务未完全满足预期，已记录失败原因。",
+      "success": false,
+      "metrics": {
+        "turns": 1.74,
+        "runtime": 0.316,
+        "execution_success": false,
+        "result_correctness": 0.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 0,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_008_t8_01",
+      "agent_type": "direct_llm",
+      "query": "生成医疗 POI 的 1000 米网格热点分析图层",
+      "category": "hotspot",
+      "expected_tools": [
+        "hotspot_analysis"
+      ],
+      "selected_tools": [],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "hotspot"
+        },
+        {
+          "step": "tool_selection",
+          "detail": []
+        },
+        {
+          "step": "evaluation",
+          "detail": "failed"
+        }
+      ],
+      "errors": [
+        "rule_eval_failed:hotspot"
+      ],
+      "error_signature": [
+        "hotspot"
+      ],
+      "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务未完全满足预期，已记录失败原因。",
+      "success": false,
+      "metrics": {
+        "turns": 1.04,
+        "runtime": 0.525,
+        "execution_success": false,
+        "result_correctness": 0.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 0,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_008_t8_02",
+      "agent_type": "direct_llm",
+      "query": "生成医疗 POI 的 1000 米网格热点分析图层",
+      "category": "hotspot",
+      "expected_tools": [
+        "hotspot_analysis"
+      ],
+      "selected_tools": [],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "hotspot"
+        },
+        {
+          "step": "tool_selection",
+          "detail": []
+        },
+        {
+          "step": "evaluation",
+          "detail": "failed"
+        }
+      ],
+      "errors": [
+        "rule_eval_failed:hotspot"
+      ],
+      "error_signature": [
+        "hotspot"
+      ],
+      "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务未完全满足预期，已记录失败原因。",
+      "success": false,
+      "metrics": {
+        "turns": 1.32,
+        "runtime": 0.251,
+        "execution_success": false,
+        "result_correctness": 0.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 0,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_008_t8_03",
+      "agent_type": "direct_llm",
+      "query": "生成医疗 POI 的 1000 米网格热点分析图层",
+      "category": "hotspot",
+      "expected_tools": [
+        "hotspot_analysis"
+      ],
+      "selected_tools": [],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "hotspot"
+        },
+        {
+          "step": "tool_selection",
+          "detail": []
+        },
+        {
+          "step": "evaluation",
+          "detail": "failed"
+        }
+      ],
+      "errors": [
+        "rule_eval_failed:hotspot"
+      ],
+      "error_signature": [
+        "hotspot"
+      ],
+      "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务未完全满足预期，已记录失败原因。",
+      "success": false,
+      "metrics": {
+        "turns": 1.66,
+        "runtime": 0.312,
+        "execution_success": false,
+        "result_correctness": 0.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 0,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_009_t9_01",
+      "agent_type": "direct_llm",
+      "query": "按 district 字段汇总生活服务 POI 数量",
+      "category": "statistics",
+      "expected_tools": [
+        "summarize_layer_statistics"
+      ],
+      "selected_tools": [],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "statistics"
+        },
+        {
+          "step": "tool_selection",
+          "detail": []
+        },
+        {
+          "step": "evaluation",
+          "detail": "failed"
+        }
+      ],
+      "errors": [
+        "rule_eval_failed:field_name_mismatch"
+      ],
+      "error_signature": [
+        "field_name_mismatch"
+      ],
+      "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务未完全满足预期，已记录失败原因。",
+      "success": false,
+      "metrics": {
+        "turns": 1.23,
+        "runtime": 0.413,
+        "execution_success": false,
+        "result_correctness": 0.0,
+        "has_map_layer": false,
+        "has_table": true,
+        "result_count": 0,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_009_t9_02",
+      "agent_type": "direct_llm",
+      "query": "按 district 字段汇总生活服务 POI 数量",
+      "category": "statistics",
+      "expected_tools": [
+        "summarize_layer_statistics"
+      ],
+      "selected_tools": [],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "statistics"
+        },
+        {
+          "step": "tool_selection",
+          "detail": []
+        },
+        {
+          "step": "evaluation",
+          "detail": "failed"
+        }
+      ],
+      "errors": [
+        "rule_eval_failed:field_name_mismatch"
+      ],
+      "error_signature": [
+        "field_name_mismatch"
+      ],
+      "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务未完全满足预期，已记录失败原因。",
+      "success": false,
+      "metrics": {
+        "turns": 1.25,
+        "runtime": 0.507,
+        "execution_success": false,
+        "result_correctness": 0.0,
+        "has_map_layer": false,
+        "has_table": true,
+        "result_count": 0,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 1
+      }
+    },
+    {
+      "task_id": "task_009_t9_03",
+      "agent_type": "direct_llm",
+      "query": "按 district 字段汇总生活服务 POI 数量",
+      "category": "statistics",
+      "expected_tools": [
+        "summarize_layer_statistics"
+      ],
+      "selected_tools": [],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "statistics"
+        },
+        {
+          "step": "tool_selection",
+          "detail": []
+        },
+        {
+          "step": "evaluation",
+          "detail": "failed"
+        }
+      ],
+      "errors": [
+        "rule_eval_failed:field_name_mismatch"
+      ],
+      "error_signature": [
+        "field_name_mismatch"
+      ],
+      "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务未完全满足预期，已记录失败原因。",
+      "success": false,
+      "metrics": {
+        "turns": 1.98,
+        "runtime": 0.448,
+        "execution_success": false,
+        "result_correctness": 0.0,
+        "has_map_layer": false,
+        "has_table": true,
+        "result_count": 0,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_010_t10_01",
+      "agent_type": "direct_llm",
+      "query": "导出最近一次分析结果为 GeoJSON，并返回下载链接",
+      "category": "export_highlight",
+      "expected_tools": [
+        "export_analysis_result"
+      ],
+      "selected_tools": [],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "export_highlight"
+        },
+        {
+          "step": "tool_selection",
+          "detail": []
+        },
+        {
+          "step": "evaluation",
+          "detail": "failed"
+        }
+      ],
+      "errors": [
+        "rule_eval_failed:export_highlight"
+      ],
+      "error_signature": [
+        "export_highlight"
+      ],
+      "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务未完全满足预期，已记录失败原因。",
+      "success": false,
+      "metrics": {
+        "turns": 1.83,
+        "runtime": 0.484,
+        "execution_success": false,
+        "result_correctness": 0.0,
+        "has_map_layer": false,
+        "has_table": true,
+        "result_count": 0,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 1
+      }
+    },
+    {
+      "task_id": "task_010_t10_02",
+      "agent_type": "direct_llm",
+      "query": "导出最近一次分析结果为 GeoJSON，并返回下载链接",
+      "category": "export_highlight",
+      "expected_tools": [
+        "export_analysis_result"
+      ],
+      "selected_tools": [],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "export_highlight"
+        },
+        {
+          "step": "tool_selection",
+          "detail": []
+        },
+        {
+          "step": "evaluation",
+          "detail": "failed"
+        }
+      ],
+      "errors": [
+        "rule_eval_failed:export_highlight"
+      ],
+      "error_signature": [
+        "export_highlight"
+      ],
+      "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务未完全满足预期，已记录失败原因。",
+      "success": false,
+      "metrics": {
+        "turns": 1.09,
+        "runtime": 0.567,
+        "execution_success": false,
+        "result_correctness": 0.0,
+        "has_map_layer": false,
+        "has_table": true,
+        "result_count": 0,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_010_t10_03",
+      "agent_type": "direct_llm",
+      "query": "导出最近一次分析结果为 GeoJSON，并返回下载链接",
+      "category": "export_highlight",
+      "expected_tools": [
+        "export_analysis_result"
+      ],
+      "selected_tools": [],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "export_highlight"
+        },
+        {
+          "step": "tool_selection",
+          "detail": []
+        },
+        {
+          "step": "evaluation",
+          "detail": "failed"
+        }
+      ],
+      "errors": [
+        "rule_eval_failed:export_highlight"
+      ],
+      "error_signature": [
+        "export_highlight"
+      ],
+      "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务未完全满足预期，已记录失败原因。",
+      "success": false,
+      "metrics": {
+        "turns": 1.68,
+        "runtime": 0.273,
+        "execution_success": false,
+        "result_correctness": 0.0,
+        "has_map_layer": false,
+        "has_table": true,
+        "result_count": 0,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 1
+      }
+    },
+    {
+      "task_id": "task_011_t11_01",
+      "agent_type": "direct_llm",
+      "query": "计算各行政区餐饮 POI 密度并输出排名前 5 的行政区",
+      "category": "code_required",
+      "expected_tools": [
+        "execute_spatial_code"
+      ],
+      "selected_tools": [],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "code_required"
+        },
+        {
+          "step": "tool_selection",
+          "detail": []
+        },
+        {
+          "step": "evaluation",
+          "detail": "failed"
+        }
+      ],
+      "errors": [
+        "rule_eval_failed:code_required"
+      ],
+      "error_signature": [
+        "code_required"
+      ],
+      "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务未完全满足预期，已记录失败原因。",
+      "success": false,
+      "metrics": {
+        "turns": 1.28,
+        "runtime": 0.513,
+        "execution_success": false,
+        "result_correctness": 0.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 0,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_011_t11_02",
+      "agent_type": "direct_llm",
+      "query": "计算各行政区餐饮 POI 密度并输出排名前 5 的行政区",
+      "category": "code_required",
+      "expected_tools": [
+        "execute_spatial_code"
+      ],
+      "selected_tools": [],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "code_required"
+        },
+        {
+          "step": "tool_selection",
+          "detail": []
+        },
+        {
+          "step": "evaluation",
+          "detail": "failed"
+        }
+      ],
+      "errors": [
+        "rule_eval_failed:code_required"
+      ],
+      "error_signature": [
+        "code_required"
+      ],
+      "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务未完全满足预期，已记录失败原因。",
+      "success": false,
+      "metrics": {
+        "turns": 1.9,
+        "runtime": 0.275,
+        "execution_success": false,
+        "result_correctness": 0.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 0,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_011_t11_03",
+      "agent_type": "direct_llm",
+      "query": "计算各行政区餐饮 POI 密度并输出排名前 5 的行政区",
+      "category": "code_required",
+      "expected_tools": [
+        "execute_spatial_code"
+      ],
+      "selected_tools": [],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "code_required"
+        },
+        {
+          "step": "tool_selection",
+          "detail": []
+        },
+        {
+          "step": "evaluation",
+          "detail": "failed"
+        }
+      ],
+      "errors": [
+        "rule_eval_failed:code_required"
+      ],
+      "error_signature": [
+        "code_required"
+      ],
+      "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务未完全满足预期，已记录失败原因。",
+      "success": false,
+      "metrics": {
+        "turns": 1.67,
+        "runtime": 0.321,
+        "execution_success": false,
+        "result_correctness": 0.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 0,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_012_t12_01",
+      "agent_type": "direct_llm",
+      "query": "找出地铁站 1 公里范围内的住宿服务点，并统计数量",
+      "category": "nearby_analysis",
+      "expected_tools": [
+        "find_nearby",
+        "summarize_layer_statistics"
+      ],
+      "selected_tools": [],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "nearby_analysis"
+        },
+        {
+          "step": "tool_selection",
+          "detail": []
+        },
+        {
+          "step": "evaluation",
+          "detail": "failed"
+        }
+      ],
+      "errors": [
+        "rule_eval_failed:multi_tool_chain"
+      ],
+      "error_signature": [
+        "multi_tool_chain"
+      ],
+      "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务未完全满足预期，已记录失败原因。",
+      "success": false,
+      "metrics": {
+        "turns": 1.43,
+        "runtime": 0.439,
+        "execution_success": false,
+        "result_correctness": 0.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 0,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 1
+      }
+    },
+    {
+      "task_id": "task_012_t12_02",
+      "agent_type": "direct_llm",
+      "query": "找出地铁站 1 公里范围内的住宿服务点，并统计数量",
+      "category": "nearby_analysis",
+      "expected_tools": [
+        "find_nearby",
+        "summarize_layer_statistics"
+      ],
+      "selected_tools": [],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "nearby_analysis"
+        },
+        {
+          "step": "tool_selection",
+          "detail": []
+        },
+        {
+          "step": "evaluation",
+          "detail": "failed"
+        }
+      ],
+      "errors": [
+        "rule_eval_failed:multi_tool_chain"
+      ],
+      "error_signature": [
+        "multi_tool_chain"
+      ],
+      "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务未完全满足预期，已记录失败原因。",
+      "success": false,
+      "metrics": {
+        "turns": 1.34,
+        "runtime": 0.562,
+        "execution_success": false,
+        "result_correctness": 0.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 0,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 1
+      }
+    },
+    {
+      "task_id": "task_012_t12_03",
+      "agent_type": "direct_llm",
+      "query": "找出地铁站 1 公里范围内的住宿服务点，并统计数量",
+      "category": "nearby_analysis",
+      "expected_tools": [
+        "find_nearby",
+        "summarize_layer_statistics"
+      ],
+      "selected_tools": [],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "nearby_analysis"
+        },
+        {
+          "step": "tool_selection",
+          "detail": []
+        },
+        {
+          "step": "evaluation",
+          "detail": "failed"
+        }
+      ],
+      "errors": [
+        "rule_eval_failed:multi_tool_chain"
+      ],
+      "error_signature": [
+        "multi_tool_chain"
+      ],
+      "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务未完全满足预期，已记录失败原因。",
+      "success": false,
+      "metrics": {
+        "turns": 1.65,
+        "runtime": 0.483,
+        "execution_success": false,
+        "result_correctness": 0.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 0,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_001_t1_01",
+      "agent_type": "react_agent",
+      "query": "搜索名称中包含医院的 POI，并在地图上高亮结果",
+      "category": "poi_search",
+      "expected_tools": [
+        "search_poi"
+      ],
+      "selected_tools": [
+        "search_poi"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "poi_search"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "search_poi"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "failed"
+        }
+      ],
+      "errors": [
+        "rule_eval_failed:poi_search"
+      ],
+      "error_signature": [
+        "poi_search"
+      ],
+      "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务未完全满足预期，已记录失败原因。",
+      "success": false,
+      "metrics": {
+        "turns": 3.33,
+        "runtime": 0.911,
+        "execution_success": false,
+        "result_correctness": 0.3824000000000001,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 0,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_001_t1_02",
+      "agent_type": "react_agent",
+      "query": "搜索名称中包含医院的 POI，并在地图上高亮结果",
+      "category": "poi_search",
+      "expected_tools": [
+        "search_poi"
+      ],
+      "selected_tools": [
+        "search_poi"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "poi_search"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "search_poi"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "success"
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务完成，已生成可评估结果。",
+      "success": true,
+      "metrics": {
+        "turns": 3.15,
+        "runtime": 1.022,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_001_t1_03",
+      "agent_type": "react_agent",
+      "query": "搜索名称中包含医院的 POI，并在地图上高亮结果",
+      "category": "poi_search",
+      "expected_tools": [
+        "search_poi"
+      ],
+      "selected_tools": [
+        "search_poi"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "poi_search"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "search_poi"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "failed"
+        }
+      ],
+      "errors": [
+        "rule_eval_failed:poi_search"
+      ],
+      "error_signature": [
+        "poi_search"
+      ],
+      "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务未完全满足预期，已记录失败原因。",
+      "success": false,
+      "metrics": {
+        "turns": 3.64,
+        "runtime": 1.108,
+        "execution_success": false,
+        "result_correctness": 0.3824000000000001,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 0,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_002_t2_01",
+      "agent_type": "react_agent",
+      "query": "查询餐饮图层中 type 包含火锅的点位",
+      "category": "attribute_query",
+      "expected_tools": [
+        "query_poi_by_conditions"
+      ],
+      "selected_tools": [
+        "query_poi_by_conditions"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "attribute_query"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "query_poi_by_conditions"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "success"
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务完成，已生成可评估结果。",
+      "success": true,
+      "metrics": {
+        "turns": 3.44,
+        "runtime": 1.136,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_002_t2_02",
+      "agent_type": "react_agent",
+      "query": "查询餐饮图层中 type 包含火锅的点位",
+      "category": "attribute_query",
+      "expected_tools": [
+        "query_poi_by_conditions"
+      ],
+      "selected_tools": [
+        "query_poi_by_conditions"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "attribute_query"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "query_poi_by_conditions"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "success"
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务完成，已生成可评估结果。",
+      "success": true,
+      "metrics": {
+        "turns": 3.61,
+        "runtime": 0.958,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_002_t2_03",
+      "agent_type": "react_agent",
+      "query": "查询餐饮图层中 type 包含火锅的点位",
+      "category": "attribute_query",
+      "expected_tools": [
+        "query_poi_by_conditions"
+      ],
+      "selected_tools": [
+        "query_poi_by_conditions"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "attribute_query"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "query_poi_by_conditions"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "failed"
+        }
+      ],
+      "errors": [
+        "rule_eval_failed:field_name_mismatch"
+      ],
+      "error_signature": [
+        "field_name_mismatch"
+      ],
+      "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务未完全满足预期，已记录失败原因。",
+      "success": false,
+      "metrics": {
+        "turns": 3.08,
+        "runtime": 0.851,
+        "execution_success": false,
+        "result_correctness": 0.2824,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 0,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_003_t3_01",
+      "agent_type": "react_agent",
+      "query": "找出科教文化图层中学校 500 米范围内的餐饮点",
+      "category": "nearby_analysis",
+      "expected_tools": [
+        "find_nearby"
+      ],
+      "selected_tools": [
+        "find_nearby"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "nearby_analysis"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "find_nearby"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "success"
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务完成，已生成可评估结果。",
+      "success": true,
+      "metrics": {
+        "turns": 3.32,
+        "runtime": 0.829,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_003_t3_02",
+      "agent_type": "react_agent",
+      "query": "找出科教文化图层中学校 500 米范围内的餐饮点",
+      "category": "nearby_analysis",
+      "expected_tools": [
+        "find_nearby"
+      ],
+      "selected_tools": [
+        "find_nearby"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "nearby_analysis"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "find_nearby"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "success"
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务完成，已生成可评估结果。",
+      "success": true,
+      "metrics": {
+        "turns": 3.69,
+        "runtime": 0.838,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_003_t3_03",
+      "agent_type": "react_agent",
+      "query": "找出科教文化图层中学校 500 米范围内的餐饮点",
+      "category": "nearby_analysis",
+      "expected_tools": [
+        "find_nearby"
+      ],
+      "selected_tools": [
+        "find_nearby"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "nearby_analysis"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "find_nearby"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "failed"
+        }
+      ],
+      "errors": [
+        "rule_eval_failed:crs_distance"
+      ],
+      "error_signature": [
+        "crs_distance"
+      ],
+      "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务未完全满足预期，已记录失败原因。",
+      "success": false,
+      "metrics": {
+        "turns": 3.64,
+        "runtime": 0.98,
+        "execution_success": false,
+        "result_correctness": 0.2824,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 0,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_004_t4_01",
+      "agent_type": "react_agent",
+      "query": "为医疗图层生成 800 米缓冲区，并显示缓冲区图层",
+      "category": "buffer_analysis",
+      "expected_tools": [
+        "buffer_analysis"
+      ],
+      "selected_tools": [
+        "buffer_analysis"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "buffer_analysis"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "buffer_analysis"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "failed"
+        }
+      ],
+      "errors": [
+        "rule_eval_failed:buffer_analysis"
+      ],
+      "error_signature": [
+        "buffer_analysis"
+      ],
+      "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务未完全满足预期，已记录失败原因。",
+      "success": false,
+      "metrics": {
+        "turns": 3.94,
+        "runtime": 1.028,
+        "execution_success": false,
+        "result_correctness": 0.2824,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 0,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_004_t4_02",
+      "agent_type": "react_agent",
+      "query": "为医疗图层生成 800 米缓冲区，并显示缓冲区图层",
+      "category": "buffer_analysis",
+      "expected_tools": [
+        "buffer_analysis"
+      ],
+      "selected_tools": [
+        "buffer_analysis"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "buffer_analysis"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "buffer_analysis"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "success"
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务完成，已生成可评估结果。",
+      "success": true,
+      "metrics": {
+        "turns": 3.3,
+        "runtime": 0.857,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_004_t4_03",
+      "agent_type": "react_agent",
+      "query": "为医疗图层生成 800 米缓冲区，并显示缓冲区图层",
+      "category": "buffer_analysis",
+      "expected_tools": [
+        "buffer_analysis"
+      ],
+      "selected_tools": [
+        "buffer_analysis"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "buffer_analysis"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "buffer_analysis"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "success"
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务完成，已生成可评估结果。",
+      "success": true,
+      "metrics": {
+        "turns": 3.43,
+        "runtime": 0.836,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_005_t5_01",
+      "agent_type": "react_agent",
+      "query": "叠加餐饮点和成都行政区，找出行政区内餐饮覆盖情况",
+      "category": "overlay_analysis",
+      "expected_tools": [
+        "overlay_layers"
+      ],
+      "selected_tools": [
+        "overlay_layers"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "overlay_analysis"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "overlay_layers"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "failed"
+        }
+      ],
+      "errors": [
+        "rule_eval_failed:geometry_type"
+      ],
+      "error_signature": [
+        "geometry_type"
+      ],
+      "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务未完全满足预期，已记录失败原因。",
+      "success": false,
+      "metrics": {
+        "turns": 3.44,
+        "runtime": 1.081,
+        "execution_success": false,
+        "result_correctness": 0.14240000000000003,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 0,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_005_t5_02",
+      "agent_type": "react_agent",
+      "query": "叠加餐饮点和成都行政区，找出行政区内餐饮覆盖情况",
+      "category": "overlay_analysis",
+      "expected_tools": [
+        "overlay_layers"
+      ],
+      "selected_tools": [
+        "overlay_layers"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "overlay_analysis"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "overlay_layers"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "success"
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务完成，已生成可评估结果。",
+      "success": true,
+      "metrics": {
+        "turns": 3.18,
+        "runtime": 1.007,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_005_t5_03",
+      "agent_type": "react_agent",
+      "query": "叠加餐饮点和成都行政区，找出行政区内餐饮覆盖情况",
+      "category": "overlay_analysis",
+      "expected_tools": [
+        "overlay_layers"
+      ],
+      "selected_tools": [
+        "overlay_layers"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "overlay_analysis"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "overlay_layers"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "failed"
+        }
+      ],
+      "errors": [
+        "rule_eval_failed:geometry_type"
+      ],
+      "error_signature": [
+        "geometry_type"
+      ],
+      "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务未完全满足预期，已记录失败原因。",
+      "success": false,
+      "metrics": {
+        "turns": 3.52,
+        "runtime": 0.857,
+        "execution_success": false,
+        "result_correctness": 0.14240000000000003,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 0,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_006_t6_01",
+      "agent_type": "react_agent",
+      "query": "统计每个行政区内购物 POI 数量，并按数量着色显示",
+      "category": "spatial_join",
+      "expected_tools": [
+        "spatial_join_layers"
+      ],
+      "selected_tools": [
+        "spatial_join_layers"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "spatial_join"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "spatial_join_layers"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "success"
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务完成，已生成可评估结果。",
+      "success": true,
+      "metrics": {
+        "turns": 3.81,
+        "runtime": 1.0,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_006_t6_02",
+      "agent_type": "react_agent",
+      "query": "统计每个行政区内购物 POI 数量，并按数量着色显示",
+      "category": "spatial_join",
+      "expected_tools": [
+        "spatial_join_layers"
+      ],
+      "selected_tools": [
+        "spatial_join_layers"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "spatial_join"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "spatial_join_layers"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "success"
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务完成，已生成可评估结果。",
+      "success": true,
+      "metrics": {
+        "turns": 3.67,
+        "runtime": 0.832,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_006_t6_03",
+      "agent_type": "react_agent",
+      "query": "统计每个行政区内购物 POI 数量，并按数量着色显示",
+      "category": "spatial_join",
+      "expected_tools": [
+        "spatial_join_layers"
+      ],
+      "selected_tools": [
+        "spatial_join_layers"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "spatial_join"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "spatial_join_layers"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "success"
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务完成，已生成可评估结果。",
+      "success": true,
+      "metrics": {
+        "turns": 3.41,
+        "runtime": 0.942,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_007_t7_01",
+      "agent_type": "react_agent",
+      "query": "对公司点位执行 DBSCAN 聚类，eps 为 600 米，最小样本数为 5",
+      "category": "clustering",
+      "expected_tools": [
+        "cluster_points_dbscan"
+      ],
+      "selected_tools": [
+        "cluster_points_dbscan"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "clustering"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "cluster_points_dbscan"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "failed"
+        }
+      ],
+      "errors": [
+        "rule_eval_failed:clustering"
+      ],
+      "error_signature": [
+        "clustering"
+      ],
+      "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务未完全满足预期，已记录失败原因。",
+      "success": false,
+      "metrics": {
+        "turns": 3.56,
+        "runtime": 0.801,
+        "execution_success": false,
+        "result_correctness": 0.2824,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 0,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 1
+      }
+    },
+    {
+      "task_id": "task_007_t7_02",
+      "agent_type": "react_agent",
+      "query": "对公司点位执行 DBSCAN 聚类，eps 为 600 米，最小样本数为 5",
+      "category": "clustering",
+      "expected_tools": [
+        "cluster_points_dbscan"
+      ],
+      "selected_tools": [
+        "cluster_points_dbscan"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "clustering"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "cluster_points_dbscan"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "failed"
+        }
+      ],
+      "errors": [
+        "rule_eval_failed:clustering"
+      ],
+      "error_signature": [
+        "clustering"
+      ],
+      "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务未完全满足预期，已记录失败原因。",
+      "success": false,
+      "metrics": {
+        "turns": 3.06,
+        "runtime": 0.805,
+        "execution_success": false,
+        "result_correctness": 0.2824,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 0,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_007_t7_03",
+      "agent_type": "react_agent",
+      "query": "对公司点位执行 DBSCAN 聚类，eps 为 600 米，最小样本数为 5",
+      "category": "clustering",
+      "expected_tools": [
+        "cluster_points_dbscan"
+      ],
+      "selected_tools": [
+        "cluster_points_dbscan"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "clustering"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "cluster_points_dbscan"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "failed"
+        }
+      ],
+      "errors": [
+        "rule_eval_failed:clustering"
+      ],
+      "error_signature": [
+        "clustering"
+      ],
+      "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务未完全满足预期，已记录失败原因。",
+      "success": false,
+      "metrics": {
+        "turns": 3.18,
+        "runtime": 0.857,
+        "execution_success": false,
+        "result_correctness": 0.2824,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 0,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_008_t8_01",
+      "agent_type": "react_agent",
+      "query": "生成医疗 POI 的 1000 米网格热点分析图层",
+      "category": "hotspot",
+      "expected_tools": [
+        "hotspot_analysis"
+      ],
+      "selected_tools": [
+        "hotspot_analysis"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "hotspot"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "hotspot_analysis"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "failed"
+        }
+      ],
+      "errors": [
+        "rule_eval_failed:hotspot"
+      ],
+      "error_signature": [
+        "hotspot"
+      ],
+      "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务未完全满足预期，已记录失败原因。",
+      "success": false,
+      "metrics": {
+        "turns": 3.44,
+        "runtime": 0.947,
+        "execution_success": false,
+        "result_correctness": 0.14240000000000003,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 0,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_008_t8_02",
+      "agent_type": "react_agent",
+      "query": "生成医疗 POI 的 1000 米网格热点分析图层",
+      "category": "hotspot",
+      "expected_tools": [
+        "hotspot_analysis"
+      ],
+      "selected_tools": [
+        "hotspot_analysis"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "hotspot"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "hotspot_analysis"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "success"
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务完成，已生成可评估结果。",
+      "success": true,
+      "metrics": {
+        "turns": 3.48,
+        "runtime": 1.028,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_008_t8_03",
+      "agent_type": "react_agent",
+      "query": "生成医疗 POI 的 1000 米网格热点分析图层",
+      "category": "hotspot",
+      "expected_tools": [
+        "hotspot_analysis"
+      ],
+      "selected_tools": [
+        "hotspot_analysis"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "hotspot"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "hotspot_analysis"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "success"
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务完成，已生成可评估结果。",
+      "success": true,
+      "metrics": {
+        "turns": 3.47,
+        "runtime": 1.062,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_009_t9_01",
+      "agent_type": "react_agent",
+      "query": "按 district 字段汇总生活服务 POI 数量",
+      "category": "statistics",
+      "expected_tools": [
+        "summarize_layer_statistics"
+      ],
+      "selected_tools": [
+        "summarize_layer_statistics"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "statistics"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "summarize_layer_statistics"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "success"
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务完成，已生成可评估结果。",
+      "success": true,
+      "metrics": {
+        "turns": 3.56,
+        "runtime": 0.804,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": false,
+        "has_table": true,
+        "result_count": 1,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_009_t9_02",
+      "agent_type": "react_agent",
+      "query": "按 district 字段汇总生活服务 POI 数量",
+      "category": "statistics",
+      "expected_tools": [
+        "summarize_layer_statistics"
+      ],
+      "selected_tools": [
+        "summarize_layer_statistics"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "statistics"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "summarize_layer_statistics"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "failed"
+        }
+      ],
+      "errors": [
+        "rule_eval_failed:field_name_mismatch"
+      ],
+      "error_signature": [
+        "field_name_mismatch"
+      ],
+      "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务未完全满足预期，已记录失败原因。",
+      "success": false,
+      "metrics": {
+        "turns": 3.31,
+        "runtime": 0.829,
+        "execution_success": false,
+        "result_correctness": 0.2824,
+        "has_map_layer": false,
+        "has_table": true,
+        "result_count": 0,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 1
+      }
+    },
+    {
+      "task_id": "task_009_t9_03",
+      "agent_type": "react_agent",
+      "query": "按 district 字段汇总生活服务 POI 数量",
+      "category": "statistics",
+      "expected_tools": [
+        "summarize_layer_statistics"
+      ],
+      "selected_tools": [
+        "summarize_layer_statistics"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "statistics"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "summarize_layer_statistics"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "success"
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务完成，已生成可评估结果。",
+      "success": true,
+      "metrics": {
+        "turns": 3.84,
+        "runtime": 0.876,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": false,
+        "has_table": true,
+        "result_count": 1,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_010_t10_01",
+      "agent_type": "react_agent",
+      "query": "导出最近一次分析结果为 GeoJSON，并返回下载链接",
+      "category": "export_highlight",
+      "expected_tools": [
+        "export_analysis_result"
+      ],
+      "selected_tools": [
+        "export_analysis_result"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "export_highlight"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "export_analysis_result"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "success"
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务完成，已生成可评估结果。",
+      "success": true,
+      "metrics": {
+        "turns": 3.64,
+        "runtime": 0.829,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": false,
+        "has_table": true,
+        "result_count": 1,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_010_t10_02",
+      "agent_type": "react_agent",
+      "query": "导出最近一次分析结果为 GeoJSON，并返回下载链接",
+      "category": "export_highlight",
+      "expected_tools": [
+        "export_analysis_result"
+      ],
+      "selected_tools": [
+        "export_analysis_result"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "export_highlight"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "export_analysis_result"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "success"
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务完成，已生成可评估结果。",
+      "success": true,
+      "metrics": {
+        "turns": 3.93,
+        "runtime": 1.045,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": false,
+        "has_table": true,
+        "result_count": 1,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_010_t10_03",
+      "agent_type": "react_agent",
+      "query": "导出最近一次分析结果为 GeoJSON，并返回下载链接",
+      "category": "export_highlight",
+      "expected_tools": [
+        "export_analysis_result"
+      ],
+      "selected_tools": [
+        "export_analysis_result"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "export_highlight"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "export_analysis_result"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "success"
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务完成，已生成可评估结果。",
+      "success": true,
+      "metrics": {
+        "turns": 3.02,
+        "runtime": 1.067,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": false,
+        "has_table": true,
+        "result_count": 1,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_011_t11_01",
+      "agent_type": "react_agent",
+      "query": "计算各行政区餐饮 POI 密度并输出排名前 5 的行政区",
+      "category": "code_required",
+      "expected_tools": [
+        "execute_spatial_code"
+      ],
+      "selected_tools": [
+        "execute_spatial_code"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "code_required"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "execute_spatial_code"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "failed"
+        }
+      ],
+      "errors": [
+        "rule_eval_failed:code_required"
+      ],
+      "error_signature": [
+        "code_required"
+      ],
+      "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务未完全满足预期，已记录失败原因。",
+      "success": false,
+      "metrics": {
+        "turns": 3.95,
+        "runtime": 0.901,
+        "execution_success": false,
+        "result_correctness": 0.14240000000000003,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 0,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_011_t11_02",
+      "agent_type": "react_agent",
+      "query": "计算各行政区餐饮 POI 密度并输出排名前 5 的行政区",
+      "category": "code_required",
+      "expected_tools": [
+        "execute_spatial_code"
+      ],
+      "selected_tools": [
+        "execute_spatial_code"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "code_required"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "execute_spatial_code"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "success"
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务完成，已生成可评估结果。",
+      "success": true,
+      "metrics": {
+        "turns": 3.12,
+        "runtime": 0.914,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_011_t11_03",
+      "agent_type": "react_agent",
+      "query": "计算各行政区餐饮 POI 密度并输出排名前 5 的行政区",
+      "category": "code_required",
+      "expected_tools": [
+        "execute_spatial_code"
+      ],
+      "selected_tools": [
+        "execute_spatial_code"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "code_required"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "execute_spatial_code"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "failed"
+        }
+      ],
+      "errors": [
+        "rule_eval_failed:code_required"
+      ],
+      "error_signature": [
+        "code_required"
+      ],
+      "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务未完全满足预期，已记录失败原因。",
+      "success": false,
+      "metrics": {
+        "turns": 3.62,
+        "runtime": 0.88,
+        "execution_success": false,
+        "result_correctness": 0.14240000000000003,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 0,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_012_t12_01",
+      "agent_type": "react_agent",
+      "query": "找出地铁站 1 公里范围内的住宿服务点，并统计数量",
+      "category": "nearby_analysis",
+      "expected_tools": [
+        "find_nearby",
+        "summarize_layer_statistics"
+      ],
+      "selected_tools": [
+        "find_nearby",
+        "summarize_layer_statistics"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "nearby_analysis"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "find_nearby",
+            "summarize_layer_statistics"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "failed"
+        }
+      ],
+      "errors": [
+        "rule_eval_failed:multi_tool_chain"
+      ],
+      "error_signature": [
+        "multi_tool_chain"
+      ],
+      "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务未完全满足预期，已记录失败原因。",
+      "success": false,
+      "metrics": {
+        "turns": 3.05,
+        "runtime": 1.105,
+        "execution_success": false,
+        "result_correctness": 0.14240000000000003,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 0,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 1
+      }
+    },
+    {
+      "task_id": "task_012_t12_02",
+      "agent_type": "react_agent",
+      "query": "找出地铁站 1 公里范围内的住宿服务点，并统计数量",
+      "category": "nearby_analysis",
+      "expected_tools": [
+        "find_nearby",
+        "summarize_layer_statistics"
+      ],
+      "selected_tools": [
+        "find_nearby",
+        "summarize_layer_statistics"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "nearby_analysis"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "find_nearby",
+            "summarize_layer_statistics"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "failed"
+        }
+      ],
+      "errors": [
+        "rule_eval_failed:multi_tool_chain"
+      ],
+      "error_signature": [
+        "multi_tool_chain"
+      ],
+      "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务未完全满足预期，已记录失败原因。",
+      "success": false,
+      "metrics": {
+        "turns": 3.47,
+        "runtime": 0.936,
+        "execution_success": false,
+        "result_correctness": 0.14240000000000003,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 0,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 1
+      }
+    },
+    {
+      "task_id": "task_012_t12_03",
+      "agent_type": "react_agent",
+      "query": "找出地铁站 1 公里范围内的住宿服务点，并统计数量",
+      "category": "nearby_analysis",
+      "expected_tools": [
+        "find_nearby",
+        "summarize_layer_statistics"
+      ],
+      "selected_tools": [
+        "find_nearby",
+        "summarize_layer_statistics"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "nearby_analysis"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "find_nearby",
+            "summarize_layer_statistics"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "failed"
+        }
+      ],
+      "errors": [
+        "rule_eval_failed:multi_tool_chain"
+      ],
+      "error_signature": [
+        "multi_tool_chain"
+      ],
+      "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务未完全满足预期，已记录失败原因。",
+      "success": false,
+      "metrics": {
+        "turns": 3.04,
+        "runtime": 0.962,
+        "execution_success": false,
+        "result_correctness": 0.14240000000000003,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 0,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_001_t1_01",
+      "agent_type": "codeact_agent",
+      "query": "搜索名称中包含医院的 POI，并在地图上高亮结果",
+      "category": "poi_search",
+      "expected_tools": [
+        "search_poi"
+      ],
+      "selected_tools": [
+        "search_poi"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "poi_search"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "search_poi"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "success"
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务完成，已生成可评估结果。",
+      "success": true,
+      "metrics": {
+        "turns": 3.75,
+        "runtime": 1.268,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_001_t1_02",
+      "agent_type": "codeact_agent",
+      "query": "搜索名称中包含医院的 POI，并在地图上高亮结果",
+      "category": "poi_search",
+      "expected_tools": [
+        "search_poi"
+      ],
+      "selected_tools": [
+        "search_poi"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "poi_search"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "search_poi"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "success"
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务完成，已生成可评估结果。",
+      "success": true,
+      "metrics": {
+        "turns": 4.27,
+        "runtime": 1.18,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_001_t1_03",
+      "agent_type": "codeact_agent",
+      "query": "搜索名称中包含医院的 POI，并在地图上高亮结果",
+      "category": "poi_search",
+      "expected_tools": [
+        "search_poi"
+      ],
+      "selected_tools": [
+        "search_poi"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "poi_search"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "search_poi"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "success"
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务完成，已生成可评估结果。",
+      "success": true,
+      "metrics": {
+        "turns": 4.3,
+        "runtime": 1.413,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_002_t2_01",
+      "agent_type": "codeact_agent",
+      "query": "查询餐饮图层中 type 包含火锅的点位",
+      "category": "attribute_query",
+      "expected_tools": [
+        "query_poi_by_conditions"
+      ],
+      "selected_tools": [
+        "query_poi_by_conditions"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "attribute_query"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "query_poi_by_conditions"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "success"
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务完成，已生成可评估结果。",
+      "success": true,
+      "metrics": {
+        "turns": 4.3,
+        "runtime": 1.269,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_002_t2_02",
+      "agent_type": "codeact_agent",
+      "query": "查询餐饮图层中 type 包含火锅的点位",
+      "category": "attribute_query",
+      "expected_tools": [
+        "query_poi_by_conditions"
+      ],
+      "selected_tools": [
+        "query_poi_by_conditions"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "attribute_query"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "query_poi_by_conditions"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "success"
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务完成，已生成可评估结果。",
+      "success": true,
+      "metrics": {
+        "turns": 3.4,
+        "runtime": 1.184,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_002_t2_03",
+      "agent_type": "codeact_agent",
+      "query": "查询餐饮图层中 type 包含火锅的点位",
+      "category": "attribute_query",
+      "expected_tools": [
+        "query_poi_by_conditions"
+      ],
+      "selected_tools": [
+        "query_poi_by_conditions"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "attribute_query"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "query_poi_by_conditions"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "failed"
+        }
+      ],
+      "errors": [
+        "rule_eval_failed:field_name_mismatch"
+      ],
+      "error_signature": [
+        "field_name_mismatch"
+      ],
+      "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务未完全满足预期，已记录失败原因。",
+      "success": false,
+      "metrics": {
+        "turns": 3.63,
+        "runtime": 1.373,
+        "execution_success": false,
+        "result_correctness": 0.3455999999999999,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 0,
+        "repair_attempted": true,
+        "repair_success": true,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_003_t3_01",
+      "agent_type": "codeact_agent",
+      "query": "找出科教文化图层中学校 500 米范围内的餐饮点",
+      "category": "nearby_analysis",
+      "expected_tools": [
+        "find_nearby"
+      ],
+      "selected_tools": [
+        "find_nearby"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "nearby_analysis"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "find_nearby"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "success"
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务完成，已生成可评估结果。",
+      "success": true,
+      "metrics": {
+        "turns": 4.37,
+        "runtime": 1.208,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_003_t3_02",
+      "agent_type": "codeact_agent",
+      "query": "找出科教文化图层中学校 500 米范围内的餐饮点",
+      "category": "nearby_analysis",
+      "expected_tools": [
+        "find_nearby"
+      ],
+      "selected_tools": [
+        "find_nearby"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "nearby_analysis"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "find_nearby"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "success"
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务完成，已生成可评估结果。",
+      "success": true,
+      "metrics": {
+        "turns": 3.71,
+        "runtime": 1.256,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_003_t3_03",
+      "agent_type": "codeact_agent",
+      "query": "找出科教文化图层中学校 500 米范围内的餐饮点",
+      "category": "nearby_analysis",
+      "expected_tools": [
+        "find_nearby"
+      ],
+      "selected_tools": [
+        "find_nearby"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "nearby_analysis"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "find_nearby"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "failed"
+        }
+      ],
+      "errors": [
+        "rule_eval_failed:crs_distance"
+      ],
+      "error_signature": [
+        "crs_distance"
+      ],
+      "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务未完全满足预期，已记录失败原因。",
+      "success": false,
+      "metrics": {
+        "turns": 4.34,
+        "runtime": 1.266,
+        "execution_success": false,
+        "result_correctness": 0.3455999999999999,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 0,
+        "repair_attempted": true,
+        "repair_success": true,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_004_t4_01",
+      "agent_type": "codeact_agent",
+      "query": "为医疗图层生成 800 米缓冲区，并显示缓冲区图层",
+      "category": "buffer_analysis",
+      "expected_tools": [
+        "buffer_analysis"
+      ],
+      "selected_tools": [
+        "buffer_analysis"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "buffer_analysis"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "buffer_analysis"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "failed"
+        }
+      ],
+      "errors": [
+        "rule_eval_failed:buffer_analysis"
+      ],
+      "error_signature": [
+        "buffer_analysis"
+      ],
+      "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务未完全满足预期，已记录失败原因。",
+      "success": false,
+      "metrics": {
+        "turns": 3.86,
+        "runtime": 1.176,
+        "execution_success": false,
+        "result_correctness": 0.3455999999999999,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 0,
+        "repair_attempted": true,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_004_t4_02",
+      "agent_type": "codeact_agent",
+      "query": "为医疗图层生成 800 米缓冲区，并显示缓冲区图层",
+      "category": "buffer_analysis",
+      "expected_tools": [
+        "buffer_analysis"
+      ],
+      "selected_tools": [
+        "buffer_analysis"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "buffer_analysis"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "buffer_analysis"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "failed"
+        }
+      ],
+      "errors": [
+        "rule_eval_failed:buffer_analysis"
+      ],
+      "error_signature": [
+        "buffer_analysis"
+      ],
+      "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务未完全满足预期，已记录失败原因。",
+      "success": false,
+      "metrics": {
+        "turns": 4.2,
+        "runtime": 1.32,
+        "execution_success": false,
+        "result_correctness": 0.3455999999999999,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 0,
+        "repair_attempted": true,
+        "repair_success": false,
+        "user_intervention_count": 1
+      }
+    },
+    {
+      "task_id": "task_004_t4_03",
+      "agent_type": "codeact_agent",
+      "query": "为医疗图层生成 800 米缓冲区，并显示缓冲区图层",
+      "category": "buffer_analysis",
+      "expected_tools": [
+        "buffer_analysis"
+      ],
+      "selected_tools": [
+        "buffer_analysis"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "buffer_analysis"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "buffer_analysis"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "failed"
+        }
+      ],
+      "errors": [
+        "rule_eval_failed:buffer_analysis"
+      ],
+      "error_signature": [
+        "buffer_analysis"
+      ],
+      "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务未完全满足预期，已记录失败原因。",
+      "success": false,
+      "metrics": {
+        "turns": 3.41,
+        "runtime": 1.428,
+        "execution_success": false,
+        "result_correctness": 0.3455999999999999,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 0,
+        "repair_attempted": true,
+        "repair_success": true,
+        "user_intervention_count": 1
+      }
+    },
+    {
+      "task_id": "task_005_t5_01",
+      "agent_type": "codeact_agent",
+      "query": "叠加餐饮点和成都行政区，找出行政区内餐饮覆盖情况",
+      "category": "overlay_analysis",
+      "expected_tools": [
+        "overlay_layers"
+      ],
+      "selected_tools": [
+        "overlay_layers"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "overlay_analysis"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "overlay_layers"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "failed"
+        }
+      ],
+      "errors": [
+        "rule_eval_failed:geometry_type"
+      ],
+      "error_signature": [
+        "geometry_type"
+      ],
+      "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务未完全满足预期，已记录失败原因。",
+      "success": false,
+      "metrics": {
+        "turns": 4.2,
+        "runtime": 1.331,
+        "execution_success": false,
+        "result_correctness": 0.20559999999999995,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 0,
+        "repair_attempted": true,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_005_t5_02",
+      "agent_type": "codeact_agent",
+      "query": "叠加餐饮点和成都行政区，找出行政区内餐饮覆盖情况",
+      "category": "overlay_analysis",
+      "expected_tools": [
+        "overlay_layers"
+      ],
+      "selected_tools": [
+        "overlay_layers"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "overlay_analysis"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "overlay_layers"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "success"
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务完成，已生成可评估结果。",
+      "success": true,
+      "metrics": {
+        "turns": 4.37,
+        "runtime": 1.366,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_005_t5_03",
+      "agent_type": "codeact_agent",
+      "query": "叠加餐饮点和成都行政区，找出行政区内餐饮覆盖情况",
+      "category": "overlay_analysis",
+      "expected_tools": [
+        "overlay_layers"
+      ],
+      "selected_tools": [
+        "overlay_layers"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "overlay_analysis"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "overlay_layers"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "success"
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务完成，已生成可评估结果。",
+      "success": true,
+      "metrics": {
+        "turns": 3.44,
+        "runtime": 1.349,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_006_t6_01",
+      "agent_type": "codeact_agent",
+      "query": "统计每个行政区内购物 POI 数量，并按数量着色显示",
+      "category": "spatial_join",
+      "expected_tools": [
+        "spatial_join_layers"
+      ],
+      "selected_tools": [
+        "spatial_join_layers"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "spatial_join"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "spatial_join_layers"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "success"
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务完成，已生成可评估结果。",
+      "success": true,
+      "metrics": {
+        "turns": 3.4,
+        "runtime": 1.214,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_006_t6_02",
+      "agent_type": "codeact_agent",
+      "query": "统计每个行政区内购物 POI 数量，并按数量着色显示",
+      "category": "spatial_join",
+      "expected_tools": [
+        "spatial_join_layers"
+      ],
+      "selected_tools": [
+        "spatial_join_layers"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "spatial_join"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "spatial_join_layers"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "failed"
+        }
+      ],
+      "errors": [
+        "rule_eval_failed:spatial_join"
+      ],
+      "error_signature": [
+        "spatial_join"
+      ],
+      "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务未完全满足预期，已记录失败原因。",
+      "success": false,
+      "metrics": {
+        "turns": 4.35,
+        "runtime": 1.436,
+        "execution_success": false,
+        "result_correctness": 0.20559999999999995,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 0,
+        "repair_attempted": true,
+        "repair_success": true,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_006_t6_03",
+      "agent_type": "codeact_agent",
+      "query": "统计每个行政区内购物 POI 数量，并按数量着色显示",
+      "category": "spatial_join",
+      "expected_tools": [
+        "spatial_join_layers"
+      ],
+      "selected_tools": [
+        "spatial_join_layers"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "spatial_join"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "spatial_join_layers"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "success"
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务完成，已生成可评估结果。",
+      "success": true,
+      "metrics": {
+        "turns": 3.93,
+        "runtime": 1.348,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_007_t7_01",
+      "agent_type": "codeact_agent",
+      "query": "对公司点位执行 DBSCAN 聚类，eps 为 600 米，最小样本数为 5",
+      "category": "clustering",
+      "expected_tools": [
+        "cluster_points_dbscan"
+      ],
+      "selected_tools": [
+        "cluster_points_dbscan"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "clustering"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "cluster_points_dbscan"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "failed"
+        }
+      ],
+      "errors": [
+        "rule_eval_failed:clustering"
+      ],
+      "error_signature": [
+        "clustering"
+      ],
+      "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务未完全满足预期，已记录失败原因。",
+      "success": false,
+      "metrics": {
+        "turns": 3.85,
+        "runtime": 1.12,
+        "execution_success": false,
+        "result_correctness": 0.3455999999999999,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 0,
+        "repair_attempted": true,
+        "repair_success": false,
+        "user_intervention_count": 1
+      }
+    },
+    {
+      "task_id": "task_007_t7_02",
+      "agent_type": "codeact_agent",
+      "query": "对公司点位执行 DBSCAN 聚类，eps 为 600 米，最小样本数为 5",
+      "category": "clustering",
+      "expected_tools": [
+        "cluster_points_dbscan"
+      ],
+      "selected_tools": [
+        "cluster_points_dbscan"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "clustering"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "cluster_points_dbscan"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "failed"
+        }
+      ],
+      "errors": [
+        "rule_eval_failed:clustering"
+      ],
+      "error_signature": [
+        "clustering"
+      ],
+      "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务未完全满足预期，已记录失败原因。",
+      "success": false,
+      "metrics": {
+        "turns": 3.97,
+        "runtime": 1.153,
+        "execution_success": false,
+        "result_correctness": 0.3455999999999999,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 0,
+        "repair_attempted": true,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_007_t7_03",
+      "agent_type": "codeact_agent",
+      "query": "对公司点位执行 DBSCAN 聚类，eps 为 600 米，最小样本数为 5",
+      "category": "clustering",
+      "expected_tools": [
+        "cluster_points_dbscan"
+      ],
+      "selected_tools": [
+        "cluster_points_dbscan"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "clustering"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "cluster_points_dbscan"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "success"
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务完成，已生成可评估结果。",
+      "success": true,
+      "metrics": {
+        "turns": 3.72,
+        "runtime": 1.418,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_008_t8_01",
+      "agent_type": "codeact_agent",
+      "query": "生成医疗 POI 的 1000 米网格热点分析图层",
+      "category": "hotspot",
+      "expected_tools": [
+        "hotspot_analysis"
+      ],
+      "selected_tools": [
+        "hotspot_analysis"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "hotspot"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "hotspot_analysis"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "success"
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务完成，已生成可评估结果。",
+      "success": true,
+      "metrics": {
+        "turns": 3.68,
+        "runtime": 1.329,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_008_t8_02",
+      "agent_type": "codeact_agent",
+      "query": "生成医疗 POI 的 1000 米网格热点分析图层",
+      "category": "hotspot",
+      "expected_tools": [
+        "hotspot_analysis"
+      ],
+      "selected_tools": [
+        "hotspot_analysis"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "hotspot"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "hotspot_analysis"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "success"
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务完成，已生成可评估结果。",
+      "success": true,
+      "metrics": {
+        "turns": 4.36,
+        "runtime": 1.324,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_008_t8_03",
+      "agent_type": "codeact_agent",
+      "query": "生成医疗 POI 的 1000 米网格热点分析图层",
+      "category": "hotspot",
+      "expected_tools": [
+        "hotspot_analysis"
+      ],
+      "selected_tools": [
+        "hotspot_analysis"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "hotspot"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "hotspot_analysis"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "failed"
+        }
+      ],
+      "errors": [
+        "rule_eval_failed:hotspot"
+      ],
+      "error_signature": [
+        "hotspot"
+      ],
+      "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务未完全满足预期，已记录失败原因。",
+      "success": false,
+      "metrics": {
+        "turns": 4.19,
+        "runtime": 1.165,
+        "execution_success": false,
+        "result_correctness": 0.20559999999999995,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 0,
+        "repair_attempted": true,
+        "repair_success": true,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_009_t9_01",
+      "agent_type": "codeact_agent",
+      "query": "按 district 字段汇总生活服务 POI 数量",
+      "category": "statistics",
+      "expected_tools": [
+        "summarize_layer_statistics"
+      ],
+      "selected_tools": [
+        "summarize_layer_statistics"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "statistics"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "summarize_layer_statistics"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "success"
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务完成，已生成可评估结果。",
+      "success": true,
+      "metrics": {
+        "turns": 3.66,
+        "runtime": 1.412,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": false,
+        "has_table": true,
+        "result_count": 1,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_009_t9_02",
+      "agent_type": "codeact_agent",
+      "query": "按 district 字段汇总生活服务 POI 数量",
+      "category": "statistics",
+      "expected_tools": [
+        "summarize_layer_statistics"
+      ],
+      "selected_tools": [
+        "summarize_layer_statistics"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "statistics"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "summarize_layer_statistics"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "failed"
+        }
+      ],
+      "errors": [
+        "rule_eval_failed:field_name_mismatch"
+      ],
+      "error_signature": [
+        "field_name_mismatch"
+      ],
+      "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务未完全满足预期，已记录失败原因。",
+      "success": false,
+      "metrics": {
+        "turns": 3.44,
+        "runtime": 1.367,
+        "execution_success": false,
+        "result_correctness": 0.3455999999999999,
+        "has_map_layer": false,
+        "has_table": true,
+        "result_count": 0,
+        "repair_attempted": true,
+        "repair_success": false,
+        "user_intervention_count": 1
+      }
+    },
+    {
+      "task_id": "task_009_t9_03",
+      "agent_type": "codeact_agent",
+      "query": "按 district 字段汇总生活服务 POI 数量",
+      "category": "statistics",
+      "expected_tools": [
+        "summarize_layer_statistics"
+      ],
+      "selected_tools": [
+        "summarize_layer_statistics"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "statistics"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "summarize_layer_statistics"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "success"
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务完成，已生成可评估结果。",
+      "success": true,
+      "metrics": {
+        "turns": 4.35,
+        "runtime": 1.178,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": false,
+        "has_table": true,
+        "result_count": 1,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_010_t10_01",
+      "agent_type": "codeact_agent",
+      "query": "导出最近一次分析结果为 GeoJSON，并返回下载链接",
+      "category": "export_highlight",
+      "expected_tools": [
+        "export_analysis_result"
+      ],
+      "selected_tools": [
+        "export_analysis_result"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "export_highlight"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "export_analysis_result"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "success"
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务完成，已生成可评估结果。",
+      "success": true,
+      "metrics": {
+        "turns": 4.04,
+        "runtime": 1.219,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": false,
+        "has_table": true,
+        "result_count": 1,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_010_t10_02",
+      "agent_type": "codeact_agent",
+      "query": "导出最近一次分析结果为 GeoJSON，并返回下载链接",
+      "category": "export_highlight",
+      "expected_tools": [
+        "export_analysis_result"
+      ],
+      "selected_tools": [
+        "export_analysis_result"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "export_highlight"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "export_analysis_result"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "success"
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务完成，已生成可评估结果。",
+      "success": true,
+      "metrics": {
+        "turns": 4.13,
+        "runtime": 1.289,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": false,
+        "has_table": true,
+        "result_count": 1,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_010_t10_03",
+      "agent_type": "codeact_agent",
+      "query": "导出最近一次分析结果为 GeoJSON，并返回下载链接",
+      "category": "export_highlight",
+      "expected_tools": [
+        "export_analysis_result"
+      ],
+      "selected_tools": [
+        "export_analysis_result"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "export_highlight"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "export_analysis_result"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "success"
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务完成，已生成可评估结果。",
+      "success": true,
+      "metrics": {
+        "turns": 3.46,
+        "runtime": 1.367,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": false,
+        "has_table": true,
+        "result_count": 1,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_011_t11_01",
+      "agent_type": "codeact_agent",
+      "query": "计算各行政区餐饮 POI 密度并输出排名前 5 的行政区",
+      "category": "code_required",
+      "expected_tools": [
+        "execute_spatial_code"
+      ],
+      "selected_tools": [
+        "execute_spatial_code"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "code_required"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "execute_spatial_code"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "failed"
+        }
+      ],
+      "errors": [
+        "rule_eval_failed:code_required"
+      ],
+      "error_signature": [
+        "code_required"
+      ],
+      "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务未完全满足预期，已记录失败原因。",
+      "success": false,
+      "metrics": {
+        "turns": 4.28,
+        "runtime": 1.139,
+        "execution_success": false,
+        "result_correctness": 0.20559999999999995,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 0,
+        "repair_attempted": true,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_011_t11_02",
+      "agent_type": "codeact_agent",
+      "query": "计算各行政区餐饮 POI 密度并输出排名前 5 的行政区",
+      "category": "code_required",
+      "expected_tools": [
+        "execute_spatial_code"
+      ],
+      "selected_tools": [
+        "execute_spatial_code"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "code_required"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "execute_spatial_code"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "success"
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务完成，已生成可评估结果。",
+      "success": true,
+      "metrics": {
+        "turns": 3.53,
+        "runtime": 1.288,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_011_t11_03",
+      "agent_type": "codeact_agent",
+      "query": "计算各行政区餐饮 POI 密度并输出排名前 5 的行政区",
+      "category": "code_required",
+      "expected_tools": [
+        "execute_spatial_code"
+      ],
+      "selected_tools": [
+        "execute_spatial_code"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "code_required"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "execute_spatial_code"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "failed"
+        }
+      ],
+      "errors": [
+        "rule_eval_failed:code_required"
+      ],
+      "error_signature": [
+        "code_required"
+      ],
+      "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务未完全满足预期，已记录失败原因。",
+      "success": false,
+      "metrics": {
+        "turns": 4.07,
+        "runtime": 1.129,
+        "execution_success": false,
+        "result_correctness": 0.20559999999999995,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 0,
+        "repair_attempted": true,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_012_t12_01",
+      "agent_type": "codeact_agent",
+      "query": "找出地铁站 1 公里范围内的住宿服务点，并统计数量",
+      "category": "nearby_analysis",
+      "expected_tools": [
+        "find_nearby",
+        "summarize_layer_statistics"
+      ],
+      "selected_tools": [
+        "find_nearby",
+        "summarize_layer_statistics"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "nearby_analysis"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "find_nearby",
+            "summarize_layer_statistics"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "failed"
+        }
+      ],
+      "errors": [
+        "rule_eval_failed:multi_tool_chain"
+      ],
+      "error_signature": [
+        "multi_tool_chain"
+      ],
+      "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务未完全满足预期，已记录失败原因。",
+      "success": false,
+      "metrics": {
+        "turns": 3.69,
+        "runtime": 1.285,
+        "execution_success": false,
+        "result_correctness": 0.20559999999999995,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 0,
+        "repair_attempted": true,
+        "repair_success": false,
+        "user_intervention_count": 1
+      }
+    },
+    {
+      "task_id": "task_012_t12_02",
+      "agent_type": "codeact_agent",
+      "query": "找出地铁站 1 公里范围内的住宿服务点，并统计数量",
+      "category": "nearby_analysis",
+      "expected_tools": [
+        "find_nearby",
+        "summarize_layer_statistics"
+      ],
+      "selected_tools": [
+        "find_nearby",
+        "summarize_layer_statistics"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "nearby_analysis"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "find_nearby",
+            "summarize_layer_statistics"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "failed"
+        }
+      ],
+      "errors": [
+        "rule_eval_failed:multi_tool_chain"
+      ],
+      "error_signature": [
+        "multi_tool_chain"
+      ],
+      "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务未完全满足预期，已记录失败原因。",
+      "success": false,
+      "metrics": {
+        "turns": 3.54,
+        "runtime": 1.377,
+        "execution_success": false,
+        "result_correctness": 0.20559999999999995,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 0,
+        "repair_attempted": true,
+        "repair_success": true,
+        "user_intervention_count": 1
+      }
+    },
+    {
+      "task_id": "task_012_t12_03",
+      "agent_type": "codeact_agent",
+      "query": "找出地铁站 1 公里范围内的住宿服务点，并统计数量",
+      "category": "nearby_analysis",
+      "expected_tools": [
+        "find_nearby",
+        "summarize_layer_statistics"
+      ],
+      "selected_tools": [
+        "find_nearby",
+        "summarize_layer_statistics"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "nearby_analysis"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "find_nearby",
+            "summarize_layer_statistics"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "failed"
+        }
+      ],
+      "errors": [
+        "rule_eval_failed:multi_tool_chain"
+      ],
+      "error_signature": [
+        "multi_tool_chain"
+      ],
+      "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务未完全满足预期，已记录失败原因。",
+      "success": false,
+      "metrics": {
+        "turns": 4.38,
+        "runtime": 1.348,
+        "execution_success": false,
+        "result_correctness": 0.20559999999999995,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 0,
+        "repair_attempted": true,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_001_t1_01",
+      "agent_type": "ace_webgis",
+      "query": "搜索名称中包含医院的 POI，并在地图上高亮结果",
+      "category": "poi_search",
+      "expected_tools": [
+        "search_poi"
+      ],
+      "selected_tools": [
+        "search_poi"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "poi_search"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "search_poi"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "success"
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务完成，已生成可评估结果。",
+      "success": true,
+      "metrics": {
+        "turns": 3.19,
+        "runtime": 1.239,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_001_t1_02",
+      "agent_type": "ace_webgis",
+      "query": "搜索名称中包含医院的 POI，并在地图上高亮结果",
+      "category": "poi_search",
+      "expected_tools": [
+        "search_poi"
+      ],
+      "selected_tools": [
+        "search_poi"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "poi_search"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "search_poi"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "success"
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务完成，已生成可评估结果。",
+      "success": true,
+      "metrics": {
+        "turns": 3.18,
+        "runtime": 0.962,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_001_t1_03",
+      "agent_type": "ace_webgis",
+      "query": "搜索名称中包含医院的 POI，并在地图上高亮结果",
+      "category": "poi_search",
+      "expected_tools": [
+        "search_poi"
+      ],
+      "selected_tools": [
+        "search_poi"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "poi_search"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "search_poi"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "success"
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "任务完成，已生成可评估结果。",
+      "success": true,
+      "metrics": {
+        "turns": 3.14,
+        "runtime": 1.093,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_002_t2_01",
+      "agent_type": "ace_webgis",
+      "query": "查询餐饮图层中 type 包含火锅的点位",
+      "category": "attribute_query",
+      "expected_tools": [
+        "query_poi_by_conditions"
+      ],
+      "selected_tools": [
+        "query_poi_by_conditions"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "attribute_query"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "query_poi_by_conditions"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "success"
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "exp:attribute_query:check schema/CRS/result before final answer",
+      "retrieved_experiences": [],
+      "final_answer": "任务完成，已生成可评估结果。",
+      "success": true,
+      "metrics": {
+        "turns": 3.2,
+        "runtime": 1.135,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_002_t2_02",
+      "agent_type": "ace_webgis",
+      "query": "查询餐饮图层中 type 包含火锅的点位",
+      "category": "attribute_query",
+      "expected_tools": [
+        "query_poi_by_conditions"
+      ],
+      "selected_tools": [
+        "query_poi_by_conditions"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "attribute_query"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "query_poi_by_conditions"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "success"
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "exp:attribute_query:check schema/CRS/result before final answer",
+      "retrieved_experiences": [
+        "exp:attribute_query:check schema/CRS/result before final answer"
+      ],
+      "final_answer": "任务完成，已生成可评估结果。",
+      "success": true,
+      "metrics": {
+        "turns": 3.31,
+        "runtime": 1.1,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_002_t2_03",
+      "agent_type": "ace_webgis",
+      "query": "查询餐饮图层中 type 包含火锅的点位",
+      "category": "attribute_query",
+      "expected_tools": [
+        "query_poi_by_conditions"
+      ],
+      "selected_tools": [
+        "query_poi_by_conditions"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "attribute_query"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "query_poi_by_conditions"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "success"
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "exp:attribute_query:check schema/CRS/result before final answer",
+      "retrieved_experiences": [
+        "exp:attribute_query:check schema/CRS/result before final answer",
+        "exp:attribute_query:check schema/CRS/result before final answer"
+      ],
+      "final_answer": "任务完成，已生成可评估结果。",
+      "success": true,
+      "metrics": {
+        "turns": 2.86,
+        "runtime": 1.033,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_003_t3_01",
+      "agent_type": "ace_webgis",
+      "query": "找出科教文化图层中学校 500 米范围内的餐饮点",
+      "category": "nearby_analysis",
+      "expected_tools": [
+        "find_nearby"
+      ],
+      "selected_tools": [
+        "find_nearby"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "nearby_analysis"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "find_nearby"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "success"
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "exp:nearby_analysis:check schema/CRS/result before final answer",
+      "retrieved_experiences": [
+        "exp:attribute_query:check schema/CRS/result before final answer",
+        "exp:attribute_query:check schema/CRS/result before final answer",
+        "exp:attribute_query:check schema/CRS/result before final answer"
+      ],
+      "final_answer": "任务完成，已生成可评估结果。",
+      "success": true,
+      "metrics": {
+        "turns": 2.48,
+        "runtime": 1.223,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_003_t3_02",
+      "agent_type": "ace_webgis",
+      "query": "找出科教文化图层中学校 500 米范围内的餐饮点",
+      "category": "nearby_analysis",
+      "expected_tools": [
+        "find_nearby"
+      ],
+      "selected_tools": [
+        "find_nearby"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "nearby_analysis"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "find_nearby"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "success"
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "exp:nearby_analysis:check schema/CRS/result before final answer",
+      "retrieved_experiences": [
+        "exp:attribute_query:check schema/CRS/result before final answer",
+        "exp:attribute_query:check schema/CRS/result before final answer",
+        "exp:attribute_query:check schema/CRS/result before final answer"
+      ],
+      "final_answer": "任务完成，已生成可评估结果。",
+      "success": true,
+      "metrics": {
+        "turns": 2.99,
+        "runtime": 1.233,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_003_t3_03",
+      "agent_type": "ace_webgis",
+      "query": "找出科教文化图层中学校 500 米范围内的餐饮点",
+      "category": "nearby_analysis",
+      "expected_tools": [
+        "find_nearby"
+      ],
+      "selected_tools": [
+        "find_nearby"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "nearby_analysis"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "find_nearby"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "success"
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "exp:nearby_analysis:check schema/CRS/result before final answer",
+      "retrieved_experiences": [
+        "exp:attribute_query:check schema/CRS/result before final answer",
+        "exp:attribute_query:check schema/CRS/result before final answer",
+        "exp:attribute_query:check schema/CRS/result before final answer"
+      ],
+      "final_answer": "任务完成，已生成可评估结果。",
+      "success": true,
+      "metrics": {
+        "turns": 3.2,
+        "runtime": 1.1,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_004_t4_01",
+      "agent_type": "ace_webgis",
+      "query": "为医疗图层生成 800 米缓冲区，并显示缓冲区图层",
+      "category": "buffer_analysis",
+      "expected_tools": [
+        "buffer_analysis"
+      ],
+      "selected_tools": [
+        "buffer_analysis"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "buffer_analysis"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "buffer_analysis"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "success"
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [
+        "exp:attribute_query:check schema/CRS/result before final answer",
+        "exp:attribute_query:check schema/CRS/result before final answer",
+        "exp:attribute_query:check schema/CRS/result before final answer"
+      ],
+      "final_answer": "任务完成，已生成可评估结果。",
+      "success": true,
+      "metrics": {
+        "turns": 2.73,
+        "runtime": 1.146,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_004_t4_02",
+      "agent_type": "ace_webgis",
+      "query": "为医疗图层生成 800 米缓冲区，并显示缓冲区图层",
+      "category": "buffer_analysis",
+      "expected_tools": [
+        "buffer_analysis"
+      ],
+      "selected_tools": [
+        "buffer_analysis"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "buffer_analysis"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "buffer_analysis"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "failed"
+        }
+      ],
+      "errors": [
+        "rule_eval_failed:buffer_analysis"
+      ],
+      "error_signature": [
+        "buffer_analysis"
+      ],
+      "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+      "generated_experience": "exp:buffer_analysis:check schema/CRS/result before final answer",
+      "retrieved_experiences": [
+        "exp:attribute_query:check schema/CRS/result before final answer",
+        "exp:attribute_query:check schema/CRS/result before final answer",
+        "exp:attribute_query:check schema/CRS/result before final answer"
+      ],
+      "final_answer": "任务未完全满足预期，已记录失败原因。",
+      "success": false,
+      "metrics": {
+        "turns": 2.56,
+        "runtime": 1.107,
+        "execution_success": false,
+        "result_correctness": 0.577,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 0,
+        "repair_attempted": true,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_004_t4_03",
+      "agent_type": "ace_webgis",
+      "query": "为医疗图层生成 800 米缓冲区，并显示缓冲区图层",
+      "category": "buffer_analysis",
+      "expected_tools": [
+        "buffer_analysis"
+      ],
+      "selected_tools": [
+        "buffer_analysis"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "buffer_analysis"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "buffer_analysis"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "failed"
+        }
+      ],
+      "errors": [
+        "rule_eval_failed:buffer_analysis"
+      ],
+      "error_signature": [
+        "buffer_analysis"
+      ],
+      "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+      "generated_experience": "exp:buffer_analysis:check schema/CRS/result before final answer",
+      "retrieved_experiences": [
+        "exp:attribute_query:check schema/CRS/result before final answer",
+        "exp:attribute_query:check schema/CRS/result before final answer",
+        "exp:attribute_query:check schema/CRS/result before final answer"
+      ],
+      "final_answer": "任务未完全满足预期，已记录失败原因。",
+      "success": false,
+      "metrics": {
+        "turns": 3.32,
+        "runtime": 1.128,
+        "execution_success": false,
+        "result_correctness": 0.577,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 0,
+        "repair_attempted": true,
+        "repair_success": true,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_005_t5_01",
+      "agent_type": "ace_webgis",
+      "query": "叠加餐饮点和成都行政区，找出行政区内餐饮覆盖情况",
+      "category": "overlay_analysis",
+      "expected_tools": [
+        "overlay_layers"
+      ],
+      "selected_tools": [
+        "overlay_layers"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "overlay_analysis"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "overlay_layers"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "failed"
+        }
+      ],
+      "errors": [
+        "rule_eval_failed:geometry_type"
+      ],
+      "error_signature": [
+        "geometry_type"
+      ],
+      "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+      "generated_experience": "exp:overlay_analysis:check schema/CRS/result before final answer",
+      "retrieved_experiences": [
+        "exp:attribute_query:check schema/CRS/result before final answer",
+        "exp:attribute_query:check schema/CRS/result before final answer",
+        "exp:attribute_query:check schema/CRS/result before final answer"
+      ],
+      "final_answer": "任务未完全满足预期，已记录失败原因。",
+      "success": false,
+      "metrics": {
+        "turns": 3.02,
+        "runtime": 1.207,
+        "execution_success": false,
+        "result_correctness": 0.43700000000000006,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 0,
+        "repair_attempted": true,
+        "repair_success": true,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_005_t5_02",
+      "agent_type": "ace_webgis",
+      "query": "叠加餐饮点和成都行政区，找出行政区内餐饮覆盖情况",
+      "category": "overlay_analysis",
+      "expected_tools": [
+        "overlay_layers"
+      ],
+      "selected_tools": [
+        "overlay_layers"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "overlay_analysis"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "overlay_layers"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "success"
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "exp:overlay_analysis:check schema/CRS/result before final answer",
+      "retrieved_experiences": [
+        "exp:attribute_query:check schema/CRS/result before final answer",
+        "exp:attribute_query:check schema/CRS/result before final answer",
+        "exp:attribute_query:check schema/CRS/result before final answer"
+      ],
+      "final_answer": "任务完成，已生成可评估结果。",
+      "success": true,
+      "metrics": {
+        "turns": 2.49,
+        "runtime": 1.154,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_005_t5_03",
+      "agent_type": "ace_webgis",
+      "query": "叠加餐饮点和成都行政区，找出行政区内餐饮覆盖情况",
+      "category": "overlay_analysis",
+      "expected_tools": [
+        "overlay_layers"
+      ],
+      "selected_tools": [
+        "overlay_layers"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "overlay_analysis"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "overlay_layers"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "failed"
+        }
+      ],
+      "errors": [
+        "rule_eval_failed:geometry_type"
+      ],
+      "error_signature": [
+        "geometry_type"
+      ],
+      "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+      "generated_experience": "exp:overlay_analysis:check schema/CRS/result before final answer",
+      "retrieved_experiences": [
+        "exp:attribute_query:check schema/CRS/result before final answer",
+        "exp:attribute_query:check schema/CRS/result before final answer",
+        "exp:attribute_query:check schema/CRS/result before final answer"
+      ],
+      "final_answer": "任务未完全满足预期，已记录失败原因。",
+      "success": false,
+      "metrics": {
+        "turns": 3.37,
+        "runtime": 0.987,
+        "execution_success": false,
+        "result_correctness": 0.43700000000000006,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 0,
+        "repair_attempted": true,
+        "repair_success": true,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_006_t6_01",
+      "agent_type": "ace_webgis",
+      "query": "统计每个行政区内购物 POI 数量，并按数量着色显示",
+      "category": "spatial_join",
+      "expected_tools": [
+        "spatial_join_layers"
+      ],
+      "selected_tools": [
+        "spatial_join_layers"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "spatial_join"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "spatial_join_layers"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "failed"
+        }
+      ],
+      "errors": [
+        "rule_eval_failed:spatial_join"
+      ],
+      "error_signature": [
+        "spatial_join"
+      ],
+      "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+      "generated_experience": "exp:spatial_join:check schema/CRS/result before final answer",
+      "retrieved_experiences": [
+        "exp:attribute_query:check schema/CRS/result before final answer",
+        "exp:attribute_query:check schema/CRS/result before final answer",
+        "exp:attribute_query:check schema/CRS/result before final answer"
+      ],
+      "final_answer": "任务未完全满足预期，已记录失败原因。",
+      "success": false,
+      "metrics": {
+        "turns": 3.17,
+        "runtime": 1.073,
+        "execution_success": false,
+        "result_correctness": 0.43700000000000006,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 0,
+        "repair_attempted": true,
+        "repair_success": true,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_006_t6_02",
+      "agent_type": "ace_webgis",
+      "query": "统计每个行政区内购物 POI 数量，并按数量着色显示",
+      "category": "spatial_join",
+      "expected_tools": [
+        "spatial_join_layers"
+      ],
+      "selected_tools": [
+        "spatial_join_layers"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "spatial_join"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "spatial_join_layers"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "success"
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [
+        "exp:attribute_query:check schema/CRS/result before final answer",
+        "exp:attribute_query:check schema/CRS/result before final answer",
+        "exp:attribute_query:check schema/CRS/result before final answer"
+      ],
+      "final_answer": "任务完成，已生成可评估结果。",
+      "success": true,
+      "metrics": {
+        "turns": 3.17,
+        "runtime": 1.179,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_006_t6_03",
+      "agent_type": "ace_webgis",
+      "query": "统计每个行政区内购物 POI 数量，并按数量着色显示",
+      "category": "spatial_join",
+      "expected_tools": [
+        "spatial_join_layers"
+      ],
+      "selected_tools": [
+        "spatial_join_layers"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "spatial_join"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "spatial_join_layers"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "success"
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [
+        "exp:attribute_query:check schema/CRS/result before final answer",
+        "exp:attribute_query:check schema/CRS/result before final answer",
+        "exp:attribute_query:check schema/CRS/result before final answer"
+      ],
+      "final_answer": "任务完成，已生成可评估结果。",
+      "success": true,
+      "metrics": {
+        "turns": 3.14,
+        "runtime": 1.03,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_007_t7_01",
+      "agent_type": "ace_webgis",
+      "query": "对公司点位执行 DBSCAN 聚类，eps 为 600 米，最小样本数为 5",
+      "category": "clustering",
+      "expected_tools": [
+        "cluster_points_dbscan"
+      ],
+      "selected_tools": [
+        "cluster_points_dbscan"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "clustering"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "cluster_points_dbscan"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "success"
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [
+        "exp:attribute_query:check schema/CRS/result before final answer",
+        "exp:attribute_query:check schema/CRS/result before final answer",
+        "exp:attribute_query:check schema/CRS/result before final answer"
+      ],
+      "final_answer": "任务完成，已生成可评估结果。",
+      "success": true,
+      "metrics": {
+        "turns": 3.14,
+        "runtime": 1.205,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_007_t7_02",
+      "agent_type": "ace_webgis",
+      "query": "对公司点位执行 DBSCAN 聚类，eps 为 600 米，最小样本数为 5",
+      "category": "clustering",
+      "expected_tools": [
+        "cluster_points_dbscan"
+      ],
+      "selected_tools": [
+        "cluster_points_dbscan"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "clustering"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "cluster_points_dbscan"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "failed"
+        }
+      ],
+      "errors": [
+        "rule_eval_failed:clustering"
+      ],
+      "error_signature": [
+        "clustering"
+      ],
+      "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+      "generated_experience": "exp:clustering:check schema/CRS/result before final answer",
+      "retrieved_experiences": [
+        "exp:attribute_query:check schema/CRS/result before final answer",
+        "exp:attribute_query:check schema/CRS/result before final answer",
+        "exp:attribute_query:check schema/CRS/result before final answer"
+      ],
+      "final_answer": "任务未完全满足预期，已记录失败原因。",
+      "success": false,
+      "metrics": {
+        "turns": 2.46,
+        "runtime": 1.256,
+        "execution_success": false,
+        "result_correctness": 0.577,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 0,
+        "repair_attempted": true,
+        "repair_success": true,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_007_t7_03",
+      "agent_type": "ace_webgis",
+      "query": "对公司点位执行 DBSCAN 聚类，eps 为 600 米，最小样本数为 5",
+      "category": "clustering",
+      "expected_tools": [
+        "cluster_points_dbscan"
+      ],
+      "selected_tools": [
+        "cluster_points_dbscan"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "clustering"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "cluster_points_dbscan"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "success"
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [
+        "exp:attribute_query:check schema/CRS/result before final answer",
+        "exp:attribute_query:check schema/CRS/result before final answer",
+        "exp:attribute_query:check schema/CRS/result before final answer"
+      ],
+      "final_answer": "任务完成，已生成可评估结果。",
+      "success": true,
+      "metrics": {
+        "turns": 2.53,
+        "runtime": 0.972,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_008_t8_01",
+      "agent_type": "ace_webgis",
+      "query": "生成医疗 POI 的 1000 米网格热点分析图层",
+      "category": "hotspot",
+      "expected_tools": [
+        "hotspot_analysis"
+      ],
+      "selected_tools": [
+        "hotspot_analysis"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "hotspot"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "hotspot_analysis"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "success"
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [
+        "exp:attribute_query:check schema/CRS/result before final answer",
+        "exp:attribute_query:check schema/CRS/result before final answer",
+        "exp:attribute_query:check schema/CRS/result before final answer"
+      ],
+      "final_answer": "任务完成，已生成可评估结果。",
+      "success": true,
+      "metrics": {
+        "turns": 3.33,
+        "runtime": 1.122,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_008_t8_02",
+      "agent_type": "ace_webgis",
+      "query": "生成医疗 POI 的 1000 米网格热点分析图层",
+      "category": "hotspot",
+      "expected_tools": [
+        "hotspot_analysis"
+      ],
+      "selected_tools": [
+        "hotspot_analysis"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "hotspot"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "hotspot_analysis"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "failed"
+        }
+      ],
+      "errors": [
+        "rule_eval_failed:hotspot"
+      ],
+      "error_signature": [
+        "hotspot"
+      ],
+      "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+      "generated_experience": "exp:hotspot:check schema/CRS/result before final answer",
+      "retrieved_experiences": [
+        "exp:attribute_query:check schema/CRS/result before final answer",
+        "exp:attribute_query:check schema/CRS/result before final answer",
+        "exp:attribute_query:check schema/CRS/result before final answer"
+      ],
+      "final_answer": "任务未完全满足预期，已记录失败原因。",
+      "success": false,
+      "metrics": {
+        "turns": 3.11,
+        "runtime": 1.167,
+        "execution_success": false,
+        "result_correctness": 0.43700000000000006,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 0,
+        "repair_attempted": true,
+        "repair_success": true,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_008_t8_03",
+      "agent_type": "ace_webgis",
+      "query": "生成医疗 POI 的 1000 米网格热点分析图层",
+      "category": "hotspot",
+      "expected_tools": [
+        "hotspot_analysis"
+      ],
+      "selected_tools": [
+        "hotspot_analysis"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "hotspot"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "hotspot_analysis"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "success"
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [
+        "exp:attribute_query:check schema/CRS/result before final answer",
+        "exp:attribute_query:check schema/CRS/result before final answer",
+        "exp:attribute_query:check schema/CRS/result before final answer"
+      ],
+      "final_answer": "任务完成，已生成可评估结果。",
+      "success": true,
+      "metrics": {
+        "turns": 2.42,
+        "runtime": 1.122,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_009_t9_01",
+      "agent_type": "ace_webgis",
+      "query": "按 district 字段汇总生活服务 POI 数量",
+      "category": "statistics",
+      "expected_tools": [
+        "summarize_layer_statistics"
+      ],
+      "selected_tools": [
+        "summarize_layer_statistics"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "statistics"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "summarize_layer_statistics"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "success"
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [
+        "exp:attribute_query:check schema/CRS/result before final answer",
+        "exp:attribute_query:check schema/CRS/result before final answer",
+        "exp:attribute_query:check schema/CRS/result before final answer"
+      ],
+      "final_answer": "任务完成，已生成可评估结果。",
+      "success": true,
+      "metrics": {
+        "turns": 3.32,
+        "runtime": 1.263,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": false,
+        "has_table": true,
+        "result_count": 1,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_009_t9_02",
+      "agent_type": "ace_webgis",
+      "query": "按 district 字段汇总生活服务 POI 数量",
+      "category": "statistics",
+      "expected_tools": [
+        "summarize_layer_statistics"
+      ],
+      "selected_tools": [
+        "summarize_layer_statistics"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "statistics"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "summarize_layer_statistics"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "failed"
+        }
+      ],
+      "errors": [
+        "rule_eval_failed:field_name_mismatch"
+      ],
+      "error_signature": [
+        "field_name_mismatch"
+      ],
+      "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+      "generated_experience": "exp:statistics:check schema/CRS/result before final answer",
+      "retrieved_experiences": [
+        "exp:attribute_query:check schema/CRS/result before final answer",
+        "exp:attribute_query:check schema/CRS/result before final answer",
+        "exp:attribute_query:check schema/CRS/result before final answer"
+      ],
+      "final_answer": "任务未完全满足预期，已记录失败原因。",
+      "success": false,
+      "metrics": {
+        "turns": 2.81,
+        "runtime": 0.96,
+        "execution_success": false,
+        "result_correctness": 0.577,
+        "has_map_layer": false,
+        "has_table": true,
+        "result_count": 0,
+        "repair_attempted": true,
+        "repair_success": true,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_009_t9_03",
+      "agent_type": "ace_webgis",
+      "query": "按 district 字段汇总生活服务 POI 数量",
+      "category": "statistics",
+      "expected_tools": [
+        "summarize_layer_statistics"
+      ],
+      "selected_tools": [
+        "summarize_layer_statistics"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "statistics"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "summarize_layer_statistics"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "success"
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [
+        "exp:attribute_query:check schema/CRS/result before final answer",
+        "exp:attribute_query:check schema/CRS/result before final answer",
+        "exp:attribute_query:check schema/CRS/result before final answer"
+      ],
+      "final_answer": "任务完成，已生成可评估结果。",
+      "success": true,
+      "metrics": {
+        "turns": 2.89,
+        "runtime": 0.959,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": false,
+        "has_table": true,
+        "result_count": 1,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_010_t10_01",
+      "agent_type": "ace_webgis",
+      "query": "导出最近一次分析结果为 GeoJSON，并返回下载链接",
+      "category": "export_highlight",
+      "expected_tools": [
+        "export_analysis_result"
+      ],
+      "selected_tools": [
+        "export_analysis_result"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "export_highlight"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "export_analysis_result"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "success"
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [
+        "exp:attribute_query:check schema/CRS/result before final answer",
+        "exp:attribute_query:check schema/CRS/result before final answer",
+        "exp:attribute_query:check schema/CRS/result before final answer"
+      ],
+      "final_answer": "任务完成，已生成可评估结果。",
+      "success": true,
+      "metrics": {
+        "turns": 2.99,
+        "runtime": 1.028,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": false,
+        "has_table": true,
+        "result_count": 1,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_010_t10_02",
+      "agent_type": "ace_webgis",
+      "query": "导出最近一次分析结果为 GeoJSON，并返回下载链接",
+      "category": "export_highlight",
+      "expected_tools": [
+        "export_analysis_result"
+      ],
+      "selected_tools": [
+        "export_analysis_result"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "export_highlight"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "export_analysis_result"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "success"
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [
+        "exp:attribute_query:check schema/CRS/result before final answer",
+        "exp:attribute_query:check schema/CRS/result before final answer",
+        "exp:attribute_query:check schema/CRS/result before final answer"
+      ],
+      "final_answer": "任务完成，已生成可评估结果。",
+      "success": true,
+      "metrics": {
+        "turns": 2.59,
+        "runtime": 1.168,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": false,
+        "has_table": true,
+        "result_count": 1,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_010_t10_03",
+      "agent_type": "ace_webgis",
+      "query": "导出最近一次分析结果为 GeoJSON，并返回下载链接",
+      "category": "export_highlight",
+      "expected_tools": [
+        "export_analysis_result"
+      ],
+      "selected_tools": [
+        "export_analysis_result"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "export_highlight"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "export_analysis_result"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "success"
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [
+        "exp:attribute_query:check schema/CRS/result before final answer",
+        "exp:attribute_query:check schema/CRS/result before final answer",
+        "exp:attribute_query:check schema/CRS/result before final answer"
+      ],
+      "final_answer": "任务完成，已生成可评估结果。",
+      "success": true,
+      "metrics": {
+        "turns": 3.17,
+        "runtime": 1.195,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": false,
+        "has_table": true,
+        "result_count": 1,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_011_t11_01",
+      "agent_type": "ace_webgis",
+      "query": "计算各行政区餐饮 POI 密度并输出排名前 5 的行政区",
+      "category": "code_required",
+      "expected_tools": [
+        "execute_spatial_code"
+      ],
+      "selected_tools": [
+        "execute_spatial_code"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "code_required"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "execute_spatial_code"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "success"
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [
+        "exp:attribute_query:check schema/CRS/result before final answer",
+        "exp:attribute_query:check schema/CRS/result before final answer",
+        "exp:attribute_query:check schema/CRS/result before final answer"
+      ],
+      "final_answer": "任务完成，已生成可评估结果。",
+      "success": true,
+      "metrics": {
+        "turns": 2.9,
+        "runtime": 1.163,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_011_t11_02",
+      "agent_type": "ace_webgis",
+      "query": "计算各行政区餐饮 POI 密度并输出排名前 5 的行政区",
+      "category": "code_required",
+      "expected_tools": [
+        "execute_spatial_code"
+      ],
+      "selected_tools": [
+        "execute_spatial_code"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "code_required"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "execute_spatial_code"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "success"
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [
+        "exp:attribute_query:check schema/CRS/result before final answer",
+        "exp:attribute_query:check schema/CRS/result before final answer",
+        "exp:attribute_query:check schema/CRS/result before final answer"
+      ],
+      "final_answer": "任务完成，已生成可评估结果。",
+      "success": true,
+      "metrics": {
+        "turns": 2.84,
+        "runtime": 0.971,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_011_t11_03",
+      "agent_type": "ace_webgis",
+      "query": "计算各行政区餐饮 POI 密度并输出排名前 5 的行政区",
+      "category": "code_required",
+      "expected_tools": [
+        "execute_spatial_code"
+      ],
+      "selected_tools": [
+        "execute_spatial_code"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "code_required"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "execute_spatial_code"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "success"
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [
+        "exp:attribute_query:check schema/CRS/result before final answer",
+        "exp:attribute_query:check schema/CRS/result before final answer",
+        "exp:attribute_query:check schema/CRS/result before final answer"
+      ],
+      "final_answer": "任务完成，已生成可评估结果。",
+      "success": true,
+      "metrics": {
+        "turns": 2.94,
+        "runtime": 0.959,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_012_t12_01",
+      "agent_type": "ace_webgis",
+      "query": "找出地铁站 1 公里范围内的住宿服务点，并统计数量",
+      "category": "nearby_analysis",
+      "expected_tools": [
+        "find_nearby",
+        "summarize_layer_statistics"
+      ],
+      "selected_tools": [
+        "find_nearby",
+        "summarize_layer_statistics"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "nearby_analysis"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "find_nearby",
+            "summarize_layer_statistics"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "success"
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "exp:nearby_analysis:check schema/CRS/result before final answer",
+      "retrieved_experiences": [
+        "exp:attribute_query:check schema/CRS/result before final answer",
+        "exp:attribute_query:check schema/CRS/result before final answer",
+        "exp:attribute_query:check schema/CRS/result before final answer"
+      ],
+      "final_answer": "任务完成，已生成可评估结果。",
+      "success": true,
+      "metrics": {
+        "turns": 3.15,
+        "runtime": 1.139,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_012_t12_02",
+      "agent_type": "ace_webgis",
+      "query": "找出地铁站 1 公里范围内的住宿服务点，并统计数量",
+      "category": "nearby_analysis",
+      "expected_tools": [
+        "find_nearby",
+        "summarize_layer_statistics"
+      ],
+      "selected_tools": [
+        "find_nearby",
+        "summarize_layer_statistics"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "nearby_analysis"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "find_nearby",
+            "summarize_layer_statistics"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "success"
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "exp:nearby_analysis:check schema/CRS/result before final answer",
+      "retrieved_experiences": [
+        "exp:attribute_query:check schema/CRS/result before final answer",
+        "exp:attribute_query:check schema/CRS/result before final answer",
+        "exp:attribute_query:check schema/CRS/result before final answer"
+      ],
+      "final_answer": "任务完成，已生成可评估结果。",
+      "success": true,
+      "metrics": {
+        "turns": 3.25,
+        "runtime": 1.237,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    },
+    {
+      "task_id": "task_012_t12_03",
+      "agent_type": "ace_webgis",
+      "query": "找出地铁站 1 公里范围内的住宿服务点，并统计数量",
+      "category": "nearby_analysis",
+      "expected_tools": [
+        "find_nearby",
+        "summarize_layer_statistics"
+      ],
+      "selected_tools": [
+        "find_nearby",
+        "summarize_layer_statistics"
+      ],
+      "execution_trace": [
+        {
+          "step": "intent",
+          "detail": "nearby_analysis"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "find_nearby",
+            "summarize_layer_statistics"
+          ]
+        },
+        {
+          "step": "evaluation",
+          "detail": "success"
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "exp:nearby_analysis:check schema/CRS/result before final answer",
+      "retrieved_experiences": [
+        "exp:attribute_query:check schema/CRS/result before final answer",
+        "exp:attribute_query:check schema/CRS/result before final answer",
+        "exp:attribute_query:check schema/CRS/result before final answer"
+      ],
+      "final_answer": "任务完成，已生成可评估结果。",
+      "success": true,
+      "metrics": {
+        "turns": 2.44,
+        "runtime": 1.013,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "repair_attempted": false,
+        "repair_success": false,
+        "user_intervention_count": 0
+      }
+    }
+  ],
+  "report": {
+    "run_id": "exp1_20260512_155250",
+    "markdown_path": "logs\\experiments\\exp1_20260512_155250\\reports\\exp1_20260512_155250_report.md",
+    "html_path": "logs\\experiments\\exp1_20260512_155250\\reports\\exp1_20260512_155250_report.html",
+    "markdown_url": "/experiment-reports/exp1_20260512_155250/exp1_20260512_155250_report.md?download=1",
+    "html_url": "/experiment-reports/exp1_20260512_155250/exp1_20260512_155250_report.html",
+    "charts": [
+      "logs\\experiments\\exp1_20260512_155250\\reports\\charts\\success_rate.png"
+    ],
+    "created_at": "2026-05-12T16:47:22",
+    "ai_summary_enabled": true
+  }
+}

@@ -1,0 +1,91 @@
+{
+  "task_id": "exp4_step_044_code_debugging",
+  "agent_type": "monolithic_rewrite",
+  "strategy": "monolithic_rewrite",
+  "adaptation_step": 44,
+  "query": "Step 44: 修复 正则表达式 代码中的运行错误，并把错误模式沉淀为可复用经验。",
+  "category": "code_reasoning",
+  "expected_skill": "code_debugging",
+  "novelty": "transfer",
+  "expected_tools": [
+    "code_execution",
+    "critic"
+  ],
+  "selected_tools": [
+    "code_execution",
+    "critic"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 44
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "code_debugging-004",
+        "code_debugging-014",
+        "code_debugging-024"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "code_debugging-044"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 13960
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "code_debugging-044",
+  "retrieved_experiences": [
+    "code_debugging-004",
+    "code_debugging-014",
+    "code_debugging-024"
+  ],
+  "final_answer": "monolithic_rewrite step=44 skill=code_debugging accuracy=0.726 context_tokens=13960 retrieved=3 generated=1",
+  "structured_response": {
+    "accuracy": 0.726,
+    "context_token_count": 13960,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "code_debugging-004",
+      "code_debugging-014",
+      "code_debugging-024"
+    ],
+    "generated_experience_ids": [
+      "code_debugging-044"
+    ]
+  },
+  "validation": {
+    "score": 0.726,
+    "success": true,
+    "threshold": 0.72,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "accuracy": 0.726
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 3.4,
+    "runtime": 0.12,
+    "execution_success": true,
+    "result_correctness": 0.726,
+    "context_token_count": 13960,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 44,
+    "compression_event": ""
+  }
+}

@@ -1,0 +1,84 @@
+{
+  "task_id": "exp4_step_004_geopandas_density",
+  "agent_type": "dynamic_cheatsheet",
+  "strategy": "dynamic_cheatsheet",
+  "adaptation_step": 4,
+  "query": "Step 4: 使用 GeoPandas 计算各行政区 生活服务 POI 密度，输出 count、area_km2、density 和 Top 5。",
+  "category": "code_required",
+  "expected_skill": "code_execution",
+  "novelty": "warmup",
+  "expected_tools": [
+    "execute_spatial_code",
+    "validation_report"
+  ],
+  "selected_tools": [
+    "execute_spatial_code"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 4
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": []
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "code_execution-004"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 1318
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [
+    "context_stability_miss:code_execution"
+  ],
+  "error_signature": [
+    "code_execution"
+  ],
+  "critic_diagnosis": "code_execution evidence missing after context update",
+  "generated_experience": "code_execution-004",
+  "retrieved_experiences": [],
+  "final_answer": "dynamic_cheatsheet step=4 skill=code_execution accuracy=0.657 context_tokens=1318 retrieved=0 generated=1",
+  "structured_response": {
+    "accuracy": 0.657,
+    "context_token_count": 1318,
+    "compression_event": "",
+    "retrieved_experience_ids": [],
+    "generated_experience_ids": [
+      "code_execution-004"
+    ]
+  },
+  "validation": {
+    "score": 0.657,
+    "success": false,
+    "threshold": 0.72,
+    "missing": [
+      "code_execution"
+    ],
+    "details": {
+      "tools": 1.0,
+      "accuracy": 0.657
+    }
+  },
+  "success": false,
+  "metrics": {
+    "turns": 3.0,
+    "runtime": 0.12,
+    "execution_success": false,
+    "result_correctness": 0.657,
+    "context_token_count": 1318,
+    "experience_retrieved": false,
+    "experience_added": true,
+    "library_size": 4,
+    "compression_event": ""
+  }
+}

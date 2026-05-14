@@ -1,0 +1,85 @@
+{
+  "task_id": "exp4_step_039_constraint_tracking",
+  "agent_type": "dynamic_cheatsheet",
+  "strategy": "dynamic_cheatsheet",
+  "adaptation_step": 39,
+  "query": "Step 39: 在 资源分配 规划中持续追踪硬约束和软约束，避免后续步骤遗忘。",
+  "category": "planning",
+  "expected_skill": "constraint_tracking",
+  "novelty": "transfer",
+  "expected_tools": [
+    "reasoning",
+    "constraint_check"
+  ],
+  "selected_tools": [
+    "reasoning",
+    "constraint_check"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 39
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "constraint_tracking-029"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "constraint_tracking-039"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 7419
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "constraint_tracking-039",
+  "retrieved_experiences": [
+    "constraint_tracking-029"
+  ],
+  "final_answer": "dynamic_cheatsheet step=39 skill=constraint_tracking accuracy=0.846 context_tokens=7419 retrieved=1 generated=1",
+  "structured_response": {
+    "accuracy": 0.846,
+    "context_token_count": 7419,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "constraint_tracking-029"
+    ],
+    "generated_experience_ids": [
+      "constraint_tracking-039"
+    ]
+  },
+  "validation": {
+    "score": 0.846,
+    "success": true,
+    "threshold": 0.72,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "accuracy": 0.846
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 3.0,
+    "runtime": 0.12,
+    "execution_success": true,
+    "result_correctness": 0.846,
+    "context_token_count": 7419,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 11,
+    "compression_event": ""
+  }
+}

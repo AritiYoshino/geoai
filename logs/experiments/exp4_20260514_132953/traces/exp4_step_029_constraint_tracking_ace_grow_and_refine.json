@@ -1,0 +1,85 @@
+{
+  "task_id": "exp4_step_029_constraint_tracking",
+  "agent_type": "ace_grow_and_refine",
+  "strategy": "ace_grow_and_refine",
+  "adaptation_step": 29,
+  "query": "Step 29: 在 旅行计划 规划中持续追踪硬约束和软约束，避免后续步骤遗忘。",
+  "category": "planning",
+  "expected_skill": "constraint_tracking",
+  "novelty": "transfer",
+  "expected_tools": [
+    "reasoning",
+    "constraint_check"
+  ],
+  "selected_tools": [
+    "reasoning",
+    "constraint_check"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 29
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "constraint_tracking-009"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "constraint_tracking-029"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 4317
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "constraint_tracking-029",
+  "retrieved_experiences": [
+    "constraint_tracking-009"
+  ],
+  "final_answer": "ace_grow_and_refine step=29 skill=constraint_tracking accuracy=0.967 context_tokens=4317 retrieved=1 generated=1",
+  "structured_response": {
+    "accuracy": 0.967,
+    "context_token_count": 4317,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "constraint_tracking-009"
+    ],
+    "generated_experience_ids": [
+      "constraint_tracking-029"
+    ]
+  },
+  "validation": {
+    "score": 0.967,
+    "success": true,
+    "threshold": 0.72,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "accuracy": 0.967
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 2.7,
+    "runtime": 0.12,
+    "execution_success": true,
+    "result_correctness": 0.967,
+    "context_token_count": 4317,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 10,
+    "compression_event": ""
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "task_id": "task_004_t4_02",
+  "agent_type": "ace_webgis",
+  "query": "为医疗图层生成 800 米缓冲区，并显示缓冲区图层",
+  "category": "buffer_analysis",
+  "expected_tools": [
+    "buffer_analysis"
+  ],
+  "selected_tools": [
+    "buffer_analysis"
+  ],
+  "execution_trace": [
+    {
+      "step": "intent",
+      "detail": "buffer_analysis"
+    },
+    {
+      "step": "tool_selection",
+      "detail": [
+        "buffer_analysis"
+      ]
+    },
+    {
+      "step": "evaluation",
+      "detail": "failed"
+    }
+  ],
+  "errors": [
+    "rule_eval_failed:buffer_analysis"
+  ],
+  "error_signature": [
+    "buffer_analysis"
+  ],
+  "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+  "generated_experience": "exp:buffer_analysis:check schema/CRS/result before final answer",
+  "retrieved_experiences": [
+    "exp:attribute_query:check schema/CRS/result before final answer",
+    "exp:attribute_query:check schema/CRS/result before final answer",
+    "exp:attribute_query:check schema/CRS/result before final answer"
+  ],
+  "final_answer": "任务未完全满足预期，已记录失败原因。",
+  "success": false,
+  "metrics": {
+    "turns": 2.56,
+    "runtime": 1.107,
+    "execution_success": false,
+    "result_correctness": 0.577,
+    "has_map_layer": true,
+    "has_table": true,
+    "result_count": 0,
+    "repair_attempted": true,
+    "repair_success": false,
+    "user_intervention_count": 0
+  }
+}

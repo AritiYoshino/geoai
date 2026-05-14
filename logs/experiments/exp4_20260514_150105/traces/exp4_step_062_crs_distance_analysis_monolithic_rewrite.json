@@ -1,0 +1,88 @@
+{
+  "task_id": "exp4_step_062_crs_distance_analysis",
+  "agent_type": "monolithic_rewrite",
+  "strategy": "monolithic_rewrite",
+  "adaptation_step": 62,
+  "query": "Step 62: 查找 医院 500 米范围内的餐饮 POI，说明米制距离计算前的坐标处理。",
+  "category": "nearby_analysis",
+  "expected_skill": "crs_awareness",
+  "novelty": "new_pattern",
+  "expected_tools": [
+    "find_nearby",
+    "projection_check"
+  ],
+  "selected_tools": [
+    "find_nearby",
+    "projection_check"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 62
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "crs_awareness-042",
+        "crs_awareness-052"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "crs_awareness-062"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 6814
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "crs_awareness-062",
+  "retrieved_experiences": [
+    "crs_awareness-042",
+    "crs_awareness-052"
+  ],
+  "final_answer": "monolithic_rewrite step=62 skill=crs_awareness accuracy=0.769 context_tokens=6814 retrieved=2 generated=1",
+  "structured_response": {
+    "accuracy": 0.769,
+    "context_token_count": 6814,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "crs_awareness-042",
+      "crs_awareness-052"
+    ],
+    "generated_experience_ids": [
+      "crs_awareness-062"
+    ]
+  },
+  "validation": {
+    "score": 0.769,
+    "success": true,
+    "threshold": 0.72,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "accuracy": 0.769
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 3.75,
+    "runtime": 0.12,
+    "execution_success": true,
+    "result_correctness": 0.769,
+    "context_token_count": 6814,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 26,
+    "compression_event": ""
+  }
+}

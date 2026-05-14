@@ -57,8 +57,7 @@
 - 多经验库管理：创建、切换、复制当前经验库、从默认经验库初始化。
 - 会话级偏好记忆：例如“统计类任务只高亮行政区面图层”。
 - JSONL 可追踪日志：任务、代码执行、经验演化和错误均可回放。
-- 实验系统接入：四组实验可验证 ACE 对准确率、错误恢复、记忆保持和长上下文鲁棒性的影响。
-- 论文证据接口：`GET /api/thesis/evidence` 汇总实验与经验库数据。
+- 实验侧已将 Exp2 定义为 Online Adaptation，Exp3 增加 Reflector、append-only memory 与 monolithic rewrite 等机制消融组，Exp4 使用 GeoAI 连续任务追踪 context collapse、refinement event、经验条目数、重复率、延迟和 token 成本。
 
 ## 风险与后续方向
 

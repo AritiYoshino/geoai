@@ -1,0 +1,92 @@
+{
+  "task_id": "exp4_step_038_format_control",
+  "agent_type": "monolithic_rewrite",
+  "strategy": "monolithic_rewrite",
+  "adaptation_step": 38,
+  "query": "Step 38: 将 用户画像 输出为指定 JSON/表格格式，避免字段遗漏。",
+  "category": "output_control",
+  "expected_skill": "format_control",
+  "novelty": "transfer",
+  "expected_tools": [
+    "reasoning",
+    "format_validator"
+  ],
+  "selected_tools": [
+    "reasoning"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 38
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "format_control-008",
+        "format_control-018",
+        "format_control-028"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "format_control-038"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 12148
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [
+    "context_stability_miss:format_control"
+  ],
+  "error_signature": [
+    "format_control"
+  ],
+  "critic_diagnosis": "format_control evidence missing after context update",
+  "generated_experience": "format_control-038",
+  "retrieved_experiences": [
+    "format_control-008",
+    "format_control-018",
+    "format_control-028"
+  ],
+  "final_answer": "monolithic_rewrite step=38 skill=format_control accuracy=0.711 context_tokens=12148 retrieved=3 generated=1",
+  "structured_response": {
+    "accuracy": 0.711,
+    "context_token_count": 12148,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "format_control-008",
+      "format_control-018",
+      "format_control-028"
+    ],
+    "generated_experience_ids": [
+      "format_control-038"
+    ]
+  },
+  "validation": {
+    "score": 0.711,
+    "success": false,
+    "threshold": 0.72,
+    "missing": [
+      "format_control"
+    ]
+  },
+  "success": false,
+  "metrics": {
+    "turns": 3.4,
+    "runtime": 0.12,
+    "execution_success": false,
+    "result_correctness": 0.711,
+    "context_token_count": 12148,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 38,
+    "compression_event": ""
+  }
+}

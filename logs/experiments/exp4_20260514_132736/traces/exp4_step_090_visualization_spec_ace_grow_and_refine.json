@@ -1,0 +1,81 @@
+{
+  "task_id": "exp4_step_090_visualization_spec",
+  "agent_type": "ace_grow_and_refine",
+  "strategy": "ace_grow_and_refine",
+  "adaptation_step": 90,
+  "query": "Step 90: 为 成本趋势 选择合适图表并保持坐标轴、图例和单位说明一致。",
+  "category": "visualization",
+  "expected_skill": "visualization_spec",
+  "novelty": "retention_retest",
+  "expected_tools": [
+    "reasoning",
+    "chart_spec"
+  ],
+  "selected_tools": [
+    "reasoning",
+    "chart_spec"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 90
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "visualization_spec-refined-090"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "visualization_spec-090"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 10458
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "visualization_spec-090",
+  "retrieved_experiences": [
+    "visualization_spec-refined-090"
+  ],
+  "final_answer": "ace_grow_and_refine step=90 skill=visualization_spec accuracy=0.97 context_tokens=10458 retrieved=1 generated=1",
+  "structured_response": {
+    "accuracy": 0.97,
+    "context_token_count": 10458,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "visualization_spec-refined-090"
+    ],
+    "generated_experience_ids": [
+      "visualization_spec-090"
+    ]
+  },
+  "validation": {
+    "score": 0.97,
+    "success": true,
+    "threshold": 0.72,
+    "missing": []
+  },
+  "success": true,
+  "metrics": {
+    "turns": 3.05,
+    "runtime": 0.12,
+    "execution_success": true,
+    "result_correctness": 0.97,
+    "context_token_count": 10458,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 10,
+    "compression_event": ""
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "id": "exp4_evaluation_config_context_collapse_v2",
+  "workbook_id": "exp4_context_collapse_online_learning_v2",
+  "success_threshold": 0.72,
+  "rolling_window": 10,
+  "baselines": [
+    "base_no_adaptation",
+    "rag_static_memory",
+    "dynamic_cheatsheet",
+    "append_only_memory",
+    "monolithic_rewrite",
+    "ace_grow_and_refine"
+  ],
+  "tracked_metrics": [
+    "step_accuracy",
+    "rolling_accuracy",
+    "context_token_count",
+    "context_item_count",
+    "helpful_item_count",
+    "harmful_item_count",
+    "duplicate_item_ratio",
+    "deleted_item_count",
+    "retrieved_experience_hit_rate",
+    "adaptation_latency_ms",
+    "token_cost_estimate",
+    "collapse_event_count"
+  ],
+  "collapse_definition": {
+    "description": "若相邻 adaptation step 中，上一步 context_token_count >= 8000，下一步 token 数下降到前一步的 35% 以下，且任务准确率下降 >= 0.12，则记为 context collapse。",
+    "token_high_watermark": 8000,
+    "token_drop_ratio": 0.35,
+    "accuracy_drop": 0.12
+  },
+  "refinement_event_definition": {
+    "description": "ACE grow-and-refine 允许阶段性去重或合并导致 token 温和下降；若下降后 rolling_accuracy 未下降超过 0.03，且 duplicate_item_ratio 同步下降，则记为正常 refinement event，不计入 collapse。",
+    "max_accuracy_drop": 0.03,
+    "requires_duplicate_ratio_drop": true
+  },
+  "expected_observation": {
+    "ace_grow_and_refine": "上下文 token 数呈平稳增长，并在阶段性精炼点温和下降；准确率随经验积累逐步提升或保持稳定，collapse_event_count 应为 0。",
+    "monolithic_rewrite": "周期性重写会让 token 数从高位骤降到低位，且准确率同步下降，形成明显 context collapse。",
+    "dynamic_cheatsheet": "Dynamic Cheatsheet 会维护较短的规则速查表，token 曲线较平滑，但容量受限时可能覆盖早期能力，导致后期准确率波动。",
+    "append_only_memory": "Append-only memory 的 token 和条目数会持续增长，短期准确率可能提升，但 duplicate_item_ratio 和延迟会持续上升。",
+    "rag_static_memory": "RAG 静态库不会出现 collapse，但无法吸收在线反馈，后期新增错误模式上的 rolling_accuracy 应低于 ACE。",
+    "base_no_adaptation": "Base 无上下文更新，token 曲线稳定，准确率作为无适应下限。"
+  }
+}

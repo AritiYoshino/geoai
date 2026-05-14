@@ -1,0 +1,134 @@
+{
+  "task_id": "exp3_q11_schema_life_service",
+  "agent_type": "without_critic",
+  "agent_name": "ACE w/o Critic",
+  "missing_modules": [
+    "critic"
+  ],
+  "query": "查询生活服务图层中 type 或 name 包含“维修”的 POI；若字段缺失，说明原因并总结字段核对策略。",
+  "category": "attribute_query",
+  "expected_tools": [
+    "query_poi_by_conditions"
+  ],
+  "selected_tools": [
+    "query_poi_by_conditions"
+  ],
+  "execution_trace": [
+    {
+      "step": "ablation_agent",
+      "detail": "missing_modules=critic"
+    },
+    {
+      "step": "tool_selection",
+      "detail": [
+        "query_poi_by_conditions"
+      ]
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": []
+    },
+    {
+      "step": "critic_diagnosis",
+      "detail": ""
+    },
+    {
+      "step": "experience_update",
+      "detail": []
+    }
+  ],
+  "errors": [
+    "missing_module_effect:outputs,result_count,experience_added"
+  ],
+  "critic_diagnosis": "",
+  "generated_experience": "",
+  "retrieved_experiences": [],
+  "final_answer": "查询生活服务图层中 type 或 name 包含“维修”的 POI；若字段缺失，说明原因并总结字段核对策略。 missing_modules=critic  生活服务 维修 type name 字段 schema",
+  "structured_response": {
+    "answer": "查询生活服务图层中 type 或 name 包含“维修”的 POI；若字段缺失，说明原因并总结字段核对策略。 missing_modules=critic  生活服务 维修 type name 字段 schema",
+    "selected_tools": [
+      "query_poi_by_conditions"
+    ],
+    "output_types": [
+      "map_layer",
+      "table",
+      "explanation"
+    ],
+    "entities": [
+      "生活服务",
+      "维修",
+      "type",
+      "name",
+      "字段"
+    ],
+    "keywords": [
+      "Critic",
+      "schema"
+    ],
+    "result_count": 0,
+    "retrieved_experience_ids": [],
+    "generated_experience_ids": [],
+    "experience_retrieved": false,
+    "experience_added": false,
+    "memory_used": false,
+    "code_executed": false,
+    "trace_events": [
+      {
+        "step": "ablation_agent",
+        "detail": "missing_modules=critic"
+      },
+      {
+        "step": "tool_selection",
+        "detail": [
+          "query_poi_by_conditions"
+        ]
+      },
+      {
+        "step": "experience_retrieval",
+        "detail": []
+      },
+      {
+        "step": "critic_diagnosis",
+        "detail": ""
+      },
+      {
+        "step": "experience_update",
+        "detail": []
+      }
+    ]
+  },
+  "validation": {
+    "score": 0.609,
+    "success": false,
+    "threshold": 0.86,
+    "missing": [
+      "outputs",
+      "result_count",
+      "experience_added"
+    ],
+    "details": {
+      "tools": 1.0,
+      "outputs": 0.75,
+      "entities": 1.0,
+      "keywords": 0.5,
+      "result_count": 0.0,
+      "experience_added": 0.0
+    }
+  },
+  "success": false,
+  "metrics": {
+    "turns": 3.95,
+    "runtime": 0.15,
+    "execution_success": false,
+    "result_correctness": 0.609,
+    "has_map_layer": true,
+    "has_table": true,
+    "result_count": 0,
+    "experience_retrieved": false,
+    "experience_added": false,
+    "memory_used": false,
+    "code_executed": false,
+    "critic_used": false,
+    "missing_module_count": 1
+  }
+}

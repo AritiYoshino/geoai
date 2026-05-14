@@ -1,0 +1,96 @@
+{
+  "task_id": "exp4_step_035_boundary_predicate",
+  "agent_type": "monolithic_rewrite",
+  "strategy": "monolithic_rewrite",
+  "adaptation_step": 35,
+  "query": "Step 35: 比较 contains 与 intersects 统计 热点网格 边界 POI 的差异，输出校验表。",
+  "category": "validation",
+  "expected_skill": "spatial_predicate_choice",
+  "novelty": "transfer",
+  "expected_tools": [
+    "execute_spatial_code",
+    "predicate_check"
+  ],
+  "selected_tools": [
+    "execute_spatial_code"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 35
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "spatial_predicate_choice-005",
+        "spatial_predicate_choice-015",
+        "spatial_predicate_choice-025"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "spatial_predicate_choice-035"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 11260
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [
+    "context_stability_miss:spatial_predicate_choice"
+  ],
+  "error_signature": [
+    "spatial_predicate_choice"
+  ],
+  "critic_diagnosis": "spatial_predicate_choice evidence missing after context update",
+  "generated_experience": "spatial_predicate_choice-035",
+  "retrieved_experiences": [
+    "spatial_predicate_choice-005",
+    "spatial_predicate_choice-015",
+    "spatial_predicate_choice-025"
+  ],
+  "final_answer": "monolithic_rewrite step=35 skill=spatial_predicate_choice accuracy=0.704 context_tokens=11260 retrieved=3 generated=1",
+  "structured_response": {
+    "accuracy": 0.704,
+    "context_token_count": 11260,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "spatial_predicate_choice-005",
+      "spatial_predicate_choice-015",
+      "spatial_predicate_choice-025"
+    ],
+    "generated_experience_ids": [
+      "spatial_predicate_choice-035"
+    ]
+  },
+  "validation": {
+    "score": 0.704,
+    "success": false,
+    "threshold": 0.72,
+    "missing": [
+      "spatial_predicate_choice"
+    ],
+    "details": {
+      "tools": 1.0,
+      "accuracy": 0.704
+    }
+  },
+  "success": false,
+  "metrics": {
+    "turns": 3.4,
+    "runtime": 0.12,
+    "execution_success": false,
+    "result_correctness": 0.704,
+    "context_token_count": 11260,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 35,
+    "compression_event": ""
+  }
+}

@@ -1,0 +1,80 @@
+{
+  "task_id": "exp4_step_002_unit_conversion",
+  "agent_type": "ace_grow_and_refine",
+  "strategy": "ace_grow_and_refine",
+  "adaptation_step": 2,
+  "query": "Step 2: 处理 价格 中的单位换算和阈值判断，保留前序换算规则。",
+  "category": "quantitative_reasoning",
+  "expected_skill": "unit_conversion",
+  "novelty": "warmup",
+  "expected_tools": [
+    "reasoning",
+    "calculator"
+  ],
+  "selected_tools": [
+    "reasoning"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 2
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": []
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "unit_conversion-002"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 1136
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [
+    "context_stability_miss:unit_conversion"
+  ],
+  "error_signature": [
+    "unit_conversion"
+  ],
+  "critic_diagnosis": "unit_conversion evidence missing after context update",
+  "generated_experience": "unit_conversion-002",
+  "retrieved_experiences": [],
+  "final_answer": "ace_grow_and_refine step=2 skill=unit_conversion accuracy=0.702 context_tokens=1136 retrieved=0 generated=1",
+  "structured_response": {
+    "accuracy": 0.702,
+    "context_token_count": 1136,
+    "compression_event": "",
+    "retrieved_experience_ids": [],
+    "generated_experience_ids": [
+      "unit_conversion-002"
+    ]
+  },
+  "validation": {
+    "score": 0.702,
+    "success": false,
+    "threshold": 0.72,
+    "missing": [
+      "unit_conversion"
+    ]
+  },
+  "success": false,
+  "metrics": {
+    "turns": 2.7,
+    "runtime": 0.12,
+    "execution_success": false,
+    "result_correctness": 0.702,
+    "context_token_count": 1136,
+    "experience_retrieved": false,
+    "experience_added": true,
+    "library_size": 2,
+    "compression_event": ""
+  }
+}

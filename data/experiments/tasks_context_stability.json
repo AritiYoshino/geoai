@@ -1,0 +1,10 @@
+{
+  "repeat_multiplier": 2,
+  "tasks": [
+    {"id": "cs_{n}", "category": "nearby_analysis", "query": "稳定性任务：距离分析前检查 CRS，完成 {v} 邻近分析", "variants": ["学校-餐饮", "医院-住宿", "地铁-购物", "商场-交通"], "repeat": 25, "expected_tools": ["find_nearby"], "expected_outputs": {"has_map_layer": true, "has_table": true, "min_result_count": 1}, "difficulty": "medium", "failure_mode": "crs_distance"},
+    {"id": "cs_{n}", "category": "attribute_query", "query": "稳定性任务：字段 name/type/category 不统一时查询 {v}", "variants": ["火锅", "银行", "医院", "酒店"], "repeat": 20, "expected_tools": ["query_poi_by_conditions"], "expected_outputs": {"has_map_layer": true, "has_table": true, "min_result_count": 1}, "difficulty": "medium", "failure_mode": "field_name_mismatch"},
+    {"id": "cs_{n}", "category": "overlay_analysis", "query": "稳定性任务：叠加前检查几何类型，处理 {v} 与行政区", "variants": ["餐饮", "购物", "医疗", "公司"], "repeat": 20, "expected_tools": ["overlay_layers"], "expected_outputs": {"has_map_layer": true, "has_table": true, "min_result_count": 1}, "difficulty": "hard", "failure_mode": "geometry_type"},
+    {"id": "cs_{n}", "category": "spatial_join", "query": "稳定性任务：空间连接前统一坐标系，统计 {v} 行政区数量", "variants": ["餐饮", "购物", "医疗", "生活服务"], "repeat": 20, "expected_tools": ["spatial_join_layers"], "expected_outputs": {"has_map_layer": true, "has_table": true, "min_result_count": 1}, "difficulty": "hard", "failure_mode": "sjoin_crs"},
+    {"id": "cs_{n}", "category": "nearby_analysis", "query": "第 80 个任务后的早期经验回测：空结果时放宽条件并检查 CRS", "repeat": 5, "expected_tools": ["find_nearby"], "expected_outputs": {"has_map_layer": true, "has_table": true, "min_result_count": 1}, "difficulty": "hard", "failure_mode": "early_experience_retest"}
+  ]
+}

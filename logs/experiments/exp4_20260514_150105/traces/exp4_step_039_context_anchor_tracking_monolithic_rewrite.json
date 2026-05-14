@@ -1,0 +1,96 @@
+{
+  "task_id": "exp4_step_039_context_anchor_tracking",
+  "agent_type": "monolithic_rewrite",
+  "strategy": "monolithic_rewrite",
+  "adaptation_step": 39,
+  "query": "Step 39: 使用当前上下文中的 school_anchor 作为中心点，查找 1 公里范围内指定 POI，并解释锚点来源。",
+  "category": "memory_followup",
+  "expected_skill": "context_reference",
+  "novelty": "transfer",
+  "expected_tools": [
+    "find_nearby_point",
+    "context_check"
+  ],
+  "selected_tools": [
+    "find_nearby_point"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 39
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "context_reference-009",
+        "context_reference-019",
+        "context_reference-029"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "context_reference-039"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 12480
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [
+    "context_stability_miss:context_reference"
+  ],
+  "error_signature": [
+    "context_reference"
+  ],
+  "critic_diagnosis": "context_reference evidence missing after context update",
+  "generated_experience": "context_reference-039",
+  "retrieved_experiences": [
+    "context_reference-009",
+    "context_reference-019",
+    "context_reference-029"
+  ],
+  "final_answer": "monolithic_rewrite step=39 skill=context_reference accuracy=0.714 context_tokens=12480 retrieved=3 generated=1",
+  "structured_response": {
+    "accuracy": 0.714,
+    "context_token_count": 12480,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "context_reference-009",
+      "context_reference-019",
+      "context_reference-029"
+    ],
+    "generated_experience_ids": [
+      "context_reference-039"
+    ]
+  },
+  "validation": {
+    "score": 0.714,
+    "success": false,
+    "threshold": 0.72,
+    "missing": [
+      "context_reference"
+    ],
+    "details": {
+      "tools": 1.0,
+      "accuracy": 0.714
+    }
+  },
+  "success": false,
+  "metrics": {
+    "turns": 3.4,
+    "runtime": 0.12,
+    "execution_success": false,
+    "result_correctness": 0.714,
+    "context_token_count": 12480,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 39,
+    "compression_event": ""
+  }
+}

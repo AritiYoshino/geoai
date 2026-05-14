@@ -1,0 +1,90 @@
+{
+  "task_id": "exp4_step_013_empty_result_recovery",
+  "agent_type": "monolithic_rewrite",
+  "strategy": "monolithic_rewrite",
+  "adaptation_step": 13,
+  "query": "Step 13: 精确搜索“24小时儿童急诊药房”；若结果为空，逐级放宽关键词并说明回退策略。",
+  "category": "poi_search",
+  "expected_skill": "empty_result_recovery",
+  "novelty": "warmup",
+  "expected_tools": [
+    "search_poi",
+    "fallback_search"
+  ],
+  "selected_tools": [
+    "search_poi"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 13
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "empty_result_recovery-003"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "empty_result_recovery-013"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 4748
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [
+    "context_stability_miss:empty_result_recovery"
+  ],
+  "error_signature": [
+    "empty_result_recovery"
+  ],
+  "critic_diagnosis": "empty_result_recovery evidence missing after context update",
+  "generated_experience": "empty_result_recovery-013",
+  "retrieved_experiences": [
+    "empty_result_recovery-003"
+  ],
+  "final_answer": "monolithic_rewrite step=13 skill=empty_result_recovery accuracy=0.651 context_tokens=4748 retrieved=1 generated=1",
+  "structured_response": {
+    "accuracy": 0.651,
+    "context_token_count": 4748,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "empty_result_recovery-003"
+    ],
+    "generated_experience_ids": [
+      "empty_result_recovery-013"
+    ]
+  },
+  "validation": {
+    "score": 0.651,
+    "success": false,
+    "threshold": 0.72,
+    "missing": [
+      "empty_result_recovery"
+    ],
+    "details": {
+      "tools": 1.0,
+      "accuracy": 0.651
+    }
+  },
+  "success": false,
+  "metrics": {
+    "turns": 3.4,
+    "runtime": 0.12,
+    "execution_success": false,
+    "result_correctness": 0.651,
+    "context_token_count": 4748,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 13,
+    "compression_event": ""
+  }
+}

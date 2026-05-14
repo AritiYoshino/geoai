@@ -1,0 +1,90 @@
+{
+  "task_id": "exp4_step_050_visualization_spec",
+  "agent_type": "append_only",
+  "strategy": "append_only",
+  "adaptation_step": 50,
+  "query": "Step 50: 为 成本趋势 选择合适图表并保持坐标轴、图例和单位说明一致。",
+  "category": "visualization",
+  "expected_skill": "visualization_spec",
+  "novelty": "transfer",
+  "expected_tools": [
+    "reasoning",
+    "chart_spec"
+  ],
+  "selected_tools": [
+    "reasoning"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 50
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "visualization_spec-010"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "visualization_spec-050"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 15958
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [
+    "context_stability_miss:visualization_spec"
+  ],
+  "error_signature": [
+    "visualization_spec"
+  ],
+  "critic_diagnosis": "visualization_spec evidence missing after context update",
+  "generated_experience": "visualization_spec-050",
+  "retrieved_experiences": [
+    "visualization_spec-010"
+  ],
+  "final_answer": "append_only step=50 skill=visualization_spec accuracy=0.641 context_tokens=15958 retrieved=1 generated=1",
+  "structured_response": {
+    "accuracy": 0.641,
+    "context_token_count": 15958,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "visualization_spec-010"
+    ],
+    "generated_experience_ids": [
+      "visualization_spec-050"
+    ]
+  },
+  "validation": {
+    "score": 0.641,
+    "success": false,
+    "threshold": 0.72,
+    "missing": [
+      "visualization_spec"
+    ],
+    "details": {
+      "tools": 1.0,
+      "accuracy": 0.641
+    }
+  },
+  "success": false,
+  "metrics": {
+    "turns": 3.2,
+    "runtime": 0.12,
+    "execution_success": false,
+    "result_correctness": 0.641,
+    "context_token_count": 15958,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 57,
+    "compression_event": ""
+  }
+}

@@ -1,0 +1,133 @@
+{
+  "task_id": "exp3_q23_temporal_transfer",
+  "agent_type": "without_evolution",
+  "agent_name": "ACE w/o Evolution",
+  "missing_modules": [
+    "evolution"
+  ],
+  "query": "查询近半年新增科教文化 POI，并说明日期解析与范围过滤过程。",
+  "category": "temporal_query",
+  "expected_tools": [
+    "query_poi_by_conditions"
+  ],
+  "selected_tools": [
+    "query_poi_by_conditions"
+  ],
+  "execution_trace": [
+    {
+      "step": "ablation_agent",
+      "detail": "missing_modules=evolution"
+    },
+    {
+      "step": "tool_selection",
+      "detail": [
+        "query_poi_by_conditions"
+      ]
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": []
+    },
+    {
+      "step": "critic_diagnosis",
+      "detail": ""
+    },
+    {
+      "step": "experience_update",
+      "detail": []
+    }
+  ],
+  "errors": [
+    "missing_module_effect:outputs,result_count,experience_retrieved"
+  ],
+  "critic_diagnosis": "",
+  "generated_experience": "",
+  "retrieved_experiences": [],
+  "final_answer": "查询近半年新增科教文化 POI，并说明日期解析与范围过滤过程。 missing_modules=evolution  半年 科教文化 日期解析 范围过滤 时间字段 解析 过滤",
+  "structured_response": {
+    "answer": "查询近半年新增科教文化 POI，并说明日期解析与范围过滤过程。 missing_modules=evolution  半年 科教文化 日期解析 范围过滤 时间字段 解析 过滤",
+    "selected_tools": [
+      "query_poi_by_conditions"
+    ],
+    "output_types": [
+      "map_layer",
+      "table"
+    ],
+    "entities": [
+      "半年",
+      "科教文化",
+      "日期解析",
+      "范围过滤"
+    ],
+    "keywords": [
+      "时间字段",
+      "解析",
+      "过滤"
+    ],
+    "result_count": 0,
+    "retrieved_experience_ids": [],
+    "generated_experience_ids": [],
+    "experience_retrieved": false,
+    "experience_added": false,
+    "memory_used": false,
+    "code_executed": false,
+    "trace_events": [
+      {
+        "step": "ablation_agent",
+        "detail": "missing_modules=evolution"
+      },
+      {
+        "step": "tool_selection",
+        "detail": [
+          "query_poi_by_conditions"
+        ]
+      },
+      {
+        "step": "experience_retrieval",
+        "detail": []
+      },
+      {
+        "step": "critic_diagnosis",
+        "detail": ""
+      },
+      {
+        "step": "experience_update",
+        "detail": []
+      }
+    ]
+  },
+  "validation": {
+    "score": 0.61,
+    "success": false,
+    "threshold": 0.86,
+    "missing": [
+      "outputs",
+      "result_count",
+      "experience_retrieved"
+    ],
+    "details": {
+      "tools": 1.0,
+      "outputs": 0.667,
+      "entities": 1.0,
+      "keywords": 0.75,
+      "result_count": 0.0,
+      "experience_retrieved": 0.0
+    }
+  },
+  "success": false,
+  "metrics": {
+    "turns": 3.95,
+    "runtime": 0.15,
+    "execution_success": false,
+    "result_correctness": 0.61,
+    "has_map_layer": true,
+    "has_table": true,
+    "result_count": 0,
+    "experience_retrieved": false,
+    "experience_added": false,
+    "memory_used": false,
+    "code_executed": false,
+    "critic_used": false,
+    "missing_module_count": 1
+  }
+}

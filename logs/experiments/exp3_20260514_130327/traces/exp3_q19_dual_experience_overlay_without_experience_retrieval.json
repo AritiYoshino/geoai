@@ -1,0 +1,133 @@
+{
+  "task_id": "exp3_q19_dual_experience_overlay",
+  "agent_type": "without_experience_retrieval",
+  "agent_name": "ACE w/o Experience Retrieval",
+  "missing_modules": [
+    "experience_retrieval"
+  ],
+  "query": "统计学校 700 米范围内餐饮 POI 数量，必须同时复用 CRS 经验和 schema 字段经验，并返回统计表。",
+  "category": "nearby_analysis",
+  "expected_tools": [
+    "find_nearby"
+  ],
+  "selected_tools": [
+    "find_nearby"
+  ],
+  "execution_trace": [
+    {
+      "step": "ablation_agent",
+      "detail": "missing_modules=experience_retrieval"
+    },
+    {
+      "step": "tool_selection",
+      "detail": [
+        "find_nearby"
+      ]
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": []
+    },
+    {
+      "step": "critic_diagnosis",
+      "detail": ""
+    },
+    {
+      "step": "experience_update",
+      "detail": []
+    }
+  ],
+  "errors": [
+    "missing_module_effect:outputs,result_count,experience_retrieved"
+  ],
+  "critic_diagnosis": "",
+  "generated_experience": "",
+  "retrieved_experiences": [],
+  "final_answer": "统计学校 700 米范围内餐饮 POI 数量，必须同时复用 CRS 经验和 schema 字段经验，并返回统计表。 missing_modules=experience_retrieval  学校 餐饮 CRS schema 字段 统计",
+  "structured_response": {
+    "answer": "统计学校 700 米范围内餐饮 POI 数量，必须同时复用 CRS 经验和 schema 字段经验，并返回统计表。 missing_modules=experience_retrieval  学校 餐饮 CRS schema 字段 统计",
+    "selected_tools": [
+      "find_nearby"
+    ],
+    "output_types": [
+      "map_layer",
+      "table"
+    ],
+    "entities": [
+      "学校",
+      "餐饮",
+      "CRS",
+      "schema"
+    ],
+    "keywords": [
+      "经验",
+      "字段",
+      "统计"
+    ],
+    "result_count": 0,
+    "retrieved_experience_ids": [],
+    "generated_experience_ids": [],
+    "experience_retrieved": false,
+    "experience_added": false,
+    "memory_used": false,
+    "code_executed": false,
+    "trace_events": [
+      {
+        "step": "ablation_agent",
+        "detail": "missing_modules=experience_retrieval"
+      },
+      {
+        "step": "tool_selection",
+        "detail": [
+          "find_nearby"
+        ]
+      },
+      {
+        "step": "experience_retrieval",
+        "detail": []
+      },
+      {
+        "step": "critic_diagnosis",
+        "detail": ""
+      },
+      {
+        "step": "experience_update",
+        "detail": []
+      }
+    ]
+  },
+  "validation": {
+    "score": 0.61,
+    "success": false,
+    "threshold": 0.86,
+    "missing": [
+      "outputs",
+      "result_count",
+      "experience_retrieved"
+    ],
+    "details": {
+      "tools": 1.0,
+      "outputs": 0.667,
+      "entities": 1.0,
+      "keywords": 0.75,
+      "result_count": 0.0,
+      "experience_retrieved": 0.0
+    }
+  },
+  "success": false,
+  "metrics": {
+    "turns": 3.95,
+    "runtime": 0.15,
+    "execution_success": false,
+    "result_correctness": 0.61,
+    "has_map_layer": true,
+    "has_table": true,
+    "result_count": 0,
+    "experience_retrieved": false,
+    "experience_added": false,
+    "memory_used": false,
+    "code_executed": false,
+    "critic_used": false,
+    "missing_module_count": 1
+  }
+}

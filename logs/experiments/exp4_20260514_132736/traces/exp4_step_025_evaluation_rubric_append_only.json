@@ -1,0 +1,89 @@
+{
+  "task_id": "exp4_step_025_evaluation_rubric",
+  "agent_type": "append_only",
+  "strategy": "append_only",
+  "adaptation_step": 25,
+  "query": "Step 25: 按历史评分标准评估 摘要 答案，保持判分口径一致。",
+  "category": "evaluation",
+  "expected_skill": "evaluation_rubric",
+  "novelty": "transfer",
+  "expected_tools": [
+    "reasoning",
+    "rubric_check"
+  ],
+  "selected_tools": [
+    "reasoning"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 25
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "evaluation_rubric-005",
+        "evaluation_rubric-015"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "evaluation_rubric-025"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 7358
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [
+    "context_stability_miss:evaluation_rubric"
+  ],
+  "error_signature": [
+    "evaluation_rubric"
+  ],
+  "critic_diagnosis": "evaluation_rubric evidence missing after context update",
+  "generated_experience": "evaluation_rubric-025",
+  "retrieved_experiences": [
+    "evaluation_rubric-005",
+    "evaluation_rubric-015"
+  ],
+  "final_answer": "append_only step=25 skill=evaluation_rubric accuracy=0.68 context_tokens=7358 retrieved=2 generated=1",
+  "structured_response": {
+    "accuracy": 0.68,
+    "context_token_count": 7358,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "evaluation_rubric-005",
+      "evaluation_rubric-015"
+    ],
+    "generated_experience_ids": [
+      "evaluation_rubric-025"
+    ]
+  },
+  "validation": {
+    "score": 0.68,
+    "success": false,
+    "threshold": 0.72,
+    "missing": [
+      "evaluation_rubric"
+    ]
+  },
+  "success": false,
+  "metrics": {
+    "turns": 3.2,
+    "runtime": 0.12,
+    "execution_success": false,
+    "result_correctness": 0.68,
+    "context_token_count": 7358,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 28,
+    "compression_event": ""
+  }
+}

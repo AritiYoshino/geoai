@@ -1,0 +1,84 @@
+{
+  "task_id": "exp4_step_001_geo_schema_alignment",
+  "agent_type": "monolithic_rewrite",
+  "strategy": "monolithic_rewrite",
+  "adaptation_step": 1,
+  "query": "Step 1: 在 餐饮 图层中查询目标关键词，先核对可用字段，再返回结果表和高亮图层。",
+  "category": "attribute_query",
+  "expected_skill": "schema_following",
+  "novelty": "warmup",
+  "expected_tools": [
+    "query_poi_by_conditions",
+    "schema_check"
+  ],
+  "selected_tools": [
+    "query_poi_by_conditions"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 1
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": []
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "schema_following-001"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 1178
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [
+    "context_stability_miss:schema_following"
+  ],
+  "error_signature": [
+    "schema_following"
+  ],
+  "critic_diagnosis": "schema_following evidence missing after context update",
+  "generated_experience": "schema_following-001",
+  "retrieved_experiences": [],
+  "final_answer": "monolithic_rewrite step=1 skill=schema_following accuracy=0.582 context_tokens=1178 retrieved=0 generated=1",
+  "structured_response": {
+    "accuracy": 0.582,
+    "context_token_count": 1178,
+    "compression_event": "",
+    "retrieved_experience_ids": [],
+    "generated_experience_ids": [
+      "schema_following-001"
+    ]
+  },
+  "validation": {
+    "score": 0.582,
+    "success": false,
+    "threshold": 0.72,
+    "missing": [
+      "schema_following"
+    ],
+    "details": {
+      "tools": 1.0,
+      "accuracy": 0.582
+    }
+  },
+  "success": false,
+  "metrics": {
+    "turns": 3.4,
+    "runtime": 0.12,
+    "execution_success": false,
+    "result_correctness": 0.582,
+    "context_token_count": 1178,
+    "experience_retrieved": false,
+    "experience_added": true,
+    "library_size": 1,
+    "compression_event": ""
+  }
+}

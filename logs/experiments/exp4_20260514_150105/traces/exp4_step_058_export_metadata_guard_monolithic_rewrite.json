@@ -1,0 +1,88 @@
+{
+  "task_id": "exp4_step_058_export_metadata_guard",
+  "agent_type": "monolithic_rewrite",
+  "strategy": "monolithic_rewrite",
+  "adaptation_step": 58,
+  "query": "Step 58: 将 医疗缓冲区 导出为 GeoJSON 和 CSV，校验 geometry、字段命名、空几何和 CRS 元数据。",
+  "category": "export_highlight",
+  "expected_skill": "export_validation",
+  "novelty": "transfer",
+  "expected_tools": [
+    "execute_spatial_code",
+    "format_validator"
+  ],
+  "selected_tools": [
+    "execute_spatial_code",
+    "format_validator"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 58
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "export_validation-038",
+        "export_validation-048"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "export_validation-058"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 5648
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "export_validation-058",
+  "retrieved_experiences": [
+    "export_validation-038",
+    "export_validation-048"
+  ],
+  "final_answer": "monolithic_rewrite step=58 skill=export_validation accuracy=0.759 context_tokens=5648 retrieved=2 generated=1",
+  "structured_response": {
+    "accuracy": 0.759,
+    "context_token_count": 5648,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "export_validation-038",
+      "export_validation-048"
+    ],
+    "generated_experience_ids": [
+      "export_validation-058"
+    ]
+  },
+  "validation": {
+    "score": 0.759,
+    "success": true,
+    "threshold": 0.72,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "accuracy": 0.759
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 3.4,
+    "runtime": 0.12,
+    "execution_success": true,
+    "result_correctness": 0.759,
+    "context_token_count": 5648,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 22,
+    "compression_event": ""
+  }
+}

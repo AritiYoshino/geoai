@@ -1,0 +1,85 @@
+{
+  "task_id": "exp4_step_063_empty_result_recovery",
+  "agent_type": "ace_grow_and_refine",
+  "strategy": "ace_grow_and_refine",
+  "adaptation_step": 63,
+  "query": "Step 63: 精确搜索“天府广场地铁站A口公交换乘点”；若结果为空，逐级放宽关键词并说明回退策略。",
+  "category": "poi_search",
+  "expected_skill": "empty_result_recovery",
+  "novelty": "new_pattern",
+  "expected_tools": [
+    "search_poi",
+    "fallback_search"
+  ],
+  "selected_tools": [
+    "search_poi",
+    "fallback_search"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 63
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "empty_result_recovery-003"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "empty_result_recovery-063"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 8155
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "empty_result_recovery-063",
+  "retrieved_experiences": [
+    "empty_result_recovery-003"
+  ],
+  "final_answer": "ace_grow_and_refine step=63 skill=empty_result_recovery accuracy=0.97 context_tokens=8155 retrieved=1 generated=1",
+  "structured_response": {
+    "accuracy": 0.97,
+    "context_token_count": 8155,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "empty_result_recovery-003"
+    ],
+    "generated_experience_ids": [
+      "empty_result_recovery-063"
+    ]
+  },
+  "validation": {
+    "score": 0.97,
+    "success": true,
+    "threshold": 0.72,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "accuracy": 0.97
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 3.05,
+    "runtime": 0.12,
+    "execution_success": true,
+    "result_correctness": 0.97,
+    "context_token_count": 8155,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 10,
+    "compression_event": ""
+  }
+}

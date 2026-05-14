@@ -1,0 +1,79 @@
+{
+  "task_id": "exp4_step_010_visualization_spec",
+  "agent_type": "dynamic_cheatsheet",
+  "strategy": "dynamic_cheatsheet",
+  "adaptation_step": 10,
+  "query": "Step 10: 为 成本趋势 选择合适图表并保持坐标轴、图例和单位说明一致。",
+  "category": "visualization",
+  "expected_skill": "visualization_spec",
+  "novelty": "warmup",
+  "expected_tools": [
+    "reasoning",
+    "chart_spec"
+  ],
+  "selected_tools": [
+    "reasoning",
+    "chart_spec"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 10
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": []
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "visualization_spec-010"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 2215
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "visualization_spec-010",
+  "retrieved_experiences": [],
+  "final_answer": "dynamic_cheatsheet step=10 skill=visualization_spec accuracy=0.742 context_tokens=2215 retrieved=0 generated=1",
+  "structured_response": {
+    "accuracy": 0.742,
+    "context_token_count": 2215,
+    "compression_event": "",
+    "retrieved_experience_ids": [],
+    "generated_experience_ids": [
+      "visualization_spec-010"
+    ]
+  },
+  "validation": {
+    "score": 0.742,
+    "success": true,
+    "threshold": 0.72,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "accuracy": 0.742
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 3.0,
+    "runtime": 0.12,
+    "execution_success": true,
+    "result_correctness": 0.742,
+    "context_token_count": 2215,
+    "experience_retrieved": false,
+    "experience_added": true,
+    "library_size": 10,
+    "compression_event": ""
+  }
+}

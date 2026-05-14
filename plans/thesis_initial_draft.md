@@ -8,7 +8,7 @@
 
 针对上述问题，本文设计并实现了一个基于 ACE（Agentic Context Engineering）机制的多 Agent 协同自进化地理分析系统。系统以动态经验库和多 Agent 分工为核心，构建了由任务协调智能体、空间分析智能体、代码执行智能体、Critic 错误诊断智能体、Evolution 经验演化进化智能体和 WebGIS 可视化模块组成的闭环架构，实现了“自然语言任务输入、上下文组织、经验检索、GIS 工具调用、受控空间代码执行、错误诊断、经验写回、地图可视化和后续复用”的完整流程。
 
-系统基于 Python、GeoPandas、MapLibre GL JS、LangChain DeepSeek 接口和 HTTP 服务实现，支持 POI 检索、属性查询、邻近分析、缓冲区分析、空间叠加、空间连接、最近邻分析、DBSCAN 聚类、热点分析、统计汇总、结果导出、地图高亮、会话管理和多经验库管理。本文结合成都餐饮、住宿服务和行政区数据构建实验任务集，设计基线对比、模块消融、记忆抗退化和长上下文扩展四组实验，对系统任务完成率、工具成功率、代码成功率、准确率、经验复用率和多轮一致性进行验证。实验与系统运行结果表明，ACE 机制能够提高地理智能体在复杂空间任务中的稳定性和可复用性，为自然语言驱动的地理空间分析提供了可行的系统实现方案。
+系统基于 Python、GeoPandas、MapLibre GL JS、LangChain DeepSeek 接口和 HTTP 服务实现，支持 POI 检索、属性查询、邻近分析、缓冲区分析、空间叠加、空间连接、最近邻分析、DBSCAN 聚类、热点分析、统计汇总、结果导出、地图高亮、会话管理和多经验库管理。本文结合成都餐饮、住宿服务和行政区数据构建实验任务集，设计主系统能力评测、Online Adaptation 在线适应、ACE 机制消融和 GeoAI Context Collapse 稳定性四组实验，对系统任务完成率、工具成功率、代码成功率、准确率、经验复用率、多轮一致性和上下文稳定性进行验证。实验与系统运行结果表明，ACE 机制能够提高地理智能体在复杂空间任务中的稳定性和可复用性，为自然语言驱动的地理空间分析提供了可行的系统实现方案。
 
 **关键词：** Agentic Context Engineering；多 Agent 协同；WebGIS；地理空间分析；经验库；GeoPandas；自进化
 
@@ -18,7 +18,7 @@ With the development of large language models in natural language understanding,
 
 To address these issues, this thesis designs and implements a multi-agent collaborative self-evolving geospatial analysis system based on Agentic Context Engineering (ACE). Centered on a dynamic experience library and multi-agent collaboration, the system consists of a coordinator agent, a spatial analyst agent, a code execution agent, a reflection and diagnosis agent, an evolution module, and a WebGIS visualization module. It forms a closed loop covering natural-language task input, context organization, experience retrieval, GIS tool invocation, controlled spatial code execution, error diagnosis, experience update, map visualization, and later reuse.
 
-The prototype is implemented with Python, GeoPandas, MapLibre GL JS, LangChain DeepSeek, and a lightweight HTTP service. It supports POI search, attribute query, proximity analysis, buffer analysis, overlay analysis, spatial join, nearest-neighbor analysis, DBSCAN clustering, hotspot analysis, statistical summarization, result export, map highlighting, session management, and multi-experience-bank management. Experiments are conducted on local Chengdu restaurant, accommodation, and administrative district data. Four groups of experiments, including baseline comparison, module ablation, memory degradation resistance, and long-context extension, are designed to evaluate task completion rate, tool success rate, code success rate, accuracy, experience reuse, and multi-turn consistency. The results indicate that the ACE mechanism improves the stability and reusability of geospatial agents in complex spatial tasks and provides a feasible implementation path for natural-language-driven geospatial analysis.
+The prototype is implemented with Python, GeoPandas, MapLibre GL JS, LangChain DeepSeek, and a lightweight HTTP service. It supports POI search, attribute query, proximity analysis, buffer analysis, overlay analysis, spatial join, nearest-neighbor analysis, DBSCAN clustering, hotspot analysis, statistical summarization, result export, map highlighting, session management, and multi-experience-bank management. Experiments are conducted on local Chengdu restaurant, accommodation, and administrative district data. Four groups of experiments, including main GeoAI capability evaluation, online adaptation, ACE mechanism ablation, and GeoAI context-collapse stability analysis, are designed to evaluate task completion rate, tool success rate, code success rate, accuracy, experience reuse, multi-turn consistency, and context stability. The results indicate that the ACE mechanism improves the stability and reusability of geospatial agents in complex spatial tasks and provides a feasible implementation path for natural-language-driven geospatial analysis.
 
 **Keywords:** Agentic Context Engineering; Multi-Agent Collaboration; WebGIS; Geospatial Analysis; Experience Library; GeoPandas; Self-evolution
 
@@ -386,7 +386,7 @@ geoai/
 │   ├── export_utils.py         # 图表导出
 │   ├── thesis_evidence.py      # 论文证据汇总
 │   ├── exp1/ ~ exp4/           # 各组实验
-│   └── experiment_outputs/     # 实验输出目录
+│   └── logs/experiments/       # 实验输出目录
 ├── data/                       # 数据存储
 │   ├── geodata/                # GeoJSON 空间数据
 │   ├── experience_libraries/   # 用户创建的经验库
@@ -583,7 +583,7 @@ data/geodata/*.geojson
 - `data/experience_banks.json`：经验库索引。
 - `data/experience_libraries/*.json`：用户创建的经验库。
 - `logs/*.jsonl`：运行日志。
-- `experiments/experiment_outputs/`：实验输出。
+- `logs/experiments/`：实验输出。
 
 ## 4.7 接口设计
 
@@ -859,7 +859,7 @@ GIS 工具执行后通常返回三类内容：
 - 后端服务：本地 HTTP 服务。
 - 地图数据：成都餐饮、住宿服务和行政区 GeoJSON。
 - 模型接口：DeepSeek Chat。
-- 输出目录：`experiments/experiment_outputs/`。
+- 输出目录：`logs/experiments/{run_id}/`。
 
 ## 6.2 实验数据与任务集
 
@@ -874,14 +874,20 @@ GIS 工具执行后通常返回三类内容：
 - 统计汇总。
 - 地图高亮。
 - 用户纠正。
-- 长上下文引用。
+- 上下文锚点引用。
+- Online adaptation 中的新经验迁移。
+- Context collapse 稳定性追踪。
 
 任务集文件：
 
-- `experiments/exp1/exp1_suite.json`
-- `experiments/exp2/exp2_suite.json`
-- `experiments/exp3/exp3_suite.json`
-- `experiments/exp4/exp4_suite.json`
+- `data/experiments/exp1_workbook.json`
+- `data/experiments/exp1_reference_answers.json`
+- `data/experiments/exp2_workbook.json`
+- `data/experiments/exp2_reference_answers.json`
+- `data/experiments/exp3_workbook.json`
+- `data/experiments/exp3_reference_answers.json`
+- `data/experiments/exp4_workbook.json`
+- `data/experiments/exp4_evaluation_config.json`
 
 ### 6.2.1 实验数据来源
 
@@ -909,7 +915,7 @@ GIS 工具执行后通常返回三类内容：
 每组实验运行后输出到：
 
 ```text
-experiments/experiment_outputs/{expX}/{run_name}/
+logs/experiments/{run_id}/
 ```
 
 输出内容包括：
@@ -931,32 +937,36 @@ experiments/experiment_outputs/{expX}/{run_name}/
 | 经验命中率 | 是否检索并使用相关经验 |
 | 错误恢复率 | 错误后是否通过诊断恢复 |
 | 偏好保持率 | 是否保持用户纠正后的偏好 |
-| 上下文污染率 | 长上下文中无关信息干扰程度 |
+| 上下文 token 数 | adaptation 过程中注入上下文的长度变化 |
+| 经验条目数 | 上下文中结构化经验条目的数量 |
+| 重复条目比例 | 经验库中高相似条目的冗余程度 |
+| context collapse 事件数 | 上下文骤降且准确率同步下降的次数 |
 
-## 6.4 实验一：基线对比实验
+## 6.4 实验一：GeoAI 主系统能力评测
 
 ### 6.4.1 实验目的
 
-比较 Base LLM 与 ACE 增强系统在同一 GIS 任务集上的表现，验证 ACE 是否能提升整体稳定性。
+比较 Base Agent、RAG Agent 与 ACE Agent 在同一 GIS 任务集上的表现，验证 ACE 是否能提升整体任务完成率、工具调用正确性、经验复用和多轮链路稳定性。
 
 ### 6.4.2 实验设计
 
-设置两组系统：
+设置三组系统：
 
-- Base LLM：不使用完整 ACE 经验闭环。
-- ACE：启用经验库、上下文记忆、Critic 错误诊断和 Evolution 经验演化。
+- Base Agent：复用 GIS 工具和受控代码执行能力，但不使用经验检索、经验写入和上下文记忆。
+- RAG Agent：使用预置静态经验库进行检索，能解决已知错误模式，但不会把本轮失败诊断写成新经验。
+- ACE Agent：启用 Critic 诊断、Evolution 经验沉淀、经验检索、上下文记忆和工具/代码执行闭环。
 
 实验流程：
 
-1. 读取 `experiments/exp1/exp1_suite.json` 中的任务集。
-2. Base LLM 和 ACE 分别执行同一批任务。
+1. 读取 `data/experiments/exp1_workbook.json` 与 `data/experiments/exp1_reference_answers.json`。
+2. Base、RAG 和 ACE 分别执行同一批任务。
 3. 记录每个任务的工具调用、代码执行、错误、回答和高亮结果。
 4. 汇总任务完成率、工具成功率、代码成功率、准确率和错误率。
-5. 将结果写入 `experiments/experiment_outputs/exp1/`。
+5. 将结果写入 `logs/experiments/{run_id}/`。
 
 ### 6.4.3 结果分析写法
 
-应从任务完成率、工具成功率、代码成功率、准确率和错误率分析 ACE 的提升，并结合典型任务说明经验库和诊断机制如何减少重复错误。
+应从任务完成率、工具成功率、代码成功率、准确率和错误率分析 ACE 的提升，并结合典型任务说明静态 RAG 与可演化 ACE 的差异来源。
 
 建议图表：
 
@@ -965,77 +975,74 @@ experiments/experiment_outputs/{expX}/{run_name}/
 - 能力雷达图。
 - 任务类型热力图。
 
-## 6.5 实验二：模块消融实验
+## 6.5 实验二：Online Adaptation 在线适应实验
 
 ### 6.5.1 实验目的
 
-验证 CriticAgent、EvolutionAgent、Experience Library 和 Context Memory 等模块对系统性能的贡献。
+验证 ACE 在连续在线适应任务中是否能利用执行反馈形成新经验，并在后续任务中迁移；同时比较静态 RAG 在面对新错误模式时的局限。
 
 ### 6.5.2 实验设计
 
-比较以下变体：
+实验包含 3 个 batch，共 90 个展开任务：
 
-- Full ACE。
-- w/o CriticAgent。
-- w/o EvolutionAgent。
-- w/o Experience Library。
-- w/o Context Memory。
+- Batch 1：静态经验收益，RAG 与 ACE 共享初始经验库，BASE 无经验。
+- Batch 2：投放静态 RAG 库没有的新错误模式，观察 ACE 是否能在线生成新经验。
+- Batch 3：最终迁移小测，主要复测新增经验，避免 RAG/BASE 因简单题同步上涨。
 
-每个变体控制一个模块失效，其他执行流程保持一致。实验任务重点选择对模块敏感的场景，例如 CRS 风险、字段风险、用户纠正、跨轮引用和错误恢复任务。
+每一步采用 online adaptation 协议：先用当前上下文完成任务，再基于执行结果、错误、空结果或校验反馈更新上下文。
 
 ### 6.5.3 结果分析写法
 
-重点说明不同模块影响的任务类型不同：
+重点分析三类趋势：ACE 随批次提升是否明显，RAG 在新增错误模式上是否停滞，ACE 新增经验在最终迁移小测中的命中率和收益是否稳定。
 
-- 经验库主要影响 CRS、字段、参数和输出策略复用。
-- CriticAgent 主要影响错误定位和修复。
-- EvolutionAgent 主要影响经验写回。
-- Context Memory 主要影响用户偏好和跨轮引用。
-
-## 6.6 实验三：记忆抗退化实验
+## 6.6 实验三：ACE 机制消融实验
 
 ### 6.6.1 实验目的
 
-验证系统在多轮 GIS 对话中是否能保持历史 POI、用户偏好和空间分析经验。
+验证 ACE 中不同机制对 GeoAI 任务性能和上下文稳定性的贡献，包括单模块移除、无 Reflector 精炼、append-only memory 和 monolithic rewrite。
 
 ### 6.6.2 实验设计
 
-构造包含信息注入、干扰任务和延迟召回的多轮任务序列，比较 Base 与 ACE 的记忆召回和偏好保持能力。
+实验设置 27 个 GeoAI 高难度任务，任务覆盖 CRS 距离、字段核对、空结果恢复、上下文锚点、边界谓词、导出元数据、时间字段、跨图层校验和多指标排名。比较以下消融组：
 
-任务序列可设计为：
+- full_ace。
+- without_context_manager。
+- without_experience_retrieval。
+- without_code_agent。
+- without_critic。
+- without_evolution。
+- without_reflector_refinement。
+- append_only_memory。
+- monolithic_rewrite。
 
-```text
-第 1 轮：记住某个 POI 或高亮偏好
-第 2-8 轮：执行无关查询、统计和分析任务
-第 9 轮：引用前面记录过的 POI 或偏好
-第 10 轮：要求系统按之前偏好重新完成统计高亮任务
-```
-
-该实验重点验证 `ContextManager` 和 `ExperienceLibrary` 是否能把短期会话信息转成可复用结构化记忆。
+题干尽量保持自然，不直接暴露模块名；模块依赖由评测侧 `requires_modules` 标注。
 
 ### 6.6.3 结果分析写法
 
-重点分析 ACE 如何把临时对话内容转化为结构化记忆，从而降低记忆退化。
+重点分析不同机制影响的能力类型：ContextManager 影响锚点和偏好保持，Experience Retrieval 影响 CRS/字段/空结果策略复用，CodeAgent 影响复杂空间计算，Critic 和 Evolution 影响错误诊断与经验写回，Reflector 与 grow-and-refine 影响经验质量和上下文稳定性。
 
-## 6.7 实验四：长上下文扩展实验
+## 6.7 实验四：GeoAI Context Collapse 稳定性实验
 
 ### 6.7.1 实验目的
 
-验证 ACE 压缩上下文在长任务序列中的鲁棒性。
+验证连续 online adaptation 中不同上下文更新方式是否会出现 context collapse，并检验 ACE grow-and-refine 是否能在保留有效经验的同时控制冗余和延迟。
 
 ### 6.7.2 实验设计
 
-比较：
+实验构造 100 步 GeoAI 连续任务，覆盖字段核对、CRS 距离、空结果恢复、GeoPandas 密度计算、边界谓词、时间字段、跨图层校验、导出元数据、上下文锚点和多指标排名。比较：
 
-- Base full context。
-- Base truncated context。
-- ACE compressed context。
+- base_no_adaptation。
+- rag_static_memory。
+- dynamic_cheatsheet。
+- append_only_memory。
+- monolithic_rewrite。
+- ace_grow_and_refine。
 
-实验构造较长任务序列，并逐步增加历史上下文长度。Base full context 保留完整历史，Base truncated context 截断早期历史，ACE compressed context 保留结构化摘要、偏好和经验。对比三者在跨轮引用、复杂任务准确率和上下文污染方面的差异。
+每个 step 先预测再更新，记录 rolling accuracy、context token 数、经验条目数、重复率、经验命中率、适应延迟、token 成本和 collapse 事件数。
 
 ### 6.7.3 结果分析写法
 
-应说明简单保留全部上下文可能引入污染，简单截断会丢失早期关键信息，而 ACE 通过结构化经验保留关键规则。
+应说明整体重写可能把长上下文压缩成短摘要并丢失细节，append-only 会导致冗余和成本上升，而 ACE 通过增量 delta、去重和 grow-and-refine 保留关键规则并避免 collapse。若 token 温和下降但准确率稳定且重复率下降，应判定为正常 refinement event。
 
 ## 6.8 实验结果图表导出
 
@@ -1044,9 +1051,9 @@ experiments/experiment_outputs/{expX}/{run_name}/
 | 实验 | 建议图表 |
 |---|---|
 | exp1 | 指标对比柱状图、响应时间图、能力雷达图、任务热力图 |
-| exp2 | 消融指标图、模块贡献图、错误分析图 |
-| exp3 | 记忆衰减曲线、系统能力对比、上下文污染图 |
-| exp4 | 长序列准确率曲线、跨轮引用图、上下文压缩与污染图 |
+| exp2 | batch 成功率曲线、经验命中率曲线、新错误模式迁移图 |
+| exp3 | 消融指标图、模块贡献图、错误类型分析图 |
+| exp4 | rolling accuracy 曲线、context token 曲线、重复率/延迟/collapse 事件图 |
 
 ## 6.9 本章小结
 
@@ -1178,7 +1185,7 @@ experiments/experiment_outputs/{expX}/{run_name}/
 
 ## 附录 B：实验任务集样例
 
-摘录 `exp1_suite.json` 到 `exp4_suite.json` 中的典型任务。
+摘录 `data/experiments/exp1_workbook.json` 到 `data/experiments/exp4_workbook.json` 中的典型任务。
 
 ## 附录 C：经验库条目样例
 

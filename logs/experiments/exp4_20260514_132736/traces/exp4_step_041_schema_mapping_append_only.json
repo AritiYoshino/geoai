@@ -1,0 +1,92 @@
+{
+  "task_id": "exp4_step_041_schema_mapping",
+  "agent_type": "append_only",
+  "strategy": "append_only",
+  "adaptation_step": 41,
+  "query": "Step 41: 根据不同表格字段别名完成 schema 对齐任务，领域变体为 客户表。",
+  "category": "structured_reasoning",
+  "expected_skill": "schema_mapping",
+  "novelty": "transfer",
+  "expected_tools": [
+    "reasoning",
+    "schema_check"
+  ],
+  "selected_tools": [
+    "reasoning"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 41
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "schema_mapping-001",
+        "schema_mapping-011",
+        "schema_mapping-021"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "schema_mapping-041"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 12613
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [
+    "context_stability_miss:schema_mapping"
+  ],
+  "error_signature": [
+    "schema_mapping"
+  ],
+  "critic_diagnosis": "schema_mapping evidence missing after context update",
+  "generated_experience": "schema_mapping-041",
+  "retrieved_experiences": [
+    "schema_mapping-001",
+    "schema_mapping-011",
+    "schema_mapping-021"
+  ],
+  "final_answer": "append_only step=41 skill=schema_mapping accuracy=0.712 context_tokens=12613 retrieved=3 generated=1",
+  "structured_response": {
+    "accuracy": 0.712,
+    "context_token_count": 12613,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "schema_mapping-001",
+      "schema_mapping-011",
+      "schema_mapping-021"
+    ],
+    "generated_experience_ids": [
+      "schema_mapping-041"
+    ]
+  },
+  "validation": {
+    "score": 0.712,
+    "success": false,
+    "threshold": 0.72,
+    "missing": [
+      "schema_mapping"
+    ]
+  },
+  "success": false,
+  "metrics": {
+    "turns": 3.2,
+    "runtime": 0.12,
+    "execution_success": false,
+    "result_correctness": 0.712,
+    "context_token_count": 12613,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 46,
+    "compression_event": ""
+  }
+}

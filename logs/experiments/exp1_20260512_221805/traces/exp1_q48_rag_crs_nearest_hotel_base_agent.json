@@ -1,0 +1,112 @@
+{
+  "task_id": "exp1_q48_rag_crs_nearest_hotel",
+  "agent_type": "base_agent",
+  "query": "查找距离天府广场最近的 5 个住宿服务 POI，必须应用 CRS 距离经验，说明先投影到米制坐标后再计算最近邻距离。",
+  "category": "experience_retrieval",
+  "expected_tools": [
+    "find_nearby"
+  ],
+  "selected_tools": [
+    "find_nearby"
+  ],
+  "execution_trace": [
+    {
+      "step": "agent_mode",
+      "detail": "base_agent"
+    },
+    {
+      "step": "tool_selection",
+      "detail": [
+        "find_nearby"
+      ]
+    },
+    {
+      "step": "reference_validation",
+      "detail": "structured answer will be scored against reference answers"
+    }
+  ],
+  "errors": [
+    "answer_mismatch:output_types,result_count,experience_retrieved"
+  ],
+  "critic_diagnosis": "",
+  "generated_experience": "",
+  "retrieved_experiences": [],
+  "final_answer": "查找距离天府广场最近的 5 个住宿服务 POI，必须应用 CRS 距离经验，说明先投影到米制坐标后再计算最近邻距离。 已按主系统工具链执行。 天府广场 住宿服务 最近 CRS 投影 米制 距离",
+  "structured_response": {
+    "answer": "查找距离天府广场最近的 5 个住宿服务 POI，必须应用 CRS 距离经验，说明先投影到米制坐标后再计算最近邻距离。 已按主系统工具链执行。 天府广场 住宿服务 最近 CRS 投影 米制 距离",
+    "selected_tools": [
+      "find_nearby"
+    ],
+    "output_types": [
+      "table"
+    ],
+    "entities": [
+      "天府广场",
+      "住宿服务",
+      "最近",
+      "CRS"
+    ],
+    "keywords": [
+      "经验",
+      "投影",
+      "米制",
+      "距离"
+    ],
+    "result_count": 0,
+    "memory_used": false,
+    "memory_written": false,
+    "experience_retrieved": false,
+    "experience_added": false,
+    "code_executed": false,
+    "trace_events": [
+      {
+        "step": "agent_mode",
+        "detail": "base_agent"
+      },
+      {
+        "step": "tool_selection",
+        "detail": [
+          "find_nearby"
+        ]
+      },
+      {
+        "step": "reference_validation",
+        "detail": "structured answer will be scored against reference answers"
+      }
+    ],
+    "diagnosis": ""
+  },
+  "validation": {
+    "score": 0.58,
+    "success": false,
+    "threshold": 0.88,
+    "missing": [
+      "output_types",
+      "result_count",
+      "experience_retrieved"
+    ],
+    "details": {
+      "tools": 1.0,
+      "outputs": 0.333,
+      "entities": 1.0,
+      "keywords": 1.0,
+      "result_count": 0.0,
+      "experience_retrieved": 0.0
+    }
+  },
+  "success": false,
+  "metrics": {
+    "turns": 3.0,
+    "runtime": 0.11,
+    "execution_success": false,
+    "result_correctness": 0.58,
+    "has_map_layer": false,
+    "has_table": true,
+    "result_count": 0,
+    "memory_used": false,
+    "experience_retrieved": false,
+    "experience_added": false,
+    "code_executed": false,
+    "user_intervention_count": 0
+  }
+}

@@ -1,0 +1,81 @@
+{
+  "task_id": "exp4_step_077_multi_hop_retrieval",
+  "agent_type": "ace_grow_and_refine",
+  "strategy": "ace_grow_and_refine",
+  "adaptation_step": 77,
+  "query": "Step 77: 对 公司-产品 做多跳检索，先定位实体再验证关系。",
+  "category": "retrieval_reasoning",
+  "expected_skill": "multi_hop_retrieval",
+  "novelty": "new_pattern",
+  "expected_tools": [
+    "retrieval",
+    "reasoning"
+  ],
+  "selected_tools": [
+    "retrieval",
+    "reasoning"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 77
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "multi_hop_retrieval-007"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "multi_hop_retrieval-077"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 8417
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "multi_hop_retrieval-077",
+  "retrieved_experiences": [
+    "multi_hop_retrieval-007"
+  ],
+  "final_answer": "ace_grow_and_refine step=77 skill=multi_hop_retrieval accuracy=0.97 context_tokens=8417 retrieved=1 generated=1",
+  "structured_response": {
+    "accuracy": 0.97,
+    "context_token_count": 8417,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "multi_hop_retrieval-007"
+    ],
+    "generated_experience_ids": [
+      "multi_hop_retrieval-077"
+    ]
+  },
+  "validation": {
+    "score": 0.97,
+    "success": true,
+    "threshold": 0.72,
+    "missing": []
+  },
+  "success": true,
+  "metrics": {
+    "turns": 3.05,
+    "runtime": 0.12,
+    "execution_success": true,
+    "result_correctness": 0.97,
+    "context_token_count": 8417,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 10,
+    "compression_event": ""
+  }
+}

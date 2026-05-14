@@ -1,0 +1,303 @@
+{
+  "id": "exp2_workbook_evolution_v2",
+  "name": "实验二：Online Adaptation 在线适应实验",
+  "description": "三批连续在线适应任务，题量扩展到 90 题。Batch 1 验证 RAG/ACE 共享静态经验库相对 BASE 的优势；Batch 2 投放静态 RAG 库没有的新错误模式，只有 ACE 能通过 Evolution 写入并立即迁移；Batch 3 主要复测新增经验，验证 ACE 随批次提升而 RAG/BASE 不随最终小测同步上涨。",
+  "repeat_multiplier": 1,
+  "batches": [
+    {
+      "batch_id": 1,
+      "theme": "静态经验收益：RAG 与 ACE 共享初始经验库，BASE 无经验",
+      "tasks": [
+        {
+          "id": "exp2_b1_easy_search",
+          "category": "poi_search",
+          "query": "搜索名称包含“{keyword}”的{layer} POI，返回地图图层和结果表。",
+          "difficulty": "easy",
+          "capabilities": ["tool_search"],
+          "variants": [
+            {"id": "hotpot_food", "keyword": "火锅", "layer": "餐饮"},
+            {"id": "tea_food", "keyword": "茶饮", "layer": "餐饮"},
+            {"id": "bank_finance", "keyword": "银行", "layer": "金融服务"},
+            {"id": "hotel_stay", "keyword": "酒店", "layer": "住宿服务"}
+          ]
+        },
+        {
+          "id": "exp2_b1_known_crs",
+          "category": "nearby_analysis",
+          "query": "复用 CRS 距离经验，查找{anchor} {distance}米内的{target} POI。",
+          "difficulty": "medium",
+          "capabilities": ["nearby_analysis", "experience_retrieval"],
+          "failure_mode": "crs_distance",
+          "variants": [
+            {"id": "school_food_500", "anchor": "学校", "distance": "500", "target": "餐饮"},
+            {"id": "hospital_food_300", "anchor": "医院", "distance": "300", "target": "餐饮"},
+            {"id": "finance_food_300", "anchor": "金融服务点", "distance": "300", "target": "餐饮"},
+            {"id": "metro_hotel_600", "anchor": "交通设施", "distance": "600", "target": "住宿服务"},
+            {"id": "shopping_life_400", "anchor": "购物中心", "distance": "400", "target": "生活服务"}
+          ]
+        },
+        {
+          "id": "exp2_b1_known_schema",
+          "category": "attribute_query",
+          "query": "复用字段核对经验，在{layer}图层中查询“{keyword}”相关 POI，并输出 schema 校验说明。",
+          "difficulty": "medium",
+          "capabilities": ["schema_following", "experience_retrieval"],
+          "failure_mode": "field_name_mismatch",
+          "variants": [
+            {"id": "food_hotpot", "layer": "餐饮", "keyword": "火锅"},
+            {"id": "medical_emergency", "layer": "医疗", "keyword": "急诊"},
+            {"id": "life_repair", "layer": "生活服务", "keyword": "维修"},
+            {"id": "education_school", "layer": "科教文化", "keyword": "学校"},
+            {"id": "finance_branch", "layer": "金融服务", "keyword": "支行"}
+          ]
+        },
+        {
+          "id": "exp2_b1_known_empty",
+          "category": "poi_search",
+          "query": "复用空结果放宽经验，搜索“{keyword}”相关 POI，若严格检索为空则逐级放宽。",
+          "difficulty": "medium",
+          "capabilities": ["tool_search", "empty_result_repair", "experience_retrieval"],
+          "failure_mode": "empty_result",
+          "variants": [
+            {"id": "child_emergency", "keyword": "24小时儿童急诊"},
+            {"id": "night_pharmacy", "keyword": "夜间药房"},
+            {"id": "wheelchair_hotel", "keyword": "无障碍酒店"},
+            {"id": "elderly_service", "keyword": "养老照护中心"}
+          ]
+        }
+      ]
+    },
+    {
+      "batch_id": 2,
+      "theme": "连续学习：ACE 生成新经验，RAG 静态库无法更新",
+      "tasks": [
+        {
+          "id": "exp2_b2_static_crs_refresh",
+          "category": "nearby_analysis",
+          "query": "复用 CRS 距离经验，查找{anchor} {distance}米内的{target} POI。",
+          "difficulty": "medium",
+          "capabilities": ["nearby_analysis", "experience_retrieval"],
+          "failure_mode": "crs_distance",
+          "variants": [
+            {"id": "park_food_300", "anchor": "风景点", "distance": "300", "target": "餐饮"},
+            {"id": "sports_medical_500", "anchor": "体育设施", "distance": "500", "target": "医疗"},
+            {"id": "gov_life_400", "anchor": "政府机构", "distance": "400", "target": "生活服务"}
+          ]
+        },
+        {
+          "id": "exp2_b2_static_schema_refresh",
+          "category": "attribute_query",
+          "query": "复用字段核对经验，在{layer}图层中查询“{keyword}”相关 POI。",
+          "difficulty": "medium",
+          "capabilities": ["schema_following", "experience_retrieval"],
+          "failure_mode": "field_name_mismatch",
+          "variants": [
+            {"id": "company_park", "layer": "公司", "keyword": "园区"},
+            {"id": "shopping_market", "layer": "购物", "keyword": "市场"},
+            {"id": "hotel_chain", "layer": "住宿服务", "keyword": "连锁"}
+          ]
+        },
+        {
+          "id": "exp2_b2_learn_temporal_seed",
+          "category": "temporal_query",
+          "query": "学习时间字段经验：筛选近 3 个月新增生活服务 POI，并说明字段格式校验。",
+          "difficulty": "hard",
+          "capabilities": ["temporal_query", "experience_add"],
+          "failure_mode": "temporal_query"
+        },
+        {
+          "id": "exp2_b2_temporal_transfer",
+          "category": "temporal_query",
+          "query": "迁移刚学习的时间字段经验：查询近{period}新增{layer} POI，并校验日期格式。",
+          "difficulty": "hard",
+          "capabilities": ["temporal_query", "experience_retrieval"],
+          "failure_mode": "temporal_query",
+          "variants": [
+            {"id": "halfyear_education", "period": "半年", "layer": "科教文化"},
+            {"id": "quarter_medical", "period": "一季度", "layer": "医疗"},
+            {"id": "month_company", "period": "一个月", "layer": "公司"},
+            {"id": "year_shopping", "period": "一年", "layer": "购物"},
+            {"id": "ninety_life", "period": "90天", "layer": "生活服务"}
+          ]
+        },
+        {
+          "id": "exp2_b2_learn_ranking_seed",
+          "category": "ranking",
+          "query": "学习多指标排名经验：综合医疗 POI 数量和面积归一化得分，输出 Top 5 行政区。",
+          "difficulty": "hard",
+          "capabilities": ["execute_code", "experience_add"],
+          "failure_mode": "multi_criteria_rank"
+        },
+        {
+          "id": "exp2_b2_ranking_transfer",
+          "category": "ranking",
+          "query": "迁移多指标排名经验：综合{metric_a}、{metric_b}和面积归一化得分，输出 Top 5 行政区。",
+          "difficulty": "hard",
+          "capabilities": ["execute_code", "experience_retrieval"],
+          "failure_mode": "multi_criteria_rank",
+          "variants": [
+            {"id": "food_medical", "metric_a": "餐饮 POI 数量", "metric_b": "医疗 POI 数量"},
+            {"id": "shopping_life", "metric_a": "购物 POI 数量", "metric_b": "生活服务 POI 数量"},
+            {"id": "education_company", "metric_a": "科教文化 POI 数量", "metric_b": "公司 POI 数量"},
+            {"id": "finance_hotel", "metric_a": "金融服务 POI 数量", "metric_b": "住宿服务 POI 数量"},
+            {"id": "sports_scenic", "metric_a": "体育 POI 数量", "metric_b": "风景 POI 数量"}
+          ]
+        },
+        {
+          "id": "exp2_b2_learn_validation_seed",
+          "category": "validation",
+          "query": "学习跨图层校验经验：检查餐饮 POI 是否落在行政区外，并列出异常记录。",
+          "difficulty": "hard",
+          "capabilities": ["spatial_join", "data_validation", "experience_add"],
+          "failure_mode": "cross_layer_validation"
+        },
+        {
+          "id": "exp2_b2_validation_transfer",
+          "category": "validation",
+          "query": "迁移跨图层校验经验：检查{layer} POI 与行政区空间一致性，并列出异常记录。",
+          "difficulty": "hard",
+          "capabilities": ["spatial_join", "data_validation", "experience_retrieval"],
+          "failure_mode": "cross_layer_validation",
+          "variants": [
+            {"id": "hotel_boundary", "layer": "住宿服务"},
+            {"id": "company_boundary", "layer": "公司"},
+            {"id": "medical_boundary", "layer": "医疗"},
+            {"id": "finance_boundary", "layer": "金融服务"},
+            {"id": "shopping_boundary", "layer": "购物"}
+          ]
+        },
+        {
+          "id": "exp2_b2_learn_adaptive_buffer_seed",
+          "category": "buffer_analysis",
+          "query": "学习动态缓冲经验：按学校、医院、购物中心三类 POI 使用不同缓冲半径。",
+          "difficulty": "hard",
+          "capabilities": ["nearby_analysis", "buffer_analysis", "experience_add"],
+          "failure_mode": "adaptive_buffer"
+        },
+        {
+          "id": "exp2_b2_adaptive_buffer_transfer",
+          "category": "buffer_analysis",
+          "query": "迁移动态缓冲经验：按{type_a}、{type_b}、{type_c}三类 POI 使用不同缓冲半径并统计覆盖。",
+          "difficulty": "hard",
+          "capabilities": ["nearby_analysis", "buffer_analysis", "experience_retrieval"],
+          "failure_mode": "adaptive_buffer",
+          "variants": [
+            {"id": "school_hospital_shopping", "type_a": "学校", "type_b": "医院", "type_c": "购物中心"},
+            {"id": "finance_food_life", "type_a": "金融服务点", "type_b": "餐饮", "type_c": "生活服务"},
+            {"id": "hotel_scenic_transport", "type_a": "住宿服务", "type_b": "风景点", "type_c": "交通设施"},
+            {"id": "gov_company_education", "type_a": "政府机构", "type_b": "公司", "type_c": "科教文化"},
+            {"id": "sports_medical_food", "type_a": "体育设施", "type_b": "医疗", "type_c": "餐饮"}
+          ]
+        }
+      ]
+    },
+    {
+      "batch_id": 3,
+      "theme": "最终迁移小测：主要考 ACE 新增经验，避免 RAG/BASE 因简单题上涨",
+      "tasks": [
+        {
+          "id": "exp2_b3_known_static_crs",
+          "category": "nearby_analysis",
+          "query": "复用静态 CRS 距离经验，查找{anchor} {distance}米内的{target} POI。",
+          "difficulty": "medium",
+          "capabilities": ["nearby_analysis", "experience_retrieval"],
+          "failure_mode": "crs_distance",
+          "variants": [
+            {"id": "education_food", "anchor": "科教文化点", "distance": "300", "target": "餐饮"},
+            {"id": "company_life", "anchor": "公司", "distance": "500", "target": "生活服务"},
+            {"id": "hotel_food", "anchor": "住宿服务", "distance": "400", "target": "餐饮"}
+          ]
+        },
+        {
+          "id": "exp2_b3_known_static_schema",
+          "category": "attribute_query",
+          "query": "复用静态字段核对经验，在{layer}图层中查询“{keyword}”相关 POI。",
+          "difficulty": "medium",
+          "capabilities": ["schema_following", "experience_retrieval"],
+          "failure_mode": "field_name_mismatch",
+          "variants": [
+            {"id": "food_bbq", "layer": "餐饮", "keyword": "烧烤"},
+            {"id": "medical_clinic", "layer": "医疗", "keyword": "诊所"},
+            {"id": "finance_atm", "layer": "金融服务", "keyword": "ATM"}
+          ]
+        },
+        {
+          "id": "exp2_b3_final_temporal",
+          "category": "temporal_query",
+          "query": "最终复用时间字段经验：查询近{period}新增{layer} POI，必须说明日期解析和范围过滤。",
+          "difficulty": "hard",
+          "capabilities": ["temporal_query", "experience_retrieval"],
+          "failure_mode": "temporal_query",
+          "variants": [
+            {"id": "v01_life_30", "period": "30天", "layer": "生活服务"},
+            {"id": "v02_edu_60", "period": "60天", "layer": "科教文化"},
+            {"id": "v03_medical_90", "period": "90天", "layer": "医疗"},
+            {"id": "v04_company_half", "period": "半年", "layer": "公司"},
+            {"id": "v05_shop_year", "period": "一年", "layer": "购物"},
+            {"id": "v06_finance_quarter", "period": "一季度", "layer": "金融服务"},
+            {"id": "v07_hotel_month", "period": "一个月", "layer": "住宿服务"},
+            {"id": "v08_sports_half", "period": "半年", "layer": "体育"},
+            {"id": "v09_scenic_year", "period": "一年", "layer": "风景"}
+          ]
+        },
+        {
+          "id": "exp2_b3_final_ranking",
+          "category": "ranking",
+          "query": "最终复用多指标排名经验：综合{metric_a}、{metric_b}、{metric_c}并归一化，输出 Top 5 行政区。",
+          "difficulty": "hard",
+          "capabilities": ["execute_code", "experience_retrieval"],
+          "failure_mode": "multi_criteria_rank",
+          "variants": [
+            {"id": "v01_med_food_life", "metric_a": "医疗 POI 数量", "metric_b": "餐饮 POI 数量", "metric_c": "生活服务 POI 数量"},
+            {"id": "v02_finance_company_shop", "metric_a": "金融服务 POI 数量", "metric_b": "公司 POI 数量", "metric_c": "购物 POI 数量"},
+            {"id": "v03_edu_sports_scenic", "metric_a": "科教文化 POI 数量", "metric_b": "体育 POI 数量", "metric_c": "风景 POI 数量"},
+            {"id": "v04_hotel_food_transport", "metric_a": "住宿服务 POI 数量", "metric_b": "餐饮 POI 数量", "metric_c": "交通设施 POI 数量"},
+            {"id": "v05_med_edu_company", "metric_a": "医疗 POI 数量", "metric_b": "科教文化 POI 数量", "metric_c": "公司 POI 数量"},
+            {"id": "v06_shop_life_food", "metric_a": "购物 POI 数量", "metric_b": "生活服务 POI 数量", "metric_c": "餐饮 POI 数量"},
+            {"id": "v07_finance_hotel_company", "metric_a": "金融服务 POI 数量", "metric_b": "住宿服务 POI 数量", "metric_c": "公司 POI 数量"},
+            {"id": "v08_sports_food_life", "metric_a": "体育 POI 数量", "metric_b": "餐饮 POI 数量", "metric_c": "生活服务 POI 数量"},
+            {"id": "v09_scenic_hotel_shop", "metric_a": "风景 POI 数量", "metric_b": "住宿服务 POI 数量", "metric_c": "购物 POI 数量"}
+          ]
+        },
+        {
+          "id": "exp2_b3_final_validation",
+          "category": "validation",
+          "query": "最终复用跨图层校验经验：检查{layer} POI 与行政区边界空间一致性，并输出异常表。",
+          "difficulty": "hard",
+          "capabilities": ["spatial_join", "data_validation", "experience_retrieval"],
+          "failure_mode": "cross_layer_validation",
+          "variants": [
+            {"id": "v01_food", "layer": "餐饮"},
+            {"id": "v02_hotel", "layer": "住宿服务"},
+            {"id": "v03_company", "layer": "公司"},
+            {"id": "v04_medical", "layer": "医疗"},
+            {"id": "v05_finance", "layer": "金融服务"},
+            {"id": "v06_shopping", "layer": "购物"},
+            {"id": "v07_life", "layer": "生活服务"},
+            {"id": "v08_education", "layer": "科教文化"},
+            {"id": "v09_sports", "layer": "体育"}
+          ]
+        },
+        {
+          "id": "exp2_b3_final_adaptive_buffer",
+          "category": "buffer_analysis",
+          "query": "最终复用动态缓冲经验：按{type_a}、{type_b}、{type_c}三类 POI 使用分级缓冲并统计覆盖。",
+          "difficulty": "hard",
+          "capabilities": ["nearby_analysis", "buffer_analysis", "experience_retrieval"],
+          "failure_mode": "adaptive_buffer",
+          "variants": [
+            {"id": "v01_school_med_shop", "type_a": "学校", "type_b": "医院", "type_c": "购物中心"},
+            {"id": "v02_finance_food_life", "type_a": "金融服务点", "type_b": "餐饮", "type_c": "生活服务"},
+            {"id": "v03_hotel_scenic_transport", "type_a": "住宿服务", "type_b": "风景点", "type_c": "交通设施"},
+            {"id": "v04_gov_company_edu", "type_a": "政府机构", "type_b": "公司", "type_c": "科教文化"},
+            {"id": "v05_sports_med_food", "type_a": "体育设施", "type_b": "医疗", "type_c": "餐饮"},
+            {"id": "v06_shop_hotel_life", "type_a": "购物中心", "type_b": "住宿服务", "type_c": "生活服务"},
+            {"id": "v07_edu_finance_food", "type_a": "科教文化", "type_b": "金融服务点", "type_c": "餐饮"},
+            {"id": "v08_company_transport_med", "type_a": "公司", "type_b": "交通设施", "type_c": "医疗"},
+            {"id": "v09_scenic_shop_hotel", "type_a": "风景点", "type_b": "购物中心", "type_c": "住宿服务"}
+          ]
+        }
+      ]
+    }
+  ]
+}

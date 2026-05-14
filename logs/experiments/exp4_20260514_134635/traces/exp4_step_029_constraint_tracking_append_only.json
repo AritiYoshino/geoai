@@ -1,0 +1,93 @@
+{
+  "task_id": "exp4_step_029_constraint_tracking",
+  "agent_type": "append_only",
+  "strategy": "append_only",
+  "adaptation_step": 29,
+  "query": "Step 29: 在 旅行计划 规划中持续追踪硬约束和软约束，避免后续步骤遗忘。",
+  "category": "planning",
+  "expected_skill": "constraint_tracking",
+  "novelty": "transfer",
+  "expected_tools": [
+    "reasoning",
+    "constraint_check"
+  ],
+  "selected_tools": [
+    "reasoning"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 29
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "constraint_tracking-009",
+        "constraint_tracking-019"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "constraint_tracking-029"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 8590
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [
+    "context_stability_miss:constraint_tracking"
+  ],
+  "error_signature": [
+    "constraint_tracking"
+  ],
+  "critic_diagnosis": "constraint_tracking evidence missing after context update",
+  "generated_experience": "constraint_tracking-029",
+  "retrieved_experiences": [
+    "constraint_tracking-009",
+    "constraint_tracking-019"
+  ],
+  "final_answer": "append_only step=29 skill=constraint_tracking accuracy=0.688 context_tokens=8590 retrieved=2 generated=1",
+  "structured_response": {
+    "accuracy": 0.688,
+    "context_token_count": 8590,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "constraint_tracking-009",
+      "constraint_tracking-019"
+    ],
+    "generated_experience_ids": [
+      "constraint_tracking-029"
+    ]
+  },
+  "validation": {
+    "score": 0.688,
+    "success": false,
+    "threshold": 0.72,
+    "missing": [
+      "constraint_tracking"
+    ],
+    "details": {
+      "tools": 1.0,
+      "accuracy": 0.688
+    }
+  },
+  "success": false,
+  "metrics": {
+    "turns": 3.2,
+    "runtime": 0.12,
+    "execution_success": false,
+    "result_correctness": 0.688,
+    "context_token_count": 8590,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 33,
+    "compression_event": ""
+  }
+}

@@ -1,0 +1,125 @@
+{
+  "task_id": "exp4_q01_learn_crs",
+  "agent_type": "monolithic_rewrite",
+  "strategy": "monolithic_rewrite",
+  "query": "学习 CRS 距离经验：查找学校 500 米内餐饮 POI，诊断经纬度距离错误并写入经验库。",
+  "category": "nearby_analysis",
+  "stage": "early_learn",
+  "expected_tools": [
+    "find_nearby"
+  ],
+  "selected_tools": [
+    "find_nearby"
+  ],
+  "execution_trace": [
+    {
+      "step": "strategy",
+      "detail": "monolithic_rewrite"
+    },
+    {
+      "step": "tool_selection",
+      "detail": [
+        "find_nearby"
+      ]
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": []
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "exp4-crs-distance"
+      ]
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "experience_stability_update",
+  "generated_experience": "exp4-crs-distance",
+  "retrieved_experiences": [],
+  "final_answer": "学习 CRS 距离经验：查找学校 500 米内餐饮 POI，诊断经纬度距离错误并写入经验库。 monolithic_rewrite exp4-crs-distance 学校 餐饮 CRS 500 诊断 经验库 投影 米制",
+  "structured_response": {
+    "answer": "学习 CRS 距离经验：查找学校 500 米内餐饮 POI，诊断经纬度距离错误并写入经验库。 monolithic_rewrite exp4-crs-distance 学校 餐饮 CRS 500 诊断 经验库 投影 米制",
+    "selected_tools": [
+      "find_nearby"
+    ],
+    "output_types": [
+      "map_layer",
+      "table",
+      "diagnosis",
+      "explanation"
+    ],
+    "entities": [
+      "学校",
+      "餐饮",
+      "CRS",
+      "500"
+    ],
+    "keywords": [
+      "诊断",
+      "经验库",
+      "投影",
+      "米制"
+    ],
+    "result_count": 1,
+    "retrieved_experience_ids": [],
+    "generated_experience_ids": [
+      "exp4-crs-distance"
+    ],
+    "experience_retrieved": false,
+    "experience_added": true,
+    "code_executed": false,
+    "diagnosis": "experience_stability_update",
+    "trace_events": [
+      {
+        "step": "strategy",
+        "detail": "monolithic_rewrite"
+      },
+      {
+        "step": "tool_selection",
+        "detail": [
+          "find_nearby"
+        ]
+      },
+      {
+        "step": "experience_retrieval",
+        "detail": []
+      },
+      {
+        "step": "experience_update",
+        "detail": [
+          "exp4-crs-distance"
+        ]
+      }
+    ]
+  },
+  "validation": {
+    "score": 1.0,
+    "success": true,
+    "threshold": 0.84,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "outputs": 1.0,
+      "entities": 1.0,
+      "keywords": 1.0,
+      "result_count": 1.0,
+      "experience_added": 1.0
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 3.55,
+    "runtime": 0.125,
+    "execution_success": true,
+    "result_correctness": 1.0,
+    "has_map_layer": true,
+    "has_table": true,
+    "result_count": 1,
+    "experience_retrieved": false,
+    "experience_added": true,
+    "code_executed": false,
+    "library_size": 1
+  }
+}

@@ -1,0 +1,96 @@
+{
+  "task_id": "exp4_step_043_empty_result_recovery",
+  "agent_type": "append_only",
+  "strategy": "append_only",
+  "adaptation_step": 43,
+  "query": "Step 43: 检索 政策条款 时若精确匹配为空，逐步放宽条件并解释回退策略。",
+  "category": "retrieval_reasoning",
+  "expected_skill": "empty_result_recovery",
+  "novelty": "transfer",
+  "expected_tools": [
+    "retrieval",
+    "reasoning"
+  ],
+  "selected_tools": [
+    "retrieval"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 43
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "empty_result_recovery-003",
+        "empty_result_recovery-013",
+        "empty_result_recovery-023"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "empty_result_recovery-043"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 13334
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [
+    "context_stability_miss:empty_result_recovery"
+  ],
+  "error_signature": [
+    "empty_result_recovery"
+  ],
+  "critic_diagnosis": "empty_result_recovery evidence missing after context update",
+  "generated_experience": "empty_result_recovery-043",
+  "retrieved_experiences": [
+    "empty_result_recovery-003",
+    "empty_result_recovery-013",
+    "empty_result_recovery-023"
+  ],
+  "final_answer": "append_only step=43 skill=empty_result_recovery accuracy=0.716 context_tokens=13334 retrieved=3 generated=1",
+  "structured_response": {
+    "accuracy": 0.716,
+    "context_token_count": 13334,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "empty_result_recovery-003",
+      "empty_result_recovery-013",
+      "empty_result_recovery-023"
+    ],
+    "generated_experience_ids": [
+      "empty_result_recovery-043"
+    ]
+  },
+  "validation": {
+    "score": 0.716,
+    "success": false,
+    "threshold": 0.72,
+    "missing": [
+      "empty_result_recovery"
+    ],
+    "details": {
+      "tools": 1.0,
+      "accuracy": 0.716
+    }
+  },
+  "success": false,
+  "metrics": {
+    "turns": 3.2,
+    "runtime": 0.12,
+    "execution_success": false,
+    "result_correctness": 0.716,
+    "context_token_count": 13334,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 49,
+    "compression_event": ""
+  }
+}

@@ -1,0 +1,85 @@
+{
+  "task_id": "exp4_step_025_evaluation_rubric",
+  "agent_type": "dynamic_cheatsheet",
+  "strategy": "dynamic_cheatsheet",
+  "adaptation_step": 25,
+  "query": "Step 25: 按历史评分标准评估 摘要 答案，保持判分口径一致。",
+  "category": "evaluation",
+  "expected_skill": "evaluation_rubric",
+  "novelty": "transfer",
+  "expected_tools": [
+    "reasoning",
+    "rubric_check"
+  ],
+  "selected_tools": [
+    "reasoning",
+    "rubric_check"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 25
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "evaluation_rubric-015"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "evaluation_rubric-025"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 4903
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "evaluation_rubric-025",
+  "retrieved_experiences": [
+    "evaluation_rubric-015"
+  ],
+  "final_answer": "dynamic_cheatsheet step=25 skill=evaluation_rubric accuracy=0.815 context_tokens=4903 retrieved=1 generated=1",
+  "structured_response": {
+    "accuracy": 0.815,
+    "context_token_count": 4903,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "evaluation_rubric-015"
+    ],
+    "generated_experience_ids": [
+      "evaluation_rubric-025"
+    ]
+  },
+  "validation": {
+    "score": 0.815,
+    "success": true,
+    "threshold": 0.72,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "accuracy": 0.815
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 3.0,
+    "runtime": 0.12,
+    "execution_success": true,
+    "result_correctness": 0.815,
+    "context_token_count": 4903,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 11,
+    "compression_event": ""
+  }
+}

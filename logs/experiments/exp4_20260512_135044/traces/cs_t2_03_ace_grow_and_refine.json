@@ -1,0 +1,51 @@
+{
+  "task_id": "cs_t2_03",
+  "agent_type": "ace_grow_and_refine",
+  "query": "稳定性任务：字段 name/type/category 不统一时查询 医院",
+  "category": "attribute_query",
+  "expected_tools": [
+    "query_poi_by_conditions"
+  ],
+  "selected_tools": [
+    "query_poi_by_conditions"
+  ],
+  "execution_trace": [
+    {
+      "step": "intent",
+      "detail": "attribute_query"
+    },
+    {
+      "step": "tool_selection",
+      "detail": [
+        "query_poi_by_conditions"
+      ]
+    },
+    {
+      "step": "evaluation",
+      "detail": "success"
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "exp:attribute_query:check schema/CRS/result before final answer",
+  "retrieved_experiences": [
+    "crs-check",
+    "field-name-check",
+    "empty-result-relax"
+  ],
+  "final_answer": "任务完成，已生成可评估结果。",
+  "success": true,
+  "metrics": {
+    "turns": 2.55,
+    "runtime": 1.249,
+    "execution_success": true,
+    "result_correctness": 1.0,
+    "has_map_layer": true,
+    "has_table": true,
+    "result_count": 1,
+    "repair_attempted": false,
+    "repair_success": false,
+    "user_intervention_count": 0
+  }
+}

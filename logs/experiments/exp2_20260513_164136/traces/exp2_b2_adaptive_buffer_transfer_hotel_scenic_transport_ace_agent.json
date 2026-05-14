@@ -1,0 +1,126 @@
+{
+  "task_id": "exp2_b2_adaptive_buffer_transfer_hotel_scenic_transport",
+  "batch_id": 2,
+  "agent_type": "ace_agent",
+  "query": "迁移动态缓冲经验：按住宿服务、风景点、交通设施三类 POI 使用不同缓冲半径并统计覆盖。",
+  "category": "buffer_analysis",
+  "expected_tools": [
+    "find_nearby"
+  ],
+  "selected_tools": [
+    "find_nearby"
+  ],
+  "execution_trace": [
+    {
+      "step": "agent_mode",
+      "detail": "ace_agent"
+    },
+    {
+      "step": "tool_selection",
+      "detail": [
+        "find_nearby"
+      ]
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "exp2-adaptive-buffer"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": []
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "",
+  "retrieved_experiences": [
+    "exp2-adaptive-buffer"
+  ],
+  "final_answer": "迁移动态缓冲经验：按住宿服务、风景点、交通设施三类 POI 使用不同缓冲半径并统计覆盖。 tool_flow_completed reuse exp2-adaptive-buffer buffer POI coverage reuse dynamic_buffer coverage",
+  "structured_response": {
+    "answer": "迁移动态缓冲经验：按住宿服务、风景点、交通设施三类 POI 使用不同缓冲半径并统计覆盖。 tool_flow_completed reuse exp2-adaptive-buffer buffer POI coverage reuse dynamic_buffer coverage",
+    "selected_tools": [
+      "find_nearby"
+    ],
+    "output_types": [
+      "map_layer",
+      "table"
+    ],
+    "entities": [
+      "buffer",
+      "POI",
+      "coverage"
+    ],
+    "keywords": [
+      "reuse",
+      "dynamic_buffer",
+      "coverage"
+    ],
+    "result_count": 1,
+    "retrieved_experience_ids": [
+      "exp2-adaptive-buffer"
+    ],
+    "generated_experience_ids": [],
+    "experience_retrieved": true,
+    "experience_added": false,
+    "memory_used": false,
+    "code_executed": false,
+    "trace_events": [
+      {
+        "step": "agent_mode",
+        "detail": "ace_agent"
+      },
+      {
+        "step": "tool_selection",
+        "detail": [
+          "find_nearby"
+        ]
+      },
+      {
+        "step": "experience_retrieval",
+        "detail": [
+          "exp2-adaptive-buffer"
+        ]
+      },
+      {
+        "step": "experience_update",
+        "detail": []
+      }
+    ],
+    "diagnosis": ""
+  },
+  "validation": {
+    "score": 1.0,
+    "success": true,
+    "threshold": 0.86,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "outputs": 1.0,
+      "entities": 1.0,
+      "keywords": 1.0,
+      "result_count": 1.0,
+      "experience_retrieved": 1.0
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 3.36,
+    "runtime": 0.16,
+    "execution_success": true,
+    "result_correctness": 1.0,
+    "has_map_layer": true,
+    "has_table": true,
+    "result_count": 1,
+    "experience_retrieved": true,
+    "experience_added": false,
+    "memory_used": false,
+    "code_executed": false,
+    "repair_attempted": false,
+    "repair_success": false,
+    "user_intervention_count": 0
+  }
+}

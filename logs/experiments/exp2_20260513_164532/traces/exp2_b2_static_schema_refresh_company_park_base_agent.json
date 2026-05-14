@@ -1,0 +1,121 @@
+{
+  "task_id": "exp2_b2_static_schema_refresh_company_park",
+  "batch_id": 2,
+  "agent_type": "base_agent",
+  "query": "复用字段核对经验，在公司图层中查询“园区”相关 POI。",
+  "category": "attribute_query",
+  "expected_tools": [
+    "query_poi_by_conditions"
+  ],
+  "selected_tools": [
+    "query_poi_by_conditions"
+  ],
+  "execution_trace": [
+    {
+      "step": "agent_mode",
+      "detail": "base_agent"
+    },
+    {
+      "step": "tool_selection",
+      "detail": [
+        "query_poi_by_conditions"
+      ]
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": []
+    },
+    {
+      "step": "experience_update",
+      "detail": []
+    }
+  ],
+  "errors": [
+    "answer_mismatch:entities,keywords,result_count,experience_retrieved"
+  ],
+  "error_signature": [
+    "field_name_mismatch"
+  ],
+  "critic_diagnosis": "",
+  "generated_experience": "",
+  "retrieved_experiences": [],
+  "final_answer": "复用字段核对经验，在公司图层中查询“园区”相关 POI。 tool_flow_completed POI",
+  "structured_response": {
+    "answer": "复用字段核对经验，在公司图层中查询“园区”相关 POI。 tool_flow_completed POI",
+    "selected_tools": [
+      "query_poi_by_conditions"
+    ],
+    "output_types": [
+      "map_layer",
+      "table"
+    ],
+    "entities": [
+      "POI"
+    ],
+    "keywords": [],
+    "result_count": 0,
+    "retrieved_experience_ids": [],
+    "generated_experience_ids": [],
+    "experience_retrieved": false,
+    "experience_added": false,
+    "memory_used": false,
+    "code_executed": false,
+    "trace_events": [
+      {
+        "step": "agent_mode",
+        "detail": "base_agent"
+      },
+      {
+        "step": "tool_selection",
+        "detail": [
+          "query_poi_by_conditions"
+        ]
+      },
+      {
+        "step": "experience_retrieval",
+        "detail": []
+      },
+      {
+        "step": "experience_update",
+        "detail": []
+      }
+    ],
+    "diagnosis": ""
+  },
+  "validation": {
+    "score": 0.475,
+    "success": false,
+    "threshold": 0.86,
+    "missing": [
+      "entities",
+      "keywords",
+      "result_count",
+      "experience_retrieved"
+    ],
+    "details": {
+      "tools": 1.0,
+      "outputs": 1.0,
+      "entities": 0.333,
+      "keywords": 0.0,
+      "result_count": 0.0,
+      "experience_retrieved": 0.0
+    }
+  },
+  "success": false,
+  "metrics": {
+    "turns": 3.42,
+    "runtime": 0.16,
+    "execution_success": false,
+    "result_correctness": 0.475,
+    "has_map_layer": true,
+    "has_table": true,
+    "result_count": 0,
+    "experience_retrieved": false,
+    "experience_added": false,
+    "memory_used": false,
+    "code_executed": false,
+    "repair_attempted": true,
+    "repair_success": false,
+    "user_intervention_count": 1
+  }
+}

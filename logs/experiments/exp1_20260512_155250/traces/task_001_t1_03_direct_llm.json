@@ -1,0 +1,47 @@
+{
+  "task_id": "task_001_t1_03",
+  "agent_type": "direct_llm",
+  "query": "搜索名称中包含医院的 POI，并在地图上高亮结果",
+  "category": "poi_search",
+  "expected_tools": [
+    "search_poi"
+  ],
+  "selected_tools": [],
+  "execution_trace": [
+    {
+      "step": "intent",
+      "detail": "poi_search"
+    },
+    {
+      "step": "tool_selection",
+      "detail": []
+    },
+    {
+      "step": "evaluation",
+      "detail": "failed"
+    }
+  ],
+  "errors": [
+    "rule_eval_failed:poi_search"
+  ],
+  "error_signature": [
+    "poi_search"
+  ],
+  "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+  "generated_experience": "",
+  "retrieved_experiences": [],
+  "final_answer": "任务未完全满足预期，已记录失败原因。",
+  "success": false,
+  "metrics": {
+    "turns": 1.11,
+    "runtime": 0.318,
+    "execution_success": false,
+    "result_correctness": 0.0,
+    "has_map_layer": true,
+    "has_table": true,
+    "result_count": 0,
+    "repair_attempted": false,
+    "repair_success": false,
+    "user_intervention_count": 0
+  }
+}

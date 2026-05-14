@@ -1,0 +1,51 @@
+{
+  "task_id": "ab_007_t7_03",
+  "agent_type": "without_experience_retrieval",
+  "query": "空结果时放宽条件，查询医院 300 米到 1000 米范围内住宿服务",
+  "category": "nearby_analysis",
+  "expected_tools": [
+    "find_nearby"
+  ],
+  "selected_tools": [
+    "find_nearby"
+  ],
+  "execution_trace": [
+    {
+      "step": "intent",
+      "detail": "nearby_analysis"
+    },
+    {
+      "step": "tool_selection",
+      "detail": [
+        "find_nearby"
+      ]
+    },
+    {
+      "step": "evaluation",
+      "detail": "failed"
+    }
+  ],
+  "errors": [
+    "rule_eval_failed:empty_result"
+  ],
+  "error_signature": [
+    "empty_result"
+  ],
+  "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+  "generated_experience": "exp:nearby_analysis:check schema/CRS/result before final answer",
+  "retrieved_experiences": [],
+  "final_answer": "任务未完全满足预期，已记录失败原因。",
+  "success": false,
+  "metrics": {
+    "turns": 3.67,
+    "runtime": 1.126,
+    "execution_success": false,
+    "result_correctness": 0.0,
+    "has_map_layer": true,
+    "has_table": true,
+    "result_count": 0,
+    "repair_attempted": true,
+    "repair_success": false,
+    "user_intervention_count": 0
+  }
+}

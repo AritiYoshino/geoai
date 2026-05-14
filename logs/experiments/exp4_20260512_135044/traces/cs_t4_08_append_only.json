@@ -1,0 +1,55 @@
+{
+  "task_id": "cs_t4_08",
+  "agent_type": "append_only",
+  "query": "稳定性任务：空间连接前统一坐标系，统计 生活服务 行政区数量",
+  "category": "spatial_join",
+  "expected_tools": [
+    "spatial_join_layers"
+  ],
+  "selected_tools": [
+    "spatial_join_layers"
+  ],
+  "execution_trace": [
+    {
+      "step": "intent",
+      "detail": "spatial_join"
+    },
+    {
+      "step": "tool_selection",
+      "detail": [
+        "spatial_join_layers"
+      ]
+    },
+    {
+      "step": "evaluation",
+      "detail": "failed"
+    }
+  ],
+  "errors": [
+    "rule_eval_failed:sjoin_crs"
+  ],
+  "error_signature": [
+    "sjoin_crs"
+  ],
+  "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+  "generated_experience": "exp:spatial_join:check schema/CRS/result before final answer",
+  "retrieved_experiences": [
+    "crs-check",
+    "field-name-check",
+    "empty-result-relax"
+  ],
+  "final_answer": "任务未完全满足预期，已记录失败原因。",
+  "success": false,
+  "metrics": {
+    "turns": 2.81,
+    "runtime": 1.015,
+    "execution_success": false,
+    "result_correctness": 0.5286,
+    "has_map_layer": true,
+    "has_table": true,
+    "result_count": 0,
+    "repair_attempted": true,
+    "repair_success": false,
+    "user_intervention_count": 0
+  }
+}

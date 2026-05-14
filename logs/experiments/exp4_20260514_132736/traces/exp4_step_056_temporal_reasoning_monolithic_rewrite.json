@@ -1,0 +1,81 @@
+{
+  "task_id": "exp4_step_056_temporal_reasoning",
+  "agent_type": "monolithic_rewrite",
+  "strategy": "monolithic_rewrite",
+  "adaptation_step": 56,
+  "query": "Step 56: 解析 过去 90 天 中的相对时间表达，并复用日期标准化经验。",
+  "category": "temporal_reasoning",
+  "expected_skill": "temporal_reasoning",
+  "novelty": "transfer",
+  "expected_tools": [
+    "reasoning",
+    "date_parse"
+  ],
+  "selected_tools": [
+    "reasoning",
+    "date_parse"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 56
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "temporal_reasoning-046"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "temporal_reasoning-056"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 5038
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "temporal_reasoning-056",
+  "retrieved_experiences": [
+    "temporal_reasoning-046"
+  ],
+  "final_answer": "monolithic_rewrite step=56 skill=temporal_reasoning accuracy=0.754 context_tokens=5038 retrieved=1 generated=1",
+  "structured_response": {
+    "accuracy": 0.754,
+    "context_token_count": 5038,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "temporal_reasoning-046"
+    ],
+    "generated_experience_ids": [
+      "temporal_reasoning-056"
+    ]
+  },
+  "validation": {
+    "score": 0.754,
+    "success": true,
+    "threshold": 0.72,
+    "missing": []
+  },
+  "success": true,
+  "metrics": {
+    "turns": 3.4,
+    "runtime": 0.12,
+    "execution_success": true,
+    "result_correctness": 0.754,
+    "context_token_count": 5038,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 20,
+    "compression_event": ""
+  }
+}

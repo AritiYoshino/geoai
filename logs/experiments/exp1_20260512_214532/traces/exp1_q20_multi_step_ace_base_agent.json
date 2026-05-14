@@ -1,0 +1,116 @@
+{
+  "task_id": "exp1_q20_multi_step_ace",
+  "agent_type": "base_agent",
+  "query": "搜索“春熙路”住宿 POI，记住一个最可能结果，再找它 800 米内的餐饮点，并导出为 GeoJSON。",
+  "category": "ace_multi_step",
+  "expected_tools": [
+    "search_poi",
+    "find_nearby_point",
+    "export_analysis_result"
+  ],
+  "selected_tools": [
+    "search_poi"
+  ],
+  "execution_trace": [
+    {
+      "step": "agent_mode",
+      "detail": "base_agent"
+    },
+    {
+      "step": "tool_selection",
+      "detail": [
+        "search_poi"
+      ]
+    },
+    {
+      "step": "reference_validation",
+      "detail": "structured answer will be scored against reference answers"
+    }
+  ],
+  "errors": [
+    "answer_mismatch:output_types,result_count,memory_used,memory_written,experience_retrieved"
+  ],
+  "critic_diagnosis": "",
+  "generated_experience": "",
+  "retrieved_experiences": [],
+  "final_answer": "搜索“春熙路” POI，记住一个最可能结果，再找它 800 米内的餐饮点，并导出为 GeoJSON。 已按主系统工具链执行。 春熙路 餐饮 导出",
+  "structured_response": {
+    "answer": "搜索“春熙路” POI，记住一个最可能结果，再找它 800 米内的餐饮点，并导出为 GeoJSON。 已按主系统工具链执行。 春熙路 餐饮 导出",
+    "selected_tools": [
+      "search_poi"
+    ],
+    "output_types": [
+      "table"
+    ],
+    "entities": [
+      "春熙路",
+      "餐饮",
+      "800",
+      "GeoJSON"
+    ],
+    "keywords": [
+      "记住",
+      "导出"
+    ],
+    "result_count": 0,
+    "memory_used": false,
+    "memory_written": false,
+    "experience_retrieved": false,
+    "experience_added": false,
+    "code_executed": false,
+    "trace_events": [
+      {
+        "step": "agent_mode",
+        "detail": "base_agent"
+      },
+      {
+        "step": "tool_selection",
+        "detail": [
+          "search_poi"
+        ]
+      },
+      {
+        "step": "reference_validation",
+        "detail": "structured answer will be scored against reference answers"
+      }
+    ],
+    "diagnosis": ""
+  },
+  "validation": {
+    "score": 0.293,
+    "success": false,
+    "threshold": 0.88,
+    "missing": [
+      "output_types",
+      "result_count",
+      "memory_used",
+      "memory_written",
+      "experience_retrieved"
+    ],
+    "details": {
+      "tools": 0.333,
+      "outputs": 0.5,
+      "entities": 1.0,
+      "keywords": 0.667,
+      "result_count": 0.0,
+      "memory_used": 0.0,
+      "memory_written": 0.0,
+      "experience_retrieved": 0.0
+    }
+  },
+  "success": false,
+  "metrics": {
+    "turns": 3.0,
+    "runtime": 0.11,
+    "execution_success": false,
+    "result_correctness": 0.293,
+    "has_map_layer": false,
+    "has_table": true,
+    "result_count": 0,
+    "memory_used": false,
+    "experience_retrieved": false,
+    "experience_added": false,
+    "code_executed": false,
+    "user_intervention_count": 0
+  }
+}

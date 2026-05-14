@@ -1,0 +1,55 @@
+{
+  "task_id": "cs_t2_14",
+  "agent_type": "monolithic_rewrite",
+  "query": "稳定性任务：字段 name/type/category 不统一时查询 银行",
+  "category": "attribute_query",
+  "expected_tools": [
+    "query_poi_by_conditions"
+  ],
+  "selected_tools": [
+    "query_poi_by_conditions"
+  ],
+  "execution_trace": [
+    {
+      "step": "intent",
+      "detail": "attribute_query"
+    },
+    {
+      "step": "tool_selection",
+      "detail": [
+        "query_poi_by_conditions"
+      ]
+    },
+    {
+      "step": "evaluation",
+      "detail": "failed"
+    }
+  ],
+  "errors": [
+    "rule_eval_failed:field_name_mismatch"
+  ],
+  "error_signature": [
+    "field_name_mismatch"
+  ],
+  "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+  "generated_experience": "exp:attribute_query:check schema/CRS/result before final answer",
+  "retrieved_experiences": [
+    "crs-check",
+    "field-name-check",
+    "empty-result-relax"
+  ],
+  "final_answer": "任务未完全满足预期，已记录失败原因。",
+  "success": false,
+  "metrics": {
+    "turns": 2.7,
+    "runtime": 1.287,
+    "execution_success": false,
+    "result_correctness": 0.6285999999999999,
+    "has_map_layer": true,
+    "has_table": true,
+    "result_count": 0,
+    "repair_attempted": true,
+    "repair_success": true,
+    "user_intervention_count": 0
+  }
+}

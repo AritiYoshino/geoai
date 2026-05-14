@@ -1,0 +1,81 @@
+{
+  "task_id": "exp4_step_052_unit_conversion",
+  "agent_type": "monolithic_rewrite",
+  "strategy": "monolithic_rewrite",
+  "adaptation_step": 52,
+  "query": "Step 52: 处理 容量 中的单位换算和阈值判断，保留前序换算规则。",
+  "category": "quantitative_reasoning",
+  "expected_skill": "unit_conversion",
+  "novelty": "transfer",
+  "expected_tools": [
+    "reasoning",
+    "calculator"
+  ],
+  "selected_tools": [
+    "reasoning",
+    "calculator"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 52
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "unit_conversion-042"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "unit_conversion-052"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 3854
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "unit_conversion-052",
+  "retrieved_experiences": [
+    "unit_conversion-042"
+  ],
+  "final_answer": "monolithic_rewrite step=52 skill=unit_conversion accuracy=0.745 context_tokens=3854 retrieved=1 generated=1",
+  "structured_response": {
+    "accuracy": 0.745,
+    "context_token_count": 3854,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "unit_conversion-042"
+    ],
+    "generated_experience_ids": [
+      "unit_conversion-052"
+    ]
+  },
+  "validation": {
+    "score": 0.745,
+    "success": true,
+    "threshold": 0.72,
+    "missing": []
+  },
+  "success": true,
+  "metrics": {
+    "turns": 3.4,
+    "runtime": 0.12,
+    "execution_success": true,
+    "result_correctness": 0.745,
+    "context_token_count": 3854,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 16,
+    "compression_event": ""
+  }
+}

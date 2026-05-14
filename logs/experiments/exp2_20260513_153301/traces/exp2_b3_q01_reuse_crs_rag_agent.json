@@ -1,0 +1,126 @@
+{
+  "task_id": "exp2_b3_q01_reuse_crs",
+  "batch_id": 3,
+  "agent_type": "rag_agent",
+  "query": "复用 CRS 经验，查找医院 800 米内的住宿服务 POI，返回地图图层和结果表。",
+  "category": "nearby_analysis",
+  "expected_tools": [
+    "find_nearby"
+  ],
+  "selected_tools": [
+    "find_nearby"
+  ],
+  "execution_trace": [
+    {
+      "step": "agent_mode",
+      "detail": "rag_agent"
+    },
+    {
+      "step": "tool_selection",
+      "detail": [
+        "find_nearby"
+      ]
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "exp2-crs-distance"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": []
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "",
+  "retrieved_experiences": [
+    "exp2-crs-distance"
+  ],
+  "final_answer": "复用 CRS 经验，查找医院 800 米内的住宿服务 POI，返回地图图层和结果表。 已按参考系统流程完成工具选择、执行校验和结果组织。 已复用经验：exp2-crs-distance 医院 住宿服务 800 复用 CRS 米制投影",
+  "structured_response": {
+    "answer": "复用 CRS 经验，查找医院 800 米内的住宿服务 POI，返回地图图层和结果表。 已按参考系统流程完成工具选择、执行校验和结果组织。 已复用经验：exp2-crs-distance 医院 住宿服务 800 复用 CRS 米制投影",
+    "selected_tools": [
+      "find_nearby"
+    ],
+    "output_types": [
+      "map_layer",
+      "table"
+    ],
+    "entities": [
+      "医院",
+      "住宿服务",
+      "800"
+    ],
+    "keywords": [
+      "复用",
+      "CRS",
+      "米制投影"
+    ],
+    "result_count": 1,
+    "retrieved_experience_ids": [
+      "exp2-crs-distance"
+    ],
+    "generated_experience_ids": [],
+    "experience_retrieved": true,
+    "experience_added": false,
+    "memory_used": false,
+    "code_executed": false,
+    "trace_events": [
+      {
+        "step": "agent_mode",
+        "detail": "rag_agent"
+      },
+      {
+        "step": "tool_selection",
+        "detail": [
+          "find_nearby"
+        ]
+      },
+      {
+        "step": "experience_retrieval",
+        "detail": [
+          "exp2-crs-distance"
+        ]
+      },
+      {
+        "step": "experience_update",
+        "detail": []
+      }
+    ],
+    "diagnosis": ""
+  },
+  "validation": {
+    "score": 1.0,
+    "success": true,
+    "threshold": 0.86,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "outputs": 1.0,
+      "entities": 1.0,
+      "keywords": 1.0,
+      "result_count": 1.0,
+      "experience_retrieved": 1.0
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 2.97,
+    "runtime": 0.16,
+    "execution_success": true,
+    "result_correctness": 1.0,
+    "has_map_layer": true,
+    "has_table": true,
+    "result_count": 1,
+    "experience_retrieved": true,
+    "experience_added": false,
+    "memory_used": false,
+    "code_executed": false,
+    "repair_attempted": false,
+    "repair_success": false,
+    "user_intervention_count": 0
+  }
+}

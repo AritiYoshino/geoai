@@ -1,0 +1,141 @@
+{
+  "task_id": "exp3_q05_empty_result_repair",
+  "agent_type": "without_critic",
+  "agent_name": "ACE w/o Critic",
+  "missing_modules": [
+    "critic"
+  ],
+  "query": "精确搜索“24小时儿童急诊药房”；如果结果为空，应用空结果恢复经验逐步放宽关键词，并由 Critic 记录失败原因。",
+  "category": "poi_search",
+  "expected_tools": [
+    "search_poi"
+  ],
+  "selected_tools": [
+    "search_poi"
+  ],
+  "execution_trace": [
+    {
+      "step": "ablation_agent",
+      "detail": "missing_modules=critic"
+    },
+    {
+      "step": "tool_selection",
+      "detail": [
+        "search_poi"
+      ]
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "exp3-empty-result-relax"
+      ]
+    },
+    {
+      "step": "critic_diagnosis",
+      "detail": ""
+    },
+    {
+      "step": "experience_update",
+      "detail": []
+    }
+  ],
+  "errors": [
+    "missing_module_effect:outputs,result_count"
+  ],
+  "critic_diagnosis": "",
+  "generated_experience": "",
+  "retrieved_experiences": [
+    "exp3-empty-result-relax"
+  ],
+  "final_answer": "精确搜索“24小时儿童急诊药房”；如果结果为空，应用空结果恢复经验逐步放宽关键词，并由 Critic 记录失败原因。 missing_modules=critic  exp3-empty-result-relax 儿童急诊 药房 空结果 关键词 经验 放宽",
+  "structured_response": {
+    "answer": "精确搜索“24小时儿童急诊药房”；如果结果为空，应用空结果恢复经验逐步放宽关键词，并由 Critic 记录失败原因。 missing_modules=critic  exp3-empty-result-relax 儿童急诊 药房 空结果 关键词 经验 放宽",
+    "selected_tools": [
+      "search_poi"
+    ],
+    "output_types": [
+      "map_layer",
+      "table",
+      "explanation"
+    ],
+    "entities": [
+      "儿童急诊",
+      "药房",
+      "空结果",
+      "关键词"
+    ],
+    "keywords": [
+      "经验",
+      "放宽",
+      "Critic"
+    ],
+    "result_count": 0,
+    "retrieved_experience_ids": [
+      "exp3-empty-result-relax"
+    ],
+    "generated_experience_ids": [],
+    "experience_retrieved": true,
+    "experience_added": false,
+    "memory_used": false,
+    "code_executed": false,
+    "trace_events": [
+      {
+        "step": "ablation_agent",
+        "detail": "missing_modules=critic"
+      },
+      {
+        "step": "tool_selection",
+        "detail": [
+          "search_poi"
+        ]
+      },
+      {
+        "step": "experience_retrieval",
+        "detail": [
+          "exp3-empty-result-relax"
+        ]
+      },
+      {
+        "step": "critic_diagnosis",
+        "detail": ""
+      },
+      {
+        "step": "experience_update",
+        "detail": []
+      }
+    ]
+  },
+  "validation": {
+    "score": 0.825,
+    "success": false,
+    "threshold": 0.86,
+    "missing": [
+      "outputs",
+      "result_count"
+    ],
+    "details": {
+      "tools": 1.0,
+      "outputs": 0.75,
+      "entities": 1.0,
+      "keywords": 0.75,
+      "result_count": 0.0,
+      "experience_retrieved": 1.0
+    }
+  },
+  "success": false,
+  "metrics": {
+    "turns": 3.75,
+    "runtime": 0.15,
+    "execution_success": false,
+    "result_correctness": 0.825,
+    "has_map_layer": true,
+    "has_table": true,
+    "result_count": 0,
+    "experience_retrieved": true,
+    "experience_added": false,
+    "memory_used": false,
+    "code_executed": false,
+    "critic_used": false,
+    "missing_module_count": 1
+  }
+}

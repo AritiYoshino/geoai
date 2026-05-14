@@ -1,0 +1,125 @@
+{
+  "task_id": "exp4_q02_learn_schema",
+  "agent_type": "ace_grow_and_refine",
+  "strategy": "ace_grow_and_refine",
+  "query": "学习字段 schema 经验：查询餐饮中 type/name 包含“火锅”的 POI，诊断字段不匹配并写入经验库。",
+  "category": "attribute_query",
+  "stage": "early_learn",
+  "expected_tools": [
+    "query_poi_by_conditions"
+  ],
+  "selected_tools": [
+    "query_poi_by_conditions"
+  ],
+  "execution_trace": [
+    {
+      "step": "strategy",
+      "detail": "ace_grow_and_refine"
+    },
+    {
+      "step": "tool_selection",
+      "detail": [
+        "query_poi_by_conditions"
+      ]
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": []
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "exp4-schema-check"
+      ]
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "experience_stability_update",
+  "generated_experience": "exp4-schema-check",
+  "retrieved_experiences": [],
+  "final_answer": "学习字段 schema 经验：查询餐饮中 type/name 包含“火锅”的 POI，诊断字段不匹配并写入经验库。 ace_grow_and_refine exp4-schema-check 餐饮 火锅 schema 字段 诊断 经验库 type name",
+  "structured_response": {
+    "answer": "学习字段 schema 经验：查询餐饮中 type/name 包含“火锅”的 POI，诊断字段不匹配并写入经验库。 ace_grow_and_refine exp4-schema-check 餐饮 火锅 schema 字段 诊断 经验库 type name",
+    "selected_tools": [
+      "query_poi_by_conditions"
+    ],
+    "output_types": [
+      "map_layer",
+      "table",
+      "diagnosis",
+      "explanation"
+    ],
+    "entities": [
+      "餐饮",
+      "火锅",
+      "schema",
+      "字段"
+    ],
+    "keywords": [
+      "诊断",
+      "经验库",
+      "type",
+      "name"
+    ],
+    "result_count": 1,
+    "retrieved_experience_ids": [],
+    "generated_experience_ids": [
+      "exp4-schema-check"
+    ],
+    "experience_retrieved": false,
+    "experience_added": true,
+    "code_executed": false,
+    "diagnosis": "experience_stability_update",
+    "trace_events": [
+      {
+        "step": "strategy",
+        "detail": "ace_grow_and_refine"
+      },
+      {
+        "step": "tool_selection",
+        "detail": [
+          "query_poi_by_conditions"
+        ]
+      },
+      {
+        "step": "experience_retrieval",
+        "detail": []
+      },
+      {
+        "step": "experience_update",
+        "detail": [
+          "exp4-schema-check"
+        ]
+      }
+    ]
+  },
+  "validation": {
+    "score": 1.0,
+    "success": true,
+    "threshold": 0.84,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "outputs": 1.0,
+      "entities": 1.0,
+      "keywords": 1.0,
+      "result_count": 1.0,
+      "experience_added": 1.0
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 2.95,
+    "runtime": 0.125,
+    "execution_success": true,
+    "result_correctness": 1.0,
+    "has_map_layer": true,
+    "has_table": true,
+    "result_count": 1,
+    "experience_retrieved": false,
+    "experience_added": true,
+    "code_executed": false,
+    "library_size": 2
+  }
+}

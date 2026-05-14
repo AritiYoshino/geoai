@@ -1,0 +1,94 @@
+{
+  "id": "exp4_context_collapse_online_learning_v2",
+  "name": "实验四习题册：GeoAI Context Collapse 稳定性实验",
+  "description": "100 个 GeoAI 任务按顺序输入模型，模拟连续 online adaptation。每一步先用当前上下文完成任务，再基于执行反馈更新上下文，并记录 token 数、滚动准确率、经验条目数、重复率和延迟；当整体重写或压缩导致上下文骤降且准确率同步下降时，判定为 context collapse。",
+  "total_steps": 100,
+  "online_protocol": {
+    "step_order": "fixed_interleaved",
+    "prediction_before_update": true,
+    "feedback_sources": ["tool_result", "code_execution_result", "validation_report", "empty_result_signal"],
+    "update_after_each_step": true
+  },
+  "task_templates": [
+    {
+      "id": "geo_schema_alignment",
+      "category": "attribute_query",
+      "skill": "schema_following",
+      "query": "Step {step}: 在 {variant} 图层中查询目标关键词，先核对可用字段，再返回结果表和高亮图层。",
+      "variants": ["餐饮", "医疗", "生活服务", "金融服务"],
+      "expected_tools": ["query_poi_by_conditions", "schema_check"]
+    },
+    {
+      "id": "crs_distance_analysis",
+      "category": "nearby_analysis",
+      "skill": "crs_awareness",
+      "query": "Step {step}: 查找 {variant} 500 米范围内的餐饮 POI，说明米制距离计算前的坐标处理。",
+      "variants": ["学校", "医院", "地铁站", "购物中心"],
+      "expected_tools": ["find_nearby", "projection_check"]
+    },
+    {
+      "id": "empty_result_recovery",
+      "category": "poi_search",
+      "skill": "empty_result_recovery",
+      "query": "Step {step}: 精确搜索“{variant}”；若结果为空，逐级放宽关键词并说明回退策略。",
+      "variants": ["24小时儿童急诊药房", "成都第七中学高新校区正门", "天府广场地铁站A口公交换乘点", "无障碍酒店"],
+      "expected_tools": ["search_poi", "fallback_search"]
+    },
+    {
+      "id": "geopandas_density",
+      "category": "code_required",
+      "skill": "code_execution",
+      "query": "Step {step}: 使用 GeoPandas 计算各行政区 {variant} POI 密度，输出 count、area_km2、density 和 Top 5。",
+      "variants": ["餐饮", "医疗", "购物", "生活服务"],
+      "expected_tools": ["execute_spatial_code", "validation_report"]
+    },
+    {
+      "id": "boundary_predicate",
+      "category": "validation",
+      "skill": "spatial_predicate_choice",
+      "query": "Step {step}: 比较 contains 与 intersects 统计 {variant} 边界 POI 的差异，输出校验表。",
+      "variants": ["行政区", "缓冲区", "热点网格", "街道边界"],
+      "expected_tools": ["execute_spatial_code", "predicate_check"]
+    },
+    {
+      "id": "temporal_poi_query",
+      "category": "temporal_query",
+      "skill": "temporal_query",
+      "query": "Step {step}: 查询{variant}新增 POI，说明日期字段解析和范围过滤过程。",
+      "variants": ["近 7 天", "近 30 天", "近 90 天", "近半年"],
+      "expected_tools": ["query_poi_by_conditions", "date_parse"]
+    },
+    {
+      "id": "multi_layer_validation",
+      "category": "validation",
+      "skill": "cross_layer_validation",
+      "query": "Step {step}: 检查 {variant} POI 是否落在成都行政区内，输出异常记录和空间一致性说明。",
+      "variants": ["住宿服务", "餐饮", "医疗", "金融服务"],
+      "expected_tools": ["spatial_join_layers", "execute_spatial_code"]
+    },
+    {
+      "id": "export_metadata_guard",
+      "category": "export_highlight",
+      "skill": "export_validation",
+      "query": "Step {step}: 将 {variant} 导出为 GeoJSON 和 CSV，校验 geometry、字段命名、空几何和 CRS 元数据。",
+      "variants": ["餐饮热点网格", "医疗缓冲区", "行政区统计结果", "邻近分析结果"],
+      "expected_tools": ["execute_spatial_code", "format_validator"]
+    },
+    {
+      "id": "context_anchor_tracking",
+      "category": "memory_followup",
+      "skill": "context_reference",
+      "query": "Step {step}: 使用当前上下文中的 {variant} 作为中心点，查找 1 公里范围内指定 POI，并解释锚点来源。",
+      "variants": ["spring_hotel", "medical_anchor", "school_anchor", "metro_anchor"],
+      "expected_tools": ["find_nearby_point", "context_check"]
+    },
+    {
+      "id": "multi_metric_ranking",
+      "category": "code_required",
+      "skill": "ranking_validation",
+      "query": "Step {step}: 综合 {variant} 与行政区面积归一化得分，输出综合排名 Top 5 和校验表。",
+      "variants": ["医疗、餐饮 POI 数量", "购物、生活服务 POI 数量", "住宿、金融服务 POI 数量", "学校、医院覆盖数量"],
+      "expected_tools": ["execute_spatial_code", "ranking_check"]
+    }
+  ]
+}

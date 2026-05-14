@@ -1,0 +1,126 @@
+{
+  "task_id": "exp2_b2_q03_reuse_geometry",
+  "batch_id": 2,
+  "agent_type": "ace_webgis",
+  "query": "复用几何检查经验，统计每个行政区内公司 POI 数量并按数量降序返回表格。",
+  "category": "spatial_join",
+  "expected_tools": [
+    "spatial_join_layers"
+  ],
+  "selected_tools": [
+    "spatial_join_layers"
+  ],
+  "execution_trace": [
+    {
+      "step": "agent_mode",
+      "detail": "ace_webgis"
+    },
+    {
+      "step": "tool_selection",
+      "detail": [
+        "spatial_join_layers"
+      ]
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "exp2-geometry-predicate"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": []
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "",
+  "retrieved_experiences": [
+    "exp2-geometry-predicate"
+  ],
+  "final_answer": "复用几何检查经验，统计每个行政区内公司 POI 数量并按数量降序返回表格。 已按参考系统流程完成工具选择、执行校验和结果组织。 已复用经验：exp2-geometry-predicate 公司 行政区 数量 几何检查 空间连接 降序",
+  "structured_response": {
+    "answer": "复用几何检查经验，统计每个行政区内公司 POI 数量并按数量降序返回表格。 已按参考系统流程完成工具选择、执行校验和结果组织。 已复用经验：exp2-geometry-predicate 公司 行政区 数量 几何检查 空间连接 降序",
+    "selected_tools": [
+      "spatial_join_layers"
+    ],
+    "output_types": [
+      "map_layer",
+      "table"
+    ],
+    "entities": [
+      "公司",
+      "行政区",
+      "数量"
+    ],
+    "keywords": [
+      "几何检查",
+      "空间连接",
+      "降序"
+    ],
+    "result_count": 1,
+    "retrieved_experience_ids": [
+      "exp2-geometry-predicate"
+    ],
+    "generated_experience_ids": [],
+    "experience_retrieved": true,
+    "experience_added": false,
+    "memory_used": false,
+    "code_executed": false,
+    "trace_events": [
+      {
+        "step": "agent_mode",
+        "detail": "ace_webgis"
+      },
+      {
+        "step": "tool_selection",
+        "detail": [
+          "spatial_join_layers"
+        ]
+      },
+      {
+        "step": "experience_retrieval",
+        "detail": [
+          "exp2-geometry-predicate"
+        ]
+      },
+      {
+        "step": "experience_update",
+        "detail": []
+      }
+    ],
+    "diagnosis": ""
+  },
+  "validation": {
+    "score": 1.0,
+    "success": true,
+    "threshold": 0.86,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "outputs": 1.0,
+      "entities": 1.0,
+      "keywords": 1.0,
+      "result_count": 1.0,
+      "experience_retrieved": 1.0
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 3.39,
+    "runtime": 0.16,
+    "execution_success": true,
+    "result_correctness": 1.0,
+    "has_map_layer": true,
+    "has_table": true,
+    "result_count": 1,
+    "experience_retrieved": true,
+    "experience_added": false,
+    "memory_used": false,
+    "code_executed": false,
+    "repair_attempted": false,
+    "repair_success": false,
+    "user_intervention_count": 0
+  }
+}

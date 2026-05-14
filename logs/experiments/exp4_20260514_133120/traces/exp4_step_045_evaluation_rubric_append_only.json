@@ -1,0 +1,96 @@
+{
+  "task_id": "exp4_step_045_evaluation_rubric",
+  "agent_type": "append_only",
+  "strategy": "append_only",
+  "adaptation_step": 45,
+  "query": "Step 45: 按历史评分标准评估 摘要 答案，保持判分口径一致。",
+  "category": "evaluation",
+  "expected_skill": "evaluation_rubric",
+  "novelty": "transfer",
+  "expected_tools": [
+    "reasoning",
+    "rubric_check"
+  ],
+  "selected_tools": [
+    "reasoning"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 45
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "evaluation_rubric-005",
+        "evaluation_rubric-015",
+        "evaluation_rubric-025"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "evaluation_rubric-045"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 14067
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [
+    "context_stability_miss:evaluation_rubric"
+  ],
+  "error_signature": [
+    "evaluation_rubric"
+  ],
+  "critic_diagnosis": "evaluation_rubric evidence missing after context update",
+  "generated_experience": "evaluation_rubric-045",
+  "retrieved_experiences": [
+    "evaluation_rubric-005",
+    "evaluation_rubric-015",
+    "evaluation_rubric-025"
+  ],
+  "final_answer": "append_only step=45 skill=evaluation_rubric accuracy=0.717 context_tokens=14067 retrieved=3 generated=1",
+  "structured_response": {
+    "accuracy": 0.717,
+    "context_token_count": 14067,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "evaluation_rubric-005",
+      "evaluation_rubric-015",
+      "evaluation_rubric-025"
+    ],
+    "generated_experience_ids": [
+      "evaluation_rubric-045"
+    ]
+  },
+  "validation": {
+    "score": 0.717,
+    "success": false,
+    "threshold": 0.72,
+    "missing": [
+      "evaluation_rubric"
+    ],
+    "details": {
+      "tools": 1.0,
+      "accuracy": 0.717
+    }
+  },
+  "success": false,
+  "metrics": {
+    "turns": 3.2,
+    "runtime": 0.12,
+    "execution_success": false,
+    "result_correctness": 0.717,
+    "context_token_count": 14067,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 51,
+    "compression_event": ""
+  }
+}

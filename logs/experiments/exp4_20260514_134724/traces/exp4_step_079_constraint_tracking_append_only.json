@@ -1,0 +1,85 @@
+{
+  "task_id": "exp4_step_079_constraint_tracking",
+  "agent_type": "append_only",
+  "strategy": "append_only",
+  "adaptation_step": 79,
+  "query": "Step 79: 在 资源分配 规划中持续追踪硬约束和软约束，避免后续步骤遗忘。",
+  "category": "planning",
+  "expected_skill": "constraint_tracking",
+  "novelty": "new_pattern",
+  "expected_tools": [
+    "reasoning",
+    "constraint_check"
+  ],
+  "selected_tools": [
+    "reasoning",
+    "constraint_check"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 79
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "constraint_tracking-009"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "constraint_tracking-079"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 4085
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "constraint_tracking-079",
+  "retrieved_experiences": [
+    "constraint_tracking-009"
+  ],
+  "final_answer": "append_only step=79 skill=constraint_tracking accuracy=0.77 context_tokens=4085 retrieved=1 generated=1",
+  "structured_response": {
+    "accuracy": 0.77,
+    "context_token_count": 4085,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "constraint_tracking-009"
+    ],
+    "generated_experience_ids": [
+      "constraint_tracking-079"
+    ]
+  },
+  "validation": {
+    "score": 0.77,
+    "success": true,
+    "threshold": 0.72,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "accuracy": 0.77
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 3.55,
+    "runtime": 0.12,
+    "execution_success": true,
+    "result_correctness": 0.77,
+    "context_token_count": 4085,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 90,
+    "compression_event": ""
+  }
+}

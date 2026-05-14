@@ -1,0 +1,90 @@
+{
+  "task_id": "exp4_step_054_code_debugging",
+  "agent_type": "append_only",
+  "strategy": "append_only",
+  "adaptation_step": 54,
+  "query": "Step 54: 修复 SQL 代码中的运行错误，并把错误模式沉淀为可复用经验。",
+  "category": "code_reasoning",
+  "expected_skill": "code_debugging",
+  "novelty": "transfer",
+  "expected_tools": [
+    "code_execution",
+    "critic"
+  ],
+  "selected_tools": [
+    "code_execution"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 54
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "code_debugging-004"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "code_debugging-054"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 17532
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [
+    "context_stability_miss:code_debugging"
+  ],
+  "error_signature": [
+    "code_debugging"
+  ],
+  "critic_diagnosis": "code_debugging evidence missing after context update",
+  "generated_experience": "code_debugging-054",
+  "retrieved_experiences": [
+    "code_debugging-004"
+  ],
+  "final_answer": "append_only step=54 skill=code_debugging accuracy=0.577 context_tokens=17532 retrieved=1 generated=1",
+  "structured_response": {
+    "accuracy": 0.577,
+    "context_token_count": 17532,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "code_debugging-004"
+    ],
+    "generated_experience_ids": [
+      "code_debugging-054"
+    ]
+  },
+  "validation": {
+    "score": 0.577,
+    "success": false,
+    "threshold": 0.72,
+    "missing": [
+      "code_debugging"
+    ],
+    "details": {
+      "tools": 1.0,
+      "accuracy": 0.577
+    }
+  },
+  "success": false,
+  "metrics": {
+    "turns": 3.2,
+    "runtime": 0.12,
+    "execution_success": false,
+    "result_correctness": 0.577,
+    "context_token_count": 17532,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 61,
+    "compression_event": ""
+  }
+}

@@ -1,0 +1,81 @@
+{
+  "task_id": "exp4_step_080_visualization_spec",
+  "agent_type": "append_only",
+  "strategy": "append_only",
+  "adaptation_step": 80,
+  "query": "Step 80: 为 误差分析 选择合适图表并保持坐标轴、图例和单位说明一致。",
+  "category": "visualization",
+  "expected_skill": "visualization_spec",
+  "novelty": "new_pattern",
+  "expected_tools": [
+    "reasoning",
+    "chart_spec"
+  ],
+  "selected_tools": [
+    "reasoning",
+    "chart_spec"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 80
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "visualization_spec-010"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "visualization_spec-080"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 4573
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "visualization_spec-080",
+  "retrieved_experiences": [
+    "visualization_spec-010"
+  ],
+  "final_answer": "append_only step=80 skill=visualization_spec accuracy=0.77 context_tokens=4573 retrieved=1 generated=1",
+  "structured_response": {
+    "accuracy": 0.77,
+    "context_token_count": 4573,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "visualization_spec-010"
+    ],
+    "generated_experience_ids": [
+      "visualization_spec-080"
+    ]
+  },
+  "validation": {
+    "score": 0.77,
+    "success": true,
+    "threshold": 0.72,
+    "missing": []
+  },
+  "success": true,
+  "metrics": {
+    "turns": 3.55,
+    "runtime": 0.12,
+    "execution_success": true,
+    "result_correctness": 0.77,
+    "context_token_count": 4573,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 91,
+    "compression_event": ""
+  }
+}

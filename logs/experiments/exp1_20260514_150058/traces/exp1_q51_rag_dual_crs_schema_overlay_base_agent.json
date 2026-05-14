@@ -1,0 +1,113 @@
+{
+  "task_id": "exp1_q51_rag_dual_crs_schema_overlay",
+  "agent_type": "base_agent",
+  "query": "统计学校 500 米范围内餐饮 POI 数量前，同时应用 CRS 经验和字段 schema 经验，说明投影与字段检查步骤，并返回统计表。",
+  "category": "experience_retrieval",
+  "expected_tools": [
+    "find_nearby"
+  ],
+  "selected_tools": [
+    "find_nearby"
+  ],
+  "execution_trace": [
+    {
+      "step": "agent_mode",
+      "detail": "base_agent"
+    },
+    {
+      "step": "tool_selection",
+      "detail": [
+        "find_nearby"
+      ]
+    },
+    {
+      "step": "reference_validation",
+      "detail": "structured answer will be scored against reference answers"
+    }
+  ],
+  "errors": [
+    "answer_mismatch:output_types,result_count,experience_retrieved"
+  ],
+  "critic_diagnosis": "",
+  "generated_experience": "",
+  "retrieved_experiences": [],
+  "final_answer": "统计学校 500 米范围内餐饮 POI 数量前，同时应用 CRS 经验和字段 schema 经验，说明投影与字段检查步骤，并返回统计表。 已按主系统工具链执行。 学校 500 餐饮 CRS 字段 投影 统计",
+  "structured_response": {
+    "answer": "统计学校 500 米范围内餐饮 POI 数量前，同时应用 CRS 经验和字段 schema 经验，说明投影与字段检查步骤，并返回统计表。 已按主系统工具链执行。 学校 500 餐饮 CRS 字段 投影 统计",
+    "selected_tools": [
+      "find_nearby"
+    ],
+    "output_types": [
+      "table"
+    ],
+    "entities": [
+      "学校",
+      "500",
+      "餐饮",
+      "CRS",
+      "schema"
+    ],
+    "keywords": [
+      "CRS 经验",
+      "字段",
+      "投影",
+      "统计"
+    ],
+    "result_count": 0,
+    "memory_used": false,
+    "memory_written": false,
+    "experience_retrieved": false,
+    "experience_added": false,
+    "code_executed": false,
+    "trace_events": [
+      {
+        "step": "agent_mode",
+        "detail": "base_agent"
+      },
+      {
+        "step": "tool_selection",
+        "detail": [
+          "find_nearby"
+        ]
+      },
+      {
+        "step": "reference_validation",
+        "detail": "structured answer will be scored against reference answers"
+      }
+    ],
+    "diagnosis": ""
+  },
+  "validation": {
+    "score": 0.61,
+    "success": false,
+    "threshold": 0.88,
+    "missing": [
+      "output_types",
+      "result_count",
+      "experience_retrieved"
+    ],
+    "details": {
+      "tools": 1.0,
+      "outputs": 0.5,
+      "entities": 1.0,
+      "keywords": 1.0,
+      "result_count": 0.0,
+      "experience_retrieved": 0.0
+    }
+  },
+  "success": false,
+  "metrics": {
+    "turns": 3.0,
+    "runtime": 0.11,
+    "execution_success": false,
+    "result_correctness": 0.61,
+    "has_map_layer": false,
+    "has_table": true,
+    "result_count": 0,
+    "memory_used": false,
+    "experience_retrieved": false,
+    "experience_added": false,
+    "code_executed": false,
+    "user_intervention_count": 0
+  }
+}

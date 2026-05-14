@@ -1,0 +1,85 @@
+{
+  "task_id": "exp4_step_092_crs_distance_analysis",
+  "agent_type": "ace_grow_and_refine",
+  "strategy": "ace_grow_and_refine",
+  "adaptation_step": 92,
+  "query": "Step 92: 查找 购物中心 500 米范围内的餐饮 POI，说明米制距离计算前的坐标处理。",
+  "category": "nearby_analysis",
+  "expected_skill": "crs_awareness",
+  "novelty": "retention_retest",
+  "expected_tools": [
+    "find_nearby",
+    "projection_check"
+  ],
+  "selected_tools": [
+    "find_nearby",
+    "projection_check"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 92
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "crs_awareness-002"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "crs_awareness-092"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 10772
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "crs_awareness-092",
+  "retrieved_experiences": [
+    "crs_awareness-002"
+  ],
+  "final_answer": "ace_grow_and_refine step=92 skill=crs_awareness accuracy=0.97 context_tokens=10772 retrieved=1 generated=1",
+  "structured_response": {
+    "accuracy": 0.97,
+    "context_token_count": 10772,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "crs_awareness-002"
+    ],
+    "generated_experience_ids": [
+      "crs_awareness-092"
+    ]
+  },
+  "validation": {
+    "score": 0.97,
+    "success": true,
+    "threshold": 0.72,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "accuracy": 0.97
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 3.05,
+    "runtime": 0.12,
+    "execution_success": true,
+    "result_correctness": 0.97,
+    "context_token_count": 10772,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 10,
+    "compression_event": ""
+  }
+}

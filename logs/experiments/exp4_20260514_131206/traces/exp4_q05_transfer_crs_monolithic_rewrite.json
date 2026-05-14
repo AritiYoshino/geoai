@@ -1,0 +1,126 @@
+{
+  "task_id": "exp4_q05_transfer_crs",
+  "agent_type": "monolithic_rewrite",
+  "strategy": "monolithic_rewrite",
+  "query": "复用 CRS 距离经验：查找医院 800 米内住宿服务 POI，说明投影到米制坐标后再计算。",
+  "category": "nearby_analysis",
+  "stage": "mid_transfer",
+  "expected_tools": [
+    "find_nearby"
+  ],
+  "selected_tools": [
+    "find_nearby"
+  ],
+  "execution_trace": [
+    {
+      "step": "strategy",
+      "detail": "monolithic_rewrite"
+    },
+    {
+      "step": "tool_selection",
+      "detail": [
+        "find_nearby"
+      ]
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "exp4-crs-distance"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": []
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "",
+  "retrieved_experiences": [
+    "exp4-crs-distance"
+  ],
+  "final_answer": "复用 CRS 距离经验：查找医院 800 米内住宿服务 POI，说明投影到米制坐标后再计算。 monolithic_rewrite exp4-crs-distance 医院 住宿服务 CRS 800 经验 投影 米制 距离",
+  "structured_response": {
+    "answer": "复用 CRS 距离经验：查找医院 800 米内住宿服务 POI，说明投影到米制坐标后再计算。 monolithic_rewrite exp4-crs-distance 医院 住宿服务 CRS 800 经验 投影 米制 距离",
+    "selected_tools": [
+      "find_nearby"
+    ],
+    "output_types": [
+      "map_layer",
+      "table",
+      "explanation"
+    ],
+    "entities": [
+      "医院",
+      "住宿服务",
+      "CRS",
+      "800"
+    ],
+    "keywords": [
+      "经验",
+      "投影",
+      "米制",
+      "距离"
+    ],
+    "result_count": 1,
+    "retrieved_experience_ids": [
+      "exp4-crs-distance"
+    ],
+    "generated_experience_ids": [],
+    "experience_retrieved": true,
+    "experience_added": false,
+    "code_executed": false,
+    "diagnosis": "",
+    "trace_events": [
+      {
+        "step": "strategy",
+        "detail": "monolithic_rewrite"
+      },
+      {
+        "step": "tool_selection",
+        "detail": [
+          "find_nearby"
+        ]
+      },
+      {
+        "step": "experience_retrieval",
+        "detail": [
+          "exp4-crs-distance"
+        ]
+      },
+      {
+        "step": "experience_update",
+        "detail": []
+      }
+    ]
+  },
+  "validation": {
+    "score": 1.0,
+    "success": true,
+    "threshold": 0.84,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "outputs": 1.0,
+      "entities": 1.0,
+      "keywords": 1.0,
+      "result_count": 1.0,
+      "experience_retrieved": 1.0
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 3.75,
+    "runtime": 0.125,
+    "execution_success": true,
+    "result_correctness": 1.0,
+    "has_map_layer": true,
+    "has_table": true,
+    "result_count": 1,
+    "experience_retrieved": true,
+    "experience_added": false,
+    "code_executed": false,
+    "library_size": 4
+  }
+}

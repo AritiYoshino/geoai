@@ -1,0 +1,96 @@
+{
+  "task_id": "exp4_step_034_geopandas_density",
+  "agent_type": "monolithic_rewrite",
+  "strategy": "monolithic_rewrite",
+  "adaptation_step": 34,
+  "query": "Step 34: 使用 GeoPandas 计算各行政区 医疗 POI 密度，输出 count、area_km2、density 和 Top 5。",
+  "category": "code_required",
+  "expected_skill": "code_execution",
+  "novelty": "transfer",
+  "expected_tools": [
+    "execute_spatial_code",
+    "validation_report"
+  ],
+  "selected_tools": [
+    "execute_spatial_code"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 34
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "code_execution-004",
+        "code_execution-014",
+        "code_execution-024"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "code_execution-034"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 11000
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [
+    "context_stability_miss:code_execution"
+  ],
+  "error_signature": [
+    "code_execution"
+  ],
+  "critic_diagnosis": "code_execution evidence missing after context update",
+  "generated_experience": "code_execution-034",
+  "retrieved_experiences": [
+    "code_execution-004",
+    "code_execution-014",
+    "code_execution-024"
+  ],
+  "final_answer": "monolithic_rewrite step=34 skill=code_execution accuracy=0.702 context_tokens=11000 retrieved=3 generated=1",
+  "structured_response": {
+    "accuracy": 0.702,
+    "context_token_count": 11000,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "code_execution-004",
+      "code_execution-014",
+      "code_execution-024"
+    ],
+    "generated_experience_ids": [
+      "code_execution-034"
+    ]
+  },
+  "validation": {
+    "score": 0.702,
+    "success": false,
+    "threshold": 0.72,
+    "missing": [
+      "code_execution"
+    ],
+    "details": {
+      "tools": 1.0,
+      "accuracy": 0.702
+    }
+  },
+  "success": false,
+  "metrics": {
+    "turns": 3.4,
+    "runtime": 0.12,
+    "execution_success": false,
+    "result_correctness": 0.702,
+    "context_token_count": 11000,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 34,
+    "compression_event": ""
+  }
+}

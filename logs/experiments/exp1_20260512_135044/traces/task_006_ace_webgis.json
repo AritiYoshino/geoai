@@ -1,0 +1,51 @@
+{
+  "task_id": "task_006",
+  "agent_type": "ace_webgis",
+  "query": "统计每个行政区内购物 POI 数量，并按数量着色显示",
+  "category": "spatial_join",
+  "expected_tools": [
+    "spatial_join_layers"
+  ],
+  "selected_tools": [
+    "spatial_join_layers"
+  ],
+  "execution_trace": [
+    {
+      "step": "intent",
+      "detail": "spatial_join"
+    },
+    {
+      "step": "tool_selection",
+      "detail": [
+        "spatial_join_layers"
+      ]
+    },
+    {
+      "step": "evaluation",
+      "detail": "success"
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "",
+  "retrieved_experiences": [
+    "exp:attribute_query:check schema/CRS/result before final answer",
+    "exp:attribute_query:check schema/CRS/result before final answer",
+    "exp:attribute_query:check schema/CRS/result before final answer"
+  ],
+  "final_answer": "任务完成，已生成可评估结果。",
+  "success": true,
+  "metrics": {
+    "turns": 2.87,
+    "runtime": 0.952,
+    "execution_success": true,
+    "result_correctness": 1.0,
+    "has_map_layer": true,
+    "has_table": true,
+    "result_count": 1,
+    "repair_attempted": false,
+    "repair_success": false,
+    "user_intervention_count": 0
+  }
+}

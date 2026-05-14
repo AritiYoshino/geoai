@@ -1,0 +1,88 @@
+{
+  "task_id": "exp4_step_066_temporal_poi_query",
+  "agent_type": "monolithic_rewrite",
+  "strategy": "monolithic_rewrite",
+  "adaptation_step": 66,
+  "query": "Step 66: 查询近 30 天新增 POI，说明日期字段解析和范围过滤过程。",
+  "category": "temporal_query",
+  "expected_skill": "temporal_query",
+  "novelty": "new_pattern",
+  "expected_tools": [
+    "query_poi_by_conditions",
+    "date_parse"
+  ],
+  "selected_tools": [
+    "query_poi_by_conditions",
+    "date_parse"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 66
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "temporal_query-046",
+        "temporal_query-056"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "temporal_query-066"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 7998
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "temporal_query-066",
+  "retrieved_experiences": [
+    "temporal_query-046",
+    "temporal_query-056"
+  ],
+  "final_answer": "monolithic_rewrite step=66 skill=temporal_query accuracy=0.778 context_tokens=7998 retrieved=2 generated=1",
+  "structured_response": {
+    "accuracy": 0.778,
+    "context_token_count": 7998,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "temporal_query-046",
+      "temporal_query-056"
+    ],
+    "generated_experience_ids": [
+      "temporal_query-066"
+    ]
+  },
+  "validation": {
+    "score": 0.778,
+    "success": true,
+    "threshold": 0.72,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "accuracy": 0.778
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 3.75,
+    "runtime": 0.12,
+    "execution_success": true,
+    "result_correctness": 0.778,
+    "context_token_count": 7998,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 30,
+    "compression_event": ""
+  }
+}

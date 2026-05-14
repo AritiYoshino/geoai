@@ -1,0 +1,47 @@
+{
+  "task_id": "task_009_t9_02",
+  "agent_type": "direct_llm",
+  "query": "按 district 字段汇总生活服务 POI 数量",
+  "category": "statistics",
+  "expected_tools": [
+    "summarize_layer_statistics"
+  ],
+  "selected_tools": [],
+  "execution_trace": [
+    {
+      "step": "intent",
+      "detail": "statistics"
+    },
+    {
+      "step": "tool_selection",
+      "detail": []
+    },
+    {
+      "step": "evaluation",
+      "detail": "failed"
+    }
+  ],
+  "errors": [
+    "rule_eval_failed:field_name_mismatch"
+  ],
+  "error_signature": [
+    "field_name_mismatch"
+  ],
+  "critic_diagnosis": "检测到工具选择、字段、CRS 或空结果风险。",
+  "generated_experience": "",
+  "retrieved_experiences": [],
+  "final_answer": "任务未完全满足预期，已记录失败原因。",
+  "success": false,
+  "metrics": {
+    "turns": 1.25,
+    "runtime": 0.507,
+    "execution_success": false,
+    "result_correctness": 0.0,
+    "has_map_layer": false,
+    "has_table": true,
+    "result_count": 0,
+    "repair_attempted": false,
+    "repair_success": false,
+    "user_intervention_count": 1
+  }
+}

@@ -1,0 +1,91 @@
+{
+  "task_id": "exp4_step_097_multi_hop_retrieval",
+  "agent_type": "monolithic_rewrite",
+  "strategy": "monolithic_rewrite",
+  "adaptation_step": 97,
+  "query": "Step 97: 对 公司-产品 做多跳检索，先定位实体再验证关系。",
+  "category": "retrieval_reasoning",
+  "expected_skill": "multi_hop_retrieval",
+  "novelty": "retention_retest",
+  "expected_tools": [
+    "retrieval",
+    "reasoning"
+  ],
+  "selected_tools": [
+    "retrieval",
+    "reasoning"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 97
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "multi_hop_retrieval-067",
+        "multi_hop_retrieval-077",
+        "multi_hop_retrieval-087"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "multi_hop_retrieval-097"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 10074
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "multi_hop_retrieval-097",
+  "retrieved_experiences": [
+    "multi_hop_retrieval-067",
+    "multi_hop_retrieval-077",
+    "multi_hop_retrieval-087"
+  ],
+  "final_answer": "monolithic_rewrite step=97 skill=multi_hop_retrieval accuracy=0.78 context_tokens=10074 retrieved=3 generated=1",
+  "structured_response": {
+    "accuracy": 0.78,
+    "context_token_count": 10074,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "multi_hop_retrieval-067",
+      "multi_hop_retrieval-077",
+      "multi_hop_retrieval-087"
+    ],
+    "generated_experience_ids": [
+      "multi_hop_retrieval-097"
+    ]
+  },
+  "validation": {
+    "score": 0.78,
+    "success": true,
+    "threshold": 0.72,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "accuracy": 0.78
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 3.75,
+    "runtime": 0.12,
+    "execution_success": true,
+    "result_correctness": 0.78,
+    "context_token_count": 10074,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 36,
+    "compression_event": ""
+  }
+}

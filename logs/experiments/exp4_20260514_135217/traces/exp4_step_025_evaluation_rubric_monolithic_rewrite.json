@@ -1,0 +1,93 @@
+{
+  "task_id": "exp4_step_025_evaluation_rubric",
+  "agent_type": "monolithic_rewrite",
+  "strategy": "monolithic_rewrite",
+  "adaptation_step": 25,
+  "query": "Step 25: 按历史评分标准评估 摘要 答案，保持判分口径一致。",
+  "category": "evaluation",
+  "expected_skill": "evaluation_rubric",
+  "novelty": "transfer",
+  "expected_tools": [
+    "reasoning",
+    "rubric_check"
+  ],
+  "selected_tools": [
+    "reasoning"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 25
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "evaluation_rubric-005",
+        "evaluation_rubric-015"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "evaluation_rubric-025"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 8300
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [
+    "context_stability_miss:evaluation_rubric"
+  ],
+  "error_signature": [
+    "evaluation_rubric"
+  ],
+  "critic_diagnosis": "evaluation_rubric evidence missing after context update",
+  "generated_experience": "evaluation_rubric-025",
+  "retrieved_experiences": [
+    "evaluation_rubric-005",
+    "evaluation_rubric-015"
+  ],
+  "final_answer": "monolithic_rewrite step=25 skill=evaluation_rubric accuracy=0.68 context_tokens=8300 retrieved=2 generated=1",
+  "structured_response": {
+    "accuracy": 0.68,
+    "context_token_count": 8300,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "evaluation_rubric-005",
+      "evaluation_rubric-015"
+    ],
+    "generated_experience_ids": [
+      "evaluation_rubric-025"
+    ]
+  },
+  "validation": {
+    "score": 0.68,
+    "success": false,
+    "threshold": 0.72,
+    "missing": [
+      "evaluation_rubric"
+    ],
+    "details": {
+      "tools": 1.0,
+      "accuracy": 0.68
+    }
+  },
+  "success": false,
+  "metrics": {
+    "turns": 3.4,
+    "runtime": 0.12,
+    "execution_success": false,
+    "result_correctness": 0.68,
+    "context_token_count": 8300,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 25,
+    "compression_event": ""
+  }
+}

@@ -1,0 +1,1240 @@
+{
+  "id": "exp1_reference_answers_v6",
+  "workbook_id": "exp1_workbook_v6",
+  "success_threshold": 0.88,
+  "answers": {
+    "exp1_q01_search": {
+      "expected_tools": [
+        "search_poi"
+      ],
+      "expected_output_types": [
+        "map_layer",
+        "table"
+      ],
+      "expected_entities": [
+        "医院",
+        "医疗",
+        "POI"
+      ],
+      "required_keywords": [
+        "搜索",
+        "高亮",
+        "结果表"
+      ],
+      "min_result_count": 1
+    },
+    "exp1_q02_attribute_query": {
+      "expected_tools": [
+        "query_poi_by_conditions"
+      ],
+      "expected_output_types": [
+        "map_layer",
+        "table"
+      ],
+      "expected_entities": [
+        "餐饮",
+        "火锅",
+        "type"
+      ],
+      "required_keywords": [
+        "查询",
+        "字段",
+        "高亮"
+      ],
+      "min_result_count": 1
+    },
+    "exp1_q03_nearby_crs": {
+      "expected_tools": [
+        "find_nearby"
+      ],
+      "expected_output_types": [
+        "map_layer",
+        "table"
+      ],
+      "expected_entities": [
+        "科教文化",
+        "学校",
+        "餐饮",
+        "500",
+        "米"
+      ],
+      "required_keywords": [
+        "邻近",
+        "距离",
+        "CRS",
+        "投影"
+      ],
+      "min_result_count": 1
+    },
+    "exp1_q04_buffer": {
+      "expected_tools": [
+        "buffer_analysis"
+      ],
+      "expected_output_types": [
+        "map_layer"
+      ],
+      "expected_entities": [
+        "医疗",
+        "800",
+        "缓冲区"
+      ],
+      "required_keywords": [
+        "缓冲区",
+        "图层"
+      ],
+      "min_result_count": 1
+    },
+    "exp1_q05_overlay": {
+      "expected_tools": [
+        "overlay_layers"
+      ],
+      "expected_output_types": [
+        "map_layer",
+        "table"
+      ],
+      "expected_entities": [
+        "餐饮",
+        "成都行政区",
+        "叠加"
+      ],
+      "required_keywords": [
+        "叠加",
+        "行政区",
+        "覆盖"
+      ],
+      "min_result_count": 1
+    },
+    "exp1_q06_spatial_join": {
+      "expected_tools": [
+        "spatial_join_layers"
+      ],
+      "expected_output_types": [
+        "map_layer",
+        "table"
+      ],
+      "expected_entities": [
+        "购物",
+        "行政区",
+        "poi_count"
+      ],
+      "required_keywords": [
+        "统计",
+        "数量",
+        "着色"
+      ],
+      "min_result_count": 1
+    },
+    "exp1_q07_hotspot": {
+      "expected_tools": [
+        "hotspot_analysis"
+      ],
+      "expected_output_types": [
+        "map_layer",
+        "grid"
+      ],
+      "expected_entities": [
+        "医疗",
+        "1000",
+        "网格",
+        "热点"
+      ],
+      "required_keywords": [
+        "热点",
+        "网格",
+        "count"
+      ],
+      "min_result_count": 1
+    },
+    "exp1_q08_code_density": {
+      "expected_tools": [
+        "execute_spatial_code"
+      ],
+      "expected_output_types": [
+        "table"
+      ],
+      "expected_entities": [
+        "餐饮",
+        "行政区",
+        "密度",
+        "前 5"
+      ],
+      "required_keywords": [
+        "GeoPandas",
+        "面积",
+        "密度",
+        "排名"
+      ],
+      "requires_code": true,
+      "min_result_count": 1
+    },
+    "exp1_q09_memory_seed": {
+      "expected_tools": [
+        "search_poi"
+      ],
+      "expected_output_types": [
+        "map_layer",
+        "table"
+      ],
+      "expected_entities": [
+        "春熙路",
+        "住宿服务",
+        "POI"
+      ],
+      "required_keywords": [
+        "记住",
+        "第一个结果",
+        "后续"
+      ],
+      "memory_write": true,
+      "min_result_count": 1
+    },
+    "exp1_q10_memory_followup": {
+      "expected_tools": [
+        "find_nearby_point",
+        "find_nearby_point_filtered"
+      ],
+      "expected_output_types": [
+        "map_layer",
+        "table"
+      ],
+      "expected_entities": [
+        "住宿",
+        "餐饮",
+        "1 公里"
+      ],
+      "required_keywords": [
+        "上面",
+        "中心",
+        "邻近"
+      ],
+      "memory_read": true,
+      "min_result_count": 1
+    },
+    "exp1_q11_rag_retrieval": {
+      "expected_tools": [
+        "find_nearby"
+      ],
+      "expected_output_types": [
+        "explanation",
+        "map_layer"
+      ],
+      "expected_entities": [
+        "500",
+        "米",
+        "CRS",
+        "米制投影"
+      ],
+      "required_keywords": [
+        "经验",
+        "CRS",
+        "投影"
+      ],
+      "requires_experience_retrieval": true,
+      "expected_experience_ids": [
+        "gis-crs-001"
+      ],
+      "min_result_count": 1
+    },
+    "exp1_q12_experience_add": {
+      "expected_tools": [
+        "query_poi_by_conditions"
+      ],
+      "expected_output_types": [
+        "diagnosis"
+      ],
+      "expected_entities": [
+        "字段名",
+        "查询",
+        "经验库"
+      ],
+      "required_keywords": [
+        "诊断",
+        "字段",
+        "经验"
+      ],
+      "requires_experience_add": true,
+      "min_result_count": 0
+    },
+    "exp1_q13_memory_buffer_followup": {
+      "expected_tools": [
+        "buffer_analysis"
+      ],
+      "expected_output_types": [
+        "map_layer"
+      ],
+      "expected_entities": [
+        "住宿",
+        "300",
+        "缓冲区",
+        "单点"
+      ],
+      "required_keywords": [
+        "上面",
+        "单点",
+        "不要整个图层"
+      ],
+      "memory_read": true,
+      "min_result_count": 1
+    },
+    "exp1_q14_rag_field_schema": {
+      "expected_tools": [
+        "query_poi_by_conditions"
+      ],
+      "expected_output_types": [
+        "explanation",
+        "table"
+      ],
+      "expected_entities": [
+        "餐饮",
+        "串串",
+        "type",
+        "schema"
+      ],
+      "required_keywords": [
+        "经验",
+        "字段",
+        "查询"
+      ],
+      "requires_experience_retrieval": true,
+      "expected_experience_ids": [
+        "gis-field-001"
+      ],
+      "min_result_count": 1
+    },
+    "exp1_q15_rag_empty_result": {
+      "expected_tools": [
+        "search_poi"
+      ],
+      "expected_output_types": [
+        "explanation",
+        "table"
+      ],
+      "expected_entities": [
+        "川西坝子火锅",
+        "放宽关键词",
+        "POI"
+      ],
+      "required_keywords": [
+        "空结果",
+        "重试",
+        "经验"
+      ],
+      "requires_experience_retrieval": true,
+      "expected_experience_ids": [
+        "gis-result-001"
+      ],
+      "min_result_count": 1
+    },
+    "exp1_q16_experience_add_crs": {
+      "expected_tools": [
+        "find_nearby"
+      ],
+      "expected_output_types": [
+        "diagnosis",
+        "explanation"
+      ],
+      "expected_entities": [
+        "距离",
+        "米制",
+        "CRS"
+      ],
+      "required_keywords": [
+        "诊断",
+        "经验库",
+        "投影"
+      ],
+      "requires_experience_add": true,
+      "min_result_count": 0
+    },
+    "exp1_q17_code_area_rank": {
+      "expected_tools": [
+        "execute_spatial_code"
+      ],
+      "expected_output_types": [
+        "table"
+      ],
+      "expected_entities": [
+        "购物",
+        "行政区",
+        "密度",
+        "前 5"
+      ],
+      "required_keywords": [
+        "GeoPandas",
+        "面积",
+        "排名"
+      ],
+      "requires_code": true,
+      "min_result_count": 1
+    },
+    "exp1_q18_preference_seed": {
+      "expected_tools": [],
+      "expected_output_types": [
+        "explanation"
+      ],
+      "expected_entities": [
+        "表格摘要",
+        "排名前 5",
+        "POI"
+      ],
+      "required_keywords": [
+        "记住",
+        "偏好",
+        "高亮"
+      ],
+      "memory_write": true,
+      "min_result_count": 0
+    },
+    "exp1_q19_preference_followup": {
+      "expected_tools": [
+        "spatial_join_layers"
+      ],
+      "expected_output_types": [
+        "map_layer",
+        "table"
+      ],
+      "expected_entities": [
+        "医疗",
+        "行政区",
+        "前 5"
+      ],
+      "required_keywords": [
+        "偏好",
+        "统计",
+        "高亮"
+      ],
+      "memory_read": true,
+      "requires_preference_follow": true,
+      "min_result_count": 1
+    },
+    "exp1_q20_multi_step_ace": {
+      "expected_tools": [
+        "search_poi",
+        "find_nearby_point",
+        "export_analysis_result"
+      ],
+      "expected_output_types": [
+        "map_layer",
+        "table"
+      ],
+      "expected_entities": [
+        "春熙路",
+        "餐饮",
+        "800",
+        "GeoJSON"
+      ],
+      "required_keywords": [
+        "记住",
+        "导出",
+        "经验"
+      ],
+      "memory_write": true,
+      "memory_read": true,
+      "requires_experience_retrieval": true,
+      "requires_export": true,
+      "min_result_count": 1
+    },
+    "exp1_q21_memory_seed_long": {
+      "expected_tools": [
+        "search_poi"
+      ],
+      "expected_output_types": [
+        "map_layer",
+        "table"
+      ],
+      "expected_entities": [
+        "天府广场",
+        "交通站点",
+        "第一个结果"
+      ],
+      "required_keywords": [
+        "搜索",
+        "记住",
+        "参考点"
+      ],
+      "memory_write": true,
+      "min_result_count": 1
+    },
+    "exp1_q22_memory_long_followup": {
+      "expected_tools": [
+        "find_nearby_point",
+        "find_nearby_point_filtered"
+      ],
+      "expected_output_types": [
+        "map_layer",
+        "table",
+        "explanation"
+      ],
+      "expected_entities": [
+        "天府广场",
+        "购物",
+        "600"
+      ],
+      "required_keywords": [
+        "跨轮引用",
+        "记住",
+        "邻近"
+      ],
+      "memory_read": true,
+      "min_result_count": 1
+    },
+    "exp1_q23_rag_dual_experience": {
+      "expected_tools": [
+        "find_nearby"
+      ],
+      "expected_output_types": [
+        "explanation",
+        "map_layer",
+        "table"
+      ],
+      "expected_entities": [
+        "学校",
+        "700",
+        "餐饮",
+        "CRS",
+        "schema"
+      ],
+      "required_keywords": [
+        "CRS 经验",
+        "字段经验",
+        "投影"
+      ],
+      "requires_experience_retrieval": true,
+      "expected_experience_ids": [
+        "gis-crs-001",
+        "gis-field-001"
+      ],
+      "min_result_count": 1
+    },
+    "exp1_q24_experience_add_empty_result": {
+      "expected_tools": [
+        "search_poi"
+      ],
+      "expected_output_types": [
+        "diagnosis",
+        "explanation"
+      ],
+      "expected_entities": [
+        "关键词",
+        "0 条结果",
+        "经验库"
+      ],
+      "required_keywords": [
+        "诊断",
+        "放宽",
+        "经验"
+      ],
+      "requires_experience_add": true,
+      "min_result_count": 0
+    },
+    "exp1_q25_code_exact_validation": {
+      "expected_tools": [
+        "execute_spatial_code"
+      ],
+      "expected_output_types": [
+        "table"
+      ],
+      "expected_entities": [
+        "餐饮",
+        "行政区",
+        "总数校验",
+        "一致"
+      ],
+      "required_keywords": [
+        "代码",
+        "分区计数",
+        "原始总数"
+      ],
+      "requires_code": true,
+      "requires_exact_value": true,
+      "min_result_count": 1
+    },
+    "exp1_q26_preference_export_chain": {
+      "expected_tools": [
+        "spatial_join_layers",
+        "export_analysis_result"
+      ],
+      "expected_output_types": [
+        "map_layer",
+        "table"
+      ],
+      "expected_entities": [
+        "购物",
+        "排名前 5",
+        "GeoJSON"
+      ],
+      "required_keywords": [
+        "偏好",
+        "高亮",
+        "导出"
+      ],
+      "memory_read": true,
+      "requires_preference_follow": true,
+      "requires_export": true,
+      "min_result_count": 1
+    },
+    "exp1_q27_code_cross_check": {
+      "expected_tools": [
+        "execute_spatial_code"
+      ],
+      "expected_output_types": [
+        "table",
+        "explanation"
+      ],
+      "expected_entities": [
+        "医疗",
+        "行政区分布",
+        "一致"
+      ],
+      "required_keywords": [
+        "交叉验证",
+        "工具",
+        "GeoPandas"
+      ],
+      "requires_code": true,
+      "requires_exact_value": true,
+      "requires_cross_validation": true,
+      "min_result_count": 1
+    },
+    "exp1_q28_layer_disambiguation": {
+      "expected_tools": [
+        "search_poi"
+      ],
+      "expected_output_types": [
+        "explanation",
+        "table",
+        "map_layer"
+      ],
+      "expected_entities": [
+        "银行",
+        "多个图层",
+        "图层选择"
+      ],
+      "required_keywords": [
+        "经验",
+        "跨图层",
+        "名称"
+      ],
+      "requires_experience_retrieval": true,
+      "expected_experience_ids": [
+        "gis-result-001"
+      ],
+      "min_result_count": 1
+    },
+    "exp1_q29_multi_constraint_query": {
+      "expected_tools": [
+        "query_poi_by_conditions"
+      ],
+      "expected_output_types": [
+        "map_layer",
+        "table"
+      ],
+      "expected_entities": [
+        "武侯区",
+        "咖啡厅",
+        "district",
+        "type"
+      ],
+      "required_keywords": [
+        "确认字段",
+        "多条件",
+        "高亮"
+      ],
+      "min_result_count": 1
+    },
+    "exp1_q30_context_switch_memory": {
+      "expected_tools": [
+        "find_nearby_point",
+        "find_nearby_point_filtered"
+      ],
+      "expected_output_types": [
+        "map_layer",
+        "table",
+        "explanation"
+      ],
+      "expected_entities": [
+        "春熙路",
+        "住宿点",
+        "生活服务",
+        "500"
+      ],
+      "required_keywords": [
+        "不要天府广场",
+        "之前记住",
+        "上下文切换"
+      ],
+      "memory_read": true,
+      "min_result_count": 1
+    },
+    "exp1_q31_stress_ratio_validation": {
+      "expected_tools": [
+        "execute_spatial_code"
+      ],
+      "expected_output_types": [
+        "table",
+        "explanation"
+      ],
+      "expected_entities": [
+        "餐饮数量 / 酒店数量",
+        "酒店数量为 0",
+        "成都市",
+        "无穷大"
+      ],
+      "required_keywords": [
+        "排除",
+        "比值",
+        "校验",
+        "GeoPandas"
+      ],
+      "requires_code": true,
+      "requires_exact_value": true,
+      "ace_stress_case": true,
+      "min_result_count": 1
+    },
+    "exp1_q32_stress_boundary_case": {
+      "expected_tools": [
+        "execute_spatial_code"
+      ],
+      "expected_output_types": [
+        "table",
+        "explanation"
+      ],
+      "expected_entities": [
+        "contains",
+        "intersects",
+        "边界",
+        "空间谓词"
+      ],
+      "required_keywords": [
+        "比较",
+        "校验表",
+        "边界点"
+      ],
+      "requires_code": true,
+      "requires_cross_validation": true,
+      "ace_stress_case": true,
+      "min_result_count": 1
+    },
+    "exp1_q33_stress_export_schema": {
+      "expected_tools": [
+        "hotspot_analysis",
+        "export_analysis_result"
+      ],
+      "expected_output_types": [
+        "map_layer",
+        "grid",
+        "explanation"
+      ],
+      "expected_entities": [
+        "GeoJSON",
+        "几何类型",
+        "字段命名",
+        "CRS"
+      ],
+      "required_keywords": [
+        "导出",
+        "schema",
+        "元数据",
+        "修复"
+      ],
+      "requires_experience_retrieval": true,
+      "requires_export": true,
+      "ace_stress_case": true,
+      "min_result_count": 1
+    },
+    "exp1_q34_summary_report": {
+      "expected_tools": [
+        "execute_spatial_code"
+      ],
+      "expected_output_types": [
+        "table",
+        "explanation"
+      ],
+      "expected_entities": [
+        "记忆",
+        "经验检索",
+        "经验新增",
+        "代码执行"
+      ],
+      "required_keywords": [
+        "综合",
+        "表格",
+        "本轮任务"
+      ],
+      "memory_read": true,
+      "requires_experience_retrieval": true,
+      "requires_experience_add": true,
+      "requires_code": true,
+      "min_result_count": 1
+    },
+    "exp1_q35_rag_crs_buffer_transfer": {
+      "expected_tools": [
+        "buffer_analysis"
+      ],
+      "expected_output_types": [
+        "explanation",
+        "map_layer"
+      ],
+      "expected_entities": [
+        "住宿服务",
+        "全季",
+        "400",
+        "CRS"
+      ],
+      "required_keywords": [
+        "经验",
+        "投影",
+        "缓冲区",
+        "经纬度"
+      ],
+      "requires_experience_retrieval": true,
+      "expected_experience_ids": [
+        "gis-crs-001"
+      ],
+      "min_result_count": 1
+    },
+    "exp1_q36_rag_schema_district_filter": {
+      "expected_tools": [
+        "query_poi_by_conditions"
+      ],
+      "expected_output_types": [
+        "explanation",
+        "table",
+        "map_layer"
+      ],
+      "expected_entities": [
+        "锦江区",
+        "银行",
+        "金融服务",
+        "schema"
+      ],
+      "required_keywords": [
+        "字段",
+        "经验",
+        "district",
+        "type"
+      ],
+      "requires_experience_retrieval": true,
+      "expected_experience_ids": [
+        "gis-field-001"
+      ],
+      "min_result_count": 1
+    },
+    "exp1_q37_rag_empty_recovery_bus_station": {
+      "expected_tools": [
+        "search_poi"
+      ],
+      "expected_output_types": [
+        "explanation",
+        "table"
+      ],
+      "expected_entities": [
+        "天府广场",
+        "地铁站",
+        "交通设施",
+        "空结果"
+      ],
+      "required_keywords": [
+        "放宽",
+        "重试",
+        "经验",
+        "精确搜索"
+      ],
+      "requires_experience_retrieval": true,
+      "expected_experience_ids": [
+        "gis-result-001"
+      ],
+      "min_result_count": 1
+    },
+    "exp1_q38_memory_seed_medical_anchor": {
+      "expected_tools": [
+        "search_poi"
+      ],
+      "expected_output_types": [
+        "map_layer",
+        "table"
+      ],
+      "expected_entities": [
+        "华西",
+        "医疗",
+        "medical_anchor"
+      ],
+      "required_keywords": [
+        "记住",
+        "第一个结果",
+        "锚点"
+      ],
+      "memory_write": true,
+      "min_result_count": 1
+    },
+    "exp1_q39_memory_followup_medical_food": {
+      "expected_tools": [
+        "find_nearby_point",
+        "find_nearby_point_filtered"
+      ],
+      "expected_output_types": [
+        "explanation",
+        "map_layer",
+        "table"
+      ],
+      "expected_entities": [
+        "medical_anchor",
+        "餐饮",
+        "750",
+        "上一轮"
+      ],
+      "required_keywords": [
+        "记忆",
+        "中心点",
+        "邻近",
+        "CRS"
+      ],
+      "memory_read": true,
+      "min_result_count": 1
+    },
+    "exp1_q40_memory_followup_medical_export": {
+      "expected_tools": [
+        "find_nearby_point",
+        "export_analysis_result"
+      ],
+      "expected_output_types": [
+        "map_layer",
+        "table"
+      ],
+      "expected_entities": [
+        "medical_anchor",
+        "金融服务",
+        "1 公里",
+        "GeoJSON"
+      ],
+      "required_keywords": [
+        "记忆",
+        "最近 5",
+        "导出"
+      ],
+      "memory_read": true,
+      "requires_export": true,
+      "min_result_count": 1
+    },
+    "exp1_q41_evolution_add_boundary_predicate": {
+      "expected_tools": [
+        "execute_spatial_code"
+      ],
+      "expected_output_types": [
+        "diagnosis",
+        "explanation"
+      ],
+      "expected_entities": [
+        "contains",
+        "intersects",
+        "边界点",
+        "经验库"
+      ],
+      "required_keywords": [
+        "诊断",
+        "空间谓词",
+        "经验",
+        "写入"
+      ],
+      "requires_experience_add": true,
+      "min_result_count": 0
+    },
+    "exp1_q42_evolution_add_export_schema": {
+      "expected_tools": [
+        "export_analysis_result"
+      ],
+      "expected_output_types": [
+        "diagnosis",
+        "explanation"
+      ],
+      "expected_entities": [
+        "GeoJSON",
+        "字段名",
+        "CRS",
+        "经验库"
+      ],
+      "required_keywords": [
+        "诊断",
+        "导出前检查",
+        "geometry",
+        "经验"
+      ],
+      "requires_experience_add": true,
+      "requires_export": true,
+      "min_result_count": 0
+    },
+    "exp1_q43_composite_retrieve_memory_code": {
+      "expected_tools": [
+        "execute_spatial_code"
+      ],
+      "expected_output_types": [
+        "table",
+        "explanation"
+      ],
+      "expected_entities": [
+        "medical_anchor",
+        "餐饮",
+        "金融服务",
+        "数量比",
+        "CRS"
+      ],
+      "required_keywords": [
+        "记忆",
+        "经验",
+        "GeoPandas",
+        "校验表"
+      ],
+      "memory_read": true,
+      "requires_experience_retrieval": true,
+      "expected_experience_ids": [
+        "gis-crs-001"
+      ],
+      "requires_code": true,
+      "requires_exact_value": true,
+      "min_result_count": 1
+    },
+    "exp1_q44_composite_preference_rag_export": {
+      "expected_tools": [
+        "spatial_join_layers",
+        "export_analysis_result"
+      ],
+      "expected_output_types": [
+        "map_layer",
+        "table",
+        "explanation"
+      ],
+      "expected_entities": [
+        "生活服务",
+        "行政区",
+        "排名前 5",
+        "schema"
+      ],
+      "required_keywords": [
+        "偏好",
+        "经验",
+        "导出",
+        "高亮"
+      ],
+      "memory_read": true,
+      "requires_preference_follow": true,
+      "requires_experience_retrieval": true,
+      "expected_experience_ids": [
+        "gis-field-001"
+      ],
+      "requires_export": true,
+      "min_result_count": 1
+    },
+    "exp1_q45_multi_memory_context_switch": {
+      "expected_tools": [
+        "find_nearby_point",
+        "find_nearby_point_filtered"
+      ],
+      "expected_output_types": [
+        "explanation",
+        "map_layer",
+        "table"
+      ],
+      "expected_entities": [
+        "春熙路",
+        "住宿点",
+        "购物",
+        "700"
+      ],
+      "required_keywords": [
+        "不要使用 medical_anchor",
+        "上下文切换",
+        "记住",
+        "邻近"
+      ],
+      "memory_read": true,
+      "min_result_count": 1
+    },
+    "exp1_q46_final_capability_audit": {
+      "expected_tools": [
+        "execute_spatial_code"
+      ],
+      "expected_output_types": [
+        "table",
+        "explanation"
+      ],
+      "expected_entities": [
+        "记忆",
+        "经验检索",
+        "经验新增",
+        "代码执行"
+      ],
+      "required_keywords": [
+        "Base",
+        "RAG",
+        "ACE",
+        "差距"
+      ],
+      "memory_read": true,
+      "requires_experience_retrieval": true,
+      "requires_experience_add": true,
+      "requires_code": true,
+      "min_result_count": 1
+    },
+    "exp1_q47_rag_layer_disambiguation_finance": {
+      "expected_tools": [
+        "search_poi"
+      ],
+      "expected_output_types": [
+        "explanation",
+        "table",
+        "map_layer"
+      ],
+      "expected_entities": [
+        "银行",
+        "金融服务",
+        "图层选择",
+        "POI"
+      ],
+      "required_keywords": [
+        "经验",
+        "图层",
+        "name",
+        "type"
+      ],
+      "requires_experience_retrieval": true,
+      "expected_experience_ids": [
+        "gis-result-001"
+      ],
+      "min_result_count": 1
+    },
+    "exp1_q48_rag_crs_nearest_hotel": {
+      "expected_tools": [
+        "find_nearby"
+      ],
+      "expected_output_types": [
+        "explanation",
+        "table",
+        "map_layer"
+      ],
+      "expected_entities": [
+        "天府广场",
+        "住宿服务",
+        "最近",
+        "CRS"
+      ],
+      "required_keywords": [
+        "经验",
+        "投影",
+        "米制",
+        "距离"
+      ],
+      "requires_experience_retrieval": true,
+      "expected_experience_ids": [
+        "gis-crs-001"
+      ],
+      "min_result_count": 1
+    },
+    "exp1_q49_rag_schema_life_service": {
+      "expected_tools": [
+        "query_poi_by_conditions"
+      ],
+      "expected_output_types": [
+        "explanation",
+        "table"
+      ],
+      "expected_entities": [
+        "生活服务",
+        "维修",
+        "type",
+        "name"
+      ],
+      "required_keywords": [
+        "schema",
+        "字段",
+        "经验",
+        "确认"
+      ],
+      "requires_experience_retrieval": true,
+      "expected_experience_ids": [
+        "gis-field-001"
+      ],
+      "min_result_count": 1
+    },
+    "exp1_q50_rag_empty_recovery_school": {
+      "expected_tools": [
+        "search_poi"
+      ],
+      "expected_output_types": [
+        "explanation",
+        "table"
+      ],
+      "expected_entities": [
+        "七中",
+        "学校",
+        "科教文化",
+        "空结果"
+      ],
+      "required_keywords": [
+        "放宽",
+        "重试",
+        "经验",
+        "精确搜索"
+      ],
+      "requires_experience_retrieval": true,
+      "expected_experience_ids": [
+        "gis-result-001"
+      ],
+      "min_result_count": 1
+    },
+    "exp1_q51_rag_dual_crs_schema_overlay": {
+      "expected_tools": [
+        "find_nearby"
+      ],
+      "expected_output_types": [
+        "explanation",
+        "table"
+      ],
+      "expected_entities": [
+        "学校",
+        "500",
+        "餐饮",
+        "CRS",
+        "schema"
+      ],
+      "required_keywords": [
+        "CRS 经验",
+        "字段",
+        "投影",
+        "统计"
+      ],
+      "requires_experience_retrieval": true,
+      "expected_experience_ids": [
+        "gis-crs-001",
+        "gis-field-001"
+      ],
+      "min_result_count": 1
+    },
+    "exp1_q52_rag_result_scale_control": {
+      "expected_tools": [
+        "search_poi"
+      ],
+      "expected_output_types": [
+        "explanation",
+        "table",
+        "map_layer"
+      ],
+      "expected_entities": [
+        "餐饮",
+        "前 10 条",
+        "完整匹配集合",
+        "高亮"
+      ],
+      "required_keywords": [
+        "经验",
+        "摘要",
+        "规模控制",
+        "地图"
+      ],
+      "requires_experience_retrieval": true,
+      "expected_experience_ids": [
+        "gis-result-001"
+      ],
+      "min_result_count": 1
+    }
+  }
+}

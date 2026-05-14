@@ -1,0 +1,93 @@
+{
+  "task_id": "exp4_step_022_unit_conversion",
+  "agent_type": "append_only",
+  "strategy": "append_only",
+  "adaptation_step": 22,
+  "query": "Step 22: 处理 价格 中的单位换算和阈值判断，保留前序换算规则。",
+  "category": "quantitative_reasoning",
+  "expected_skill": "unit_conversion",
+  "novelty": "transfer",
+  "expected_tools": [
+    "reasoning",
+    "calculator"
+  ],
+  "selected_tools": [
+    "reasoning"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 22
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "unit_conversion-002",
+        "unit_conversion-012"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "unit_conversion-022"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 6470
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [
+    "context_stability_miss:unit_conversion"
+  ],
+  "error_signature": [
+    "unit_conversion"
+  ],
+  "critic_diagnosis": "unit_conversion evidence missing after context update",
+  "generated_experience": "unit_conversion-022",
+  "retrieved_experiences": [
+    "unit_conversion-002",
+    "unit_conversion-012"
+  ],
+  "final_answer": "append_only step=22 skill=unit_conversion accuracy=0.674 context_tokens=6470 retrieved=2 generated=1",
+  "structured_response": {
+    "accuracy": 0.674,
+    "context_token_count": 6470,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "unit_conversion-002",
+      "unit_conversion-012"
+    ],
+    "generated_experience_ids": [
+      "unit_conversion-022"
+    ]
+  },
+  "validation": {
+    "score": 0.674,
+    "success": false,
+    "threshold": 0.72,
+    "missing": [
+      "unit_conversion"
+    ],
+    "details": {
+      "tools": 1.0,
+      "accuracy": 0.674
+    }
+  },
+  "success": false,
+  "metrics": {
+    "turns": 3.2,
+    "runtime": 0.12,
+    "execution_success": false,
+    "result_correctness": 0.674,
+    "context_token_count": 6470,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 25,
+    "compression_event": ""
+  }
+}

@@ -1,0 +1,88 @@
+{
+  "task_id": "exp4_step_058_format_control",
+  "agent_type": "dynamic_cheatsheet",
+  "strategy": "dynamic_cheatsheet",
+  "adaptation_step": 58,
+  "query": "Step 58: 将 用户画像 输出为指定 JSON/表格格式，避免字段遗漏。",
+  "category": "output_control",
+  "expected_skill": "format_control",
+  "novelty": "transfer",
+  "expected_tools": [
+    "reasoning",
+    "format_validator"
+  ],
+  "selected_tools": [
+    "reasoning",
+    "format_validator"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 58
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "format_control-048",
+        "format_control-048-shortcut"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "format_control-058"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 8471
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "format_control-058",
+  "retrieved_experiences": [
+    "format_control-048",
+    "format_control-048-shortcut"
+  ],
+  "final_answer": "dynamic_cheatsheet step=58 skill=format_control accuracy=0.888 context_tokens=8471 retrieved=2 generated=1",
+  "structured_response": {
+    "accuracy": 0.888,
+    "context_token_count": 8471,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "format_control-048",
+      "format_control-048-shortcut"
+    ],
+    "generated_experience_ids": [
+      "format_control-058"
+    ]
+  },
+  "validation": {
+    "score": 0.888,
+    "success": true,
+    "threshold": 0.72,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "accuracy": 0.888
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 3.0,
+    "runtime": 0.12,
+    "execution_success": true,
+    "result_correctness": 0.888,
+    "context_token_count": 8471,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 10,
+    "compression_event": ""
+  }
+}

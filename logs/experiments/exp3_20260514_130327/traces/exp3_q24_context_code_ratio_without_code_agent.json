@@ -1,0 +1,126 @@
+{
+  "task_id": "exp3_q24_context_code_ratio",
+  "agent_type": "without_code_agent",
+  "agent_name": "ACE w/o CodeAgent",
+  "missing_modules": [
+    "code_agent"
+  ],
+  "query": "使用上下文中的 medical_anchor，计算 1 公里内住宿服务与金融服务 POI 数量比，输出代码校验表。",
+  "category": "ace_multi_step",
+  "expected_tools": [
+    "execute_spatial_code"
+  ],
+  "selected_tools": [],
+  "execution_trace": [
+    {
+      "step": "ablation_agent",
+      "detail": "missing_modules=code_agent"
+    },
+    {
+      "step": "tool_selection",
+      "detail": []
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": []
+    },
+    {
+      "step": "critic_diagnosis",
+      "detail": ""
+    },
+    {
+      "step": "experience_update",
+      "detail": []
+    }
+  ],
+  "errors": [
+    "missing_module_effect:tools,result_count,code_executed"
+  ],
+  "critic_diagnosis": "",
+  "generated_experience": "",
+  "retrieved_experiences": [],
+  "final_answer": "使用上下文中的 medical_anchor，计算 1 公里内住宿服务与金融服务 POI 数量比，输出代码校验表。 missing_modules=code_agent  medical_anchor 住宿服务 金融服务 记忆 校验表 1 公里",
+  "structured_response": {
+    "answer": "使用上下文中的 medical_anchor，计算 1 公里内住宿服务与金融服务 POI 数量比，输出代码校验表。 missing_modules=code_agent  medical_anchor 住宿服务 金融服务 记忆 校验表 1 公里",
+    "selected_tools": [],
+    "output_types": [
+      "table",
+      "explanation"
+    ],
+    "entities": [
+      "medical_anchor",
+      "住宿服务",
+      "金融服务",
+      "数量比"
+    ],
+    "keywords": [
+      "记忆",
+      "校验表",
+      "1 公里"
+    ],
+    "result_count": 0,
+    "retrieved_experience_ids": [],
+    "generated_experience_ids": [],
+    "experience_retrieved": false,
+    "experience_added": false,
+    "memory_used": true,
+    "code_executed": false,
+    "trace_events": [
+      {
+        "step": "ablation_agent",
+        "detail": "missing_modules=code_agent"
+      },
+      {
+        "step": "tool_selection",
+        "detail": []
+      },
+      {
+        "step": "experience_retrieval",
+        "detail": []
+      },
+      {
+        "step": "critic_diagnosis",
+        "detail": ""
+      },
+      {
+        "step": "experience_update",
+        "detail": []
+      }
+    ]
+  },
+  "validation": {
+    "score": 0.517,
+    "success": false,
+    "threshold": 0.86,
+    "missing": [
+      "tools",
+      "result_count",
+      "code_executed"
+    ],
+    "details": {
+      "tools": 0.0,
+      "outputs": 1.0,
+      "entities": 1.0,
+      "keywords": 0.75,
+      "result_count": 0.0,
+      "code_executed": 0.0,
+      "memory_used": 1.0
+    }
+  },
+  "success": false,
+  "metrics": {
+    "turns": 3.95,
+    "runtime": 0.11,
+    "execution_success": false,
+    "result_correctness": 0.517,
+    "has_map_layer": false,
+    "has_table": true,
+    "result_count": 0,
+    "experience_retrieved": false,
+    "experience_added": false,
+    "memory_used": true,
+    "code_executed": false,
+    "critic_used": false,
+    "missing_module_count": 1
+  }
+}

@@ -1,0 +1,85 @@
+{
+  "task_id": "exp4_step_033_empty_result_recovery",
+  "agent_type": "dynamic_cheatsheet",
+  "strategy": "dynamic_cheatsheet",
+  "adaptation_step": 33,
+  "query": "Step 33: 精确搜索“24小时儿童急诊药房”；若结果为空，逐级放宽关键词并说明回退策略。",
+  "category": "poi_search",
+  "expected_skill": "empty_result_recovery",
+  "novelty": "transfer",
+  "expected_tools": [
+    "search_poi",
+    "fallback_search"
+  ],
+  "selected_tools": [
+    "search_poi",
+    "fallback_search"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 33
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "empty_result_recovery-023"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "empty_result_recovery-033"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 6351
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "empty_result_recovery-033",
+  "retrieved_experiences": [
+    "empty_result_recovery-023"
+  ],
+  "final_answer": "dynamic_cheatsheet step=33 skill=empty_result_recovery accuracy=0.833 context_tokens=6351 retrieved=1 generated=1",
+  "structured_response": {
+    "accuracy": 0.833,
+    "context_token_count": 6351,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "empty_result_recovery-023"
+    ],
+    "generated_experience_ids": [
+      "empty_result_recovery-033"
+    ]
+  },
+  "validation": {
+    "score": 0.833,
+    "success": true,
+    "threshold": 0.72,
+    "missing": [],
+    "details": {
+      "tools": 1.0,
+      "accuracy": 0.833
+    }
+  },
+  "success": true,
+  "metrics": {
+    "turns": 3.0,
+    "runtime": 0.12,
+    "execution_success": true,
+    "result_correctness": 0.833,
+    "context_token_count": 6351,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 11,
+    "compression_event": ""
+  }
+}

@@ -1,0 +1,130 @@
+<!doctype html><html lang='zh-CN'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width, initial-scale=1'><title>实验报告</title><style>body{font-family:Inter,'Microsoft YaHei',sans-serif;max-width:1120px;margin:0 auto;padding:32px;color:#172033;line-height:1.7}h1{font-size:30px}h2{margin-top:32px;border-left:4px solid #1769aa;padding-left:10px}table{width:100%;border-collapse:collapse;margin:14px 0 24px;font-size:14px}th,td{border:1px solid #d8e0ea;padding:8px 10px;text-align:left;vertical-align:top}th{background:#eef5fb}img{max-width:100%;border:1px solid #d8e0ea;border-radius:8px}figure{margin:18px 0}figcaption{color:#64748b;font-size:13px}p{margin:10px 0}</style></head><body><h1>Context Collapse 稳定性实验 实验报告</h1>
+<p>Run ID：exp4_20260514_150105</p>
+<p>生成时间：2026-05-14T15:01:08</p>
+<p>配置：`{&quot;use_critic&quot;: true, &quot;use_evolution&quot;: true, &quot;use_experience_retrieval&quot;: true, &quot;use_code_agent&quot;: true, &quot;use_context_manager&quot;: true, &quot;use_real_ace&quot;: false, &quot;mock_mode&quot;: true}`</p>
+<h2>实验设计思路</h2>
+<p>实验四采用 100 个任务顺序输入的连续在线学习过程，比较周期性重写、Dynamic Cheatsheet 和 ACE 增长-精炼三种上下文更新策略，重点观察 context token 曲线和准确率曲线是否出现同步坍塌。</p>
+<p>任务展开规模：100 个任务单元；本次 trace 数：300；成功 245，失败 55。</p>
+<p>任务文件：`data/experiments/exp4_workbook.json`。</p>
+<h2>数据集说明</h2>
+<p>实验使用 `data/geodata/` 下的成都 POI 与行政区 GeoJSON 图层，任务集通过自然语言描述调用检索、查询、邻近、缓冲、叠加、空间连接、聚类、热点、统计和导出等 GIS 能力。</p>
+<table><thead><tr>
+<th>数据层</th>
+<th>要素数</th>
+<th>几何类型</th>
+<th>字段示例</th>
+</tr></thead><tbody>
+<tr><td>交通设施</td><td>20226</td><td>Point</td><td>name, type, address, lng, lat, province</td></tr>
+<tr><td>住宿服务</td><td>6473</td><td>Point</td><td>name, type, address, lng, lat, province</td></tr>
+<tr><td>体育</td><td>6753</td><td>Point</td><td>name, type, address, lng, lat, province</td></tr>
+<tr><td>公司</td><td>42299</td><td>Point</td><td>name, type, address, lng, lat, province</td></tr>
+<tr><td>医疗</td><td>12974</td><td>Point</td><td>name, type, address, lng, lat, province</td></tr>
+<tr><td>商务住宅</td><td>11726</td><td>Point</td><td>name, type, address, lng, lat, province</td></tr>
+<tr><td>成都行政区</td><td>24</td><td>Polygon</td><td>NAME</td></tr>
+<tr><td>政府</td><td>6959</td><td>Point</td><td>name, type, address, lng, lat, province</td></tr>
+<tr><td>生活服务</td><td>54729</td><td>Point</td><td>name, type, address, lng, lat, province</td></tr>
+<tr><td>科教文化</td><td>10916</td><td>Point</td><td>name, type, address, lng, lat, province</td></tr>
+<tr><td>购物</td><td>102214</td><td>Point</td><td>name, type, address, lng, lat, province</td></tr>
+<tr><td>金融服务</td><td>7157</td><td>Point</td><td>name, type, address, lng, lat, province</td></tr>
+<tr><td>风景</td><td>337</td><td>Point</td><td>name, type, address, lng, lat, province</td></tr>
+<tr><td>餐饮</td><td>61101</td><td>Point</td><td>name, type, address, lng, lat, province</td></tr>
+</tbody></table>
+<h2>任务集说明</h2>
+<p>实验四任务集拆成 `exp4_workbook.json` 习题册和 `exp4_evaluation_config.json` 评测配置。习题册定义 10 类通用能力任务模板并展开为 100 个 adaptation step，不局限于 GIS 任务；参考答案文件记录 collapse 判定阈值：高位 token 骤降到 35% 以下且任务准确率下降至少 0.12。</p>
+<table><thead><tr>
+<th>类别</th>
+<th>任务数</th>
+</tr></thead><tbody>
+<tr><td>attribute_query</td><td>10</td></tr>
+<tr><td>code_required</td><td>20</td></tr>
+<tr><td>export_highlight</td><td>10</td></tr>
+<tr><td>memory_followup</td><td>10</td></tr>
+<tr><td>nearby_analysis</td><td>10</td></tr>
+<tr><td>poi_search</td><td>10</td></tr>
+<tr><td>temporal_query</td><td>10</td></tr>
+<tr><td>validation</td><td>20</td></tr>
+</tbody></table>
+<h2>Trace 说明</h2>
+<p>每个 trace 是一次任务在某个框架或消融组下的完整记录。报告中的指标均可由 trace 字段直接复算。</p>
+<table><thead><tr>
+<th>字段</th>
+<th>含义</th>
+</tr></thead><tbody>
+<tr><td>task_id</td><td>展开后的任务编号；包含模板编号、重复轮次或 batch 信息。</td></tr>
+<tr><td>agent_type</td><td>执行该 trace 的框架、消融组或经验库策略。</td></tr>
+<tr><td>query</td><td>自然语言 GIS 任务文本。</td></tr>
+<tr><td>category</td><td>任务类别，例如 POI 检索、邻近分析、叠加分析、热点分析等。</td></tr>
+<tr><td>expected_tools</td><td>任务设计时标注的期望工具链，用于计算工具选择准确率。</td></tr>
+<tr><td>selected_tools</td><td>系统实际选择或模拟选择的工具链。</td></tr>
+<tr><td>execution_trace</td><td>意图识别、工具选择、执行评估等关键步骤记录。</td></tr>
+<tr><td>errors / error_signature</td><td>运行中出现的错误及其归一化签名，用于重复错误统计。</td></tr>
+<tr><td>critic_diagnosis</td><td>CriticAgent 产生的结构化诊断，消融时可为空或弱化。</td></tr>
+<tr><td>retrieved_experiences</td><td>本次任务检索到的经验条目，用于经验复用率和经验有效性分析。</td></tr>
+<tr><td>generated_experience</td><td>任务后沉淀的新经验，用于观察 Evolution 是否产生可复用知识。</td></tr>
+<tr><td>metrics</td><td>单条 trace 的可计算指标，如 turns、runtime、execution_success、result_correctness、repair_success。</td></tr>
+<tr><td>structured_response</td><td>实验一的新结构化返回，包含 selected_tools、output_types、entities、keywords、memory/experience/code 证据。</td></tr>
+<tr><td>validation</td><td>实验一按参考答案自动评分的结果，包含总分、阈值、缺失项和分项得分。</td></tr>
+</tbody></table>
+<h2>指标计算方法</h2>
+<table><thead><tr>
+<th>指标</th>
+<th>字段</th>
+<th>计算方式</th>
+</tr></thead><tbody>
+<tr><td>任务成功率</td><td>success_rate / task_success_rate</td><td>成功 trace 数 / trace 总数。success=true 记为 1，否则为 0。</td></tr>
+<tr><td>工具选择准确率</td><td>tool_selection_accuracy</td><td>对每条 trace 计算 |expected_tools ∩ selected_tools| / |expected_tools|，再对有效 trace 求平均。</td></tr>
+<tr><td>执行成功率</td><td>execution_success_rate</td><td>无 errors 且 metrics.execution_success=true 的 trace 数 / trace 总数。</td></tr>
+<tr><td>结果正确率</td><td>result_correctness</td><td>metrics.result_correctness 的算术平均值，取值范围 0-1。</td></tr>
+<tr><td>平均轮数</td><td>average_turns</td><td>metrics.turns 的算术平均值，用于衡量交互/推理链路长度。</td></tr>
+<tr><td>平均耗时</td><td>average_runtime / average_latency</td><td>metrics.runtime 的算术平均值，单位为秒。</td></tr>
+<tr><td>用户干预次数</td><td>user_intervention_count</td><td>所有 trace 的 metrics.user_intervention_count 求和。</td></tr>
+<tr><td>错误数</td><td>error_count</td><td>所有 trace 的 errors 列表长度求和。</td></tr>
+<tr><td>重复错误率</td><td>repeated_error_rate</td><td>出现重复 error_signature 的错误 trace 数 / trace 总数。</td></tr>
+<tr><td>修复成功率</td><td>repair_success_rate / self_repair_rate</td><td>repair_attempted=true 的 trace 中 repair_success=true 的比例。</td></tr>
+<tr><td>经验复用率</td><td>experience_reuse_rate</td><td>retrieved_experiences 非空的 trace 数 / trace 总数。</td></tr>
+<tr><td>知识保留率</td><td>knowledge_retention_rate</td><td>Exp4 最终快照中仍保留的早期经验数 / 早期经验总数。</td></tr>
+<tr><td>冗余率</td><td>redundancy_rate</td><td>经验文本指纹两两 Jaccard 相似度 &gt;= 0.72 的组合数 / 组合总数。</td></tr>
+<tr><td>上下文 token 数</td><td>context_token_count</td><td>中文字符、英文 token 和标点的近似加权计数，用于观察上下文膨胀。</td></tr>
+<tr><td>有效策略条目数量</td><td>effective_strategy_entry_count</td><td>Exp4 每步上下文中去重后的有效策略/能力条目数。</td></tr>
+<tr><td>重复条目比例</td><td>duplicate_entry_ratio</td><td>Exp4 每步上下文中重复经验条目占比，用于观察动态速查表或经验更新策略的冗余累积。</td></tr>
+<tr><td>上下文突然缩短次数</td><td>context_sudden_shorten_count</td><td>Exp4 中高位上下文 token 数突然缩短到前一步 65% 以下的次数。</td></tr>
+<tr><td>性能突然下降次数</td><td>performance_sudden_drop_count</td><td>Exp4 中相邻 adaptation step 任务准确率下降 &gt;=0.12 的次数。</td></tr>
+<tr><td>Collapse 事件数</td><td>collapse_event_count</td><td>Exp4 中相邻 adaptation step 出现高位 token 骤降到低位，且任务准确率同步下降的次数。</td></tr>
+</tbody></table>
+<h2>结果指标</h2>
+<table><thead><tr>
+<th>组别</th>
+<th>average_runtime</th>
+<th>average_turns</th>
+<th>collapse_event_count</th>
+<th>context_sudden_shorten_count</th>
+<th>description</th>
+<th>error_count</th>
+<th>execution_success_rate</th>
+<th>experience_add_rate</th>
+<th>experience_reuse_rate</th>
+<th>final_context_token_count</th>
+<th>final_duplicate_entry_ratio</th>
+<th>final_effective_strategy_entry_count</th>
+<th>final_redundancy_rate</th>
+<th>final_task_accuracy</th>
+<th>knowledge_retention_rate</th>
+<th>max_context_token_count</th>
+<th>name</th>
+<th>performance_sudden_drop_count</th>
+<th>repeated_error_rate</th>
+<th>result_correctness</th>
+<th>task_success_rate</th>
+<th>tool_selection_accuracy</th>
+</tr></thead><tbody>
+<tr><td>monolithic_rewrite</td><td>0.120</td><td>3.545</td><td>2</td><td>2</td><td>周期性把长上下文压缩为很短摘要，容易在压缩点丢失早期技能并触发 context collapse。</td><td>44</td><td>0.560</td><td>1.000</td><td>0.880</td><td>10980</td><td>0.763</td><td>10</td><td>0.763</td><td>0.780</td><td>0.100</td><td>13960</td><td>Periodic Rewrite Baseline</td><td>2</td><td>0.440</td><td>0.717</td><td>0.560</td><td>1.000</td></tr>
+<tr><td>dynamic_cheatsheet</td><td>0.120</td><td>3.145</td><td>0</td><td>0</td><td>维护一个动态速查表，持续把近期任务规则写成短条目；容量受限时会覆盖旧条目，容易丢失早期能力。</td><td>8</td><td>0.920</td><td>1.000</td><td>0.900</td><td>12805</td><td>0.100</td><td>10</td><td>0.100</td><td>0.920</td><td>0.100</td><td>12805</td><td>Dynamic Cheatsheet</td><td>0</td><td>0.000</td><td>0.852</td><td>0.920</td><td>1.000</td></tr>
+<tr><td>ace_grow_and_refine</td><td>0.120</td><td>2.848</td><td>0</td><td>0</td><td>ACE 将任务反馈沉淀为结构化经验，并阶段性合并、去冗余和保留核心技能，使上下文平稳增长或温和精简。</td><td>3</td><td>0.970</td><td>1.000</td><td>0.900</td><td>12028</td><td>0.000</td><td>10</td><td>0.000</td><td>0.970</td><td>0.100</td><td>12028</td><td>ACE Grow-and-Refine</td><td>0</td><td>0.000</td><td>0.932</td><td>0.970</td><td>1.000</td></tr>
+</tbody></table>
+<h2>可视化图表</h2>
+<p>图表由当前 result.json 直接生成，便于论文或答辩材料引用。</p>
+<figure><img src='charts/context_token_count.png' alt='charts/context_token_count.png'><figcaption>charts/context_token_count.png</figcaption></figure>
+<figure><img src='charts/task_accuracy.png' alt='charts/task_accuracy.png'><figcaption>charts/task_accuracy.png</figcaption></figure>
+<h2>总结分析</h2>
+<p>实验四中 ACE grow-and-refine 最终任务准确率为 0.970，最终上下文 token 数为 12028，collapse 事件数为 0；可用于说明 ACE 在连续在线学习中能避免上下文坍塌。</p>
+<p>未启用 DeepSeek 自动总结；可在导出时勾选 AI 总结生成更自然的论文式分析。</p></body></html>

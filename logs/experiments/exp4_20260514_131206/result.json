@@ -1,0 +1,4861 @@
+{
+  "run_id": "exp4_20260514_131206",
+  "experiment_id": "exp4",
+  "name": "Context Collapse / 经验库稳定性实验",
+  "created_at": "2026-05-14T13:12:06",
+  "config": {
+    "use_critic": true,
+    "use_evolution": true,
+    "use_experience_retrieval": true,
+    "use_code_agent": true,
+    "use_context_manager": true,
+    "use_real_ace": false,
+    "mock_mode": true
+  },
+  "frameworks": {
+    "monolithic_rewrite": {
+      "name": "Monolithic Rewrite",
+      "description": "每隔一段任务重写经验库摘要，容易覆盖早期经验。"
+    },
+    "append_only": {
+      "name": "Append Only",
+      "description": "只追加新经验，不合并去重，早期经验仍在但检索噪声和冗余逐渐上升。"
+    },
+    "ace_grow_and_refine": {
+      "name": "ACE Grow-and-Refine",
+      "description": "增量写入、合并同类经验并保留早期关键经验，强调稳定复用。"
+    }
+  },
+  "dataset": {
+    "workbook": "data\\experiments\\exp4_workbook.json",
+    "reference_answers": "data\\experiments\\exp4_reference_answers.json",
+    "task_count": 12,
+    "success_threshold": 0.84,
+    "capability_coverage": {
+      "critic_diagnosis": 6,
+      "experience_evolution": 6,
+      "crs_awareness": 3,
+      "schema_following": 3,
+      "empty_result_repair": 3,
+      "export_result": 3,
+      "experience_retrieval": 6,
+      "nearby_analysis": 1,
+      "tool_search": 1,
+      "temporal_query": 1,
+      "execute_code": 1,
+      "ranking": 1
+    },
+    "early_experience_ids": [
+      "exp4-crs-distance",
+      "exp4-schema-check",
+      "exp4-empty-result-relax",
+      "exp4-export-metadata"
+    ]
+  },
+  "groups": {
+    "monolithic_rewrite": {
+      "task_success_rate": 0.8333333333333334,
+      "tool_selection_accuracy": 1.0,
+      "execution_success_rate": 0.8333333333333334,
+      "result_correctness": 0.9300833333333333,
+      "average_turns": 3.775,
+      "average_runtime": 0.12791666666666665,
+      "experience_reuse_rate": 0.3333333333333333,
+      "experience_add_rate": 0.5,
+      "error_count": 2,
+      "repeated_error_rate": 0.16666666666666666,
+      "name": "Monolithic Rewrite",
+      "description": "每隔一段任务重写经验库摘要，容易覆盖早期经验。",
+      "knowledge_retention_rate": 0.0,
+      "collapse_event_count": 1,
+      "final_task_accuracy": 0.5,
+      "final_redundancy_rate": 0.0,
+      "final_context_token_count": 482
+    },
+    "append_only": {
+      "task_success_rate": 1.0,
+      "tool_selection_accuracy": 1.0,
+      "execution_success_rate": 1.0,
+      "result_correctness": 0.9816666666666666,
+      "average_turns": 3.4416666666666664,
+      "average_runtime": 0.12791666666666665,
+      "experience_reuse_rate": 0.5,
+      "experience_add_rate": 0.5,
+      "error_count": 0,
+      "repeated_error_rate": 0.0,
+      "name": "Append Only",
+      "description": "只追加新经验，不合并去重，早期经验仍在但检索噪声和冗余逐渐上升。",
+      "knowledge_retention_rate": 1.0,
+      "collapse_event_count": 1,
+      "final_task_accuracy": 1.0,
+      "final_redundancy_rate": 0.2857142857142857,
+      "final_context_token_count": 1140
+    },
+    "ace_grow_and_refine": {
+      "task_success_rate": 1.0,
+      "tool_selection_accuracy": 1.0,
+      "execution_success_rate": 1.0,
+      "result_correctness": 1.0,
+      "average_turns": 3.141666666666667,
+      "average_runtime": 0.12791666666666665,
+      "experience_reuse_rate": 0.5,
+      "experience_add_rate": 0.5,
+      "error_count": 0,
+      "repeated_error_rate": 0.0,
+      "name": "ACE Grow-and-Refine",
+      "description": "增量写入、合并同类经验并保留早期关键经验，强调稳定复用。",
+      "knowledge_retention_rate": 1.0,
+      "collapse_event_count": 0,
+      "final_task_accuracy": 1.0,
+      "final_redundancy_rate": 0.0,
+      "final_context_token_count": 792
+    }
+  },
+  "snapshots": {
+    "monolithic_rewrite": [
+      {
+        "step": 4,
+        "task_accuracy": 1.0,
+        "knowledge_retention_rate": 1.0,
+        "redundancy_rate": 0.0,
+        "context_token_count": 668,
+        "experience_retrieval_precision": 0.68,
+        "early_experience_retention_score": 1.0,
+        "experience_ids": [
+          "exp4-crs-distance",
+          "exp4-schema-check",
+          "exp4-empty-result-relax",
+          "exp4-export-metadata"
+        ],
+        "early_experience_ids": [
+          "exp4-crs-distance",
+          "exp4-schema-check",
+          "exp4-empty-result-relax",
+          "exp4-export-metadata"
+        ]
+      },
+      {
+        "step": 8,
+        "task_accuracy": 1.0,
+        "knowledge_retention_rate": 1.0,
+        "redundancy_rate": 0.0,
+        "context_token_count": 668,
+        "experience_retrieval_precision": 0.68,
+        "early_experience_retention_score": 1.0,
+        "experience_ids": [
+          "exp4-crs-distance",
+          "exp4-schema-check",
+          "exp4-empty-result-relax",
+          "exp4-export-metadata"
+        ],
+        "early_experience_ids": [
+          "exp4-crs-distance",
+          "exp4-schema-check",
+          "exp4-empty-result-relax",
+          "exp4-export-metadata"
+        ]
+      },
+      {
+        "step": 12,
+        "task_accuracy": 0.5,
+        "knowledge_retention_rate": 0.0,
+        "redundancy_rate": 0.0,
+        "context_token_count": 482,
+        "experience_retrieval_precision": 0.68,
+        "early_experience_retention_score": 0.0,
+        "experience_ids": [
+          "exp4-ranking-normalize"
+        ],
+        "early_experience_ids": [
+          "exp4-crs-distance",
+          "exp4-schema-check",
+          "exp4-empty-result-relax",
+          "exp4-export-metadata"
+        ]
+      }
+    ],
+    "append_only": [
+      {
+        "step": 4,
+        "task_accuracy": 1.0,
+        "knowledge_retention_rate": 1.0,
+        "redundancy_rate": 0.0,
+        "context_token_count": 780,
+        "experience_retrieval_precision": 0.72,
+        "early_experience_retention_score": 1.0,
+        "experience_ids": [
+          "exp4-crs-distance",
+          "exp4-schema-check",
+          "exp4-empty-result-relax",
+          "exp4-export-metadata"
+        ],
+        "early_experience_ids": [
+          "exp4-crs-distance",
+          "exp4-schema-check",
+          "exp4-empty-result-relax",
+          "exp4-export-metadata"
+        ]
+      },
+      {
+        "step": 8,
+        "task_accuracy": 1.0,
+        "knowledge_retention_rate": 1.0,
+        "redundancy_rate": 0.0,
+        "context_token_count": 780,
+        "experience_retrieval_precision": 0.72,
+        "early_experience_retention_score": 1.0,
+        "experience_ids": [
+          "exp4-crs-distance",
+          "exp4-schema-check",
+          "exp4-empty-result-relax",
+          "exp4-export-metadata"
+        ],
+        "early_experience_ids": [
+          "exp4-crs-distance",
+          "exp4-schema-check",
+          "exp4-empty-result-relax",
+          "exp4-export-metadata"
+        ]
+      },
+      {
+        "step": 12,
+        "task_accuracy": 1.0,
+        "knowledge_retention_rate": 1.0,
+        "redundancy_rate": 0.2857142857142857,
+        "context_token_count": 1140,
+        "experience_retrieval_precision": 0.591,
+        "early_experience_retention_score": 1.0,
+        "experience_ids": [
+          "exp4-crs-distance",
+          "exp4-schema-check",
+          "exp4-empty-result-relax",
+          "exp4-export-metadata",
+          "exp4-temporal-parse",
+          "exp4-temporal-parse",
+          "exp4-ranking-normalize",
+          "exp4-ranking-normalize"
+        ],
+        "early_experience_ids": [
+          "exp4-crs-distance",
+          "exp4-schema-check",
+          "exp4-empty-result-relax",
+          "exp4-export-metadata"
+        ]
+      }
+    ],
+    "ace_grow_and_refine": [
+      {
+        "step": 4,
+        "task_accuracy": 1.0,
+        "knowledge_retention_rate": 1.0,
+        "redundancy_rate": 0.0,
+        "context_token_count": 668,
+        "experience_retrieval_precision": 0.9,
+        "early_experience_retention_score": 1.0,
+        "experience_ids": [
+          "exp4-crs-distance",
+          "exp4-schema-check",
+          "exp4-empty-result-relax",
+          "exp4-export-metadata"
+        ],
+        "early_experience_ids": [
+          "exp4-crs-distance",
+          "exp4-schema-check",
+          "exp4-empty-result-relax",
+          "exp4-export-metadata"
+        ]
+      },
+      {
+        "step": 8,
+        "task_accuracy": 1.0,
+        "knowledge_retention_rate": 1.0,
+        "redundancy_rate": 0.0,
+        "context_token_count": 668,
+        "experience_retrieval_precision": 0.9,
+        "early_experience_retention_score": 1.0,
+        "experience_ids": [
+          "exp4-crs-distance",
+          "exp4-schema-check",
+          "exp4-empty-result-relax",
+          "exp4-export-metadata"
+        ],
+        "early_experience_ids": [
+          "exp4-crs-distance",
+          "exp4-schema-check",
+          "exp4-empty-result-relax",
+          "exp4-export-metadata"
+        ]
+      },
+      {
+        "step": 12,
+        "task_accuracy": 1.0,
+        "knowledge_retention_rate": 1.0,
+        "redundancy_rate": 0.0,
+        "context_token_count": 792,
+        "experience_retrieval_precision": 0.9,
+        "early_experience_retention_score": 1.0,
+        "experience_ids": [
+          "exp4-crs-distance",
+          "exp4-schema-check",
+          "exp4-empty-result-relax",
+          "exp4-export-metadata",
+          "exp4-temporal-parse",
+          "exp4-ranking-normalize"
+        ],
+        "early_experience_ids": [
+          "exp4-crs-distance",
+          "exp4-schema-check",
+          "exp4-empty-result-relax",
+          "exp4-export-metadata"
+        ]
+      }
+    ]
+  },
+  "traces": [
+    {
+      "task_id": "exp4_q01_learn_crs",
+      "agent_type": "monolithic_rewrite",
+      "strategy": "monolithic_rewrite",
+      "query": "学习 CRS 距离经验：查找学校 500 米内餐饮 POI，诊断经纬度距离错误并写入经验库。",
+      "category": "nearby_analysis",
+      "stage": "early_learn",
+      "expected_tools": [
+        "find_nearby"
+      ],
+      "selected_tools": [
+        "find_nearby"
+      ],
+      "execution_trace": [
+        {
+          "step": "strategy",
+          "detail": "monolithic_rewrite"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "find_nearby"
+          ]
+        },
+        {
+          "step": "experience_retrieval",
+          "detail": []
+        },
+        {
+          "step": "experience_update",
+          "detail": [
+            "exp4-crs-distance"
+          ]
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "experience_stability_update",
+      "generated_experience": "exp4-crs-distance",
+      "retrieved_experiences": [],
+      "final_answer": "学习 CRS 距离经验：查找学校 500 米内餐饮 POI，诊断经纬度距离错误并写入经验库。 monolithic_rewrite exp4-crs-distance 学校 餐饮 CRS 500 诊断 经验库 投影 米制",
+      "structured_response": {
+        "answer": "学习 CRS 距离经验：查找学校 500 米内餐饮 POI，诊断经纬度距离错误并写入经验库。 monolithic_rewrite exp4-crs-distance 学校 餐饮 CRS 500 诊断 经验库 投影 米制",
+        "selected_tools": [
+          "find_nearby"
+        ],
+        "output_types": [
+          "map_layer",
+          "table",
+          "diagnosis",
+          "explanation"
+        ],
+        "entities": [
+          "学校",
+          "餐饮",
+          "CRS",
+          "500"
+        ],
+        "keywords": [
+          "诊断",
+          "经验库",
+          "投影",
+          "米制"
+        ],
+        "result_count": 1,
+        "retrieved_experience_ids": [],
+        "generated_experience_ids": [
+          "exp4-crs-distance"
+        ],
+        "experience_retrieved": false,
+        "experience_added": true,
+        "code_executed": false,
+        "diagnosis": "experience_stability_update",
+        "trace_events": [
+          {
+            "step": "strategy",
+            "detail": "monolithic_rewrite"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "find_nearby"
+            ]
+          },
+          {
+            "step": "experience_retrieval",
+            "detail": []
+          },
+          {
+            "step": "experience_update",
+            "detail": [
+              "exp4-crs-distance"
+            ]
+          }
+        ]
+      },
+      "validation": {
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.84,
+        "missing": [],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0,
+          "experience_added": 1.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 3.55,
+        "runtime": 0.125,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "experience_retrieved": false,
+        "experience_added": true,
+        "code_executed": false,
+        "library_size": 1
+      }
+    },
+    {
+      "task_id": "exp4_q02_learn_schema",
+      "agent_type": "monolithic_rewrite",
+      "strategy": "monolithic_rewrite",
+      "query": "学习字段 schema 经验：查询餐饮中 type/name 包含“火锅”的 POI，诊断字段不匹配并写入经验库。",
+      "category": "attribute_query",
+      "stage": "early_learn",
+      "expected_tools": [
+        "query_poi_by_conditions"
+      ],
+      "selected_tools": [
+        "query_poi_by_conditions"
+      ],
+      "execution_trace": [
+        {
+          "step": "strategy",
+          "detail": "monolithic_rewrite"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "query_poi_by_conditions"
+          ]
+        },
+        {
+          "step": "experience_retrieval",
+          "detail": []
+        },
+        {
+          "step": "experience_update",
+          "detail": [
+            "exp4-schema-check"
+          ]
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "experience_stability_update",
+      "generated_experience": "exp4-schema-check",
+      "retrieved_experiences": [],
+      "final_answer": "学习字段 schema 经验：查询餐饮中 type/name 包含“火锅”的 POI，诊断字段不匹配并写入经验库。 monolithic_rewrite exp4-schema-check 餐饮 火锅 schema 字段 诊断 经验库 type name",
+      "structured_response": {
+        "answer": "学习字段 schema 经验：查询餐饮中 type/name 包含“火锅”的 POI，诊断字段不匹配并写入经验库。 monolithic_rewrite exp4-schema-check 餐饮 火锅 schema 字段 诊断 经验库 type name",
+        "selected_tools": [
+          "query_poi_by_conditions"
+        ],
+        "output_types": [
+          "map_layer",
+          "table",
+          "diagnosis",
+          "explanation"
+        ],
+        "entities": [
+          "餐饮",
+          "火锅",
+          "schema",
+          "字段"
+        ],
+        "keywords": [
+          "诊断",
+          "经验库",
+          "type",
+          "name"
+        ],
+        "result_count": 1,
+        "retrieved_experience_ids": [],
+        "generated_experience_ids": [
+          "exp4-schema-check"
+        ],
+        "experience_retrieved": false,
+        "experience_added": true,
+        "code_executed": false,
+        "diagnosis": "experience_stability_update",
+        "trace_events": [
+          {
+            "step": "strategy",
+            "detail": "monolithic_rewrite"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "query_poi_by_conditions"
+            ]
+          },
+          {
+            "step": "experience_retrieval",
+            "detail": []
+          },
+          {
+            "step": "experience_update",
+            "detail": [
+              "exp4-schema-check"
+            ]
+          }
+        ]
+      },
+      "validation": {
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.84,
+        "missing": [],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0,
+          "experience_added": 1.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 3.55,
+        "runtime": 0.125,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "experience_retrieved": false,
+        "experience_added": true,
+        "code_executed": false,
+        "library_size": 2
+      }
+    },
+    {
+      "task_id": "exp4_q03_learn_empty",
+      "agent_type": "monolithic_rewrite",
+      "strategy": "monolithic_rewrite",
+      "query": "学习空结果恢复经验：精确搜索“24小时儿童急诊药房”，若为空则逐步放宽关键词并写入经验库。",
+      "category": "poi_search",
+      "stage": "early_learn",
+      "expected_tools": [
+        "search_poi"
+      ],
+      "selected_tools": [
+        "search_poi"
+      ],
+      "execution_trace": [
+        {
+          "step": "strategy",
+          "detail": "monolithic_rewrite"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "search_poi"
+          ]
+        },
+        {
+          "step": "experience_retrieval",
+          "detail": []
+        },
+        {
+          "step": "experience_update",
+          "detail": [
+            "exp4-empty-result-relax"
+          ]
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "experience_stability_update",
+      "generated_experience": "exp4-empty-result-relax",
+      "retrieved_experiences": [],
+      "final_answer": "学习空结果恢复经验：精确搜索“24小时儿童急诊药房”，若为空则逐步放宽关键词并写入经验库。 monolithic_rewrite exp4-empty-result-relax 儿童急诊 药房 空结果 关键词 诊断 经验库 放宽 重试",
+      "structured_response": {
+        "answer": "学习空结果恢复经验：精确搜索“24小时儿童急诊药房”，若为空则逐步放宽关键词并写入经验库。 monolithic_rewrite exp4-empty-result-relax 儿童急诊 药房 空结果 关键词 诊断 经验库 放宽 重试",
+        "selected_tools": [
+          "search_poi"
+        ],
+        "output_types": [
+          "map_layer",
+          "table",
+          "diagnosis",
+          "explanation"
+        ],
+        "entities": [
+          "儿童急诊",
+          "药房",
+          "空结果",
+          "关键词"
+        ],
+        "keywords": [
+          "诊断",
+          "经验库",
+          "放宽",
+          "重试"
+        ],
+        "result_count": 1,
+        "retrieved_experience_ids": [],
+        "generated_experience_ids": [
+          "exp4-empty-result-relax"
+        ],
+        "experience_retrieved": false,
+        "experience_added": true,
+        "code_executed": false,
+        "diagnosis": "experience_stability_update",
+        "trace_events": [
+          {
+            "step": "strategy",
+            "detail": "monolithic_rewrite"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "search_poi"
+            ]
+          },
+          {
+            "step": "experience_retrieval",
+            "detail": []
+          },
+          {
+            "step": "experience_update",
+            "detail": [
+              "exp4-empty-result-relax"
+            ]
+          }
+        ]
+      },
+      "validation": {
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.84,
+        "missing": [],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0,
+          "experience_added": 1.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 3.55,
+        "runtime": 0.125,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "experience_retrieved": false,
+        "experience_added": true,
+        "code_executed": false,
+        "library_size": 3
+      }
+    },
+    {
+      "task_id": "exp4_q04_learn_export",
+      "agent_type": "monolithic_rewrite",
+      "strategy": "monolithic_rewrite",
+      "query": "学习导出元数据经验：导出餐饮结果前检查 CRS、geometry 和字段命名，若冲突则写入经验库。",
+      "category": "export_highlight",
+      "stage": "early_learn",
+      "expected_tools": [
+        "export_analysis_result"
+      ],
+      "selected_tools": [
+        "export_analysis_result"
+      ],
+      "execution_trace": [
+        {
+          "step": "strategy",
+          "detail": "monolithic_rewrite"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "export_analysis_result"
+          ]
+        },
+        {
+          "step": "experience_retrieval",
+          "detail": []
+        },
+        {
+          "step": "experience_update",
+          "detail": [
+            "exp4-export-metadata"
+          ]
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "experience_stability_update",
+      "generated_experience": "exp4-export-metadata",
+      "retrieved_experiences": [],
+      "final_answer": "学习导出元数据经验：导出餐饮结果前检查 CRS、geometry 和字段命名，若冲突则写入经验库。 monolithic_rewrite exp4-export-metadata CRS geometry 字段命名 导出 诊断 经验库 元数据 GeoJSON",
+      "structured_response": {
+        "answer": "学习导出元数据经验：导出餐饮结果前检查 CRS、geometry 和字段命名，若冲突则写入经验库。 monolithic_rewrite exp4-export-metadata CRS geometry 字段命名 导出 诊断 经验库 元数据 GeoJSON",
+        "selected_tools": [
+          "export_analysis_result"
+        ],
+        "output_types": [
+          "table",
+          "diagnosis",
+          "explanation"
+        ],
+        "entities": [
+          "CRS",
+          "geometry",
+          "字段命名",
+          "导出"
+        ],
+        "keywords": [
+          "诊断",
+          "经验库",
+          "元数据",
+          "GeoJSON"
+        ],
+        "result_count": 1,
+        "retrieved_experience_ids": [],
+        "generated_experience_ids": [
+          "exp4-export-metadata"
+        ],
+        "experience_retrieved": false,
+        "experience_added": true,
+        "code_executed": false,
+        "diagnosis": "experience_stability_update",
+        "trace_events": [
+          {
+            "step": "strategy",
+            "detail": "monolithic_rewrite"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "export_analysis_result"
+            ]
+          },
+          {
+            "step": "experience_retrieval",
+            "detail": []
+          },
+          {
+            "step": "experience_update",
+            "detail": [
+              "exp4-export-metadata"
+            ]
+          }
+        ]
+      },
+      "validation": {
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.84,
+        "missing": [],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0,
+          "experience_added": 1.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 3.55,
+        "runtime": 0.125,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": false,
+        "has_table": true,
+        "result_count": 1,
+        "experience_retrieved": false,
+        "experience_added": true,
+        "code_executed": false,
+        "library_size": 4
+      }
+    },
+    {
+      "task_id": "exp4_q05_transfer_crs",
+      "agent_type": "monolithic_rewrite",
+      "strategy": "monolithic_rewrite",
+      "query": "复用 CRS 距离经验：查找医院 800 米内住宿服务 POI，说明投影到米制坐标后再计算。",
+      "category": "nearby_analysis",
+      "stage": "mid_transfer",
+      "expected_tools": [
+        "find_nearby"
+      ],
+      "selected_tools": [
+        "find_nearby"
+      ],
+      "execution_trace": [
+        {
+          "step": "strategy",
+          "detail": "monolithic_rewrite"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "find_nearby"
+          ]
+        },
+        {
+          "step": "experience_retrieval",
+          "detail": [
+            "exp4-crs-distance"
+          ]
+        },
+        {
+          "step": "experience_update",
+          "detail": []
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [
+        "exp4-crs-distance"
+      ],
+      "final_answer": "复用 CRS 距离经验：查找医院 800 米内住宿服务 POI，说明投影到米制坐标后再计算。 monolithic_rewrite exp4-crs-distance 医院 住宿服务 CRS 800 经验 投影 米制 距离",
+      "structured_response": {
+        "answer": "复用 CRS 距离经验：查找医院 800 米内住宿服务 POI，说明投影到米制坐标后再计算。 monolithic_rewrite exp4-crs-distance 医院 住宿服务 CRS 800 经验 投影 米制 距离",
+        "selected_tools": [
+          "find_nearby"
+        ],
+        "output_types": [
+          "map_layer",
+          "table",
+          "explanation"
+        ],
+        "entities": [
+          "医院",
+          "住宿服务",
+          "CRS",
+          "800"
+        ],
+        "keywords": [
+          "经验",
+          "投影",
+          "米制",
+          "距离"
+        ],
+        "result_count": 1,
+        "retrieved_experience_ids": [
+          "exp4-crs-distance"
+        ],
+        "generated_experience_ids": [],
+        "experience_retrieved": true,
+        "experience_added": false,
+        "code_executed": false,
+        "diagnosis": "",
+        "trace_events": [
+          {
+            "step": "strategy",
+            "detail": "monolithic_rewrite"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "find_nearby"
+            ]
+          },
+          {
+            "step": "experience_retrieval",
+            "detail": [
+              "exp4-crs-distance"
+            ]
+          },
+          {
+            "step": "experience_update",
+            "detail": []
+          }
+        ]
+      },
+      "validation": {
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.84,
+        "missing": [],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0,
+          "experience_retrieved": 1.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 3.75,
+        "runtime": 0.125,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "experience_retrieved": true,
+        "experience_added": false,
+        "code_executed": false,
+        "library_size": 4
+      }
+    },
+    {
+      "task_id": "exp4_q06_transfer_schema",
+      "agent_type": "monolithic_rewrite",
+      "strategy": "monolithic_rewrite",
+      "query": "复用字段 schema 经验：查询生活服务中 type/name 包含“维修”的 POI，先确认可用字段。",
+      "category": "attribute_query",
+      "stage": "mid_transfer",
+      "expected_tools": [
+        "query_poi_by_conditions"
+      ],
+      "selected_tools": [
+        "query_poi_by_conditions"
+      ],
+      "execution_trace": [
+        {
+          "step": "strategy",
+          "detail": "monolithic_rewrite"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "query_poi_by_conditions"
+          ]
+        },
+        {
+          "step": "experience_retrieval",
+          "detail": [
+            "exp4-schema-check"
+          ]
+        },
+        {
+          "step": "experience_update",
+          "detail": []
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [
+        "exp4-schema-check"
+      ],
+      "final_answer": "复用字段 schema 经验：查询生活服务中 type/name 包含“维修”的 POI，先确认可用字段。 monolithic_rewrite exp4-schema-check 生活服务 维修 schema 字段 经验 type name 确认",
+      "structured_response": {
+        "answer": "复用字段 schema 经验：查询生活服务中 type/name 包含“维修”的 POI，先确认可用字段。 monolithic_rewrite exp4-schema-check 生活服务 维修 schema 字段 经验 type name 确认",
+        "selected_tools": [
+          "query_poi_by_conditions"
+        ],
+        "output_types": [
+          "map_layer",
+          "table",
+          "explanation"
+        ],
+        "entities": [
+          "生活服务",
+          "维修",
+          "schema",
+          "字段"
+        ],
+        "keywords": [
+          "经验",
+          "type",
+          "name",
+          "确认"
+        ],
+        "result_count": 1,
+        "retrieved_experience_ids": [
+          "exp4-schema-check"
+        ],
+        "generated_experience_ids": [],
+        "experience_retrieved": true,
+        "experience_added": false,
+        "code_executed": false,
+        "diagnosis": "",
+        "trace_events": [
+          {
+            "step": "strategy",
+            "detail": "monolithic_rewrite"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "query_poi_by_conditions"
+            ]
+          },
+          {
+            "step": "experience_retrieval",
+            "detail": [
+              "exp4-schema-check"
+            ]
+          },
+          {
+            "step": "experience_update",
+            "detail": []
+          }
+        ]
+      },
+      "validation": {
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.84,
+        "missing": [],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0,
+          "experience_retrieved": 1.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 3.75,
+        "runtime": 0.125,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "experience_retrieved": true,
+        "experience_added": false,
+        "code_executed": false,
+        "library_size": 4
+      }
+    },
+    {
+      "task_id": "exp4_q07_transfer_empty",
+      "agent_type": "monolithic_rewrite",
+      "strategy": "monolithic_rewrite",
+      "query": "复用空结果恢复经验：搜索“成都第七中学高新校区正门”，为空时放宽为“七中”“学校”。",
+      "category": "poi_search",
+      "stage": "mid_transfer",
+      "expected_tools": [
+        "search_poi"
+      ],
+      "selected_tools": [
+        "search_poi"
+      ],
+      "execution_trace": [
+        {
+          "step": "strategy",
+          "detail": "monolithic_rewrite"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "search_poi"
+          ]
+        },
+        {
+          "step": "experience_retrieval",
+          "detail": [
+            "exp4-empty-result-relax"
+          ]
+        },
+        {
+          "step": "experience_update",
+          "detail": []
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [
+        "exp4-empty-result-relax"
+      ],
+      "final_answer": "复用空结果恢复经验：搜索“成都第七中学高新校区正门”，为空时放宽为“七中”“学校”。 monolithic_rewrite exp4-empty-result-relax 七中 学校 空结果 关键词 经验 放宽 重试 搜索",
+      "structured_response": {
+        "answer": "复用空结果恢复经验：搜索“成都第七中学高新校区正门”，为空时放宽为“七中”“学校”。 monolithic_rewrite exp4-empty-result-relax 七中 学校 空结果 关键词 经验 放宽 重试 搜索",
+        "selected_tools": [
+          "search_poi"
+        ],
+        "output_types": [
+          "map_layer",
+          "table",
+          "explanation"
+        ],
+        "entities": [
+          "七中",
+          "学校",
+          "空结果",
+          "关键词"
+        ],
+        "keywords": [
+          "经验",
+          "放宽",
+          "重试",
+          "搜索"
+        ],
+        "result_count": 1,
+        "retrieved_experience_ids": [
+          "exp4-empty-result-relax"
+        ],
+        "generated_experience_ids": [],
+        "experience_retrieved": true,
+        "experience_added": false,
+        "code_executed": false,
+        "diagnosis": "",
+        "trace_events": [
+          {
+            "step": "strategy",
+            "detail": "monolithic_rewrite"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "search_poi"
+            ]
+          },
+          {
+            "step": "experience_retrieval",
+            "detail": [
+              "exp4-empty-result-relax"
+            ]
+          },
+          {
+            "step": "experience_update",
+            "detail": []
+          }
+        ]
+      },
+      "validation": {
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.84,
+        "missing": [],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0,
+          "experience_retrieved": 1.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 3.75,
+        "runtime": 0.125,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "experience_retrieved": true,
+        "experience_added": false,
+        "code_executed": false,
+        "library_size": 4
+      }
+    },
+    {
+      "task_id": "exp4_q08_transfer_export",
+      "agent_type": "monolithic_rewrite",
+      "strategy": "monolithic_rewrite",
+      "query": "复用导出元数据经验：导出热点网格为 GeoJSON 前检查 CRS、geometry 和字段命名。",
+      "category": "export_highlight",
+      "stage": "mid_transfer",
+      "expected_tools": [
+        "export_analysis_result"
+      ],
+      "selected_tools": [
+        "export_analysis_result"
+      ],
+      "execution_trace": [
+        {
+          "step": "strategy",
+          "detail": "monolithic_rewrite"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "export_analysis_result"
+          ]
+        },
+        {
+          "step": "experience_retrieval",
+          "detail": [
+            "exp4-export-metadata"
+          ]
+        },
+        {
+          "step": "experience_update",
+          "detail": []
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [
+        "exp4-export-metadata"
+      ],
+      "final_answer": "复用导出元数据经验：导出热点网格为 GeoJSON 前检查 CRS、geometry 和字段命名。 monolithic_rewrite exp4-export-metadata GeoJSON CRS geometry 字段命名 经验 导出 元数据 检查",
+      "structured_response": {
+        "answer": "复用导出元数据经验：导出热点网格为 GeoJSON 前检查 CRS、geometry 和字段命名。 monolithic_rewrite exp4-export-metadata GeoJSON CRS geometry 字段命名 经验 导出 元数据 检查",
+        "selected_tools": [
+          "export_analysis_result"
+        ],
+        "output_types": [
+          "table",
+          "explanation"
+        ],
+        "entities": [
+          "GeoJSON",
+          "CRS",
+          "geometry",
+          "字段命名"
+        ],
+        "keywords": [
+          "经验",
+          "导出",
+          "元数据",
+          "检查"
+        ],
+        "result_count": 1,
+        "retrieved_experience_ids": [
+          "exp4-export-metadata"
+        ],
+        "generated_experience_ids": [],
+        "experience_retrieved": true,
+        "experience_added": false,
+        "code_executed": false,
+        "diagnosis": "",
+        "trace_events": [
+          {
+            "step": "strategy",
+            "detail": "monolithic_rewrite"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "export_analysis_result"
+            ]
+          },
+          {
+            "step": "experience_retrieval",
+            "detail": [
+              "exp4-export-metadata"
+            ]
+          },
+          {
+            "step": "experience_update",
+            "detail": []
+          }
+        ]
+      },
+      "validation": {
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.84,
+        "missing": [],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0,
+          "experience_retrieved": 1.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 3.75,
+        "runtime": 0.125,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": false,
+        "has_table": true,
+        "result_count": 1,
+        "experience_retrieved": true,
+        "experience_added": false,
+        "code_executed": false,
+        "library_size": 4
+      }
+    },
+    {
+      "task_id": "exp4_q09_late_new_temporal",
+      "agent_type": "monolithic_rewrite",
+      "strategy": "monolithic_rewrite",
+      "query": "学习新时间字段经验：查询近 90 天新增医疗 POI，诊断日期格式不一致并写入经验库。",
+      "category": "temporal_query",
+      "stage": "late_new",
+      "expected_tools": [
+        "query_poi_by_conditions"
+      ],
+      "selected_tools": [
+        "query_poi_by_conditions"
+      ],
+      "execution_trace": [
+        {
+          "step": "strategy",
+          "detail": "monolithic_rewrite"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "query_poi_by_conditions"
+          ]
+        },
+        {
+          "step": "experience_retrieval",
+          "detail": []
+        },
+        {
+          "step": "experience_update",
+          "detail": [
+            "exp4-temporal-parse"
+          ]
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "experience_stability_update",
+      "generated_experience": "exp4-temporal-parse",
+      "retrieved_experiences": [],
+      "final_answer": "学习新时间字段经验：查询近 90 天新增医疗 POI，诊断日期格式不一致并写入经验库。 monolithic_rewrite exp4-temporal-parse 90 天 医疗 日期 格式 诊断 经验库 时间字段 解析",
+      "structured_response": {
+        "answer": "学习新时间字段经验：查询近 90 天新增医疗 POI，诊断日期格式不一致并写入经验库。 monolithic_rewrite exp4-temporal-parse 90 天 医疗 日期 格式 诊断 经验库 时间字段 解析",
+        "selected_tools": [
+          "query_poi_by_conditions"
+        ],
+        "output_types": [
+          "map_layer",
+          "table",
+          "diagnosis",
+          "explanation"
+        ],
+        "entities": [
+          "90 天",
+          "医疗",
+          "日期",
+          "格式"
+        ],
+        "keywords": [
+          "诊断",
+          "经验库",
+          "时间字段",
+          "解析"
+        ],
+        "result_count": 1,
+        "retrieved_experience_ids": [],
+        "generated_experience_ids": [
+          "exp4-temporal-parse"
+        ],
+        "experience_retrieved": false,
+        "experience_added": true,
+        "code_executed": false,
+        "diagnosis": "experience_stability_update",
+        "trace_events": [
+          {
+            "step": "strategy",
+            "detail": "monolithic_rewrite"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "query_poi_by_conditions"
+            ]
+          },
+          {
+            "step": "experience_retrieval",
+            "detail": []
+          },
+          {
+            "step": "experience_update",
+            "detail": [
+              "exp4-temporal-parse"
+            ]
+          }
+        ]
+      },
+      "validation": {
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.84,
+        "missing": [],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0,
+          "experience_added": 1.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 4.1,
+        "runtime": 0.125,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "experience_retrieved": false,
+        "experience_added": true,
+        "code_executed": false,
+        "library_size": 1
+      }
+    },
+    {
+      "task_id": "exp4_q10_late_new_ranking",
+      "agent_type": "monolithic_rewrite",
+      "strategy": "monolithic_rewrite",
+      "query": "学习多指标排名经验：综合医疗、餐饮和面积归一化得分，输出行政区 Top 5 并写入排名策略。",
+      "category": "code_required",
+      "stage": "late_new",
+      "expected_tools": [
+        "execute_spatial_code"
+      ],
+      "selected_tools": [
+        "execute_spatial_code"
+      ],
+      "execution_trace": [
+        {
+          "step": "strategy",
+          "detail": "monolithic_rewrite"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "execute_spatial_code"
+          ]
+        },
+        {
+          "step": "experience_retrieval",
+          "detail": []
+        },
+        {
+          "step": "experience_update",
+          "detail": [
+            "exp4-ranking-normalize"
+          ]
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "experience_stability_update",
+      "generated_experience": "exp4-ranking-normalize",
+      "retrieved_experiences": [],
+      "final_answer": "学习多指标排名经验：综合医疗、餐饮和面积归一化得分，输出行政区 Top 5 并写入排名策略。 monolithic_rewrite exp4-ranking-normalize 医疗 餐饮 归一化 Top 5 诊断 经验库 排名 GeoPandas",
+      "structured_response": {
+        "answer": "学习多指标排名经验：综合医疗、餐饮和面积归一化得分，输出行政区 Top 5 并写入排名策略。 monolithic_rewrite exp4-ranking-normalize 医疗 餐饮 归一化 Top 5 诊断 经验库 排名 GeoPandas",
+        "selected_tools": [
+          "execute_spatial_code"
+        ],
+        "output_types": [
+          "table",
+          "diagnosis",
+          "explanation"
+        ],
+        "entities": [
+          "医疗",
+          "餐饮",
+          "归一化",
+          "Top 5"
+        ],
+        "keywords": [
+          "诊断",
+          "经验库",
+          "排名",
+          "GeoPandas"
+        ],
+        "result_count": 1,
+        "retrieved_experience_ids": [],
+        "generated_experience_ids": [
+          "exp4-ranking-normalize"
+        ],
+        "experience_retrieved": false,
+        "experience_added": true,
+        "code_executed": true,
+        "diagnosis": "experience_stability_update",
+        "trace_events": [
+          {
+            "step": "strategy",
+            "detail": "monolithic_rewrite"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "execute_spatial_code"
+            ]
+          },
+          {
+            "step": "experience_retrieval",
+            "detail": []
+          },
+          {
+            "step": "experience_update",
+            "detail": [
+              "exp4-ranking-normalize"
+            ]
+          }
+        ]
+      },
+      "validation": {
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.84,
+        "missing": [],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0,
+          "experience_added": 1.0,
+          "code_executed": 1.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 4.1,
+        "runtime": 0.125,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": false,
+        "has_table": true,
+        "result_count": 1,
+        "experience_retrieved": false,
+        "experience_added": true,
+        "code_executed": true,
+        "library_size": 1
+      }
+    },
+    {
+      "task_id": "exp4_q11_retest_crs_schema",
+      "agent_type": "monolithic_rewrite",
+      "strategy": "monolithic_rewrite",
+      "query": "早期经验回测：统计学校 700 米内餐饮 POI 数量，必须同时复用 CRS 经验和 schema 经验。",
+      "category": "nearby_analysis",
+      "stage": "final_retest",
+      "expected_tools": [
+        "find_nearby"
+      ],
+      "selected_tools": [
+        "find_nearby"
+      ],
+      "execution_trace": [
+        {
+          "step": "strategy",
+          "detail": "monolithic_rewrite"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "find_nearby"
+          ]
+        },
+        {
+          "step": "experience_retrieval",
+          "detail": []
+        },
+        {
+          "step": "experience_update",
+          "detail": []
+        }
+      ],
+      "errors": [
+        "stability_miss:outputs,result_count,experience_retrieved"
+      ],
+      "error_signature": [
+        "final_retest"
+      ],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "早期经验回测：统计学校 700 米内餐饮 POI 数量，必须同时复用 CRS 经验和 schema 经验。 monolithic_rewrite 学校 餐饮 统计",
+      "structured_response": {
+        "answer": "早期经验回测：统计学校 700 米内餐饮 POI 数量，必须同时复用 CRS 经验和 schema 经验。 monolithic_rewrite 学校 餐饮 统计",
+        "selected_tools": [
+          "find_nearby"
+        ],
+        "output_types": [
+          "map_layer",
+          "table"
+        ],
+        "entities": [
+          "学校",
+          "餐饮",
+          "CRS",
+          "schema"
+        ],
+        "keywords": [
+          "经验",
+          "统计"
+        ],
+        "result_count": 0,
+        "retrieved_experience_ids": [],
+        "generated_experience_ids": [],
+        "experience_retrieved": false,
+        "experience_added": false,
+        "code_executed": false,
+        "diagnosis": "",
+        "trace_events": [
+          {
+            "step": "strategy",
+            "detail": "monolithic_rewrite"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "find_nearby"
+            ]
+          },
+          {
+            "step": "experience_retrieval",
+            "detail": []
+          },
+          {
+            "step": "experience_update",
+            "detail": []
+          }
+        ]
+      },
+      "validation": {
+        "score": 0.565,
+        "success": false,
+        "threshold": 0.84,
+        "missing": [
+          "outputs",
+          "result_count",
+          "experience_retrieved"
+        ],
+        "details": {
+          "tools": 1.0,
+          "outputs": 0.667,
+          "entities": 1.0,
+          "keywords": 0.5,
+          "result_count": 0.0,
+          "experience_retrieved": 0.0
+        }
+      },
+      "success": false,
+      "metrics": {
+        "turns": 3.95,
+        "runtime": 0.125,
+        "execution_success": false,
+        "result_correctness": 0.565,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 0,
+        "experience_retrieved": false,
+        "experience_added": false,
+        "code_executed": false,
+        "library_size": 1
+      }
+    },
+    {
+      "task_id": "exp4_q12_retest_empty_export",
+      "agent_type": "monolithic_rewrite",
+      "strategy": "monolithic_rewrite",
+      "query": "早期经验回测：搜索精确名称为空时放宽关键词，并导出结果前检查 CRS、geometry 和字段命名。",
+      "category": "export_highlight",
+      "stage": "final_retest",
+      "expected_tools": [
+        "search_poi",
+        "export_analysis_result"
+      ],
+      "selected_tools": [
+        "search_poi",
+        "export_analysis_result"
+      ],
+      "execution_trace": [
+        {
+          "step": "strategy",
+          "detail": "monolithic_rewrite"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "search_poi",
+            "export_analysis_result"
+          ]
+        },
+        {
+          "step": "experience_retrieval",
+          "detail": []
+        },
+        {
+          "step": "experience_update",
+          "detail": []
+        }
+      ],
+      "errors": [
+        "stability_miss:outputs,result_count,experience_retrieved"
+      ],
+      "error_signature": [
+        "final_retest"
+      ],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [],
+      "final_answer": "早期经验回测：搜索精确名称为空时放宽关键词，并导出结果前检查 CRS、geometry 和字段命名。 monolithic_rewrite 空结果 关键词",
+      "structured_response": {
+        "answer": "早期经验回测：搜索精确名称为空时放宽关键词，并导出结果前检查 CRS、geometry 和字段命名。 monolithic_rewrite 空结果 关键词",
+        "selected_tools": [
+          "search_poi",
+          "export_analysis_result"
+        ],
+        "output_types": [
+          "map_layer",
+          "table"
+        ],
+        "entities": [
+          "空结果",
+          "关键词",
+          "CRS",
+          "geometry"
+        ],
+        "keywords": [
+          "经验",
+          "放宽",
+          "导出"
+        ],
+        "result_count": 0,
+        "retrieved_experience_ids": [],
+        "generated_experience_ids": [],
+        "experience_retrieved": false,
+        "experience_added": false,
+        "code_executed": false,
+        "diagnosis": "",
+        "trace_events": [
+          {
+            "step": "strategy",
+            "detail": "monolithic_rewrite"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "search_poi",
+              "export_analysis_result"
+            ]
+          },
+          {
+            "step": "experience_retrieval",
+            "detail": []
+          },
+          {
+            "step": "experience_update",
+            "detail": []
+          }
+        ]
+      },
+      "validation": {
+        "score": 0.596,
+        "success": false,
+        "threshold": 0.84,
+        "missing": [
+          "outputs",
+          "result_count",
+          "experience_retrieved"
+        ],
+        "details": {
+          "tools": 1.0,
+          "outputs": 0.667,
+          "entities": 1.0,
+          "keywords": 0.75,
+          "result_count": 0.0,
+          "experience_retrieved": 0.0
+        }
+      },
+      "success": false,
+      "metrics": {
+        "turns": 3.95,
+        "runtime": 0.16,
+        "execution_success": false,
+        "result_correctness": 0.596,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 0,
+        "experience_retrieved": false,
+        "experience_added": false,
+        "code_executed": false,
+        "library_size": 1
+      }
+    },
+    {
+      "task_id": "exp4_q01_learn_crs",
+      "agent_type": "append_only",
+      "strategy": "append_only",
+      "query": "学习 CRS 距离经验：查找学校 500 米内餐饮 POI，诊断经纬度距离错误并写入经验库。",
+      "category": "nearby_analysis",
+      "stage": "early_learn",
+      "expected_tools": [
+        "find_nearby"
+      ],
+      "selected_tools": [
+        "find_nearby"
+      ],
+      "execution_trace": [
+        {
+          "step": "strategy",
+          "detail": "append_only"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "find_nearby"
+          ]
+        },
+        {
+          "step": "experience_retrieval",
+          "detail": []
+        },
+        {
+          "step": "experience_update",
+          "detail": [
+            "exp4-crs-distance"
+          ]
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "experience_stability_update",
+      "generated_experience": "exp4-crs-distance",
+      "retrieved_experiences": [],
+      "final_answer": "学习 CRS 距离经验：查找学校 500 米内餐饮 POI，诊断经纬度距离错误并写入经验库。 append_only exp4-crs-distance 学校 餐饮 CRS 500 诊断 经验库 投影 米制",
+      "structured_response": {
+        "answer": "学习 CRS 距离经验：查找学校 500 米内餐饮 POI，诊断经纬度距离错误并写入经验库。 append_only exp4-crs-distance 学校 餐饮 CRS 500 诊断 经验库 投影 米制",
+        "selected_tools": [
+          "find_nearby"
+        ],
+        "output_types": [
+          "map_layer",
+          "table",
+          "diagnosis",
+          "explanation"
+        ],
+        "entities": [
+          "学校",
+          "餐饮",
+          "CRS",
+          "500"
+        ],
+        "keywords": [
+          "诊断",
+          "经验库",
+          "投影",
+          "米制"
+        ],
+        "result_count": 1,
+        "retrieved_experience_ids": [],
+        "generated_experience_ids": [
+          "exp4-crs-distance"
+        ],
+        "experience_retrieved": false,
+        "experience_added": true,
+        "code_executed": false,
+        "diagnosis": "experience_stability_update",
+        "trace_events": [
+          {
+            "step": "strategy",
+            "detail": "append_only"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "find_nearby"
+            ]
+          },
+          {
+            "step": "experience_retrieval",
+            "detail": []
+          },
+          {
+            "step": "experience_update",
+            "detail": [
+              "exp4-crs-distance"
+            ]
+          }
+        ]
+      },
+      "validation": {
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.84,
+        "missing": [],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0,
+          "experience_added": 1.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 3.25,
+        "runtime": 0.125,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "experience_retrieved": false,
+        "experience_added": true,
+        "code_executed": false,
+        "library_size": 1
+      }
+    },
+    {
+      "task_id": "exp4_q02_learn_schema",
+      "agent_type": "append_only",
+      "strategy": "append_only",
+      "query": "学习字段 schema 经验：查询餐饮中 type/name 包含“火锅”的 POI，诊断字段不匹配并写入经验库。",
+      "category": "attribute_query",
+      "stage": "early_learn",
+      "expected_tools": [
+        "query_poi_by_conditions"
+      ],
+      "selected_tools": [
+        "query_poi_by_conditions"
+      ],
+      "execution_trace": [
+        {
+          "step": "strategy",
+          "detail": "append_only"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "query_poi_by_conditions"
+          ]
+        },
+        {
+          "step": "experience_retrieval",
+          "detail": []
+        },
+        {
+          "step": "experience_update",
+          "detail": [
+            "exp4-schema-check"
+          ]
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "experience_stability_update",
+      "generated_experience": "exp4-schema-check",
+      "retrieved_experiences": [],
+      "final_answer": "学习字段 schema 经验：查询餐饮中 type/name 包含“火锅”的 POI，诊断字段不匹配并写入经验库。 append_only exp4-schema-check 餐饮 火锅 schema 字段 诊断 经验库 type name",
+      "structured_response": {
+        "answer": "学习字段 schema 经验：查询餐饮中 type/name 包含“火锅”的 POI，诊断字段不匹配并写入经验库。 append_only exp4-schema-check 餐饮 火锅 schema 字段 诊断 经验库 type name",
+        "selected_tools": [
+          "query_poi_by_conditions"
+        ],
+        "output_types": [
+          "map_layer",
+          "table",
+          "diagnosis",
+          "explanation"
+        ],
+        "entities": [
+          "餐饮",
+          "火锅",
+          "schema",
+          "字段"
+        ],
+        "keywords": [
+          "诊断",
+          "经验库",
+          "type",
+          "name"
+        ],
+        "result_count": 1,
+        "retrieved_experience_ids": [],
+        "generated_experience_ids": [
+          "exp4-schema-check"
+        ],
+        "experience_retrieved": false,
+        "experience_added": true,
+        "code_executed": false,
+        "diagnosis": "experience_stability_update",
+        "trace_events": [
+          {
+            "step": "strategy",
+            "detail": "append_only"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "query_poi_by_conditions"
+            ]
+          },
+          {
+            "step": "experience_retrieval",
+            "detail": []
+          },
+          {
+            "step": "experience_update",
+            "detail": [
+              "exp4-schema-check"
+            ]
+          }
+        ]
+      },
+      "validation": {
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.84,
+        "missing": [],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0,
+          "experience_added": 1.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 3.25,
+        "runtime": 0.125,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "experience_retrieved": false,
+        "experience_added": true,
+        "code_executed": false,
+        "library_size": 2
+      }
+    },
+    {
+      "task_id": "exp4_q03_learn_empty",
+      "agent_type": "append_only",
+      "strategy": "append_only",
+      "query": "学习空结果恢复经验：精确搜索“24小时儿童急诊药房”，若为空则逐步放宽关键词并写入经验库。",
+      "category": "poi_search",
+      "stage": "early_learn",
+      "expected_tools": [
+        "search_poi"
+      ],
+      "selected_tools": [
+        "search_poi"
+      ],
+      "execution_trace": [
+        {
+          "step": "strategy",
+          "detail": "append_only"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "search_poi"
+          ]
+        },
+        {
+          "step": "experience_retrieval",
+          "detail": []
+        },
+        {
+          "step": "experience_update",
+          "detail": [
+            "exp4-empty-result-relax"
+          ]
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "experience_stability_update",
+      "generated_experience": "exp4-empty-result-relax",
+      "retrieved_experiences": [],
+      "final_answer": "学习空结果恢复经验：精确搜索“24小时儿童急诊药房”，若为空则逐步放宽关键词并写入经验库。 append_only exp4-empty-result-relax 儿童急诊 药房 空结果 关键词 诊断 经验库 放宽 重试",
+      "structured_response": {
+        "answer": "学习空结果恢复经验：精确搜索“24小时儿童急诊药房”，若为空则逐步放宽关键词并写入经验库。 append_only exp4-empty-result-relax 儿童急诊 药房 空结果 关键词 诊断 经验库 放宽 重试",
+        "selected_tools": [
+          "search_poi"
+        ],
+        "output_types": [
+          "map_layer",
+          "table",
+          "diagnosis",
+          "explanation"
+        ],
+        "entities": [
+          "儿童急诊",
+          "药房",
+          "空结果",
+          "关键词"
+        ],
+        "keywords": [
+          "诊断",
+          "经验库",
+          "放宽",
+          "重试"
+        ],
+        "result_count": 1,
+        "retrieved_experience_ids": [],
+        "generated_experience_ids": [
+          "exp4-empty-result-relax"
+        ],
+        "experience_retrieved": false,
+        "experience_added": true,
+        "code_executed": false,
+        "diagnosis": "experience_stability_update",
+        "trace_events": [
+          {
+            "step": "strategy",
+            "detail": "append_only"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "search_poi"
+            ]
+          },
+          {
+            "step": "experience_retrieval",
+            "detail": []
+          },
+          {
+            "step": "experience_update",
+            "detail": [
+              "exp4-empty-result-relax"
+            ]
+          }
+        ]
+      },
+      "validation": {
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.84,
+        "missing": [],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0,
+          "experience_added": 1.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 3.25,
+        "runtime": 0.125,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "experience_retrieved": false,
+        "experience_added": true,
+        "code_executed": false,
+        "library_size": 3
+      }
+    },
+    {
+      "task_id": "exp4_q04_learn_export",
+      "agent_type": "append_only",
+      "strategy": "append_only",
+      "query": "学习导出元数据经验：导出餐饮结果前检查 CRS、geometry 和字段命名，若冲突则写入经验库。",
+      "category": "export_highlight",
+      "stage": "early_learn",
+      "expected_tools": [
+        "export_analysis_result"
+      ],
+      "selected_tools": [
+        "export_analysis_result"
+      ],
+      "execution_trace": [
+        {
+          "step": "strategy",
+          "detail": "append_only"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "export_analysis_result"
+          ]
+        },
+        {
+          "step": "experience_retrieval",
+          "detail": []
+        },
+        {
+          "step": "experience_update",
+          "detail": [
+            "exp4-export-metadata"
+          ]
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "experience_stability_update",
+      "generated_experience": "exp4-export-metadata",
+      "retrieved_experiences": [],
+      "final_answer": "学习导出元数据经验：导出餐饮结果前检查 CRS、geometry 和字段命名，若冲突则写入经验库。 append_only exp4-export-metadata CRS geometry 字段命名 导出 诊断 经验库 元数据 GeoJSON",
+      "structured_response": {
+        "answer": "学习导出元数据经验：导出餐饮结果前检查 CRS、geometry 和字段命名，若冲突则写入经验库。 append_only exp4-export-metadata CRS geometry 字段命名 导出 诊断 经验库 元数据 GeoJSON",
+        "selected_tools": [
+          "export_analysis_result"
+        ],
+        "output_types": [
+          "table",
+          "diagnosis",
+          "explanation"
+        ],
+        "entities": [
+          "CRS",
+          "geometry",
+          "字段命名",
+          "导出"
+        ],
+        "keywords": [
+          "诊断",
+          "经验库",
+          "元数据",
+          "GeoJSON"
+        ],
+        "result_count": 1,
+        "retrieved_experience_ids": [],
+        "generated_experience_ids": [
+          "exp4-export-metadata"
+        ],
+        "experience_retrieved": false,
+        "experience_added": true,
+        "code_executed": false,
+        "diagnosis": "experience_stability_update",
+        "trace_events": [
+          {
+            "step": "strategy",
+            "detail": "append_only"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "export_analysis_result"
+            ]
+          },
+          {
+            "step": "experience_retrieval",
+            "detail": []
+          },
+          {
+            "step": "experience_update",
+            "detail": [
+              "exp4-export-metadata"
+            ]
+          }
+        ]
+      },
+      "validation": {
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.84,
+        "missing": [],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0,
+          "experience_added": 1.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 3.25,
+        "runtime": 0.125,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": false,
+        "has_table": true,
+        "result_count": 1,
+        "experience_retrieved": false,
+        "experience_added": true,
+        "code_executed": false,
+        "library_size": 4
+      }
+    },
+    {
+      "task_id": "exp4_q05_transfer_crs",
+      "agent_type": "append_only",
+      "strategy": "append_only",
+      "query": "复用 CRS 距离经验：查找医院 800 米内住宿服务 POI，说明投影到米制坐标后再计算。",
+      "category": "nearby_analysis",
+      "stage": "mid_transfer",
+      "expected_tools": [
+        "find_nearby"
+      ],
+      "selected_tools": [
+        "find_nearby"
+      ],
+      "execution_trace": [
+        {
+          "step": "strategy",
+          "detail": "append_only"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "find_nearby"
+          ]
+        },
+        {
+          "step": "experience_retrieval",
+          "detail": [
+            "exp4-crs-distance"
+          ]
+        },
+        {
+          "step": "experience_update",
+          "detail": []
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [
+        "exp4-crs-distance"
+      ],
+      "final_answer": "复用 CRS 距离经验：查找医院 800 米内住宿服务 POI，说明投影到米制坐标后再计算。 append_only exp4-crs-distance 医院 住宿服务 CRS 800 经验 投影 米制 距离",
+      "structured_response": {
+        "answer": "复用 CRS 距离经验：查找医院 800 米内住宿服务 POI，说明投影到米制坐标后再计算。 append_only exp4-crs-distance 医院 住宿服务 CRS 800 经验 投影 米制 距离",
+        "selected_tools": [
+          "find_nearby"
+        ],
+        "output_types": [
+          "map_layer",
+          "table",
+          "explanation"
+        ],
+        "entities": [
+          "医院",
+          "住宿服务",
+          "CRS",
+          "800"
+        ],
+        "keywords": [
+          "经验",
+          "投影",
+          "米制",
+          "距离"
+        ],
+        "result_count": 1,
+        "retrieved_experience_ids": [
+          "exp4-crs-distance"
+        ],
+        "generated_experience_ids": [],
+        "experience_retrieved": true,
+        "experience_added": false,
+        "code_executed": false,
+        "diagnosis": "",
+        "trace_events": [
+          {
+            "step": "strategy",
+            "detail": "append_only"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "find_nearby"
+            ]
+          },
+          {
+            "step": "experience_retrieval",
+            "detail": [
+              "exp4-crs-distance"
+            ]
+          },
+          {
+            "step": "experience_update",
+            "detail": []
+          }
+        ]
+      },
+      "validation": {
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.84,
+        "missing": [],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0,
+          "experience_retrieved": 1.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 3.45,
+        "runtime": 0.125,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "experience_retrieved": true,
+        "experience_added": false,
+        "code_executed": false,
+        "library_size": 4
+      }
+    },
+    {
+      "task_id": "exp4_q06_transfer_schema",
+      "agent_type": "append_only",
+      "strategy": "append_only",
+      "query": "复用字段 schema 经验：查询生活服务中 type/name 包含“维修”的 POI，先确认可用字段。",
+      "category": "attribute_query",
+      "stage": "mid_transfer",
+      "expected_tools": [
+        "query_poi_by_conditions"
+      ],
+      "selected_tools": [
+        "query_poi_by_conditions"
+      ],
+      "execution_trace": [
+        {
+          "step": "strategy",
+          "detail": "append_only"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "query_poi_by_conditions"
+          ]
+        },
+        {
+          "step": "experience_retrieval",
+          "detail": [
+            "exp4-schema-check"
+          ]
+        },
+        {
+          "step": "experience_update",
+          "detail": []
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [
+        "exp4-schema-check"
+      ],
+      "final_answer": "复用字段 schema 经验：查询生活服务中 type/name 包含“维修”的 POI，先确认可用字段。 append_only exp4-schema-check 生活服务 维修 schema 字段 经验 type name 确认",
+      "structured_response": {
+        "answer": "复用字段 schema 经验：查询生活服务中 type/name 包含“维修”的 POI，先确认可用字段。 append_only exp4-schema-check 生活服务 维修 schema 字段 经验 type name 确认",
+        "selected_tools": [
+          "query_poi_by_conditions"
+        ],
+        "output_types": [
+          "map_layer",
+          "table",
+          "explanation"
+        ],
+        "entities": [
+          "生活服务",
+          "维修",
+          "schema",
+          "字段"
+        ],
+        "keywords": [
+          "经验",
+          "type",
+          "name",
+          "确认"
+        ],
+        "result_count": 1,
+        "retrieved_experience_ids": [
+          "exp4-schema-check"
+        ],
+        "generated_experience_ids": [],
+        "experience_retrieved": true,
+        "experience_added": false,
+        "code_executed": false,
+        "diagnosis": "",
+        "trace_events": [
+          {
+            "step": "strategy",
+            "detail": "append_only"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "query_poi_by_conditions"
+            ]
+          },
+          {
+            "step": "experience_retrieval",
+            "detail": [
+              "exp4-schema-check"
+            ]
+          },
+          {
+            "step": "experience_update",
+            "detail": []
+          }
+        ]
+      },
+      "validation": {
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.84,
+        "missing": [],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0,
+          "experience_retrieved": 1.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 3.45,
+        "runtime": 0.125,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "experience_retrieved": true,
+        "experience_added": false,
+        "code_executed": false,
+        "library_size": 4
+      }
+    },
+    {
+      "task_id": "exp4_q07_transfer_empty",
+      "agent_type": "append_only",
+      "strategy": "append_only",
+      "query": "复用空结果恢复经验：搜索“成都第七中学高新校区正门”，为空时放宽为“七中”“学校”。",
+      "category": "poi_search",
+      "stage": "mid_transfer",
+      "expected_tools": [
+        "search_poi"
+      ],
+      "selected_tools": [
+        "search_poi"
+      ],
+      "execution_trace": [
+        {
+          "step": "strategy",
+          "detail": "append_only"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "search_poi"
+          ]
+        },
+        {
+          "step": "experience_retrieval",
+          "detail": [
+            "exp4-empty-result-relax"
+          ]
+        },
+        {
+          "step": "experience_update",
+          "detail": []
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [
+        "exp4-empty-result-relax"
+      ],
+      "final_answer": "复用空结果恢复经验：搜索“成都第七中学高新校区正门”，为空时放宽为“七中”“学校”。 append_only exp4-empty-result-relax 七中 学校 空结果 关键词 经验 放宽 重试 搜索",
+      "structured_response": {
+        "answer": "复用空结果恢复经验：搜索“成都第七中学高新校区正门”，为空时放宽为“七中”“学校”。 append_only exp4-empty-result-relax 七中 学校 空结果 关键词 经验 放宽 重试 搜索",
+        "selected_tools": [
+          "search_poi"
+        ],
+        "output_types": [
+          "map_layer",
+          "table",
+          "explanation"
+        ],
+        "entities": [
+          "七中",
+          "学校",
+          "空结果",
+          "关键词"
+        ],
+        "keywords": [
+          "经验",
+          "放宽",
+          "重试",
+          "搜索"
+        ],
+        "result_count": 1,
+        "retrieved_experience_ids": [
+          "exp4-empty-result-relax"
+        ],
+        "generated_experience_ids": [],
+        "experience_retrieved": true,
+        "experience_added": false,
+        "code_executed": false,
+        "diagnosis": "",
+        "trace_events": [
+          {
+            "step": "strategy",
+            "detail": "append_only"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "search_poi"
+            ]
+          },
+          {
+            "step": "experience_retrieval",
+            "detail": [
+              "exp4-empty-result-relax"
+            ]
+          },
+          {
+            "step": "experience_update",
+            "detail": []
+          }
+        ]
+      },
+      "validation": {
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.84,
+        "missing": [],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0,
+          "experience_retrieved": 1.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 3.45,
+        "runtime": 0.125,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "experience_retrieved": true,
+        "experience_added": false,
+        "code_executed": false,
+        "library_size": 4
+      }
+    },
+    {
+      "task_id": "exp4_q08_transfer_export",
+      "agent_type": "append_only",
+      "strategy": "append_only",
+      "query": "复用导出元数据经验：导出热点网格为 GeoJSON 前检查 CRS、geometry 和字段命名。",
+      "category": "export_highlight",
+      "stage": "mid_transfer",
+      "expected_tools": [
+        "export_analysis_result"
+      ],
+      "selected_tools": [
+        "export_analysis_result"
+      ],
+      "execution_trace": [
+        {
+          "step": "strategy",
+          "detail": "append_only"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "export_analysis_result"
+          ]
+        },
+        {
+          "step": "experience_retrieval",
+          "detail": [
+            "exp4-export-metadata"
+          ]
+        },
+        {
+          "step": "experience_update",
+          "detail": []
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [
+        "exp4-export-metadata"
+      ],
+      "final_answer": "复用导出元数据经验：导出热点网格为 GeoJSON 前检查 CRS、geometry 和字段命名。 append_only exp4-export-metadata GeoJSON CRS geometry 字段命名 经验 导出 元数据 检查",
+      "structured_response": {
+        "answer": "复用导出元数据经验：导出热点网格为 GeoJSON 前检查 CRS、geometry 和字段命名。 append_only exp4-export-metadata GeoJSON CRS geometry 字段命名 经验 导出 元数据 检查",
+        "selected_tools": [
+          "export_analysis_result"
+        ],
+        "output_types": [
+          "table",
+          "explanation"
+        ],
+        "entities": [
+          "GeoJSON",
+          "CRS",
+          "geometry",
+          "字段命名"
+        ],
+        "keywords": [
+          "经验",
+          "导出",
+          "元数据",
+          "检查"
+        ],
+        "result_count": 1,
+        "retrieved_experience_ids": [
+          "exp4-export-metadata"
+        ],
+        "generated_experience_ids": [],
+        "experience_retrieved": true,
+        "experience_added": false,
+        "code_executed": false,
+        "diagnosis": "",
+        "trace_events": [
+          {
+            "step": "strategy",
+            "detail": "append_only"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "export_analysis_result"
+            ]
+          },
+          {
+            "step": "experience_retrieval",
+            "detail": [
+              "exp4-export-metadata"
+            ]
+          },
+          {
+            "step": "experience_update",
+            "detail": []
+          }
+        ]
+      },
+      "validation": {
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.84,
+        "missing": [],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0,
+          "experience_retrieved": 1.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 3.45,
+        "runtime": 0.125,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": false,
+        "has_table": true,
+        "result_count": 1,
+        "experience_retrieved": true,
+        "experience_added": false,
+        "code_executed": false,
+        "library_size": 4
+      }
+    },
+    {
+      "task_id": "exp4_q09_late_new_temporal",
+      "agent_type": "append_only",
+      "strategy": "append_only",
+      "query": "学习新时间字段经验：查询近 90 天新增医疗 POI，诊断日期格式不一致并写入经验库。",
+      "category": "temporal_query",
+      "stage": "late_new",
+      "expected_tools": [
+        "query_poi_by_conditions"
+      ],
+      "selected_tools": [
+        "query_poi_by_conditions"
+      ],
+      "execution_trace": [
+        {
+          "step": "strategy",
+          "detail": "append_only"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "query_poi_by_conditions"
+          ]
+        },
+        {
+          "step": "experience_retrieval",
+          "detail": []
+        },
+        {
+          "step": "experience_update",
+          "detail": [
+            "exp4-temporal-parse"
+          ]
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "experience_stability_update",
+      "generated_experience": "exp4-temporal-parse",
+      "retrieved_experiences": [],
+      "final_answer": "学习新时间字段经验：查询近 90 天新增医疗 POI，诊断日期格式不一致并写入经验库。 append_only exp4-temporal-parse 90 天 医疗 日期 格式 诊断 经验库 时间字段 解析",
+      "structured_response": {
+        "answer": "学习新时间字段经验：查询近 90 天新增医疗 POI，诊断日期格式不一致并写入经验库。 append_only exp4-temporal-parse 90 天 医疗 日期 格式 诊断 经验库 时间字段 解析",
+        "selected_tools": [
+          "query_poi_by_conditions"
+        ],
+        "output_types": [
+          "map_layer",
+          "table",
+          "diagnosis",
+          "explanation"
+        ],
+        "entities": [
+          "90 天",
+          "医疗",
+          "日期",
+          "格式"
+        ],
+        "keywords": [
+          "诊断",
+          "经验库",
+          "时间字段",
+          "解析"
+        ],
+        "result_count": 1,
+        "retrieved_experience_ids": [],
+        "generated_experience_ids": [
+          "exp4-temporal-parse"
+        ],
+        "experience_retrieved": false,
+        "experience_added": true,
+        "code_executed": false,
+        "diagnosis": "experience_stability_update",
+        "trace_events": [
+          {
+            "step": "strategy",
+            "detail": "append_only"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "query_poi_by_conditions"
+            ]
+          },
+          {
+            "step": "experience_retrieval",
+            "detail": []
+          },
+          {
+            "step": "experience_update",
+            "detail": [
+              "exp4-temporal-parse"
+            ]
+          }
+        ]
+      },
+      "validation": {
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.84,
+        "missing": [],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0,
+          "experience_added": 1.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 3.8,
+        "runtime": 0.125,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "experience_retrieved": false,
+        "experience_added": true,
+        "code_executed": false,
+        "library_size": 6
+      }
+    },
+    {
+      "task_id": "exp4_q10_late_new_ranking",
+      "agent_type": "append_only",
+      "strategy": "append_only",
+      "query": "学习多指标排名经验：综合医疗、餐饮和面积归一化得分，输出行政区 Top 5 并写入排名策略。",
+      "category": "code_required",
+      "stage": "late_new",
+      "expected_tools": [
+        "execute_spatial_code"
+      ],
+      "selected_tools": [
+        "execute_spatial_code"
+      ],
+      "execution_trace": [
+        {
+          "step": "strategy",
+          "detail": "append_only"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "execute_spatial_code"
+          ]
+        },
+        {
+          "step": "experience_retrieval",
+          "detail": []
+        },
+        {
+          "step": "experience_update",
+          "detail": [
+            "exp4-ranking-normalize"
+          ]
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "experience_stability_update",
+      "generated_experience": "exp4-ranking-normalize",
+      "retrieved_experiences": [],
+      "final_answer": "学习多指标排名经验：综合医疗、餐饮和面积归一化得分，输出行政区 Top 5 并写入排名策略。 append_only exp4-ranking-normalize 医疗 餐饮 归一化 Top 5 诊断 经验库 排名 GeoPandas",
+      "structured_response": {
+        "answer": "学习多指标排名经验：综合医疗、餐饮和面积归一化得分，输出行政区 Top 5 并写入排名策略。 append_only exp4-ranking-normalize 医疗 餐饮 归一化 Top 5 诊断 经验库 排名 GeoPandas",
+        "selected_tools": [
+          "execute_spatial_code"
+        ],
+        "output_types": [
+          "table",
+          "diagnosis",
+          "explanation"
+        ],
+        "entities": [
+          "医疗",
+          "餐饮",
+          "归一化",
+          "Top 5"
+        ],
+        "keywords": [
+          "诊断",
+          "经验库",
+          "排名",
+          "GeoPandas"
+        ],
+        "result_count": 1,
+        "retrieved_experience_ids": [],
+        "generated_experience_ids": [
+          "exp4-ranking-normalize"
+        ],
+        "experience_retrieved": false,
+        "experience_added": true,
+        "code_executed": true,
+        "diagnosis": "experience_stability_update",
+        "trace_events": [
+          {
+            "step": "strategy",
+            "detail": "append_only"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "execute_spatial_code"
+            ]
+          },
+          {
+            "step": "experience_retrieval",
+            "detail": []
+          },
+          {
+            "step": "experience_update",
+            "detail": [
+              "exp4-ranking-normalize"
+            ]
+          }
+        ]
+      },
+      "validation": {
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.84,
+        "missing": [],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0,
+          "experience_added": 1.0,
+          "code_executed": 1.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 3.8,
+        "runtime": 0.125,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": false,
+        "has_table": true,
+        "result_count": 1,
+        "experience_retrieved": false,
+        "experience_added": true,
+        "code_executed": true,
+        "library_size": 8
+      }
+    },
+    {
+      "task_id": "exp4_q11_retest_crs_schema",
+      "agent_type": "append_only",
+      "strategy": "append_only",
+      "query": "早期经验回测：统计学校 700 米内餐饮 POI 数量，必须同时复用 CRS 经验和 schema 经验。",
+      "category": "nearby_analysis",
+      "stage": "final_retest",
+      "expected_tools": [
+        "find_nearby"
+      ],
+      "selected_tools": [
+        "find_nearby"
+      ],
+      "execution_trace": [
+        {
+          "step": "strategy",
+          "detail": "append_only"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "find_nearby"
+          ]
+        },
+        {
+          "step": "experience_retrieval",
+          "detail": [
+            "exp4-schema-check"
+          ]
+        },
+        {
+          "step": "experience_update",
+          "detail": []
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [
+        "exp4-schema-check"
+      ],
+      "final_answer": "早期经验回测：统计学校 700 米内餐饮 POI 数量，必须同时复用 CRS 经验和 schema 经验。 append_only exp4-schema-check 学校 餐饮 CRS schema 经验 投影 字段 统计",
+      "structured_response": {
+        "answer": "早期经验回测：统计学校 700 米内餐饮 POI 数量，必须同时复用 CRS 经验和 schema 经验。 append_only exp4-schema-check 学校 餐饮 CRS schema 经验 投影 字段 统计",
+        "selected_tools": [
+          "find_nearby"
+        ],
+        "output_types": [
+          "map_layer",
+          "table",
+          "explanation"
+        ],
+        "entities": [
+          "学校",
+          "餐饮",
+          "CRS",
+          "schema"
+        ],
+        "keywords": [
+          "经验",
+          "投影",
+          "字段",
+          "统计"
+        ],
+        "result_count": 1,
+        "retrieved_experience_ids": [
+          "exp4-schema-check"
+        ],
+        "generated_experience_ids": [],
+        "experience_retrieved": true,
+        "experience_added": false,
+        "code_executed": false,
+        "diagnosis": "",
+        "trace_events": [
+          {
+            "step": "strategy",
+            "detail": "append_only"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "find_nearby"
+            ]
+          },
+          {
+            "step": "experience_retrieval",
+            "detail": [
+              "exp4-schema-check"
+            ]
+          },
+          {
+            "step": "experience_update",
+            "detail": []
+          }
+        ]
+      },
+      "validation": {
+        "score": 0.89,
+        "success": true,
+        "threshold": 0.84,
+        "missing": [],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0,
+          "experience_retrieved": 0.5
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 3.45,
+        "runtime": 0.125,
+        "execution_success": true,
+        "result_correctness": 0.89,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "experience_retrieved": true,
+        "experience_added": false,
+        "code_executed": false,
+        "library_size": 8
+      }
+    },
+    {
+      "task_id": "exp4_q12_retest_empty_export",
+      "agent_type": "append_only",
+      "strategy": "append_only",
+      "query": "早期经验回测：搜索精确名称为空时放宽关键词，并导出结果前检查 CRS、geometry 和字段命名。",
+      "category": "export_highlight",
+      "stage": "final_retest",
+      "expected_tools": [
+        "search_poi",
+        "export_analysis_result"
+      ],
+      "selected_tools": [
+        "search_poi",
+        "export_analysis_result"
+      ],
+      "execution_trace": [
+        {
+          "step": "strategy",
+          "detail": "append_only"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "search_poi",
+            "export_analysis_result"
+          ]
+        },
+        {
+          "step": "experience_retrieval",
+          "detail": [
+            "exp4-export-metadata"
+          ]
+        },
+        {
+          "step": "experience_update",
+          "detail": []
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [
+        "exp4-export-metadata"
+      ],
+      "final_answer": "早期经验回测：搜索精确名称为空时放宽关键词，并导出结果前检查 CRS、geometry 和字段命名。 append_only exp4-export-metadata 空结果 关键词 CRS geometry 经验 放宽 导出 元数据",
+      "structured_response": {
+        "answer": "早期经验回测：搜索精确名称为空时放宽关键词，并导出结果前检查 CRS、geometry 和字段命名。 append_only exp4-export-metadata 空结果 关键词 CRS geometry 经验 放宽 导出 元数据",
+        "selected_tools": [
+          "search_poi",
+          "export_analysis_result"
+        ],
+        "output_types": [
+          "map_layer",
+          "table",
+          "explanation"
+        ],
+        "entities": [
+          "空结果",
+          "关键词",
+          "CRS",
+          "geometry"
+        ],
+        "keywords": [
+          "经验",
+          "放宽",
+          "导出",
+          "元数据"
+        ],
+        "result_count": 1,
+        "retrieved_experience_ids": [
+          "exp4-export-metadata"
+        ],
+        "generated_experience_ids": [],
+        "experience_retrieved": true,
+        "experience_added": false,
+        "code_executed": false,
+        "diagnosis": "",
+        "trace_events": [
+          {
+            "step": "strategy",
+            "detail": "append_only"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "search_poi",
+              "export_analysis_result"
+            ]
+          },
+          {
+            "step": "experience_retrieval",
+            "detail": [
+              "exp4-export-metadata"
+            ]
+          },
+          {
+            "step": "experience_update",
+            "detail": []
+          }
+        ]
+      },
+      "validation": {
+        "score": 0.89,
+        "success": true,
+        "threshold": 0.84,
+        "missing": [],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0,
+          "experience_retrieved": 0.5
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 3.45,
+        "runtime": 0.16,
+        "execution_success": true,
+        "result_correctness": 0.89,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "experience_retrieved": true,
+        "experience_added": false,
+        "code_executed": false,
+        "library_size": 8
+      }
+    },
+    {
+      "task_id": "exp4_q01_learn_crs",
+      "agent_type": "ace_grow_and_refine",
+      "strategy": "ace_grow_and_refine",
+      "query": "学习 CRS 距离经验：查找学校 500 米内餐饮 POI，诊断经纬度距离错误并写入经验库。",
+      "category": "nearby_analysis",
+      "stage": "early_learn",
+      "expected_tools": [
+        "find_nearby"
+      ],
+      "selected_tools": [
+        "find_nearby"
+      ],
+      "execution_trace": [
+        {
+          "step": "strategy",
+          "detail": "ace_grow_and_refine"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "find_nearby"
+          ]
+        },
+        {
+          "step": "experience_retrieval",
+          "detail": []
+        },
+        {
+          "step": "experience_update",
+          "detail": [
+            "exp4-crs-distance"
+          ]
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "experience_stability_update",
+      "generated_experience": "exp4-crs-distance",
+      "retrieved_experiences": [],
+      "final_answer": "学习 CRS 距离经验：查找学校 500 米内餐饮 POI，诊断经纬度距离错误并写入经验库。 ace_grow_and_refine exp4-crs-distance 学校 餐饮 CRS 500 诊断 经验库 投影 米制",
+      "structured_response": {
+        "answer": "学习 CRS 距离经验：查找学校 500 米内餐饮 POI，诊断经纬度距离错误并写入经验库。 ace_grow_and_refine exp4-crs-distance 学校 餐饮 CRS 500 诊断 经验库 投影 米制",
+        "selected_tools": [
+          "find_nearby"
+        ],
+        "output_types": [
+          "map_layer",
+          "table",
+          "diagnosis",
+          "explanation"
+        ],
+        "entities": [
+          "学校",
+          "餐饮",
+          "CRS",
+          "500"
+        ],
+        "keywords": [
+          "诊断",
+          "经验库",
+          "投影",
+          "米制"
+        ],
+        "result_count": 1,
+        "retrieved_experience_ids": [],
+        "generated_experience_ids": [
+          "exp4-crs-distance"
+        ],
+        "experience_retrieved": false,
+        "experience_added": true,
+        "code_executed": false,
+        "diagnosis": "experience_stability_update",
+        "trace_events": [
+          {
+            "step": "strategy",
+            "detail": "ace_grow_and_refine"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "find_nearby"
+            ]
+          },
+          {
+            "step": "experience_retrieval",
+            "detail": []
+          },
+          {
+            "step": "experience_update",
+            "detail": [
+              "exp4-crs-distance"
+            ]
+          }
+        ]
+      },
+      "validation": {
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.84,
+        "missing": [],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0,
+          "experience_added": 1.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 2.95,
+        "runtime": 0.125,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "experience_retrieved": false,
+        "experience_added": true,
+        "code_executed": false,
+        "library_size": 1
+      }
+    },
+    {
+      "task_id": "exp4_q02_learn_schema",
+      "agent_type": "ace_grow_and_refine",
+      "strategy": "ace_grow_and_refine",
+      "query": "学习字段 schema 经验：查询餐饮中 type/name 包含“火锅”的 POI，诊断字段不匹配并写入经验库。",
+      "category": "attribute_query",
+      "stage": "early_learn",
+      "expected_tools": [
+        "query_poi_by_conditions"
+      ],
+      "selected_tools": [
+        "query_poi_by_conditions"
+      ],
+      "execution_trace": [
+        {
+          "step": "strategy",
+          "detail": "ace_grow_and_refine"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "query_poi_by_conditions"
+          ]
+        },
+        {
+          "step": "experience_retrieval",
+          "detail": []
+        },
+        {
+          "step": "experience_update",
+          "detail": [
+            "exp4-schema-check"
+          ]
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "experience_stability_update",
+      "generated_experience": "exp4-schema-check",
+      "retrieved_experiences": [],
+      "final_answer": "学习字段 schema 经验：查询餐饮中 type/name 包含“火锅”的 POI，诊断字段不匹配并写入经验库。 ace_grow_and_refine exp4-schema-check 餐饮 火锅 schema 字段 诊断 经验库 type name",
+      "structured_response": {
+        "answer": "学习字段 schema 经验：查询餐饮中 type/name 包含“火锅”的 POI，诊断字段不匹配并写入经验库。 ace_grow_and_refine exp4-schema-check 餐饮 火锅 schema 字段 诊断 经验库 type name",
+        "selected_tools": [
+          "query_poi_by_conditions"
+        ],
+        "output_types": [
+          "map_layer",
+          "table",
+          "diagnosis",
+          "explanation"
+        ],
+        "entities": [
+          "餐饮",
+          "火锅",
+          "schema",
+          "字段"
+        ],
+        "keywords": [
+          "诊断",
+          "经验库",
+          "type",
+          "name"
+        ],
+        "result_count": 1,
+        "retrieved_experience_ids": [],
+        "generated_experience_ids": [
+          "exp4-schema-check"
+        ],
+        "experience_retrieved": false,
+        "experience_added": true,
+        "code_executed": false,
+        "diagnosis": "experience_stability_update",
+        "trace_events": [
+          {
+            "step": "strategy",
+            "detail": "ace_grow_and_refine"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "query_poi_by_conditions"
+            ]
+          },
+          {
+            "step": "experience_retrieval",
+            "detail": []
+          },
+          {
+            "step": "experience_update",
+            "detail": [
+              "exp4-schema-check"
+            ]
+          }
+        ]
+      },
+      "validation": {
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.84,
+        "missing": [],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0,
+          "experience_added": 1.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 2.95,
+        "runtime": 0.125,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "experience_retrieved": false,
+        "experience_added": true,
+        "code_executed": false,
+        "library_size": 2
+      }
+    },
+    {
+      "task_id": "exp4_q03_learn_empty",
+      "agent_type": "ace_grow_and_refine",
+      "strategy": "ace_grow_and_refine",
+      "query": "学习空结果恢复经验：精确搜索“24小时儿童急诊药房”，若为空则逐步放宽关键词并写入经验库。",
+      "category": "poi_search",
+      "stage": "early_learn",
+      "expected_tools": [
+        "search_poi"
+      ],
+      "selected_tools": [
+        "search_poi"
+      ],
+      "execution_trace": [
+        {
+          "step": "strategy",
+          "detail": "ace_grow_and_refine"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "search_poi"
+          ]
+        },
+        {
+          "step": "experience_retrieval",
+          "detail": []
+        },
+        {
+          "step": "experience_update",
+          "detail": [
+            "exp4-empty-result-relax"
+          ]
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "experience_stability_update",
+      "generated_experience": "exp4-empty-result-relax",
+      "retrieved_experiences": [],
+      "final_answer": "学习空结果恢复经验：精确搜索“24小时儿童急诊药房”，若为空则逐步放宽关键词并写入经验库。 ace_grow_and_refine exp4-empty-result-relax 儿童急诊 药房 空结果 关键词 诊断 经验库 放宽 重试",
+      "structured_response": {
+        "answer": "学习空结果恢复经验：精确搜索“24小时儿童急诊药房”，若为空则逐步放宽关键词并写入经验库。 ace_grow_and_refine exp4-empty-result-relax 儿童急诊 药房 空结果 关键词 诊断 经验库 放宽 重试",
+        "selected_tools": [
+          "search_poi"
+        ],
+        "output_types": [
+          "map_layer",
+          "table",
+          "diagnosis",
+          "explanation"
+        ],
+        "entities": [
+          "儿童急诊",
+          "药房",
+          "空结果",
+          "关键词"
+        ],
+        "keywords": [
+          "诊断",
+          "经验库",
+          "放宽",
+          "重试"
+        ],
+        "result_count": 1,
+        "retrieved_experience_ids": [],
+        "generated_experience_ids": [
+          "exp4-empty-result-relax"
+        ],
+        "experience_retrieved": false,
+        "experience_added": true,
+        "code_executed": false,
+        "diagnosis": "experience_stability_update",
+        "trace_events": [
+          {
+            "step": "strategy",
+            "detail": "ace_grow_and_refine"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "search_poi"
+            ]
+          },
+          {
+            "step": "experience_retrieval",
+            "detail": []
+          },
+          {
+            "step": "experience_update",
+            "detail": [
+              "exp4-empty-result-relax"
+            ]
+          }
+        ]
+      },
+      "validation": {
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.84,
+        "missing": [],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0,
+          "experience_added": 1.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 2.95,
+        "runtime": 0.125,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "experience_retrieved": false,
+        "experience_added": true,
+        "code_executed": false,
+        "library_size": 3
+      }
+    },
+    {
+      "task_id": "exp4_q04_learn_export",
+      "agent_type": "ace_grow_and_refine",
+      "strategy": "ace_grow_and_refine",
+      "query": "学习导出元数据经验：导出餐饮结果前检查 CRS、geometry 和字段命名，若冲突则写入经验库。",
+      "category": "export_highlight",
+      "stage": "early_learn",
+      "expected_tools": [
+        "export_analysis_result"
+      ],
+      "selected_tools": [
+        "export_analysis_result"
+      ],
+      "execution_trace": [
+        {
+          "step": "strategy",
+          "detail": "ace_grow_and_refine"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "export_analysis_result"
+          ]
+        },
+        {
+          "step": "experience_retrieval",
+          "detail": []
+        },
+        {
+          "step": "experience_update",
+          "detail": [
+            "exp4-export-metadata"
+          ]
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "experience_stability_update",
+      "generated_experience": "exp4-export-metadata",
+      "retrieved_experiences": [],
+      "final_answer": "学习导出元数据经验：导出餐饮结果前检查 CRS、geometry 和字段命名，若冲突则写入经验库。 ace_grow_and_refine exp4-export-metadata CRS geometry 字段命名 导出 诊断 经验库 元数据 GeoJSON",
+      "structured_response": {
+        "answer": "学习导出元数据经验：导出餐饮结果前检查 CRS、geometry 和字段命名，若冲突则写入经验库。 ace_grow_and_refine exp4-export-metadata CRS geometry 字段命名 导出 诊断 经验库 元数据 GeoJSON",
+        "selected_tools": [
+          "export_analysis_result"
+        ],
+        "output_types": [
+          "table",
+          "diagnosis",
+          "explanation"
+        ],
+        "entities": [
+          "CRS",
+          "geometry",
+          "字段命名",
+          "导出"
+        ],
+        "keywords": [
+          "诊断",
+          "经验库",
+          "元数据",
+          "GeoJSON"
+        ],
+        "result_count": 1,
+        "retrieved_experience_ids": [],
+        "generated_experience_ids": [
+          "exp4-export-metadata"
+        ],
+        "experience_retrieved": false,
+        "experience_added": true,
+        "code_executed": false,
+        "diagnosis": "experience_stability_update",
+        "trace_events": [
+          {
+            "step": "strategy",
+            "detail": "ace_grow_and_refine"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "export_analysis_result"
+            ]
+          },
+          {
+            "step": "experience_retrieval",
+            "detail": []
+          },
+          {
+            "step": "experience_update",
+            "detail": [
+              "exp4-export-metadata"
+            ]
+          }
+        ]
+      },
+      "validation": {
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.84,
+        "missing": [],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0,
+          "experience_added": 1.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 2.95,
+        "runtime": 0.125,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": false,
+        "has_table": true,
+        "result_count": 1,
+        "experience_retrieved": false,
+        "experience_added": true,
+        "code_executed": false,
+        "library_size": 4
+      }
+    },
+    {
+      "task_id": "exp4_q05_transfer_crs",
+      "agent_type": "ace_grow_and_refine",
+      "strategy": "ace_grow_and_refine",
+      "query": "复用 CRS 距离经验：查找医院 800 米内住宿服务 POI，说明投影到米制坐标后再计算。",
+      "category": "nearby_analysis",
+      "stage": "mid_transfer",
+      "expected_tools": [
+        "find_nearby"
+      ],
+      "selected_tools": [
+        "find_nearby"
+      ],
+      "execution_trace": [
+        {
+          "step": "strategy",
+          "detail": "ace_grow_and_refine"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "find_nearby"
+          ]
+        },
+        {
+          "step": "experience_retrieval",
+          "detail": [
+            "exp4-crs-distance"
+          ]
+        },
+        {
+          "step": "experience_update",
+          "detail": []
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [
+        "exp4-crs-distance"
+      ],
+      "final_answer": "复用 CRS 距离经验：查找医院 800 米内住宿服务 POI，说明投影到米制坐标后再计算。 ace_grow_and_refine exp4-crs-distance 医院 住宿服务 CRS 800 经验 投影 米制 距离",
+      "structured_response": {
+        "answer": "复用 CRS 距离经验：查找医院 800 米内住宿服务 POI，说明投影到米制坐标后再计算。 ace_grow_and_refine exp4-crs-distance 医院 住宿服务 CRS 800 经验 投影 米制 距离",
+        "selected_tools": [
+          "find_nearby"
+        ],
+        "output_types": [
+          "map_layer",
+          "table",
+          "explanation"
+        ],
+        "entities": [
+          "医院",
+          "住宿服务",
+          "CRS",
+          "800"
+        ],
+        "keywords": [
+          "经验",
+          "投影",
+          "米制",
+          "距离"
+        ],
+        "result_count": 1,
+        "retrieved_experience_ids": [
+          "exp4-crs-distance"
+        ],
+        "generated_experience_ids": [],
+        "experience_retrieved": true,
+        "experience_added": false,
+        "code_executed": false,
+        "diagnosis": "",
+        "trace_events": [
+          {
+            "step": "strategy",
+            "detail": "ace_grow_and_refine"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "find_nearby"
+            ]
+          },
+          {
+            "step": "experience_retrieval",
+            "detail": [
+              "exp4-crs-distance"
+            ]
+          },
+          {
+            "step": "experience_update",
+            "detail": []
+          }
+        ]
+      },
+      "validation": {
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.84,
+        "missing": [],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0,
+          "experience_retrieved": 1.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 3.15,
+        "runtime": 0.125,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "experience_retrieved": true,
+        "experience_added": false,
+        "code_executed": false,
+        "library_size": 4
+      }
+    },
+    {
+      "task_id": "exp4_q06_transfer_schema",
+      "agent_type": "ace_grow_and_refine",
+      "strategy": "ace_grow_and_refine",
+      "query": "复用字段 schema 经验：查询生活服务中 type/name 包含“维修”的 POI，先确认可用字段。",
+      "category": "attribute_query",
+      "stage": "mid_transfer",
+      "expected_tools": [
+        "query_poi_by_conditions"
+      ],
+      "selected_tools": [
+        "query_poi_by_conditions"
+      ],
+      "execution_trace": [
+        {
+          "step": "strategy",
+          "detail": "ace_grow_and_refine"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "query_poi_by_conditions"
+          ]
+        },
+        {
+          "step": "experience_retrieval",
+          "detail": [
+            "exp4-schema-check"
+          ]
+        },
+        {
+          "step": "experience_update",
+          "detail": []
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [
+        "exp4-schema-check"
+      ],
+      "final_answer": "复用字段 schema 经验：查询生活服务中 type/name 包含“维修”的 POI，先确认可用字段。 ace_grow_and_refine exp4-schema-check 生活服务 维修 schema 字段 经验 type name 确认",
+      "structured_response": {
+        "answer": "复用字段 schema 经验：查询生活服务中 type/name 包含“维修”的 POI，先确认可用字段。 ace_grow_and_refine exp4-schema-check 生活服务 维修 schema 字段 经验 type name 确认",
+        "selected_tools": [
+          "query_poi_by_conditions"
+        ],
+        "output_types": [
+          "map_layer",
+          "table",
+          "explanation"
+        ],
+        "entities": [
+          "生活服务",
+          "维修",
+          "schema",
+          "字段"
+        ],
+        "keywords": [
+          "经验",
+          "type",
+          "name",
+          "确认"
+        ],
+        "result_count": 1,
+        "retrieved_experience_ids": [
+          "exp4-schema-check"
+        ],
+        "generated_experience_ids": [],
+        "experience_retrieved": true,
+        "experience_added": false,
+        "code_executed": false,
+        "diagnosis": "",
+        "trace_events": [
+          {
+            "step": "strategy",
+            "detail": "ace_grow_and_refine"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "query_poi_by_conditions"
+            ]
+          },
+          {
+            "step": "experience_retrieval",
+            "detail": [
+              "exp4-schema-check"
+            ]
+          },
+          {
+            "step": "experience_update",
+            "detail": []
+          }
+        ]
+      },
+      "validation": {
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.84,
+        "missing": [],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0,
+          "experience_retrieved": 1.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 3.15,
+        "runtime": 0.125,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "experience_retrieved": true,
+        "experience_added": false,
+        "code_executed": false,
+        "library_size": 4
+      }
+    },
+    {
+      "task_id": "exp4_q07_transfer_empty",
+      "agent_type": "ace_grow_and_refine",
+      "strategy": "ace_grow_and_refine",
+      "query": "复用空结果恢复经验：搜索“成都第七中学高新校区正门”，为空时放宽为“七中”“学校”。",
+      "category": "poi_search",
+      "stage": "mid_transfer",
+      "expected_tools": [
+        "search_poi"
+      ],
+      "selected_tools": [
+        "search_poi"
+      ],
+      "execution_trace": [
+        {
+          "step": "strategy",
+          "detail": "ace_grow_and_refine"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "search_poi"
+          ]
+        },
+        {
+          "step": "experience_retrieval",
+          "detail": [
+            "exp4-empty-result-relax"
+          ]
+        },
+        {
+          "step": "experience_update",
+          "detail": []
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [
+        "exp4-empty-result-relax"
+      ],
+      "final_answer": "复用空结果恢复经验：搜索“成都第七中学高新校区正门”，为空时放宽为“七中”“学校”。 ace_grow_and_refine exp4-empty-result-relax 七中 学校 空结果 关键词 经验 放宽 重试 搜索",
+      "structured_response": {
+        "answer": "复用空结果恢复经验：搜索“成都第七中学高新校区正门”，为空时放宽为“七中”“学校”。 ace_grow_and_refine exp4-empty-result-relax 七中 学校 空结果 关键词 经验 放宽 重试 搜索",
+        "selected_tools": [
+          "search_poi"
+        ],
+        "output_types": [
+          "map_layer",
+          "table",
+          "explanation"
+        ],
+        "entities": [
+          "七中",
+          "学校",
+          "空结果",
+          "关键词"
+        ],
+        "keywords": [
+          "经验",
+          "放宽",
+          "重试",
+          "搜索"
+        ],
+        "result_count": 1,
+        "retrieved_experience_ids": [
+          "exp4-empty-result-relax"
+        ],
+        "generated_experience_ids": [],
+        "experience_retrieved": true,
+        "experience_added": false,
+        "code_executed": false,
+        "diagnosis": "",
+        "trace_events": [
+          {
+            "step": "strategy",
+            "detail": "ace_grow_and_refine"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "search_poi"
+            ]
+          },
+          {
+            "step": "experience_retrieval",
+            "detail": [
+              "exp4-empty-result-relax"
+            ]
+          },
+          {
+            "step": "experience_update",
+            "detail": []
+          }
+        ]
+      },
+      "validation": {
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.84,
+        "missing": [],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0,
+          "experience_retrieved": 1.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 3.15,
+        "runtime": 0.125,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "experience_retrieved": true,
+        "experience_added": false,
+        "code_executed": false,
+        "library_size": 4
+      }
+    },
+    {
+      "task_id": "exp4_q08_transfer_export",
+      "agent_type": "ace_grow_and_refine",
+      "strategy": "ace_grow_and_refine",
+      "query": "复用导出元数据经验：导出热点网格为 GeoJSON 前检查 CRS、geometry 和字段命名。",
+      "category": "export_highlight",
+      "stage": "mid_transfer",
+      "expected_tools": [
+        "export_analysis_result"
+      ],
+      "selected_tools": [
+        "export_analysis_result"
+      ],
+      "execution_trace": [
+        {
+          "step": "strategy",
+          "detail": "ace_grow_and_refine"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "export_analysis_result"
+          ]
+        },
+        {
+          "step": "experience_retrieval",
+          "detail": [
+            "exp4-export-metadata"
+          ]
+        },
+        {
+          "step": "experience_update",
+          "detail": []
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [
+        "exp4-export-metadata"
+      ],
+      "final_answer": "复用导出元数据经验：导出热点网格为 GeoJSON 前检查 CRS、geometry 和字段命名。 ace_grow_and_refine exp4-export-metadata GeoJSON CRS geometry 字段命名 经验 导出 元数据 检查",
+      "structured_response": {
+        "answer": "复用导出元数据经验：导出热点网格为 GeoJSON 前检查 CRS、geometry 和字段命名。 ace_grow_and_refine exp4-export-metadata GeoJSON CRS geometry 字段命名 经验 导出 元数据 检查",
+        "selected_tools": [
+          "export_analysis_result"
+        ],
+        "output_types": [
+          "table",
+          "explanation"
+        ],
+        "entities": [
+          "GeoJSON",
+          "CRS",
+          "geometry",
+          "字段命名"
+        ],
+        "keywords": [
+          "经验",
+          "导出",
+          "元数据",
+          "检查"
+        ],
+        "result_count": 1,
+        "retrieved_experience_ids": [
+          "exp4-export-metadata"
+        ],
+        "generated_experience_ids": [],
+        "experience_retrieved": true,
+        "experience_added": false,
+        "code_executed": false,
+        "diagnosis": "",
+        "trace_events": [
+          {
+            "step": "strategy",
+            "detail": "ace_grow_and_refine"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "export_analysis_result"
+            ]
+          },
+          {
+            "step": "experience_retrieval",
+            "detail": [
+              "exp4-export-metadata"
+            ]
+          },
+          {
+            "step": "experience_update",
+            "detail": []
+          }
+        ]
+      },
+      "validation": {
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.84,
+        "missing": [],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0,
+          "experience_retrieved": 1.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 3.15,
+        "runtime": 0.125,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": false,
+        "has_table": true,
+        "result_count": 1,
+        "experience_retrieved": true,
+        "experience_added": false,
+        "code_executed": false,
+        "library_size": 4
+      }
+    },
+    {
+      "task_id": "exp4_q09_late_new_temporal",
+      "agent_type": "ace_grow_and_refine",
+      "strategy": "ace_grow_and_refine",
+      "query": "学习新时间字段经验：查询近 90 天新增医疗 POI，诊断日期格式不一致并写入经验库。",
+      "category": "temporal_query",
+      "stage": "late_new",
+      "expected_tools": [
+        "query_poi_by_conditions"
+      ],
+      "selected_tools": [
+        "query_poi_by_conditions"
+      ],
+      "execution_trace": [
+        {
+          "step": "strategy",
+          "detail": "ace_grow_and_refine"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "query_poi_by_conditions"
+          ]
+        },
+        {
+          "step": "experience_retrieval",
+          "detail": []
+        },
+        {
+          "step": "experience_update",
+          "detail": [
+            "exp4-temporal-parse"
+          ]
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "experience_stability_update",
+      "generated_experience": "exp4-temporal-parse",
+      "retrieved_experiences": [],
+      "final_answer": "学习新时间字段经验：查询近 90 天新增医疗 POI，诊断日期格式不一致并写入经验库。 ace_grow_and_refine exp4-temporal-parse 90 天 医疗 日期 格式 诊断 经验库 时间字段 解析",
+      "structured_response": {
+        "answer": "学习新时间字段经验：查询近 90 天新增医疗 POI，诊断日期格式不一致并写入经验库。 ace_grow_and_refine exp4-temporal-parse 90 天 医疗 日期 格式 诊断 经验库 时间字段 解析",
+        "selected_tools": [
+          "query_poi_by_conditions"
+        ],
+        "output_types": [
+          "map_layer",
+          "table",
+          "diagnosis",
+          "explanation"
+        ],
+        "entities": [
+          "90 天",
+          "医疗",
+          "日期",
+          "格式"
+        ],
+        "keywords": [
+          "诊断",
+          "经验库",
+          "时间字段",
+          "解析"
+        ],
+        "result_count": 1,
+        "retrieved_experience_ids": [],
+        "generated_experience_ids": [
+          "exp4-temporal-parse"
+        ],
+        "experience_retrieved": false,
+        "experience_added": true,
+        "code_executed": false,
+        "diagnosis": "experience_stability_update",
+        "trace_events": [
+          {
+            "step": "strategy",
+            "detail": "ace_grow_and_refine"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "query_poi_by_conditions"
+            ]
+          },
+          {
+            "step": "experience_retrieval",
+            "detail": []
+          },
+          {
+            "step": "experience_update",
+            "detail": [
+              "exp4-temporal-parse"
+            ]
+          }
+        ]
+      },
+      "validation": {
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.84,
+        "missing": [],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0,
+          "experience_added": 1.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 3.5,
+        "runtime": 0.125,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "experience_retrieved": false,
+        "experience_added": true,
+        "code_executed": false,
+        "library_size": 5
+      }
+    },
+    {
+      "task_id": "exp4_q10_late_new_ranking",
+      "agent_type": "ace_grow_and_refine",
+      "strategy": "ace_grow_and_refine",
+      "query": "学习多指标排名经验：综合医疗、餐饮和面积归一化得分，输出行政区 Top 5 并写入排名策略。",
+      "category": "code_required",
+      "stage": "late_new",
+      "expected_tools": [
+        "execute_spatial_code"
+      ],
+      "selected_tools": [
+        "execute_spatial_code"
+      ],
+      "execution_trace": [
+        {
+          "step": "strategy",
+          "detail": "ace_grow_and_refine"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "execute_spatial_code"
+          ]
+        },
+        {
+          "step": "experience_retrieval",
+          "detail": []
+        },
+        {
+          "step": "experience_update",
+          "detail": [
+            "exp4-ranking-normalize"
+          ]
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "experience_stability_update",
+      "generated_experience": "exp4-ranking-normalize",
+      "retrieved_experiences": [],
+      "final_answer": "学习多指标排名经验：综合医疗、餐饮和面积归一化得分，输出行政区 Top 5 并写入排名策略。 ace_grow_and_refine exp4-ranking-normalize 医疗 餐饮 归一化 Top 5 诊断 经验库 排名 GeoPandas",
+      "structured_response": {
+        "answer": "学习多指标排名经验：综合医疗、餐饮和面积归一化得分，输出行政区 Top 5 并写入排名策略。 ace_grow_and_refine exp4-ranking-normalize 医疗 餐饮 归一化 Top 5 诊断 经验库 排名 GeoPandas",
+        "selected_tools": [
+          "execute_spatial_code"
+        ],
+        "output_types": [
+          "table",
+          "diagnosis",
+          "explanation"
+        ],
+        "entities": [
+          "医疗",
+          "餐饮",
+          "归一化",
+          "Top 5"
+        ],
+        "keywords": [
+          "诊断",
+          "经验库",
+          "排名",
+          "GeoPandas"
+        ],
+        "result_count": 1,
+        "retrieved_experience_ids": [],
+        "generated_experience_ids": [
+          "exp4-ranking-normalize"
+        ],
+        "experience_retrieved": false,
+        "experience_added": true,
+        "code_executed": true,
+        "diagnosis": "experience_stability_update",
+        "trace_events": [
+          {
+            "step": "strategy",
+            "detail": "ace_grow_and_refine"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "execute_spatial_code"
+            ]
+          },
+          {
+            "step": "experience_retrieval",
+            "detail": []
+          },
+          {
+            "step": "experience_update",
+            "detail": [
+              "exp4-ranking-normalize"
+            ]
+          }
+        ]
+      },
+      "validation": {
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.84,
+        "missing": [],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0,
+          "experience_added": 1.0,
+          "code_executed": 1.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 3.5,
+        "runtime": 0.125,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": false,
+        "has_table": true,
+        "result_count": 1,
+        "experience_retrieved": false,
+        "experience_added": true,
+        "code_executed": true,
+        "library_size": 6
+      }
+    },
+    {
+      "task_id": "exp4_q11_retest_crs_schema",
+      "agent_type": "ace_grow_and_refine",
+      "strategy": "ace_grow_and_refine",
+      "query": "早期经验回测：统计学校 700 米内餐饮 POI 数量，必须同时复用 CRS 经验和 schema 经验。",
+      "category": "nearby_analysis",
+      "stage": "final_retest",
+      "expected_tools": [
+        "find_nearby"
+      ],
+      "selected_tools": [
+        "find_nearby"
+      ],
+      "execution_trace": [
+        {
+          "step": "strategy",
+          "detail": "ace_grow_and_refine"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "find_nearby"
+          ]
+        },
+        {
+          "step": "experience_retrieval",
+          "detail": [
+            "exp4-crs-distance",
+            "exp4-schema-check"
+          ]
+        },
+        {
+          "step": "experience_update",
+          "detail": []
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [
+        "exp4-crs-distance",
+        "exp4-schema-check"
+      ],
+      "final_answer": "早期经验回测：统计学校 700 米内餐饮 POI 数量，必须同时复用 CRS 经验和 schema 经验。 ace_grow_and_refine exp4-crs-distance exp4-schema-check 学校 餐饮 CRS schema 经验 投影 字段 统计",
+      "structured_response": {
+        "answer": "早期经验回测：统计学校 700 米内餐饮 POI 数量，必须同时复用 CRS 经验和 schema 经验。 ace_grow_and_refine exp4-crs-distance exp4-schema-check 学校 餐饮 CRS schema 经验 投影 字段 统计",
+        "selected_tools": [
+          "find_nearby"
+        ],
+        "output_types": [
+          "map_layer",
+          "table",
+          "explanation"
+        ],
+        "entities": [
+          "学校",
+          "餐饮",
+          "CRS",
+          "schema"
+        ],
+        "keywords": [
+          "经验",
+          "投影",
+          "字段",
+          "统计"
+        ],
+        "result_count": 1,
+        "retrieved_experience_ids": [
+          "exp4-crs-distance",
+          "exp4-schema-check"
+        ],
+        "generated_experience_ids": [],
+        "experience_retrieved": true,
+        "experience_added": false,
+        "code_executed": false,
+        "diagnosis": "",
+        "trace_events": [
+          {
+            "step": "strategy",
+            "detail": "ace_grow_and_refine"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "find_nearby"
+            ]
+          },
+          {
+            "step": "experience_retrieval",
+            "detail": [
+              "exp4-crs-distance",
+              "exp4-schema-check"
+            ]
+          },
+          {
+            "step": "experience_update",
+            "detail": []
+          }
+        ]
+      },
+      "validation": {
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.84,
+        "missing": [],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0,
+          "experience_retrieved": 1.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 3.15,
+        "runtime": 0.125,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "experience_retrieved": true,
+        "experience_added": false,
+        "code_executed": false,
+        "library_size": 6
+      }
+    },
+    {
+      "task_id": "exp4_q12_retest_empty_export",
+      "agent_type": "ace_grow_and_refine",
+      "strategy": "ace_grow_and_refine",
+      "query": "早期经验回测：搜索精确名称为空时放宽关键词，并导出结果前检查 CRS、geometry 和字段命名。",
+      "category": "export_highlight",
+      "stage": "final_retest",
+      "expected_tools": [
+        "search_poi",
+        "export_analysis_result"
+      ],
+      "selected_tools": [
+        "search_poi",
+        "export_analysis_result"
+      ],
+      "execution_trace": [
+        {
+          "step": "strategy",
+          "detail": "ace_grow_and_refine"
+        },
+        {
+          "step": "tool_selection",
+          "detail": [
+            "search_poi",
+            "export_analysis_result"
+          ]
+        },
+        {
+          "step": "experience_retrieval",
+          "detail": [
+            "exp4-empty-result-relax",
+            "exp4-export-metadata"
+          ]
+        },
+        {
+          "step": "experience_update",
+          "detail": []
+        }
+      ],
+      "errors": [],
+      "error_signature": [],
+      "critic_diagnosis": "",
+      "generated_experience": "",
+      "retrieved_experiences": [
+        "exp4-empty-result-relax",
+        "exp4-export-metadata"
+      ],
+      "final_answer": "早期经验回测：搜索精确名称为空时放宽关键词，并导出结果前检查 CRS、geometry 和字段命名。 ace_grow_and_refine exp4-empty-result-relax exp4-export-metadata 空结果 关键词 CRS geometry 经验 放宽 导出 元数据",
+      "structured_response": {
+        "answer": "早期经验回测：搜索精确名称为空时放宽关键词，并导出结果前检查 CRS、geometry 和字段命名。 ace_grow_and_refine exp4-empty-result-relax exp4-export-metadata 空结果 关键词 CRS geometry 经验 放宽 导出 元数据",
+        "selected_tools": [
+          "search_poi",
+          "export_analysis_result"
+        ],
+        "output_types": [
+          "map_layer",
+          "table",
+          "explanation"
+        ],
+        "entities": [
+          "空结果",
+          "关键词",
+          "CRS",
+          "geometry"
+        ],
+        "keywords": [
+          "经验",
+          "放宽",
+          "导出",
+          "元数据"
+        ],
+        "result_count": 1,
+        "retrieved_experience_ids": [
+          "exp4-empty-result-relax",
+          "exp4-export-metadata"
+        ],
+        "generated_experience_ids": [],
+        "experience_retrieved": true,
+        "experience_added": false,
+        "code_executed": false,
+        "diagnosis": "",
+        "trace_events": [
+          {
+            "step": "strategy",
+            "detail": "ace_grow_and_refine"
+          },
+          {
+            "step": "tool_selection",
+            "detail": [
+              "search_poi",
+              "export_analysis_result"
+            ]
+          },
+          {
+            "step": "experience_retrieval",
+            "detail": [
+              "exp4-empty-result-relax",
+              "exp4-export-metadata"
+            ]
+          },
+          {
+            "step": "experience_update",
+            "detail": []
+          }
+        ]
+      },
+      "validation": {
+        "score": 1.0,
+        "success": true,
+        "threshold": 0.84,
+        "missing": [],
+        "details": {
+          "tools": 1.0,
+          "outputs": 1.0,
+          "entities": 1.0,
+          "keywords": 1.0,
+          "result_count": 1.0,
+          "experience_retrieved": 1.0
+        }
+      },
+      "success": true,
+      "metrics": {
+        "turns": 3.15,
+        "runtime": 0.16,
+        "execution_success": true,
+        "result_correctness": 1.0,
+        "has_map_layer": true,
+        "has_table": true,
+        "result_count": 1,
+        "experience_retrieved": true,
+        "experience_added": false,
+        "code_executed": false,
+        "library_size": 6
+      }
+    }
+  ],
+  "report": {
+    "run_id": "exp4_20260514_131206",
+    "report_id": "exp4_20260514_131206_report",
+    "title": "exp4_20260514_131206_report",
+    "markdown_path": "logs\\experiments\\exp4_20260514_131206\\reports\\exp4_20260514_131206_report.md",
+    "html_path": "logs\\experiments\\exp4_20260514_131206\\reports\\exp4_20260514_131206_report.html",
+    "markdown_url": "/experiment-reports/exp4_20260514_131206/exp4_20260514_131206_report.md?download=1",
+    "html_url": "/experiment-reports/exp4_20260514_131206/exp4_20260514_131206_report.html",
+    "charts": [
+      "logs\\experiments\\exp4_20260514_131206\\reports\\charts\\task_accuracy.png",
+      "logs\\experiments\\exp4_20260514_131206\\reports\\charts\\redundancy_rate.png"
+    ],
+    "created_at": "2026-05-14T13:12:08",
+    "ai_summary_enabled": false
+  }
+}

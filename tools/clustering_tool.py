@@ -1,6 +1,7 @@
 import os
 from math import ceil, floor
 from pathlib import Path
+from urllib.parse import quote
 
 import geopandas as gpd
 import numpy as np
@@ -16,9 +17,16 @@ except Exception:
 try:
     import rasterio
     from rasterio.transform import from_bounds as rasterio_from_bounds
+    from rasterio.warp import transform_bounds
     HAS_RASTERIO = True
 except Exception:
     HAS_RASTERIO = False
+
+try:
+    from PIL import Image
+    HAS_PIL = True
+except Exception:
+    HAS_PIL = False
 
 from .advanced_common import (
     distance_to_meters,
@@ -135,7 +143,7 @@ def _generate_hotspot_geotiff(
         parts = key.split("_")
         ix, iy = int(parts[0]), int(parts[1])
         if 0 <= ix < cols and 0 <= iy < rows:
-            raster_data[iy, ix] = float(count)
+            raster_data[rows - 1 - iy, ix] = float(count)
 
     # 将行政边界外的网格置为 nodata（使用栅格化 mask）
     # 构建每个网格单元的矢量掩膜，判断是否与行政边界相交
@@ -146,7 +154,7 @@ def _generate_hotspot_geotiff(
             y0 = miny + iy * size_m
             cell_box = shapely_box(x0, y0, x0 + size_m, y0 + size_m)
             if not cell_box.intersects(admin_boundary):
-                mask[iy, ix] = True
+                mask[rows - 1 - iy, ix] = True
 
     raster_data[mask] = nodata
 
@@ -177,6 +185,29 @@ def _generate_hotspot_geotiff(
         dst.set_band_description(1, "POI Count")
 
     return output_path
+
+
+def _generate_hotspot_preview_png(raster_path, output_path, nodata=-9999):
+    if not HAS_PIL:
+        return None
+
+    with rasterio.open(raster_path) as src:
+        data = src.read(1)
+        valid = (data != nodata) & np.isfinite(data) & (data > 0)
+        rgba = np.zeros((data.shape[0], data.shape[1], 4), dtype=np.uint8)
+        if valid.any():
+            values = data[valid].astype(np.float32)
+            max_value = float(values.max()) or 1.0
+            normalized = np.zeros_like(data, dtype=np.float32)
+            normalized[valid] = np.clip(data[valid] / max_value, 0, 1)
+
+            rgba[..., 0] = np.where(valid, 254, 0).astype(np.uint8)
+            rgba[..., 1] = np.where(valid, (226 - normalized * 165).astype(np.uint8), 0)
+            rgba[..., 2] = np.where(valid, (226 - normalized * 192).astype(np.uint8), 0)
+            rgba[..., 3] = np.where(valid, (70 + normalized * 165).astype(np.uint8), 0)
+
+        Image.fromarray(rgba, mode="RGBA").save(output_path)
+        return transform_bounds(src.crs, "EPSG:4326", *src.bounds, densify_pts=21)
 
 
 def create_dbscan_tool(handler):
@@ -243,6 +274,7 @@ def create_hotspot_tool(handler):
         unit: str = "m",
         top_n: int = 10,
         as_raster: bool = True,
+        show_vector_grid: bool = False,
     ) -> str:
         """Create a Chengdu admin-boundary grid hotspot layer for point-like layers.
         支持输出矢量网格 (SHP-like) 和/或真正的 GeoTIFF 栅格。
@@ -252,7 +284,8 @@ def create_hotspot_tool(handler):
             cell_size: 网格单元大小（数值）。
             unit: 单位，支持 "m"（米，默认）或 "km"（千米）。
             top_n: 显示 Top N 热点网格。
-            as_raster: 是否同时输出 GeoTIFF 栅格文件（默认 True）。
+            as_raster: 是否输出 GeoTIFF 栅格文件（默认 True）。
+            show_vector_grid: 是否在地图上同时显示矢量网格面（默认 False，避免结果显示为带网格线的矢量面）。
         """
         gdf, real_name = find_layer(map_h, layer_name)[1:]
         if gdf is None:
@@ -322,8 +355,10 @@ def create_hotspot_tool(handler):
         )
         cell_label = f"{float(cell_size):g}"
         result_name = f"{real_name}_hotspot_grid_{cell_label}{unit}_chengdu"
-        store_generated_result(handler, result_name, hotspot_gdf)
-        if hasattr(map_h, "add_generated_layer"):
+        if show_vector_grid:
+            store_generated_result(handler, result_name, hotspot_gdf)
+
+        if show_vector_grid and hasattr(map_h, "add_generated_layer"):
             max_count = int(hotspot_gdf["count"].max()) if not hotspot_gdf.empty else 1
             map_h.add_generated_layer(
                 result_name,
@@ -335,8 +370,8 @@ def create_hotspot_tool(handler):
                     "fill_color": "#ef4444",
                     "line_color": "#991b1b",
                     "fill_opacity": 0.58,
-                    "line_opacity": 0.9,
-                    "line_width": 1.6,
+                    "line_opacity": 0.0,
+                    "line_width": 0,
                 },
                 auto_visible=True,
             )
@@ -366,7 +401,32 @@ def create_hotspot_tool(handler):
                         crs=projected.crs,
                         output_path=raster_path,
                     )
-                    raster_msg = f"GeoTIFF 栅格已保存: {raster_path}"
+                    handler._last_generated_raster = {
+                        "name": result_name,
+                        "path": raster_path,
+                        "format": "geotiff",
+                        "value_field": "count",
+                    }
+                    preview_msg = ""
+                    if HAS_PIL and hasattr(map_h, "add_generated_raster_layer"):
+                        preview_path = str(export_dir / f"{result_name}.png")
+                        raster_bbox = _generate_hotspot_preview_png(raster_path, preview_path)
+                        if raster_bbox:
+                            preview_url = f"/exports/{quote(Path(preview_path).name)}"
+                            map_h.add_generated_raster_layer(
+                                f"{result_name}_raster",
+                                preview_url,
+                                raster_bbox,
+                                visualization_style={
+                                    "kind": "raster",
+                                    "opacity": 0.78,
+                                    "source_format": "geotiff",
+                                    "source_path": raster_path,
+                                },
+                                auto_visible=True,
+                            )
+                            preview_msg = f"；地图栅格预览已生成: {preview_path}"
+                    raster_msg = f"GeoTIFF 栅格已保存: {raster_path}{preview_msg}"
                 except Exception as exc:
                     raster_msg = f"GeoTIFF 生成失败: {str(exc)}"
         else:
@@ -375,7 +435,8 @@ def create_hotspot_tool(handler):
         # --- 构建返回信息 ---
         lines = [
             f"已完成热点分析。POI图层={real_name}，研究范围={admin_name}，网格大小={cell_size}{unit}。",
-            f"输出矢量网格数={len(hotspot_gdf)}，有POI的网格数={int((hotspot_gdf['count'] > 0).sum())}，最大单元计数={int(hotspot_gdf['count'].max()) if not hotspot_gdf.empty else 0}。",
+            f"内部统计网格数={len(hotspot_gdf)}，有POI的网格数={int((hotspot_gdf['count'] > 0).sum())}，最大单元计数={int(hotspot_gdf['count'].max()) if not hotspot_gdf.empty else 0}。",
+            f"地图矢量网格显示={'开启' if show_vector_grid else '关闭'}。",
             f"{raster_msg}",
             f"热点 Top {top_n}:",
             summary.to_string(index=False),

@@ -1,0 +1,96 @@
+{
+  "task_id": "exp4_step_044_code_debugging",
+  "agent_type": "append_only",
+  "strategy": "append_only",
+  "adaptation_step": 44,
+  "query": "Step 44: 修复 正则表达式 代码中的运行错误，并把错误模式沉淀为可复用经验。",
+  "category": "code_reasoning",
+  "expected_skill": "code_debugging",
+  "novelty": "transfer",
+  "expected_tools": [
+    "code_execution",
+    "critic"
+  ],
+  "selected_tools": [
+    "code_execution"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 44
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "code_debugging-004",
+        "code_debugging-014",
+        "code_debugging-014-duplicate"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "code_debugging-044"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 13699
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [
+    "context_stability_miss:code_debugging"
+  ],
+  "error_signature": [
+    "code_debugging"
+  ],
+  "critic_diagnosis": "code_debugging evidence missing after context update",
+  "generated_experience": "code_debugging-044",
+  "retrieved_experiences": [
+    "code_debugging-004",
+    "code_debugging-014",
+    "code_debugging-014-duplicate"
+  ],
+  "final_answer": "append_only step=44 skill=code_debugging accuracy=0.718 context_tokens=13699 retrieved=3 generated=1",
+  "structured_response": {
+    "accuracy": 0.718,
+    "context_token_count": 13699,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "code_debugging-004",
+      "code_debugging-014",
+      "code_debugging-014-duplicate"
+    ],
+    "generated_experience_ids": [
+      "code_debugging-044"
+    ]
+  },
+  "validation": {
+    "score": 0.718,
+    "success": false,
+    "threshold": 0.72,
+    "missing": [
+      "code_debugging"
+    ],
+    "details": {
+      "tools": 1.0,
+      "accuracy": 0.718
+    }
+  },
+  "success": false,
+  "metrics": {
+    "turns": 3.2,
+    "runtime": 0.12,
+    "execution_success": false,
+    "result_correctness": 0.718,
+    "context_token_count": 13699,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 50,
+    "compression_event": ""
+  }
+}

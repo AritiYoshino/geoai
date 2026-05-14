@@ -1,0 +1,87 @@
+{
+  "task_id": "exp4_step_093_empty_result_recovery",
+  "agent_type": "monolithic_rewrite",
+  "strategy": "monolithic_rewrite",
+  "adaptation_step": 93,
+  "query": "Step 93: 检索 论文 时若精确匹配为空，逐步放宽条件并解释回退策略。",
+  "category": "retrieval_reasoning",
+  "expected_skill": "empty_result_recovery",
+  "novelty": "retention_retest",
+  "expected_tools": [
+    "retrieval",
+    "reasoning"
+  ],
+  "selected_tools": [
+    "retrieval",
+    "reasoning"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 93
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "empty_result_recovery-063",
+        "empty_result_recovery-073",
+        "empty_result_recovery-083"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "empty_result_recovery-093"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 8908
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "empty_result_recovery-093",
+  "retrieved_experiences": [
+    "empty_result_recovery-063",
+    "empty_result_recovery-073",
+    "empty_result_recovery-083"
+  ],
+  "final_answer": "monolithic_rewrite step=93 skill=empty_result_recovery accuracy=0.78 context_tokens=8908 retrieved=3 generated=1",
+  "structured_response": {
+    "accuracy": 0.78,
+    "context_token_count": 8908,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "empty_result_recovery-063",
+      "empty_result_recovery-073",
+      "empty_result_recovery-083"
+    ],
+    "generated_experience_ids": [
+      "empty_result_recovery-093"
+    ]
+  },
+  "validation": {
+    "score": 0.78,
+    "success": true,
+    "threshold": 0.72,
+    "missing": []
+  },
+  "success": true,
+  "metrics": {
+    "turns": 3.75,
+    "runtime": 0.12,
+    "execution_success": true,
+    "result_correctness": 0.78,
+    "context_token_count": 8908,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 32,
+    "compression_event": ""
+  }
+}

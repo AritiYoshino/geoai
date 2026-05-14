@@ -1,0 +1,81 @@
+{
+  "task_id": "exp4_step_020_visualization_spec",
+  "agent_type": "ace_grow_and_refine",
+  "strategy": "ace_grow_and_refine",
+  "adaptation_step": 20,
+  "query": "Step 20: 为 误差分析 选择合适图表并保持坐标轴、图例和单位说明一致。",
+  "category": "visualization",
+  "expected_skill": "visualization_spec",
+  "novelty": "warmup",
+  "expected_tools": [
+    "reasoning",
+    "chart_spec"
+  ],
+  "selected_tools": [
+    "reasoning",
+    "chart_spec"
+  ],
+  "execution_trace": [
+    {
+      "step": "adaptation_step",
+      "detail": 20
+    },
+    {
+      "step": "experience_retrieval",
+      "detail": [
+        "visualization_spec-refined-020"
+      ]
+    },
+    {
+      "step": "experience_update",
+      "detail": [
+        "visualization_spec-020"
+      ]
+    },
+    {
+      "step": "context_tokens",
+      "detail": 3871
+    },
+    {
+      "step": "compression_event",
+      "detail": ""
+    }
+  ],
+  "errors": [],
+  "error_signature": [],
+  "critic_diagnosis": "",
+  "generated_experience": "visualization_spec-020",
+  "retrieved_experiences": [
+    "visualization_spec-refined-020"
+  ],
+  "final_answer": "ace_grow_and_refine step=20 skill=visualization_spec accuracy=0.94 context_tokens=3871 retrieved=1 generated=1",
+  "structured_response": {
+    "accuracy": 0.94,
+    "context_token_count": 3871,
+    "compression_event": "",
+    "retrieved_experience_ids": [
+      "visualization_spec-refined-020"
+    ],
+    "generated_experience_ids": [
+      "visualization_spec-020"
+    ]
+  },
+  "validation": {
+    "score": 0.94,
+    "success": true,
+    "threshold": 0.72,
+    "missing": []
+  },
+  "success": true,
+  "metrics": {
+    "turns": 2.7,
+    "runtime": 0.12,
+    "execution_success": true,
+    "result_correctness": 0.94,
+    "context_token_count": 3871,
+    "experience_retrieved": true,
+    "experience_added": true,
+    "library_size": 10,
+    "compression_event": ""
+  }
+}
